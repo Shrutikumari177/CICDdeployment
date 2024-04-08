@@ -1,0 +1,253 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    controllerName="com.ingenx.nauti.masterdashboard.controller.RouteMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page id="page">
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Route Master"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+
+        <Panel id="_IDGenPanel1" class="tablepanel">
+
+        <Bar id="_IDGenBar12" class="headerBar2">
+            <contentLeft>
+                <Button
+                    id="_IDGenButton12"
+                    text="New Entries"
+                    press="newEntries"
+                />
+                <Button
+                    id="_IDGenButton13"
+                    text="Copy As"
+                    press="pressCopy"
+                />
+                <Button
+                    id="_IDGenButton14"
+                    text="Delete"
+                    press="onDeletePress"
+                />
+                <Button
+                    id="_IDGenButton15"
+                    text="Edit"
+                    press="pressEdit"
+                />
+            </contentLeft>
+        </Bar>
+
+        <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
+
+
+        <Table id="createTypeTable"
+            width="100%"
+            class="mastertables"
+            items="{/MAS}"
+            mode="MultiSelect"
+            sticky="ColumnHeaders"
+            selectionChange="selectedItems">
+
+            <columns>
+                <Column >
+                    <Label text="User" />
+                </Column>
+                <Column >
+                    <Label text="Code" />
+                </Column>
+                <Column >
+                    <Label text="Value" />
+                </Column>
+                <Column >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column  >
+                    <Label text="Crcy" />
+                </Column>
+                <Column >
+                    <Label text="Data Type" />
+                </Column>
+                <Column >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="_istItem1">
+                <cells>
+                   
+                    <Text id="_IDGenText3" text="{BNAME}" />
+                    <Text id="_IDGenText4" text="{CODE}" />
+                    <Text id="_IDGenText5" text="{VALUE}" />
+                    <Text id="_IDGenText6" text="{CVALUE_code}" />
+                    <Text id="_IDGenText7" text="{CUNIT_code}" />
+                    <Text id="_IDGenText8" text="{DATATYPE}" />
+                    <Text id="_IDGenText9" text="{TABLENAME}" />
+                    <CheckBox id="_IDGenText10" selected="{MULTI_CHOICE}" />
+                </cells>
+            </ColumnListItem>
+        </Table>
+        </ScrollContainer>
+        </Panel>
+
+        <Table id="entryTypeTable"
+            selectionChange="selectedItems"
+            width="100%"
+            class="tablepanel entrytables"
+            visible="false"
+        >
+            <columns>
+                <Column id="User">
+                    <Label text="User" />
+                </Column>
+                <Column >
+                    <Label text="Code" />
+                </Column>
+                <Column >
+                    <Label text="Value" />
+                </Column>
+                <Column >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column  >
+                    <Label text="Crcy" />
+                </Column>
+                <Column >
+                    <Label text="Data Type" />
+                </Column>
+                <Column >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="istItem1">
+                <cells>
+                    <Input id="BNAME"/>
+                    <Input id="CODE" />
+                    <Input id="VALUE"/>
+                    <Input id="CVALUE"/>
+                    <Input id="CUNIT"/>
+                    <Input id="DATATYPE" />
+                    <Input id="TABLENAME"/>
+                    <CheckBox id="MULTI_CHOICE"  />
+                </cells>
+            </ColumnListItem>
+        </Table>
+
+        <Table
+            id="updateTypeTable"
+            selectionChange="selectedItems"
+            width="100%"
+            class="mastertables"
+            visible="false" >
+            <columns>
+                <Column >
+                    <Label text="User" />
+                </Column>
+                <Column >
+                    <Label text="Code" />
+                </Column>
+                <Column >
+                    <Label text="Value" />
+                </Column>
+                <Column >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column  >
+                    <Label text="Crcy" />
+                </Column>
+                <Column >
+                    <Label text="Data Type" />
+                </Column>
+                <Column >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <items>
+                <ColumnListItem id="stItem1">
+                    <cells>
+                        <Input id="bname" />
+                        <Input id="code" value="" editable="false"/>
+                        <Input id="value" />
+                        <Input id="cvalue" />
+                        <Input id="cunit" />
+                        <Input id="datatype" />
+                        <Input id="tablename" />
+                        <CheckBox id="multichoice"  />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+            <OverflowToolbar
+                id="mainPageFooter2"
+                design="Auto"
+                visible="false" >
+                <ToolbarSpacer id="_IDGenToolbarSpacer4" />
+                <Button
+                    id="mainPageSave12"
+                    text="Update"
+                    press="onUpdate"
+                />
+                <Button
+                    id="_IDGenButton23"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+ 
+ 
+            <!-- main page footer -->
+            <OverflowToolbar
+                id="mainPageFooter"
+                design="Auto"
+                visible="false">
+                <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                <Button id="add" icon="sap-icon://sys-add" press=".onAddRow1" text="Add Row" type="Success"></Button>
+                <Button id="minus" icon="sap-icon://sys-minus" press=".onDeleteRow1" text="Delete Row" type="Reject"></Button>
+
+                <Button
+                    id="mainPageSave"
+                    text="Save"
+                    press="onSave"
+                />
+                <Button
+                    id="_IDGenButton22"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+       
+        
+       
+ 
+       
+    </Page>
+</mvc:View>
+ 

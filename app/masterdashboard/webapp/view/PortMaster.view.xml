@@ -1,0 +1,228 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    controllerName="com.ingenx.nauti.masterdashboard.controller.PortMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page id="page">
+         <headerContent>
+            <!-- Your header content goes here -->
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Port Master"
+                    />
+                </contentLeft>
+               
+            </Bar>
+        </headerContent>
+ 
+        <Panel class="tablepanel">
+
+        <Bar id="_IDGenBar12" class="headerBar2">
+            <contentLeft>
+             <Button id="entryBtn" text="New Entries" press="newEntries" />
+                <!-- <Button id="copyBtn" text="Copy As" press="pressCopy"/> -->
+                <Button  id= "editBtn" text="Edit"  press="pressEdit"/>
+                <Button id= "deleteBtn" text="Delete" press="onDeletePress"/>
+            </contentLeft>
+           
+        </Bar>
+
+        <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
+
+        <Table 
+            id="createTypeTable"
+            width="100%"
+            class="mastertables"
+            items="{/PortMasterSet}"
+            updateFinished="onTableUpdateFinished"
+            mode="MultiSelect"
+            sticky="ColumnHeaders"
+            selectionChange="selectedItems"
+            noDataText="Loading...."
+            >
+
+            <columns>
+                <Column >
+                    <Label text="Value" />
+                </Column>
+                <Column >
+                    <Label text="Field Description" />
+                </Column>
+                <Column >
+                    <Label text="Country" />
+                </Column>
+                <Column >
+                    <Label text="Country Name" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="_istItem1">
+                <cells>
+                   
+                    <Text id="_IDGenText3" text="{Portc}" />
+                    <Text id="_IDGenText4" text="{Portn}" />
+                    <Text id="_IDGenText5" text="{Country}" />
+                    <Text id="_IDGenText6" text="{Countryn}" />
+                </cells>
+            </ColumnListItem>
+        </Table>
+         </ScrollContainer>
+        </Panel>
+
+        <Table id="entryTypeTable"
+            selectionChange="selectedItems"
+            width="100%"
+            class="tablepanel entrytables"
+            visible="false"
+            mode="MultiSelect"
+        >
+            <columns>
+                 <Column id="_IDGeolumn1">
+                    <Text
+                        id="Portc"
+                        text="Value"
+                    />
+                </Column>
+                <Column id="_IDGenlumn2">
+                    <Text
+                        id="Portn"
+                        text="Field Description"
+                    />
+                </Column>
+                <Column id="_IDGnColumn3">
+                    <Text
+                        id="Country"
+                        text="Country"
+                    />
+                </Column>
+                <Column id="_IDGnColumn4">
+                    <Text
+                        id="Countryn"
+                        text="Country Name"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem2">
+                    <cells>
+                        <Input id="value"  maxLength="4"/>
+                        <Input id="desc" />
+                        <Input id="country" />
+                        <Input id="cName" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+
+        </Table>
+
+        <Table
+            id="updateTypeTable"
+            selectionChange="selectedItems"
+            width="100%"
+            class="tablepanel "
+            visible="false" >
+           <columns>
+                 <Column id="_IDGenComn1">
+                    <Text
+                        id="_IDGenTex1"
+                        text="Value"
+                    />
+                </Column>
+                <Column id="_IDGenColu2">
+                    <Text
+                        id="_IDGenTe2"
+                        text="Field Description"
+                    />
+                </Column>
+                <Column id="IDGenColumn3">
+                    <Text
+                        id="IDGenText3"
+                        text="Country"
+                    />
+                </Column>
+                <Column id="IDGenColumn4">
+                    <Text
+                        id="IDGenText4"
+                        text="Country Name"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem3">
+                    <cells>
+                        <Input id="value1" editable="true" />
+                        <Input id="desc1"  editable="true"/>
+                        <Input id="country1"  editable="true"/>
+                        <Input id="cName1"  editable="true"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+            <OverflowToolbar
+                id="mainPageFooter2"
+                design="Auto"
+                visible="false" >
+                  <ToolbarSpacer id="_IDGenToolbarSpacer4" />
+               
+                <Button
+                    id="mainPageSave12"
+                    text="Update"
+                    press="onUpdate"
+                />
+                <Button
+                    id="_IDGenButton23"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+ 
+ 
+            <!-- main page footer -->
+            <OverflowToolbar
+                id="mainPageFooter"
+                design="Auto"
+                visible="false">
+                <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                <Button id="add" icon="sap-icon://sys-add" press=".onAddRow1" text="Add Row" type="Success"></Button>
+                <Button id="minus" icon="sap-icon://sys-minus" press=".onDeleteRow1" text="Delete Row" type="Reject"></Button>
+                <Button
+                    id="mainPageSave"
+                    text="Save"
+                    press="onSave"
+                />
+                <Button
+                    id="_IDGenButton22"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+       
+        
+ 
+       
+    </Page>
+     <ScrollContainer
+        id="_IDGenScrollContainer1"
+        height="100%"
+        width="100%"
+        vertical="true"
+        focusable="true"
+    >
+        <!--this is first page-->
+    </ScrollContainer>
+</mvc:View>
+ 

@@ -1,0 +1,251 @@
+<mvc:View
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    controllerName="com.ingenx.nauti.masterdashboard.controller.ApiUrl"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:core="sap.ui.core"
+>
+    <Page id="_IDGenPage1">
+       <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Api Url Path Master"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+        <Panel id="_IDGenPanel1" class="tablepanel">
+       <Bar
+            id="_IDGenBar1"
+            class="headerBar2"
+         >
+            <contentLeft>
+                <Button text="New Entries" press="newEntries" />
+                <Button text="Copy As" press="pressCopy"/>
+                <Button text="Edit"  press="pressEdit"/>
+                <Button text="Delete" press="onDeletePress"/>
+            </contentLeft>
+            
+        </Bar>
+
+        <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
+
+        <Table
+            id="createTypeTable"
+            mode="MultiSelect"
+            items="{/EPATH}"
+            updateFinished="onTableUpdateFinished"
+            selectionChange="selectedItems"
+            width="100%"
+            class="mastertables"
+            sticky="ColumnHeaders"
+           
+        >
+            <columns>
+                <Column id="_IDGenColumn1">
+                    <Text
+                        id="_IDGenText11"
+                        text="Process Indicator"
+                    />
+                </Column>
+                <Column id="_IDGenColumn2">
+                    <Text
+                        id="_IDGenText2"
+                        text="MARINE TRAFFIC API KEY"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGnText2"
+                        text="URLPath"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGeText2"
+                        text="Path"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem1">
+                    <cells>
+                     
+                        <Text
+                            id="_IDGenInput1"
+                            text="{IND}"
+                        />
+                        <Text
+                            id="_IDGenInput2"
+                            text="{API_KEY}"
+                        />
+                        <Text
+                            id="_IDGnInput1"
+                            text="{API_URL}"
+                        />
+                        <Text
+                            id="_IenInput1"
+                            text="{EPATH1}"
+                        />
+                       
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        </ScrollContainer>
+        </Panel>
+
+        <Table
+            id="entryTypeTable"
+            updateFinished="onTableUpdateFinished"
+            selectionChange="selectedItems"
+            width="100%"
+            class="tablepanel entrytables"
+            visible="false"
+            mode="MultiSelect"
+        >
+            <columns>
+                <Column id="_IDGnColumn1">
+                    <Text
+                        id="_IDGeText11"
+                        text="Process Indicator"
+                    />
+                </Column>
+                <Column id="_IDGeColumn2">
+                    <Text
+                        id="_IDeText2"
+                        text="MARINE TRAFFIC API KEY"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGnext2"
+                        text="URLPath"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGeTxt2"
+                        text="Path"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input id="Ind"  maxLength="4"/>
+                        <Input id="apikey" />
+                        <Input id="apiurl" />
+                        <Input id="path" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+       
+        <Table
+            id="updateTypeTable"
+            updateFinished="onTableUpdateFinished"
+            selectionChange="selectedItems"
+            width="100%"
+            class="mastertables"
+            visible="false"
+           
+        >
+            <columns>
+                <Column id="_IDGenlumn1">
+                    <Text
+                        id="_IDGeext11"
+                        text="Process Indicator"
+                    />
+                </Column>
+                <Column id="_IDGenComn2">
+                    <Text
+                        id="_IDGText2"
+                        text="MARINE TRAFFIC API KEY"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGnxt2"
+                        text="URLPath"
+                    />
+                </Column>
+                <Column >
+                    <Text
+                        id="_IDGeTe2"
+                        text="Path"
+                    />
+                </Column>
+
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input id="Ind1" editable="true" />
+                        <Input id="apikey1"  editable="true"/>
+                        <Text id="apiurl1" />
+                        <Input id="path1" editable="true" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+       
+            <OverflowToolbar
+                id="mainPageFooter"
+                design="Auto"
+                visible="false"
+            >
+                <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                <Button
+                    id="mainPageSave"
+                    text="Save"
+                    press="onSave"
+                />
+                <Button
+                    id="_IDGenButton22"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+
+            <OverflowToolbar
+                id="mainPageFooter2"
+                design="Auto"
+                visible="false"
+            >
+                <ToolbarSpacer id="_IDGenToolbarSpacer4" />
+                <Button
+                    id="mainPageSave12"
+                    text="Update"
+                    press="onUpdate"
+                />
+                <Button
+                    id="_IDGenButton23"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+ 
+            <!--new entries footer -->
+           
+       
+    </Page>
+ 
+    
+    
+</mvc:View>

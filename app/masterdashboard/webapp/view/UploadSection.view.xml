@@ -1,0 +1,191 @@
+
+<mvc:View xmlns:tnt="sap.tnt" xmlns:cards="sap.f.cards"
+xmlns:form="sap.ui.layout.form"
+ controllerName="com.ingenx.nauti.masterdashboard.controller.UploadSection" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
+ xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
+
+    <Page id="page" class="page">
+
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                    
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Upload Section"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+
+        <IconTabBar >
+            <items>
+                <IconTabFilter text="Port Location Upload" key="portLocUpload">
+                    <Panel height="400px">
+                        <Bar id="_IDGenBar1" class="_IDGenBar1" >
+                            <contentLeft>
+                                <Button id="_IDGenButton2" text="Port Download Template" press="onPortLocDownloadPress" />
+                            </contentLeft>
+                    
+                        </Bar>
+                
+                        <HBox  class="upload">
+                    
+                            <Label text="File Name :" class="uploadlabel"/>
+                            <unified:FileUploader
+                                id="fileUploader"
+                                uploadUrl="/"
+                                buttonText="Choose File"
+                                fileType="xlsx"
+                                uploadComplete="onPortLocUploadComplete"
+                                change="onPortLocFileChange"
+                                class="uploadInput"
+                            />
+                            <Button
+                                text="Upload"
+                                press="onPortLocUploadPress"
+                            />
+                            <Button
+                                text="Preview"
+                                press="onPortLocPreviewPress"
+                            />
+                        </HBox>
+    
+                    </Panel>
+                </IconTabFilter>
+
+                <IconTabFilter text="Marine Path Upload">
+                    <Panel height="400px">
+                        <Bar id="IDGeBar1" class="_IDGenBar1" >
+                            <contentLeft>
+                                
+                                <Button
+                                    id="IDGnButton2"
+                                    text="Marine Download Template"
+                                    press="onMarinePathDownloadPress"
+                                />
+                                
+                            </contentLeft>
+                        
+                        </Bar>
+        
+                        <HBox  class="upload">
+                        
+                        <Label text="File Name : " class="uploadlabel"/>
+                            <unified:FileUploader
+                                id="fileUploader3"
+                                uploadUrl="/"
+                                buttonText="Choose File"
+                                fileType="xlsx"
+                                uploadComplete="onMarinePathUploadComplete"
+                                change="onMarinePathFileChange"
+                                class="uploadInput"
+                                
+                            />
+                            <Button
+                                text="Upload"
+                                press="onMarinePathUploadPress"
+                            />
+                            <Button
+                                text="Preview"
+                                press="onMarinePathPreviewPress"
+                            />
+                        </HBox>
+                    </Panel>
+                </IconTabFilter>
+
+                <!-- <IconTabFilter text="Port Upload" key="portUpload">
+                    <Panel height="400px">
+                        <Bar id="IDGenBar1" class="_IDGenBar1" >
+                            <contentLeft>
+                                <Button
+                                    id="IDGenButton2"
+                                    text="PortUpd Download as Template"
+                                    press="onPortUploadDownloadPress"
+                                />
+                            </contentLeft>
+                        </Bar>
+ 
+                        <HBox alignContent="Stretch" class="upload">
+                            <Label text="File Name :" class="uploadlabel"/>
+                            <unified:FileUploader
+                                id="fileUploader2"
+                                uploadUrl="/"
+                                buttonText="Choose File"
+                                fileType="xlsx"
+                                uploadComplete="onPortUploadComplete"
+                                change="onPortUploadFileChange"
+                            />
+                            <Button
+                                text="Upload"
+                                press="onPortUploadPress"
+                            />
+                            <Button
+                                text="Preview"
+                                press="onPortUploadPreviewPress"
+                            />
+                        </HBox>
+                    </Panel>
+                </IconTabFilter> -->
+
+                
+
+                <!-- <IconTabFilter text="Marine Distance Upload">
+                    <Panel height="400px">
+                        <Bar id="_IDGeBar1" class="_IDGenBar1" >
+                            <contentLeft>
+                                <Button id="_IDGeButton2" text="MarineDistance Download as Template" press="onMarineDistanceDownloadPress" />
+                            </contentLeft>
+                        
+                        </Bar>
+                        
+                        <HBox  class="upload">
+                        
+                        <Label text="File Name : " class="uploadlabel"/>
+                            <unified:FileUploader
+                                id="fileUploader4"
+                                uploadUrl="/"
+                                buttonText="Choose File"
+                                fileType="xlsx"
+                                uploadComplete="onMarineDistanceUploadComplete"
+                                change="onMarineDistanceFileChange"
+                            class="uploadInput"
+                            />
+                            <Button
+                                text="Upload"
+                                press="onMarineDistanceUploadPress"
+                            />
+                            <Button
+                                text="Preview"
+                                press="onMarineDistancePreviewPress"
+                            />
+                        </HBox>
+                    </Panel>
+                </IconTabFilter> -->
+            </items>
+           
+				
+        </IconTabBar>
+    </Page>
+       
+</mvc:View>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

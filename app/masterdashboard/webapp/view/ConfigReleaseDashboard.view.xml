@@ -1,0 +1,53 @@
+<mvc:View controllerName="com.ingenx.nauti.masterdashboard.controller.ConfigReleaseDashboard"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"  xmlns:tnt="sap.tnt" xmlns:core="sap.ui.core">
+    
+   <Page>
+   
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Config Release Dashboard"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+
+        <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Maintain Group" press="onConfigMaintainGroup" >
+                    <TileContent id="_IDGenTileContent1">
+                    <ImageContent id="_IDGenImageContent1" src="./images/maintainGroup.png" ></ImageContent>
+                    </TileContent>
+        </GenericTile>
+        <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Voyage Config" press="onConfigVoyage" >
+                    <TileContent id="_IDGenTileContent2">
+                    <ImageContent id="_IDGenImageContent2" src="./images/voyageConfig.png" ></ImageContent>
+                    </TileContent>
+        </GenericTile>
+        <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Config Chartering" press="onConfigChartering" >
+                    <TileContent id="_IDGenTileContent3">
+                    <ImageContent id="_IDGenImageContent3" src="./images/configChartering.png" ></ImageContent>
+                    </TileContent>
+        </GenericTile>
+
+    
+  
+    
+   </Page>
+    
+</mvc:View>

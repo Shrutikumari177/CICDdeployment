@@ -1,0 +1,331 @@
+
+.footerBar{
+    background-color: rgb(193, 230, 252) !important;
+}
+
+.sapMLIBShowSeparator>td{
+    border: 1px solid rgb(214, 211, 211);
+ }
+.mastertables th {
+    border: 1px solid rgb(214, 211, 211);
+}
+.entrytables th {
+    border: 1px solid rgb(214, 211, 211);
+}
+.mastertables{
+    height: 450px;
+}
+.updateTableFooter{
+    margin-top: -20%;
+}
+
+ .vesselDetailsTable{
+    margin-top: 2%;
+ }
+ .vesselDetailsTable th{
+    border: 1px solid rgb(214, 211, 211);
+ }
+
+ .stickyBar{
+   margin-top: 1%;
+ }
+ .headerbar{
+    height: 50px !important;
+    padding:0% 2% 0% 2% !important;
+}
+.headerBar2{
+    padding-bottom: 1%;
+    
+}
+
+.sapMBtnContent {
+    line-height: 2.125rem;
+    font-size: 16px;
+}
+.tablepanel{
+    padding :1% 2% 1% 2%;
+    
+}
+.scrollContainer {
+    border-bottom: 1px solid #ccc; /* Add a border to the bottom of the scroll container */
+}
+
+ 
+ .stickyBar{
+   margin-top: 1%;
+ }
+ .bar{
+    position: fixed;
+ }
+ 
+/* .formPanel{
+    justify-content: space-around;
+} */
+.uploadlabel{
+    margin-top: 10% !important;
+}
+
+
+/************************************ For Home Screen **********************************************/
+
+
+/************************************* For Create Voyage Screen *************************************/
+.threeFlex{
+    margin: 0.5%;
+    border: 1px solid rgb(204, 202, 202);
+}
+.tableLayout{
+    border: 1px solid rgb(218, 215, 215);
+    
+}
+/************************************** Freight Simulator Screen ***************************************/
+.freightSimulatorPage{
+    background-color: rgb(212, 238, 240);
+}
+.fsBar2{
+    background-color:#0e6977ed;
+    font-weight: bold;
+}
+.fsBarTxt1{
+    color: white;
+}
+.fsSubBar{
+    background-color: #369cac !important;
+}
+.labelTxt{
+    color: white !important;
+}
+ 
+/************************************** Bidding controller page ******************************************/
+.compareIcon{
+    
+    margin-top: 30%;
+}
+.biddingTileflex{
+    justify-content: space-around;
+    justify-content: center;
+}
+ 
+.ongoingPanel{
+    border:1px solid rgb(210, 209, 209);
+    padding: 5%;
+    margin: 1%;
+    border-radius: 0%;
+    background-color: rgb(255, 255, 255);
+}
+
+/************************************** Bidding object page ************************************************/
+.panelBoard{
+    background-color: white;
+    padding: 3%;
+}
+.panelBoard1{
+    border: 1px solid rgb(214, 212, 212);
+    background-color: white;
+    margin: 20%;
+    padding: 10%;
+    
+}
+.vPanel{
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+    flex-wrap: wrap;
+   
+}
+.panelBoard2{
+    margin-left: 15% !important;
+    margin-top: 15% !important;
+    border: 1px solid rgb(214, 212, 212);
+    width: 500px !important;
+}
+.companyText{
+    color: green;
+}
+.text1{
+    font-weight: bold;
+}
+.botxt1{
+    margin-top: 3%;
+    font-size: 22px;
+ }
+.botxt2{
+    margin-top: 15%;
+}
+.botxt3{
+    margin-top: 5%!important;
+}
+.vgNoText{
+    float: right;
+}
+.upload{
+    margin-left: 30%;
+    margin-top: 5%;
+ }
+/************************************ For Master DashBoard Screen **********************************************/
+.masterFlexBox{
+    flex-wrap: wrap;
+    justify-content: left;
+    margin-bottom: 5%;
+    margin-left: 3%;
+    
+}
+.icon{
+    font-size: 50px !important;
+   
+ }
+ .icon1{
+    font-size: 40px !important;
+   
+ }
+ .icon2{
+    font-size: 60px !important;
+   
+ }
+
+/**************************************** Nautical Dashboard Screen *********************************/
+
+
+.headerTxt{
+    font-weight: bold;
+}
+.dashboardBtn{
+    margin-top: 15%;
+    margin-left: 23%;
+}
+.nauticalimg{
+    margin-top: 5%;
+    margin-left: 10%;
+    position: fixed;
+}
+ 
+
+/************************************** Transaction data Dashboard  **************************************/
+.iconBar{
+    position: sticky;
+    width: 100%;
+  }
+
+.transactionDashboard{
+    margin: 2%;
+}
+.transactionFlexBox{
+    margin-bottom: 2%;
+}
+/* .transactiontoolHeader1{
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+} */
+
+/*************************************Transaction Capture Voyage Plan Screen***********************************/
+.animation{
+    display: none;
+}
+/* Voyage Vessel Details */
+.vgheading{
+    margin: 10px;
+    padding: 5px;
+    border-bottom: 1px solid rgb(180, 179, 179);
+    width: 100%;
+}
+.vdHeaderLayout{
+    margin-left: 4rem;
+    margin-bottom: 2rem;
+    justify-content: space-between;
+}
+ 
+.table{
+    margin-left: 9%;
+    border: 1px solid rgb(221, 217, 217);
+}
+ 
+.vdsection{
+   margin-left: 8rem;
+}
+.vdsection2{
+    margin-left: 7.4rem;
+}
+.voyagePanel{
+    background-color: white;
+    margin: 1%;
+}
+ 
+/* Voyage vessel Plan section  */
+ 
+.vsplandetails{
+    margin-left: 3rem;
+}
+.infoinputs{
+    margin-left: 2rem;
+}
+ 
+/* Voyage Bid Details */
+ 
+.flexbidtable{
+    padding-right: 5%;
+    padding-bottom: 2%;
+}
+.flexbtn{
+    margin-left: 4.2%;
+}
+ 
+/***************************************** Business Partner Details Page ************************************/
+.BPdetailsContent{
+    margin-left: 35%;
+}
+
+/* Master data pages css by anurag */
+ 
+.customHeader{
+    background-color: black;
+}
+.size1{
+    margin-left: 1rem !important;
+}
+.textBid{
+    color: white;
+}
+
+.masterFileUpload{
+    margin-left: 250px;
+    margin-top: 70px;
+}
+ 
+.masterheadings{
+    margin-left: 40px;
+    margin-top:30px;
+    font-size: 15px;
+    border-bottom: 1px solid rgb(189, 187, 187);
+    width: 100%;
+}
+ 
+/* file upload dialog box css */
+.MastDialogButtonAlign{
+    margin-top: 40px;
+    margin-left: 270px;
+}
+.header{
+    background-color: black;
+    color: white;
+}
+.customHeaderButton{
+    background-color: black;
+    color: white;
+}
+ 
+
+ 
+ 
+
+
+/*********************************Compare Live Freight Negotitation****************************************/
+.VnLabel{
+    margin-left: -20%;
+    margin-bottom: 1.2%;
+}
+.mandatorylabel{
+    direction: rtl; 
+}
+
+

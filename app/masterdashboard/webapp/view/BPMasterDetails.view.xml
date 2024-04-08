@@ -1,0 +1,51 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:cards="sap.f.cards" xmlns:tnt="sap.tnt" controllerName="com.ingenx.nauti.masterdashboard.controller.BPMasterDetails"
+xmlns:html="http://www.w3.org/1999/xhtml"
+xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+xmlns="sap.m" >
+
+    <Page>
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <core:Icon id="_IDGenIcon1"
+                        src="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <core:Icon id="_IDGenIcon2"
+                        src="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="BP Master Details"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+
+        <Bar id="_IDGenBar1" class="_IDGenBar1">
+            <contentLeft>
+                <Button id="_IDGenButton1" text="Save as Variant" press="onSaveAs"></Button>
+            </contentLeft>
+        </Bar>
+        
+        <Text id="EnterDetailsId" text="Enter Details" class="vgheading"></Text>
+
+        <HBox id="_IDGenHBox1" alignItems="Center" class="BPdetailsContent">
+            <Label id="_IDGenLabel1" text="Vendor No:" required="true" class="mandatorylabel"></Label>
+            <Input id="_IDGenInput1" width="200px" required="true" showValueHelp="true"></Input>
+        </HBox>
+       
+        <footer>
+            <Bar>
+                <contentRight>
+                    <Button id="_IDGenButton11" text="Execute" icon="none" ></Button>
+                </contentRight>                
+            </Bar>
+        </footer>
+
+    </Page>
+
+</mvc:View>

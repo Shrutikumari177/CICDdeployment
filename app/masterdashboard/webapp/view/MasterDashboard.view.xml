@@ -1,0 +1,159 @@
+<mvc:View controllerName="com.ingenx.nauti.masterdashboard.controller.MasterDashboard"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:html="http://www.w3.org/1999/xhtml">
+   <Page id="_IDGenPage1">
+       
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Master Dashboard"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+ 
+        
+            <FlexBox class="masterFlexBox">
+                <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Voyage Type" press="navToVoyageType" >
+                    <TileContent id="_IDGenTileContent1">
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Vessel Type" press="onVesselPress">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Currency" press="navToCurrencyType">
+                    <TileContent >
+                    <core:Icon class="icon1" src="sap-icon://BusinessSuiteInAppSymbols/icon-manage-budget" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile4" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Class Master" press="navToClassMaster">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-subclass" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile5" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Bid Master" press="onBidMaster">
+                    <TileContent >
+                    <core:Icon class ="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-change-analysis" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile8" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="UOM" press="onUoM">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://measure" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile9" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Cost Master" press="onCostMaster">
+                    <TileContent >
+                    <core:Icon class="icon1" src="sap-icon://expense-report" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile10" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Event Master" press="onEventMaster">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://activity-items" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile18" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Country Master" press="onCountryMaster">
+                    <TileContent >
+
+                    <core:Icon class="icon" src="sap-icon://functional-location" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile12" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Business Partner" press="onBusinessPartnerPress">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://group" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile13" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Configure Release" press="onConfigPress">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-table-chart-customization" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile6" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Port/Location Master" press="onPortLoc">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-ship" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile7" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Route Master" press="onRouterMaster">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-split-segmentation" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile15" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Port Master" press="onPortMaster">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-ship" />
+                    </TileContent>
+                </GenericTile>            
+           
+                <GenericTile id="GenGenericTile11" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Ref. Doc. Indicator" press="onRefDocIndicator">
+                    <TileContent >
+                    <core:Icon class="icon" src="sap-icon://write-new-document" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile19" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="API URL" press="onApiurl">
+                    <TileContent >
+                     <core:Icon class="icon" src="sap-icon://SAP-icons-TNT/api" />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile id="GenGenericTile101" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Port/Marine Upload" press="onUpload">
+                    <TileContent>
+                    <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-source" />
+                    </TileContent>
+                </GenericTile>
+
+
+               
+                
+            </FlexBox>
+      
+
+        
+     
+    </Page>
+</mvc:View>

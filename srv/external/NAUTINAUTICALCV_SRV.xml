@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="NAUTI.NAUTICALCV_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="BidType" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="DomvalueL"/>
+                </Key>
+                <Property Name="Ddtext" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Short Descript." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DomvalueL" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Lower Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="CargoUnit" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Uom"/>
+                </Key>
+                <Property Name="Uom" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unit of measure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Uomdes" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Uom Discription" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="CarType" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Carcd"/>
+                </Key>
+                <Property Name="Carcd" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Vessel Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cardes" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Cargo type descripti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="CurType" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Navoycur"/>
+                </Key>
+                <Property Name="Navoycur" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Navoygcurdes" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Currency Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="VoyType" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voycd"/>
+                </Key>
+                <Property Name="Voycd" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Voyage Code" sap:creatable="false" sap:updatable="false" sap:filterable="false"/>
+                <Property Name="Voydes" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Voyage Code Descript" sap:creatable="false" sap:updatable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GtTab" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Portc"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vlegn" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="LegID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portc" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Port Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Port Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Locnam" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Oil TSW" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pdist" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Medst" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="UoM-Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Vspeed" Type="Edm.Decimal" Nullable="false" Precision="17" Scale="3" sap:unicode="false" sap:label="Speed" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ppdays" Type="Edm.Decimal" Nullable="false" Precision="6" Scale="3" sap:unicode="false" sap:label="Port Days" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vsdays" Type="Edm.Decimal" Nullable="false" Precision="7" Scale="3" sap:unicode="false" sap:label="Sea Days" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetad" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:unicode="false" sap:label="ETA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetat" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetdd" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:unicode="false" sap:label="ETD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetdt" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vwead" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Weather Delay .Sea" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pstat" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cargs" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="0" sap:unicode="false" sap:label="Cargo size" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cargu" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Base Unit" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Frcost" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Othco" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Totco" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ZCalculate" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="GvSpeed"/>
+                </Key>
+                <Property Name="GvSpeed" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Net Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="ZCalcNav" Relationship="NAUTI.NAUTICALCV_SRV.ZCalcAsso" FromRole="FromRole_ZCalcAsso" ToRole="ToRole_ZCalcAsso"/>
+            </EntityType>
+            <EntityType Name="GtPlan" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vlegn" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="LegID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portc" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Port Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Port Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Locnam" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Oil TSW" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pdist" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Medst" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="UoM-Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Vspeed" Type="Edm.Decimal" Nullable="false" Precision="17" Scale="3" sap:unicode="false" sap:label="Speed" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ppdays" Type="Edm.Decimal" Nullable="false" Precision="6" Scale="3" sap:unicode="false" sap:label="Port Days" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vsdays" Type="Edm.Decimal" Nullable="false" Precision="7" Scale="3" sap:unicode="false" sap:label="Sea Days" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetad" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:unicode="false" sap:label="ETA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetat" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetdd" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:unicode="false" sap:label="ETD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vetdt" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vwead" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Weather Delay .Sea" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pstat" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cargs" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="0" sap:unicode="false" sap:label="Cargo size" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cargu" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Base Unit" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Frcost" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Othco" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Totco" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="3" sap:unicode="false" sap:label="Total Cost" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ZCreatePlan" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Voynm" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Voyage name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Voyty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Voyage Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Carty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Vessel Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Curr" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bidtype" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Bid Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="ZCreatePlanNav" Relationship="NAUTI.NAUTICALCV_SRV.ZCreatePlanAsso" FromRole="FromRole_ZCreatePlanAsso" ToRole="ToRole_ZCreatePlanAsso"/>
+            </EntityType>
+            <Association Name="ZCalcAsso" sap:content-version="1">
+                <End Type="NAUTI.NAUTICALCV_SRV.ZCalculate" Multiplicity="1" Role="FromRole_ZCalcAsso"/>
+                <End Type="NAUTI.NAUTICALCV_SRV.GtTab" Multiplicity="*" Role="ToRole_ZCalcAsso"/>
+            </Association>
+            <Association Name="ZCreatePlanAsso" sap:content-version="1">
+                <End Type="NAUTI.NAUTICALCV_SRV.ZCreatePlan" Multiplicity="1" Role="FromRole_ZCreatePlanAsso"/>
+                <End Type="NAUTI.NAUTICALCV_SRV.GtPlan" Multiplicity="*" Role="ToRole_ZCreatePlanAsso"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_ZCreatePlanAsso">
+                        <PropertyRef Name="Voyno"/>
+                    </Principal>
+                    <Dependent Role="ToRole_ZCreatePlanAsso">
+                        <PropertyRef Name="Voyno"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="NAUTI_NAUTICALCV_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="BidTypeSet" EntityType="NAUTI.NAUTICALCV_SRV.BidType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="CargoUnitSet" EntityType="NAUTI.NAUTICALCV_SRV.CargoUnit" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="CarTypeSet" EntityType="NAUTI.NAUTICALCV_SRV.CarType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="CurTypeSet" EntityType="NAUTI.NAUTICALCV_SRV.CurType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="VoyTypeSet" EntityType="NAUTI.NAUTICALCV_SRV.VoyType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GtTabSet" EntityType="NAUTI.NAUTICALCV_SRV.GtTab" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ZCalculateSet" EntityType="NAUTI.NAUTICALCV_SRV.ZCalculate" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GtPlanSet" EntityType="NAUTI.NAUTICALCV_SRV.GtPlan" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ZCreatePlanSet" EntityType="NAUTI.NAUTICALCV_SRV.ZCreatePlan" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="ZCalcAssoSet" Association="NAUTI.NAUTICALCV_SRV.ZCalcAsso" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZCalculateSet" Role="FromRole_ZCalcAsso"/>
+                    <End EntitySet="GtTabSet" Role="ToRole_ZCalcAsso"/>
+                </AssociationSet>
+                <AssociationSet Name="ZCreatePlanAssoSet" Association="NAUTI.NAUTICALCV_SRV.ZCreatePlanAsso" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZCreatePlanSet" Role="FromRole_ZCreatePlanAsso"/>
+                    <End EntitySet="GtPlanSet" Role="ToRole_ZCreatePlanAsso"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICALCV_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICALCV_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

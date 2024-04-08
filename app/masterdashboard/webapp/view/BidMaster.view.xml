@@ -1,0 +1,266 @@
+<mvc:View
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    controllerName="com.ingenx.nauti.masterdashboard.controller.BidMaster"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:core="sap.ui.core"
+>
+    <Page id="_IDGenPage1">
+        <headerContent>
+            <!-- Your header content goes here -->
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
+                        press="onBackPress"
+                    />
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
+                        press="onPressHome"
+                    />
+                   
+                    <Text id="_IDGenText1"
+                        class="text1"
+                        text="Master Details For Bidding"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+
+        <Panel class="tablepanel">
+        <Bar id="_IDGenBar12" class="headerBar2">
+            <contentLeft>
+                <Button
+                    id="entryBtn"
+                    text="New Entries"
+                    press="newEntries"
+                />
+                <Button
+                    id="copyBtn"
+                    text="Copy As"
+                    press="pressCopy"
+                    visible="true"
+                />
+                <Button
+                    id= "deleteBtn"
+                    text="Delete"
+                    press="onDeletePress"
+                />
+                <Button
+                    id= "editBtn"
+                    text="Edit"
+                    press="pressEdit"
+                />
+               
+             
+            </contentLeft>
+            
+        </Bar>
+
+        <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
+
+         <Table id="createTypeTable"
+            width="100%"
+            class="mastertables"
+            items="{path: '/xNAUTIxMASBID', sorter: {path: 'Bname', descending: false}}"
+            mode="MultiSelect"
+            selectionChange="selectedItems"
+            sticky="ColumnHeaders"
+            noDataText="Loading ..."
+            >
+
+            <columns>
+                <Column  >
+                    <Label text="User" />
+                </Column>
+                <Column >
+                    <Label text="Code" />
+                </Column>
+                <Column  >
+                    <Label text="Value" />
+                </Column>
+                <Column  >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column   >
+                    <Label text="Currency" />
+                </Column>
+                <Column  >
+                    <Label text="Data Type" />
+                </Column>
+                <Column  >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="_istItem1">
+                <cells>
+                    <Text id="_IDGenText3" text="{Bname}" />
+                    <Text id="_IDGenText4"  text="{Code}" />
+                    <Text id="_IDGenText5" text="{Value}"  />
+                    <Text id="_IDGenText6" text="{Cvalue}" />
+                    <Text id="_IDGenText7" text="{Cunit}"  />
+                    <Text id="_IDGenText8" text="{Datatype}"  />
+                    <Text id="_IDGenText9" text="{Tablename}"  />
+                   
+                    <CheckBox id="_IDGenText10" selected="{Multi_Choice}" />
+
+                </cells>
+            </ColumnListItem>
+        </Table>
+        </ScrollContainer>
+        </Panel>
+
+       
+        <Table
+            id="entryTypeTable"
+            updateFinished="onTableUpdateFinished"
+            selectionChange="selectedItems"
+            width="100%"
+            class="tablepanel entrytables"
+            visible="false"
+            mode="MultiSelect"
+        >
+              <columns>
+                <Column >
+                    <Label text="Code" required="true" />
+                </Column>
+                <Column id="User">
+                    <Label text="User" required="true" />
+                </Column>
+                <Column >
+                    <Label text="Value"  required="true"/>
+                </Column>
+                <Column >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column  >
+                    <Label text="Currency" />
+                </Column>
+                <Column >
+                    <Label text="Data Type"  required="true"/>
+                </Column>
+                <Column >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="istItem1">
+                <cells>
+                    <Input id="Code"  liveChange="onCodeLiveChange" />
+                    <Input id="Bname" liveChange="onLiveChangeUser"/>
+                    <Input id="Value" liveChange="onLiveChangeValue"/>
+                    <Input id="Cvalue" liveChange="onLiveChangeCvalue" type="Number"/>
+                    <Input id="Cunit" showValueHelp="true" valueHelpRequest=".showValueHelpCurrency"/>
+                    <Input id="Datatype"  liveChange="onLiveChangeDatatype"/>
+                    <Input id="Tablename" liveChange="onLiveChangeTablename"/>
+                    <CheckBox id="Multi_Choice"  select="onSelectChange"/>
+                </cells>
+            </ColumnListItem>
+        </Table>
+        <Table
+            id="updateTypeTable"
+            updateFinished="onTableUpdateFinished"
+            selectionChange="selectedItems"
+            width="100%"
+             class="mastertables"
+            visible="false"
+            mode="MultiSelect"
+           
+        >
+              <columns>
+                <Column >
+                    <Label text="Code" />
+                </Column>
+                <Column >
+                    <Label text="User" />
+                </Column>
+                <Column >
+                    <Label text="Value" />
+                </Column>
+                <Column >
+                    <Label text="Revaluation" />
+                </Column>
+                 <Column  >
+                    <Label text="Currency" />
+                </Column>
+                <Column >
+                    <Label text="Data Type" />
+                </Column>
+                <Column >
+                    <Label text="Table Name" />
+                </Column>
+                <Column >
+                    <Label text="Multiple Column" />
+                </Column>
+               
+            </columns>
+            <ColumnListItem id="istItem2">
+                <cells>
+                    <Text id="Code1"/>
+                    <Text id="Bname1"  />
+                    <Input id="Value1" liveChange="onLiveChangeValue"/>
+                    <Input id="Cvalue1" liveChange="onLiveChangeCvalue"/>
+                    <Input id="Cunit1" showValueHelp="true" valueHelpRequest=".showValueHelpCurrency"/>
+                    <Input id="Datatype1"  liveChange="onLiveChangeDatatype"/>
+                    <Input id="Tablename1" liveChange="onLiveChangeTablename"/>
+                    <CheckBox id="Multi_Choice1"  select="onSelectChange"/>
+                </cells>
+            </ColumnListItem>
+        </Table>
+         <OverflowToolbar
+                id="mainPageFooter"
+                design="Auto"
+                visible="false"
+            >
+                <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                <Button id="add" text="Add Row" icon="sap-icon://sys-add" press=".onAddRow1" type="Success"></Button>
+                <Button id="minus" text="Delete Row" icon="sap-icon://sys-minus" press=".onDeleteRow1" type="Reject"></Button>
+                <Button
+                    id="mainPageSave"
+                    text="Save"
+                    press="onSave"
+                />
+                <Button
+                    id="_IDGenButton22"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+
+            <OverflowToolbar
+                id="mainPageFooter2"
+                design="Auto"
+                visible="false"
+                 class="updateTableFooter"
+            >
+                <ToolbarSpacer id="_IDGenToolbarSpacer4" />
+                <Button
+                    id="mainPageSave12"
+                    text="Update"
+                    press="onUpdate"
+                />
+                <Button
+                    id="_IDGenButton23"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+
+      
+           
+       
+    </Page>
+ 
+   
+</mvc:View>
