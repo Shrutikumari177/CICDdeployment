@@ -122,16 +122,16 @@
          >
             <columns>
                 <Column>
-                    <Text text="Country" />
+                    <Text text="Currency" />
                 </Column>
                 <Column>
-                    <Text text="Country Description" />
+                    <Text text=" Description" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="showValueHelpCurrency" valueHelpOnly="true"/>
+                        <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="showValueHelpCurrency" valueHelpIconSrc="true"/>
                         <Input id="NAVOYGCURDES2" />
                     </cells>
                 </ColumnListItem>
@@ -148,10 +148,10 @@
          >
             <columns>
                 <Column>
-                    <Text text="Currency Type" />
+                    <Text text="Currency " />
                 </Column>
                 <Column>
-                    <Text text=" Currency Description" />
+                    <Text text="Description" />
                 </Column>
             </columns>
             <items>

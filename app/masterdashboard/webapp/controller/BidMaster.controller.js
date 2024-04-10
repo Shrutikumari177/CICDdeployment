@@ -733,7 +733,7 @@ sap.ui.define(
         this.getView().byId("mainPageFooter").setVisible(true);
         this.getView().byId("editBtn").setEnabled(false);
         this.getView().byId("deleteBtn").setEnabled(false);
-        this.getView().byId("copyBtn").setEnabled(false);
+        // this.getView().byId("copyBtn").setEnabled(false);
       },
 
 

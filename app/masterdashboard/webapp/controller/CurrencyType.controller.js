@@ -211,10 +211,10 @@ sap.ui.define(
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.navTo("RouteHome");
             oRouter.navTo("RouteHome");
-                  setTimeout(()=>{
+            setTimeout(() => {
 
-                    that.resetView();
-                  },1500);
+              that.resetView();
+            }, 1500);
 
           } else {
             sap.m.MessageBox.confirm(
@@ -226,10 +226,10 @@ sap.ui.define(
                   const oRouter = that.getOwnerComponent().getRouter();
                   oRouter.navTo("RouteHome");
                   oRouter.navTo("RouteHome");
-                  setTimeout(()=>{
+                  setTimeout(() => {
 
                     that.resetView();
-                  },1500);
+                  }, 1500);
 
                 } else {
                   // If user clicks Cancel, do nothing
@@ -250,10 +250,10 @@ sap.ui.define(
             const oRouter = that.getOwnerComponent().getRouter();
             oRouter.navTo("RouteHome");
             oRouter.navTo("RouteHome");
-                  setTimeout(()=>{
+            setTimeout(() => {
 
-                    that.resetView();
-                  },1500);
+              that.resetView();
+            }, 1500);
 
           } else {
             sap.m.MessageBox.confirm(
@@ -265,10 +265,10 @@ sap.ui.define(
                   const oRouter = that.getOwnerComponent().getRouter();
                   oRouter.navTo("RouteHome");
                   oRouter.navTo("RouteHome");
-                  setTimeout(()=>{
+                  setTimeout(() => {
 
                     that.resetView();
-                  },1500);
+                  }, 1500);
                 } else {
                   // If user clicks Cancel, do nothing
                 }
@@ -290,10 +290,10 @@ sap.ui.define(
 
             oRouter.navTo("RouteHome");
             oRouter.navTo("RouteHome");
-            setTimeout(()=>{
+            setTimeout(() => {
 
               that.resetView();
-            },1500);
+            }, 1500);
 
           } else {
 
@@ -317,10 +317,10 @@ sap.ui.define(
                   cancelObj.setVisible(false);
                   oRouter.navTo("RouteHome");
                   oRouter.navTo("RouteHome");
-                  setTimeout(()=>{
+                  setTimeout(() => {
 
                     that.resetView();
-                  },1500);
+                  }, 1500);
 
 
                 }
@@ -337,7 +337,7 @@ sap.ui.define(
       },
 
       selectedItems: function (oEvent) {
-      
+
         let oTable = oEvent.getSource();
         let aSelectedItems = oTable.getSelectedItems();
 
@@ -376,15 +376,15 @@ sap.ui.define(
 
           this.getView().byId("deleteBtn").setEnabled(false);
           var oEntryTable = this.getView().byId("entryTypeTable");
-        var items = oEntryTable.getItems();
-        for (var i = items.length - 1; i > 0; i--) {
-          oEntryTable.removeItem(items[i]);
-        }
- 
-        // Clear input fields of the first row
-        var firstItemCells = items[0].getCells();
-        firstItemCells[0].setValue("");
-        firstItemCells[1].setValue("");
+          var items = oEntryTable.getItems();
+          for (var i = items.length - 1; i > 0; i--) {
+            oEntryTable.removeItem(items[i]);
+          }
+
+          // Clear input fields of the first row
+          var firstItemCells = items[0].getCells();
+          firstItemCells[0].setValue("");
+          firstItemCells[1].setValue("");
 
 
 
@@ -403,7 +403,7 @@ sap.ui.define(
 
       //   }
 
-      
+
       //   if (aSelectedIds.length) {
       //     if (aSelectedIds.length > 1) {
       //       MessageToast.show("Please select one Item.");
@@ -422,7 +422,7 @@ sap.ui.define(
       //   let aSelectedItems = oTable.getSelectedItems();
 
       //   let cells = aSelectedItems[0].getCells();
-        
+
       //   inputFieldObj = cells[1].getAggregation('items')[0].setEditable(true);
       //   saveObj = cells[1].getAggregation('items')[1].setVisible(true);
       //   cancelObj = cells[1].getAggregation('items')[2].setVisible(true);
@@ -584,7 +584,7 @@ sap.ui.define(
 
       onCreateSent: function (ev) {
         sap.m.MessageToast.show("Creating..")
-        console.log(ev.getParameter("context")?.getObject())
+        // console.log(ev.getParameter("context")?.getObject())
       },
       onCreateCompleted: function (ev) {
         let isSuccess = ev.getParameter('success');

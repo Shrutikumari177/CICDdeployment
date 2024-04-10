@@ -149,7 +149,6 @@ sap.ui.define(
         oBindListSP.getContexts();
       }, onCreateSent: function (ev) {
         sap.m.MessageToast.show("Creating..")
-        console.log(ev.getParameter("context")?.getObject())
       },
       onCreateCompleted: function (ev) {
         let isSuccess = ev.getParameter('success');
@@ -246,7 +245,11 @@ sap.ui.define(
 
             let data = aData.filter(item =>(item.Zgroup == UpData.Zgroup));
 
-            if (data?.Voyty === UpData.Voyty && data?.Vesty === UpData.Vesty && data?.Rels === UpData.Rels) {
+            if (
+              (data && data.Voyty === UpData.Voyty) &&
+              (data && data.Vesty === UpData.Vesty) &&
+              (data && data.Rels === UpData.Rels)
+            ) {
               sap.m.MessageToast.show("Nothing to Update..")
             } else {
               let path = `/VoyageReleaseSet('${UpData.Zgroup}'`;

@@ -561,8 +561,7 @@ sap.ui.define(
         oBindListSP.getContexts();
       },
       onCreateSent: function (ev) {
-        sap.m.MessageToast.show("Creating..")
-        console.log(ev.getParameter("context")?.getObject())
+        sap.m.MessageToast.show("Creating..");
       },
       onCreateCompleted: function (ev) {
         let isSuccess = ev.getParameter('success');
