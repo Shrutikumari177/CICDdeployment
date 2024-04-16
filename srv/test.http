@@ -1,0 +1,39 @@
+
+### getting Header details
+
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000035/Voyno
+
+### getting Header details
+
+GET  http://localhost:4004/odata/v4/nauticalservice/VoyTypeSet/1001
+
+
+### posting data
+POST  http://localhost:4004/odata/v4/nauticalservice/ZCalculateSet
+Content-Type: application/json
+
+{
+  "GvSpeed": "24",
+  "ZCalcNav": [
+    {
+      "Medst": "NM",
+      "Pdist": "00000",
+      "Portc": "INBOM",
+      "Portn": "MUMBAI",
+      "Ppdays": "5",
+      "Vetdd": "2024-04-05",
+      "Vetdt": "17:48:45",
+      "Vspeed": "24",
+      "Vwead": "0"
+    },
+    {
+      "Medst": "NM",
+      "Pdist": "1971",
+      "Portc": "INPRT",
+      "Portn": "PARADIP",
+      "Ppdays": "2",
+      "Vspeed": "24",
+      "Vwead": "0"
+    }
+  ]
+}

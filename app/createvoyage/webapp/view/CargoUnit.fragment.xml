@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:core="sap.ui.core"
+>
+	<ValueHelpDialog
+	contentWidth="50%"
+		contentHeight="auto"
+		title="Cargo Unit"
+		supportMultiselect="false"
+		ok=".onCargoUnitHelpOkPress"
+		cancel=".onCargoUnitHelpCancelPress"
+		afterClose=".onCargoUnitHelpAfterClose"
+		key="sCargoUnit"
+		descriptionKey="sCargoUnitText"
+	/>
+</core:FragmentDefinition>

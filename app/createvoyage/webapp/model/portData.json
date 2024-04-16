@@ -1,0 +1,31 @@
+{
+    
+    "myData": [
+        {"startPort": "AUNTL", "endPort": "INBOM", "distance": 6509},
+        {"startPort": "AUNTL", "endPort": "INPRT", "distance": 5692},
+        {"startPort": "CNSHG", "endPort": "AUNTL", "distance": 5499},
+        {"startPort": "CNSHG", "endPort": "INBOM", "distance": 4658},
+        {"startPort": "CNSHG", "endPort": "INPRT", "distance": 3734},
+        {"startPort": "CNSHG", "endPort": "SGSIN", "distance": 2192},
+        {"startPort": "INBOM", "endPort": "AUNTL", "distance": 6507},
+        {"startPort": "INBOM", "endPort": "IDJKT", "distance": 2754},
+        {"startPort": "INBOM", "endPort": "INPRT", "distance": 1971},
+        {"startPort": "INBOM", "endPort": "INVTZ", "distance": 1768},
+        {"startPort": "INMUN", "endPort": "AEDXB", "distance": 901},
+        {"startPort": "INPRT", "endPort": "AEHAM", "distance": 2955},
+        {"startPort": "INPRT", "endPort": "AUNTL", "distance": 5742},
+        {"startPort": "INPRT", "endPort": "CNSHG", "distance": 3852},
+        {"startPort": "INPRT", "endPort": "INBOM", "distance": 1947},
+        {"startPort": "INPRT", "endPort": "INVTZ", "distance": 252},
+        {"startPort": "INPRT", "endPort": "USFLL", "distance": 10343},
+        {"startPort": "INVTZ", "endPort": "CNSHG", "distance": 3853},
+        {"startPort": "INVTZ", "endPort": "INBOM", "distance": 1748},
+        {"startPort": "INVTZ", "endPort": "INPRT", "distance": 261},
+        {"startPort": "SGSIN", "endPort": "INBOM", "distance": 2474},
+        {"startPort": "SGSIN", "endPort": "INPRT", "distance": 1540},
+        {"startPort": "USFLL", "endPort": "AUNTL", "distance": 15185},
+        {"startPort": "USFLL", "endPort": "CNSHG", "distance": 9908},
+        {"startPort": "USFLL", "endPort": "INBOM", "distance": 8997},
+        {"startPort": "USFLL", "endPort": "SGSIN", "distance": 10867}
+    ]
+}

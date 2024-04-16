@@ -1,0 +1,206 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "com.ingenx.nauti.createvoyage",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.13.1",
+      "toolsId": "6c3233a9-9179-4d86-bc77-92ea51e14b52"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/nauticalservice/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      },
+      "mainService2": {
+        "uri": "/v2/odata/v4/nauticalservice/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.122.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.ingenx.nauti.createvoyage.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "modelV2": {
+        "dataSource": "mainService2",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+      },
+      {
+          "uri": "css/leaflet.css"
+      },
+      {
+          "uri": "css/leaflet-routing-machine.css"
+      },
+      {
+        "uri": "css/style1.css"
+    }
+      ],
+      "js":[
+        {
+          "uri": "libs/leaflet.js"
+      },
+      {
+          "uri": "libs/leaflet-routing-machine.js"
+      },
+      {
+          "uri": "libs/leaflet.curve.js"
+      },
+      {
+          "uri": "libs/esri-leaflet.js"
+      },
+      {
+          "uri": "libs/esri-leaflet-vector.js"
+      },
+      {
+          "uri": "libs/decimal.js"
+      },
+      {
+          "uri": "libs/dayjs.min.js"
+      },
+      {
+          "uri": "libs/dayjs-plugin-utc.js"
+      }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "com.ingenx.nauti.createvoyage.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteView1",
+          "pattern": ":?query:",
+          "target": [
+            "TargetView1"
+          ]
+        },
+        {
+          "name": "freightsim",
+          "pattern": "freightSimulator",
+          "target": [
+            "TargetFreightSim"
+          ]
+        },
+        {
+          "name": "RouteTrChangeVoyage",
+          "pattern": "TrChangeVoyage/{VOYAGE_NO}",
+          "target": [
+            "TargetTrChangeVoyage"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetView1": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "View1",
+          "viewName": "View1"
+        },
+        "TargetFreightSim": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "FreightSim",
+          "viewName": "FreightSim"
+        },
+        "TargetTrChangeVoyage": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "TrChangeVoyage",
+          "viewName": "TrChangeVoyage"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.ingenx.nauti.createvoyage.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

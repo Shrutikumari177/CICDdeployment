@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="NAUTI.MARINE_TRAFFIC_API_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="EsPath" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Latitude"/>
+                </Key>
+                <Property Name="PathId" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Path ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Latitude" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Latitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Longitude" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Longitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="et_route_map" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IvFromPort"/>
+                    <PropertyRef Name="IvToPort"/>
+                </Key>
+                <Property Name="marineApiRoute" Type="NAUTI.MARINE_TRAFFIC_API_SRV.marineApiRoute" Nullable="false"/>
+                <Property Name="IvFromPort" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="From Port ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IvOptimized" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Optimized Route" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IvToPort" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="To Port ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="route" Relationship="NAUTI.MARINE_TRAFFIC_API_SRV.route" FromRole="FromRole_route" ToRole="ToRole_route"/>
+            </EntityType>
+            <EntityType Name="PortMaster" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Portn"/>
+                    <PropertyRef Name="Locid"/>
+                </Key>
+                <Property Name="Country" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portc" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Port Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Port Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Reancho" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Related Anchorage" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Latitude" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Latitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Longitude" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Longitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Countryn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Country Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Locid" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Location ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="EtPortlist" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Portc"/>
+                </Key>
+                <Property Name="Country" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portc" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Port Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Portn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Port Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Reancho" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Related Anchorage" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Latitude" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Latitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Longitude" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Longitude" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Countryn" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Country Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Locid" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Location ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ind" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Process ind" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <ComplexType Name="marineApiRoute">
+                <Property Name="EvDistance" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
+            <Association Name="route" sap:content-version="1">
+                <End Type="NAUTI.MARINE_TRAFFIC_API_SRV.et_route_map" Multiplicity="1" Role="FromRole_route"/>
+                <End Type="NAUTI.MARINE_TRAFFIC_API_SRV.EsPath" Multiplicity="*" Role="ToRole_route"/>
+            </Association>
+            <EntityContainer Name="NAUTI_MARINE_TRAFFIC_API_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="es_route_map" EntityType="NAUTI.MARINE_TRAFFIC_API_SRV.et_route_map" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="PortMasterSet" EntityType="NAUTI.MARINE_TRAFFIC_API_SRV.PortMaster" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="es_port_master" EntityType="NAUTI.MARINE_TRAFFIC_API_SRV.EtPortlist" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="EsPathCollection" EntityType="NAUTI.MARINE_TRAFFIC_API_SRV.EsPath" sap:content-version="1"/>
+                <AssociationSet Name="route_AssocSet" Association="NAUTI.MARINE_TRAFFIC_API_SRV.route" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="es_route_map" Role="FromRole_route"/>
+                    <End EntitySet="EsPathCollection" Role="ToRole_route"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

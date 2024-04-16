@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:core="sap.ui.core"
+>
+	<ValueHelpDialog
+	contentWidth="50%"
+		contentHeight="auto"
+		title="Voyage Types"
+		supportMultiselect="false"
+		ok=".onVoyTyHelpOkPress"
+		cancel=".onVoyTyHelpCancelPress"
+		afterClose=".onVoyTyHelpAfterClose"
+		key="sVoyageType"
+		descriptionKey="sVoyageTypeText"
+	/>
+</core:FragmentDefinition>

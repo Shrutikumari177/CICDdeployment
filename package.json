@@ -1,77 +1,115 @@
 {
-    "name": "nautical",
-    "version": "1.0.0",
-    "description": "A simple CAP project.",
-    "repository": "<Add your repository here>",
-    "license": "UNLICENSED",
-    "private": true,
-    "dependencies": {
-        "@sap-cloud-sdk/connectivity": "^3.13.0",
-        "@sap-cloud-sdk/http-client": "^3.13.0",
-        "@sap-cloud-sdk/resilience": "^3.13.0",
-        "@sap/cds": "^7.8.0",
-        "express": "^4.19.2",
-        "@sap/cds-hana": "^2",
-        "@sap/xssec": "^3"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "^1",
-        "@sap/cds-dk": "^7",
-        "@sap/ux-specification": "^1.120.7",
-        "rimraf": "^3.0.2"
-    },
-    "engines": {
-        "node": "^18"
-    },
-    "scripts": {
-        "start": "cds-serve",
-        "watch-masterdashboard": "cds watch --open masterdashboard/webapp/index.html?sap-ui-xx-viewCache=false",
-        "undeploy": "cf undeploy nautical --delete-services --delete-service-keys --delete-service-brokers",
-        "build": "rimraf resources mta_archives && mbt build --mtar archive",
-        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
-    },
-    "cds": {
-        "requires": {
-            "NAUTIMASTER_BTP_SRV": {
-                "kind": "odata-v2",
-                "model": "srv/external/NAUTIMASTER_BTP_SRV",
-                "csrf": true,
-                "csrfInBatch": true,
-                "[production]": {
-                    "credentials": {
-                        "destination": "Ingenx_OData_SAP",
-                        "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
-                    }
-                },
-                "[development]": {
-                    "credentials": {
-                        "destination": "SandboxPO",
-                        "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
-                    }
-                }
-            },
-            "NAUTINAUTICALCV_SRV": {
-                "kind": "odata-v2",
-                "model": "srv/external/NAUTINAUTICALCV_SRV",
-                "csrf": true,
-                "csrfInBatch": true,
-                "[production]": {
-                    "credentials": {
-                        "destination": "Ingenx_OData_SAP",
-                        "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
-                    }
-                },
-                "[development]": {
-                    "credentials": {
-                        "destination": "SandboxPO",
-                        "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
-                    }
-                }
-            },
-            "[production]": {
-                "db": "hana",
-                "auth": "xsuaa"
-            }
+  "name": "nautical",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^3.13.0",
+    "@sap-cloud-sdk/http-client": "^3.13.0",
+    "@sap-cloud-sdk/resilience": "^3.13.0",
+    "@sap/cds": "^7.8.0",
+    "@sap/cds-hana": "^2",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "@sap/xssec": "^3",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7",
+    "@sap/ux-specification": "^1.120.7",
+    "rimraf": "^3.0.2"
+  },
+  "engines": {
+    "node": "^18"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-masterdashboard": "cds watch --open masterdashboard/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy nautical --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-createvoyage": "cds watch --open createvoyage/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "cds": {
+    "requires": {
+      "NAUTIMASTER_BTP_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIMASTER_BTP_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
+          }
         }
+      },
+      "NAUTINAUTICALCV_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTINAUTICALCV_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
+          }
+        }
+      },
+      "NAUTIMARINE_TRAFFIC_API_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIMARINE_TRAFFIC_API_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
+          }
+        }
+      },
+      "[production]": {
+        "db": "hana",
+        "auth": "xsuaa"
+      },
+      "NAUTITRANSACTION_BTP_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTITRANSACTION_BTP_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/TRANSACTION_BTP_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/TRANSACTION_BTP_SRV"
+          }
+        }
+      }
     }
+  }
 }

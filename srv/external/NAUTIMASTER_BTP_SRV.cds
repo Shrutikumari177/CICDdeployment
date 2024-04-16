@@ -1,4 +1,4 @@
-/* checksum : b208e5c23dd5afb29524d33ade50c61b */
+/* checksum : 74b769bc964457e44847190775b71f47 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -300,6 +300,79 @@ entity NAUTIMASTER_BTP_SRV.country_updSet {
 @sap.deletable : 'false'
 @sap.pageable : 'false'
 @sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.PortmasterSet {
+  @sap.unicode : 'false'
+  @sap.label : 'Country'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Country : String(3) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Port Code'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Portc : String(10) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Port Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Portn : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Related Anchorage'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Reancho : String(30) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Latitude'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Latitude : String(15) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Longitude'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Longitude : String(15) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Country Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Countryn : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Location ID'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Locid : String(10) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Process ind'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Ind : String(1) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
 entity NAUTIMASTER_BTP_SRV.RefrenceDocumentSet {
   @sap.unicode : 'false'
   @sap.label : 'Ref Doc .ind'
@@ -469,72 +542,69 @@ entity NAUTIMASTER_BTP_SRV.StandardCurrencySet {
 @sap.creatable : 'false'
 @sap.updatable : 'false'
 @sap.deletable : 'false'
-@sap.pageable : 'false'
 @sap.content.version : '1'
-entity NAUTIMASTER_BTP_SRV.PortmasterSet {
-  @sap.unicode : 'false'
+@sap.label : 'cds for bp master'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxBusinessPartner1 {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key Lifnr : String(10) not null;
+  @sap.label : 'BP Role'
+  @sap.quickinfo : 'BP Role for Screen Usage'
+  PartnerRole : String(7);
+  @sap.label : 'Title'
+  Anred : String(15);
+  @sap.label : 'Name'
+  @sap.quickinfo : 'Name 1'
+  Name1 : String(35);
+  @sap.label : 'Name 2'
+  Name2 : String(35);
+  @sap.label : 'Name 3'
+  Name3 : String(35);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Search Term 1'
+  Sort1 : String(20);
+  @sap.label : 'Street 2'
+  StrSuppl1 : String(40);
+  @sap.label : 'Street 3'
+  StrSuppl2 : String(40);
+  @sap.label : 'House Number'
+  HouseNum1 : String(10);
+  @sap.label : 'Street'
+  Stras : String(60);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Postal Code'
+  Pstlz : String(10);
+  @sap.label : 'City'
+  Ort01 : String(35);
+  @sap.display.format : 'UpperCase'
   @sap.label : 'Country'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  key Country : String(3) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Port Code'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  key Portc : String(10) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Port Name'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Portn : String(25) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Related Anchorage'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Reancho : String(30) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Latitude'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Latitude : String(15) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Longitude'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Longitude : String(15) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Country Name'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Countryn : String(25) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Location ID'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Locid : String(10) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Process ind'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Ind : String(1) not null;
+  @sap.quickinfo : 'Country Key'
+  Land1 : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Region'
+  @sap.quickinfo : 'Region (State, Province, County)'
+  Regio : String(3);
+  @sap.label : 'Language Key'
+  Spras : String(2);
+  @sap.label : 'Telephone 1'
+  @sap.quickinfo : 'First telephone number'
+  Telf1 : String(16);
+  @sap.label : 'Telephone 2'
+  @sap.quickinfo : 'Second telephone number'
+  Telf2 : String(16);
+  @sap.label : 'Fax Number'
+  Telfx : String(31);
+  @sap.label : 'E-Mail Address'
+  SmtpAddr : String(241);
+  @sap.display.format : 'Date'
+  @sap.label : 'Created on'
+  @sap.quickinfo : 'Date on which the Record Was Created'
+  Erdat : Date;
+  @sap.display.format : 'Date'
+  @sap.label : 'To'
+  @sap.quickinfo : 'Valid-to date in current Release only 99991231 possible'
+  DateTo : Date;
 };
 
 @cds.external : true
@@ -586,9 +656,11 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxvend_btp {
   @sap.text : 'SupplierName'
   @sap.label : 'Vendor'
   @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  @sap.value.list : 'standard'
   key Supplier : String(10) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Company Code'
+  @sap.value.list : 'standard'
   key CompanyCode : String(4) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Business Partner'
@@ -609,13 +681,16 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxvend_btp {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Bank acct'
   @sap.quickinfo : 'Bank Account Number'
+  @sap.value.list : 'standard'
   key BankAccount : String(18) not null;
   @sap.display.format : 'UpperCase'
   @sap.text : 'SupplierCountryName'
   @sap.label : 'Country'
   @sap.quickinfo : 'Country Key'
+  @sap.value.list : 'standard'
   key Country : String(3) not null;
   @sap.label : 'Name of Supplier'
+  @sap.value.list : 'standard'
   SupplierName : String(80);
   @sap.label : 'Name'
   @sap.quickinfo : 'Name 1'
@@ -629,6 +704,7 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxvend_btp {
   @sap.label : 'Postal Code'
   PostalCode : String(10);
   @sap.label : 'City'
+  @sap.value.list : 'standard'
   CityName : String(40);
   @sap.label : 'Street'
   @sap.quickinfo : 'Street and House Number'
@@ -715,6 +791,7 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxvend_btp {
   AlternativePayeeAccountNumber : String(10);
   @sap.display.format : 'UpperCase'
   @sap.label : 'Company Code'
+  @sap.value.list : 'standard'
   SearchString : String(4);
   @sap.display.format : 'UpperCase'
   @sap.label : 'Sort key'
@@ -869,6 +946,194 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxVOY {
   @sap.label : 'Voyage Code Descript'
   @sap.quickinfo : 'Voyage Code Description'
   voydes : String(40);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.searchable : 'true'
+@sap.content.version : '1'
+@sap.label : 'Bank Data'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.I_Bank_Acct_VH {
+  @sap.display.format : 'UpperCase'
+  @sap.text : 'BankName'
+  @sap.label : 'Bank Key'
+  @sap.quickinfo : 'Bank Keys'
+  key BankInternalID : String(15) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Bank Country'
+  @sap.quickinfo : 'Bank country key'
+  key BankCountry : String(3) not null;
+  @sap.label : 'Bank name'
+  @sap.quickinfo : 'Name of bank'
+  BankName : String(60);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.searchable : 'true'
+@sap.content.version : '1'
+@sap.label : 'Company Code'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.I_CompanyCodeStdVH {
+  @sap.display.format : 'UpperCase'
+  @sap.text : 'CompanyCodeName'
+  @sap.label : 'Company Code'
+  key CompanyCode : String(4) not null;
+  @sap.label : 'Company Name'
+  @sap.quickinfo : 'Name of Company Code or Company'
+  CompanyCodeName : String(25);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.searchable : 'true'
+@sap.content.version : '1'
+@sap.label : 'Company Code'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.I_CompanyCodeVH {
+  @sap.display.format : 'UpperCase'
+  @sap.text : 'CompanyCodeName'
+  @sap.label : 'Company Code'
+  key CompanyCode : String(4) not null;
+  @sap.label : 'Company Name'
+  @sap.quickinfo : 'Name of Company Code or Company'
+  CompanyCodeName : String(25);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Controlling Area'
+  ControllingArea : String(4);
+  @sap.label : 'City'
+  CityName : String(25);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country Key'
+  Country : String(3);
+  @sap.label : 'Currency'
+  @sap.quickinfo : 'Currency Key'
+  @sap.semantics : 'currency-code'
+  Currency : String(5);
+  @sap.label : 'Language Key'
+  Language : String(2);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chart of Accounts'
+  ChartOfAccounts : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Fiscal Year Variant'
+  FiscalYearVariant : String(2);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Company'
+  Company : String(6);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Credit control area'
+  CreditControlArea : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country CoA'
+  @sap.quickinfo : 'Country Chart of Accounts'
+  CountryChartOfAccounts : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'FM Area'
+  @sap.quickinfo : 'Financial Management Area'
+  FinancialManagementArea : String(4);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.searchable : 'true'
+@sap.content.version : '1'
+@sap.label : 'Country'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.I_Country {
+  @sap.display.format : 'UpperCase'
+  @sap.text : 'Country_Text'
+  @sap.label : 'Country Key'
+  key Country : String(3) not null;
+  @sap.label : 'Country Name'
+  @sap.quickinfo : 'Country Name (Max. 50 Characters)'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  Country_Text : String(50);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'ISO Code 3 Char'
+  @sap.quickinfo : 'ISO country code 3 char'
+  CountryThreeLetterISOCode : String(3);
+  @sap.display.format : 'NonNegative'
+  @sap.label : 'ISO Code Num. 3'
+  @sap.quickinfo : 'ISO Country Code Numeric 3-Characters'
+  CountryThreeDigitISOCode : String(3);
+  @sap.label : 'Country Currency'
+  @sap.semantics : 'currency-code'
+  CountryCurrency : String(5);
+  @sap.label : 'Index-Based Currency'
+  @sap.quickinfo : 'Currency Key of the Index-Based Currency'
+  @sap.semantics : 'currency-code'
+  IndexBasedCurrency : String(5);
+  @sap.label : 'Hard Currency'
+  @sap.quickinfo : 'Currency Key of the Hard Currency'
+  @sap.semantics : 'currency-code'
+  HardCurrency : String(5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Procedure'
+  @sap.quickinfo : 'Procedure (Pricing, Output Control, Acct. Det., Costing,...)'
+  TaxCalculationProcedure : String(6);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Altern.Country Key'
+  @sap.quickinfo : 'Alternative Country Key'
+  CountryAlternativeCode : String(3);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.searchable : 'true'
+@sap.content.version : '1'
+@sap.label : 'Value Help for Supplier'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.I_Supplier_VH {
+  @sap.display.format : 'UpperCase'
+  @sap.text : 'SupplierName'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key Supplier : String(10) not null;
+  @sap.label : 'Name'
+  @sap.quickinfo : 'Name 1'
+  SupplierName : String(35);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Authorization'
+  @sap.quickinfo : 'Authorization Group'
+  AuthorizationGroup : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Account group'
+  @sap.quickinfo : 'Vendor account group'
+  SupplierAccountGroup : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Purpose Completed'
+  @sap.quickinfo : 'Business Purpose Completed Flag'
+  IsBusinessPurposeCompleted : String(1);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.value.list : 'true'
+entity NAUTIMASTER_BTP_SRV.P_CityValueHelp {
+  @sap.label : 'City'
+  key CityName : String(40) not null;
 };
 
 @cds.external : true

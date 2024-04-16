@@ -1,0 +1,397 @@
+<mvc:View
+	xmlns:layout="sap.ui.layout"
+	controllerName="com.ingenx.nauti.createvoyage.controller.FreightSim"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:ui="sap.ui.table"
+	displayBlock="true"
+	xmlns="sap.m"
+>
+	<Page
+		id="page"
+		title="Freight Simulator"
+	>
+		<content>
+			<layout:BlockLayout>
+				<layout:BlockLayoutRow>
+					<layout:content>
+						<layout:BlockLayoutCell
+							title="Freight (Per TON)"
+							titleAlignment="Begin"
+							titleLevel="H6"
+							width="0"
+							class="cellBlockTitle cellBlockPadding"
+							backgroundColorSet="ColorSet7"
+							backgroundColorShade="ShadeF"
+						/>
+					</layout:content>
+				</layout:BlockLayoutRow>
+			</layout:BlockLayout>
+			<layout:BlockLayout>
+				<layout:content>
+					<layout:BlockLayoutRow>
+						<layout:content>
+							<layout:BlockLayoutCell
+								backgroundColorSet="ColorSet7"
+								backgroundColorShade="ShadeD"
+								class="cellContentPadding"
+							>
+								<layout:content>
+									<ui:Table
+										id="FreightSimPertTable"
+										selectionMode="None"
+										rows="{pertmodel>/}"
+										visibleRowCount="4"
+									>
+										<ui:extension>
+											<Toolbar
+												design="Info"
+												style="Clear"
+												class="toolBarStyle"
+											>
+												<content>
+													<Label
+														text="Proposed Freight Cost:"
+														labelFor="pertFCost"
+													/>
+													<Input
+														id="pertFCost"
+														width="8rem"
+														/>
+														<!-- liveChange="pertFCostChange" -->
+													<Label
+														text="Total Cost:"
+														labelFor="pertTotalCost"
+													/>
+													<Input
+														id="pertTotalCost"
+														width="8rem"
+														editable="false"
+													/>
+													<ToolbarSpacer/>
+													<ProgressIndicator id="progressIndicatorPert" state="Information" width="10rem"/>
+												</content>
+											</Toolbar>
+										</ui:extension>
+										<ui:columns>
+											<ui:Column width="auto">
+												<Label text="Port Name"/>
+												<ui:template>
+													<Input
+														value="{pertmodel>PortName}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Distance(NM)"/>
+												<ui:template>
+													<Input
+														value="{
+															path: 'pertmodel>Distance',
+															formatter: '.formatter.numberFormat'
+														}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Cargo Size"/>
+												<ui:template>
+													<Input value="{
+														path: 'pertmodel>CargoSize',
+														formatter: '.formatter.numberFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Freight Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'pertmodel>FreightCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Other Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'pertmodel>OtherCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Total Projected Cost per Port"/>
+												<ui:template>
+													<Input value="{
+														path: 'pertmodel>PortProjectedCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+										</ui:columns>
+									</ui:Table>
+								</layout:content>
+							</layout:BlockLayoutCell>
+						</layout:content>
+					</layout:BlockLayoutRow>
+				</layout:content>
+			</layout:BlockLayout>
+			<layout:BlockLayout>
+				<layout:BlockLayoutRow>
+					<layout:content>
+						<layout:BlockLayoutCell
+							title="Freight (Lumpsum)"
+							titleAlignment="Begin"
+							titleLevel="H6"
+							width="0"
+							class="cellBlockTitle cellBlockPadding"
+							backgroundColorSet="ColorSet7"
+							backgroundColorShade="ShadeF"
+						/>
+					</layout:content>
+				</layout:BlockLayoutRow>
+			</layout:BlockLayout>
+			<layout:BlockLayout>
+				<layout:content>
+					<layout:BlockLayoutRow>
+						<layout:content>
+							<layout:BlockLayoutCell
+								backgroundColorSet="ColorSet7"
+								backgroundColorShade="ShadeD"
+								class="cellContentPadding"
+							>
+								<layout:content>
+									<ui:Table
+										id="FreightSimLumpsumTable"
+										selectionMode="None"
+										rows="{lumpsummodel>/}"
+										visibleRowCount="4"
+									>
+										<ui:extension>
+											<Toolbar
+												design="Info"
+												style="Clear"
+												class="toolBarStyle"
+											>
+												<content>
+													<Label
+														text="Proposed Freight Cost:"
+														labelFor="lumpsumFCost"
+													/>
+													<Input
+														id="lumpsumFCost"
+														width="8rem"
+														/>
+														<!-- liveChange="lumpsumFCostChange" -->
+													<Label
+														text="Total Cost:"
+														labelFor="lumpsumTotalCost"
+													/>
+													<Input
+														id="lumpsumTotalCost"
+														width="8rem"
+														editable="false"
+													/>
+													<ToolbarSpacer/>
+													<ProgressIndicator id="progressIndicatorLSUM" state="Information" width="10rem"/>
+												</content>
+											</Toolbar>
+										</ui:extension>
+										<ui:columns>
+											<ui:Column width="auto">
+												<Label text="Port Name"/>
+												<ui:template>
+													<Input
+														value="{lumpsummodel>PortName}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Distance(NM)"/>
+												<ui:template>
+													<Input
+														value="{
+															path: 'lumpsummodel>Distance',
+															formatter: '.formatter.numberFormat'
+														}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Cargo Size"/>
+												<ui:template>
+													<Input value="{
+														path: 'lumpsummodel>CargoSize',
+														formatter: '.formatter.numberFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Freight Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'lumpsummodel>FreightCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Other Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'lumpsummodel>OtherCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Total Projected Cost per Port"/>
+												<ui:template>
+													<Input value="{
+														path: 'lumpsummodel>PortProjectedCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+										</ui:columns>
+									</ui:Table>
+								</layout:content>
+							</layout:BlockLayoutCell>
+						</layout:content>
+					</layout:BlockLayoutRow>
+				</layout:content>
+			</layout:BlockLayout>
+			<layout:BlockLayout>
+				<layout:BlockLayoutRow>
+					<layout:content>
+						<layout:BlockLayoutCell
+							title="Freight (TO/NM)"
+							titleAlignment="Begin"
+							titleLevel="H6"
+							width="0"
+							class="cellBlockTitle cellBlockPadding"
+							backgroundColorSet="ColorSet7"
+							backgroundColorShade="ShadeF"
+						/>
+					</layout:content>
+				</layout:BlockLayoutRow>
+			</layout:BlockLayout>
+			<layout:BlockLayout>
+				<layout:content>
+					<layout:BlockLayoutRow>
+						<layout:content>
+							<layout:BlockLayoutCell
+								backgroundColorSet="ColorSet7"
+								backgroundColorShade="ShadeD"
+								class="cellContentPadding"
+							>
+								<layout:content>
+									<ui:Table
+										id="FreightSimTonNMTable"
+										selectionMode="None"
+										rows="{tonmmodel>/}"
+										visibleRowCount="4"
+									>
+										<ui:extension>
+											<Toolbar
+												design="Info"
+												style="Clear"
+												class="toolBarStyle"
+											>
+												<content>
+													<Label
+														text="Proposed Freight Cost:"
+														labelFor="tonNMFCost"
+													/>
+													<Input
+														id="tonNMFCost"
+														width="8rem"
+														/>
+														<!-- liveChange="tonNMFCostChange" -->
+													<Label
+														text="Total Cost:"
+														labelFor="tonNMTotalCost"
+													/>
+													<Input
+														id="tonNMTotalCost"
+														width="8rem"
+														editable="false"
+													/>
+													<ToolbarSpacer/>
+													<ProgressIndicator id="progressIndicatorTonNM" state="Information" width="10rem"/>
+												</content>
+											</Toolbar>
+										</ui:extension>
+										<ui:columns>
+											<ui:Column width="auto">
+												<Label text="Port Name"/>
+												<ui:template>
+													<Input
+														value="{tonmmodel>PortName}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Distance(NM)"/>
+												<ui:template>
+													<Input
+														value="{
+															path: 'tonmmodel>Distance',
+															formatter: '.formatter.numberFormat'
+														}"
+														editable="false"
+													/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Cargo Size"/>
+												<ui:template>
+													<Input value="{
+														path: 'tonmmodel>CargoSize',
+														formatter: '.formatter.numberFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Freight Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'tonmmodel>FreightCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Other Cost"/>
+												<ui:template>
+													<Input value="{
+														path: 'tonmmodel>OtherCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+											<ui:Column width="auto">
+												<Label text="Total Projected Cost per Port"/>
+												<ui:template>
+													<Input value="{
+														path: 'tonmmodel>PortProjectedCost',
+														formatter: '.formatter.costFormat'
+													}"/>
+												</ui:template>
+											</ui:Column>
+										</ui:columns>
+									</ui:Table>
+								</layout:content>
+							</layout:BlockLayoutCell>
+						</layout:content>
+					</layout:BlockLayoutRow>
+				</layout:content>
+			</layout:BlockLayout>
+		</content>
+	</Page>
+</mvc:View>
