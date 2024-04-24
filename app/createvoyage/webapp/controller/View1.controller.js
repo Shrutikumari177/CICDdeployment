@@ -231,34 +231,6 @@ sap.ui.define(
         })
 
 
-        // oDataModel.read("/PortMasterSet", {
-        //   success: function (oData, oResponse) {
-        //     // map.invalidateSize(true);
-        //     oJsonModel.getData().allPort = oData.results;
-        //     // console.log(oData.results);
-        //     for (var i = 0; i < oData.results.length; i++) {
-        //       L.marker([Number(oData.results[i].Latitude), Number(oData.results[i].Longitude)], {
-        //         icon: anchorIcon,
-        //       })
-        //         .bindPopup(oData.results[i].Portn)
-        //         .bindTooltip(oData.results[i].Portn, {
-        //           direction: "bottom",
-        //           permanent: true,
-        //           offset: L.point(3, 2),
-        //           className: "leaflet-tooltip-own",
-        //         })
-        //         .addTo(map)
-        //         .on("click", that.onMarkerClick);
-        //     }
-        //     if (that._BusyDialog) {
-        //       boolPortsLoaded = true;
-        //       that._BusyDialog.close();
-        //       clearTimeout(that._BusyTimeout);
-        //       map.invalidateSize(true);
-        //     }
-        //   },
-        //   error: function (oData, oResponse) { },
-        // });
       },
 
 
@@ -537,6 +509,7 @@ sap.ui.define(
         let GvSpeed = selectedPorts[0].Speed;
         let legOneCargoSize = selectedPorts[0].CargoSize;
         let totalCargoSize = 0;
+
         // if (!headerData[0].voynm) {
         //   MessageBox.error("Please enter Voyage Name.");
         //   return false;
@@ -634,22 +607,25 @@ sap.ui.define(
           success: function (oData) {
             // console.log(oData);
 
-            // oRouter.navTo("RouteTrChangeVoyage",{
-            //   "VOYAGE_NO": oData.Voyno
-            // });
+           
            
             MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
               title: "Voyage Created",
               onClose: function () {
-                sap.ushell.Container.getService("CrossApplicationNavigation").toExternal({
-                  target: {
-                    semanticObject: "Nautical",
-                    action: "manage",
-                  },
-                  params: {
-                    voyno: `${oData.Voyno}`,
-                  },
+
+                console.log("sent voyage no. :", oData.Voyno)
+                oRouter.navTo("RouteTrChangeVoyage",{
+                  "VOYAGE_NO": oData.Voyno
                 });
+                // sap.ushell.Container.getService("CrossApplicationNavigation").toExternal({
+                //   target: {
+                //     semanticObject: "Nautical",
+                //     action: "manage",
+                //   },
+                //   params: {
+                //     voyno: `${oData.Voyno}`,
+                //   },
+                // });
               },
             });
           },
@@ -926,6 +902,17 @@ sap.ui.define(
         // this._oValueHelpDialog.setTokens(this._oMultiInput.getTokens());
         this._oCargoUnitHelpDialog.open();
       },
+      // {
+// Voyno: "1000000034",
+// Vlegn: "0000000001",
+// Costcode: "1001",
+// Costu: "LSUM",
+// Prcunit: "",
+// Procost: 10000,
+// Costcurr: "INR",
+// Cstcodes: "PORT CHARGES",
+// CostCheck: false
+// },
 
       onCargoUnitHelpOkPress: function (oEvent) {
         let aTokens = oEvent.getParameter("tokens");

@@ -92,21 +92,21 @@
         "db": "hana",
         "auth": "xsuaa"
       },
-      "NAUTITRANSACTION_BTP_SRV": {
+      "NAUTIBTP_NAUTICAL_TRANSACTIO_SRV": {
         "kind": "odata-v2",
-        "model": "srv/external/NAUTITRANSACTION_BTP_SRV",
+        "model": "srv/external/NAUTIBTP_NAUTICAL_TRANSACTIO_SRV",
         "csrf": true,
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
             "destination": "Ingenx_OData_SAP",
-            "path": "/sap/opu/odata/nauti/TRANSACTION_BTP_SRV"
+            "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         },
         "[development]": {
           "credentials": {
             "destination": "SandboxPO",
-            "path": "/sap/opu/odata/nauti/TRANSACTION_BTP_SRV"
+            "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         }
       }

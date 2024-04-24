@@ -129,22 +129,29 @@ module.exports = async (srv) =>
   srv.on('DELETE', 'es_port_master', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
   srv.on('DELETE', 'es_route_map', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query));
 
-  const NAUTITRANSACTION_BTP_SRV = await cds.connect.to("NAUTITRANSACTION_BTP_SRV"); 
-  srv.on('READ', 'xNAUTIxVoygItem', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('READ', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('READ', 'CharteringSet', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
+  const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV"); 
+  srv.on('READ', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('READ', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('READ', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('READ', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
 
-  srv.on('CREATE', 'xNAUTIxVoygItem', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('CREATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('CREATE', 'CharteringSet', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
 
-  srv.on('UPDATE', 'xNAUTIxVoygItem', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('UPDATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('UPDATE', 'CharteringSet', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
+  srv.on('CREATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('CREATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('CREATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query));
+  srv.on('CREATE', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
 
-  srv.on('READ', 'xNAUTIxVoygItem', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('READ', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
-  srv.on('READ', 'CharteringSet', req => NAUTITRANSACTION_BTP_SRV.run(req.query)); 
+  srv.on('UPDATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('UPDATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('UPDATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query));
+  srv.on('UPDATE', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+
+
+
+  srv.on('UPDATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('UPDATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+  srv.on('UPDATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+
 
 
 }

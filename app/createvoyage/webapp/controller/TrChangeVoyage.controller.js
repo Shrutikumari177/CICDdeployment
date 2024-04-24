@@ -19,8 +19,14 @@ sap.ui.define(
 
         let voyHeaderModel = {};
         let voyItemModel = {};
+        /**
+         * @type {sap.ui.model.json.JSONModel}
+         */
+        let costdetailsModel = {};
+        let bidTechnicalModel = {};
 
         let tempObj = [];
+        let voyageNum;
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
@@ -29,9 +35,6 @@ sap.ui.define(
 
                 oRouter.getRoute("RouteTrChangeVoyage").attachPatternMatched(this.onObjectMatched, this);
 
-    
-          
-            
                 // console.log("oview named model", oModel);
 
                 var hideButton = this.byId("Hide");
@@ -45,50 +48,65 @@ sap.ui.define(
 
             },
             onObjectMatched(oEvent) {
+                tempObj = [];
                 let myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
-                console.log("myVoyno :", myVOYNO);
+                voyageNum = myVOYNO;
+                console.log("myVoyno  received:", myVOYNO);
 
                 let omodel = this.getOwnerComponent().getModel();
-                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, "1000000034");
+                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
                 let oBindList = omodel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
-                    $expand: "toitem"
+                    $expand: "toitem,tocostcharge,tobiditem"
                 });
-                
 
-               let that = this;
+
+                let that = this;
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
 
                     if (aContexts.length === 1) { // Check if context exists
                         const entityData = aContexts[0].getObject();
                         tempObj.push(entityData);
                         voyHeaderModel = new JSONModel();
-                        voyHeaderModel.setData( tempObj)
-                        
+                        voyHeaderModel.setData(tempObj)
+
                         voyItemModel = new JSONModel();
-                        voyItemModel.setData ( tempObj[0].toitem)
-        
-                        console.table( voyHeaderModel.getData());
-        
-                        that.getView().setModel(voyHeaderModel,"voyHeaderModel");
-                        that.getView().setModel(voyItemModel,"voyItemModel");
+                        voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+                        voyItemModel.setData(tempObj[0].toitem)
+
+                        console.table("voyage data : ", voyHeaderModel.getData());
+                        costdetailsModel = new JSONModel();
+                        costdetailsModel.setData(tempObj[0].tocostcharge)
+
+
+                        bidTechnicalModel = new JSONModel();
+                        // temp changes
+                        bidTechnicalModel.setData(tempObj[0].tobiditem);
+
+                        that.getView().setModel(voyHeaderModel, "voyHeaderModel");
+                        that.getView().setModel(voyItemModel, "voyItemModel");
+                        that.getView().setModel(costdetailsModel, "costdetailsModel");
+                        that.getView().setModel(bidTechnicalModel, "bidTechnicalModel");
 
                         that.getView().getModel("voyHeaderModel").refresh();
                         that.getView().getModel("voyItemModel").refresh();
-                        console.table(that.getView().getModel("voyItemModel").getData());
+                        that.getView().getModel("costdetailsModel").refresh();
+                        console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
+                        console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
+                        console.log("bidDetails :", that.getView().getModel("bidTechnicalModel").getData());
 
-                
+
                     } else {
                         console.warn("Entity with VOYAGE_NO:", myVOYNO, "not found.");
                     }
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
                 });
-                console.log("my data",tempObj);     
+                console.log("my data", tempObj);
 
 
             },
             //  totalDistance fn 
-            totalDistanceCalc : function(odata){
+            totalDistanceCalc: function (odata) {
                 console.log(odata);
                 let totalDist = 0;
                 let arr = odata;
@@ -100,7 +118,7 @@ sap.ui.define(
                 return formatter.numberFormat(totalDist);
 
             },
-            totalFreightCost : function(odata){
+            CalcTotalFrcost: function (odata) {
                 console.log(odata);
                 let totalFrCost = 0;
                 let arr = odata;
@@ -112,7 +130,7 @@ sap.ui.define(
                 return formatter.numberFormat(totalFrCost);
 
             },
-            totalCost : function(odata){
+            totalCost: function (odata) {
                 console.log(odata);
                 let totalCost = 0;
                 let arr = odata;
@@ -124,7 +142,7 @@ sap.ui.define(
                 return formatter.numberFormat(totalCost);
 
             },
-            totalOtherCost : function(odata){
+            totalOtherCost: function (odata) {
                 console.log(odata);
                 let totalOthCost = 0;
                 let arr = odata;
@@ -136,11 +154,11 @@ sap.ui.define(
                 return formatter.numberFormat(totalOthCost);
 
             },
-            formattedLegId : function (legId){
-                return legId.replace(/^0+(?=\d)/, '');
-
+            formattedLegId: function (legId) {
+                if (legId) return parseInt(legId);
+                return ''
             },
-            totalSeaDaysCalc : function(odata){
+            totalSeaDaysCalc: function (odata) {
                 console.log(odata);
                 let totalSeaDays = 0;
                 let arr = odata;
@@ -149,13 +167,325 @@ sap.ui.define(
 
                 })
                 console.log("total SeaDays: ", totalSeaDays);
-                return formatter.numberFormat( totalSeaDays);
+                return formatter.numberFormat(totalSeaDays);
 
             },
+            // fn to convert "60,000.000" to "600000"
+            parseStringToNumber: function (stringValue) {
+                // Remove commas from the string and parse it to a floating-point number
+                if (stringValue) {
+
+                    const numericValue = parseFloat(stringValue.replace(/,/g, ''));
+                    return numericValue;
+                }
+            },
+
+            // fn to change model value dynamicaly on cargosize change
+            liveCargoChange1: function (oEvent) {
+                const cargosize1 = oEvent.getParameter("value") || 0;
+                const currIndex = oEvent.getSource().getParent().getId().slice(-1);
+                const oTable = this.byId("_itemTable").getItems();
+                const cargosize = this.parseStringToNumber(cargosize1);
+                let selectedUnit = this.byId("_idunit").getSelectedKey();
+                if (selectedUnit === "L/S") {
+                    this.lumpsumFCostChange1(cargosize, currIndex)
+                }
+                else if (selectedUnit === "TO") {
+                    this.pertFCostChange(cargosize);
+
+                } else if (selectedUnit === "PTK") {
+
+                    this.tonNMFCostChange(cargosize);
+                }
+
+            },
+            liveFrCostChange: function (oEvent) {
+                const fCost1 = oEvent.getParameter("value") || 0;
+                let FCost = this.parseStringToNumber(fCost1);
+                let selectedUnit = this.byId("_idunit").getSelectedKey();
+                if (FCost === undefined) {
+                    FCost = 0;
+                }
+                if (selectedUnit === "L/S") {
+                    this.lumpsumFCostChange(FCost)
+                }
+                else if (selectedUnit === "TO") {
+                    this.pertFCostChange(FCost);
+
+                } else if (selectedUnit === "PTK") {
+
+                    this.tonNMFCostChange(FCost);
+                }
+
+            },
+
+            lumpsumFCostChange1: function (cargosize, currIndex) {
+
+                try {
+
+
+                    // if (FCost) {
+                    const items = this.byId("_itemTable").getItems();
+
+                    const lumpsumPortData = items;
+                    let totalCost = 0,
+                        last = 0,
+                        tempCost = 0;
+                    lumpsumPortData.forEach((element, index) => {
+                        if (last) {
+                            tempCost = Number(Decimal(FCost).div(last).mul(element.Cargs).toString());
+                        } else {
+                            last = element.Cargs;
+                        }
+                        lumpsumPortData[index].Frcost = tempCost;
+                        // lumpsumPortData[index].Othco= 0;
+                        lumpsumPortData[index].Totco = Decimal(tempCost).add(lumpsumPortData[index].Othco);
+                        totalCost += tempCost;
+                        tempCost = 0;
+                    });
+                    voyItemModel.refresh();
+                    //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
+
+                } catch (error) {
+
+                    throw new Error(error);
+                }
+            },
+
+            lumpsumFCostChange: function (FCost) {
+
+                try {
+
+
+                    // if (FCost) {
+                    const lumpsumPortData = this.getView().getModel("voyItemModel").getData();
+                    let totalCost = 0,
+                        last = 0,
+                        tempCost = 0;
+                    lumpsumPortData.forEach((element, index) => {
+                        if (last) {
+                            tempCost = parseFloat(Decimal(FCost).div(last).mul(element.Cargs).toString());
+                        } else {
+                            last = element.Cargs;
+                        }
+                        lumpsumPortData[index].Frcost = tempCost;
+                        // lumpsumPortData[index].Othco= 0;
+                        lumpsumPortData[index].Totco = parseFloat(Decimal(tempCost).add(lumpsumPortData[index].Othco));
+                        totalCost += tempCost;
+                        tempCost = 0;
+                    });
+                    voyItemModel.refresh();
+                    //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
+
+                } catch (error) {
+
+                    throw new Error(error);
+                }
+            },
+
+
+            // fn for per ton  costCharge
+            pertFCostChange: function (FCost) {
+
+                try {
+                    //   const FCost = oEvent.getParameter("value") || 0;
+                    // if (FCost) {
+                    voyItemModel.refresh();
+                    const pertPortData = voyItemModel.getData();
+                    let totalCost = 0,
+                        tempCost = 0;
+                    pertPortData.forEach((element, index, arr) => {
+                        if (index === 1) {
+                            tempCost = Number(Decimal(element.Cargs).mul(FCost).toString());
+                        } else if (index > 1) {
+                            tempCost = Number(
+                                Decimal(arr[index - 2].Cargs)
+                                    .sub(arr[index - 1].Cargs)
+                                    .mul(FCost)
+                                    .toString()
+                            );
+                        }
+                        pertPortData[index].Frcost = tempCost;
+                        pertPortData[index].Othco = 0;
+                        pertPortData[index].Totco = Decimal(tempCost).add(pertPortData[index].Othco);
+                        totalCost += tempCost;
+                        tempCost = 0;
+
+                    });
+                    voyItemModel.refresh();
+
+                    //   this.byId("pertTotalCost").setValue(formatter.costFormat(totalCost));
+
+
+                } catch (error) {
+
+                    throw new Error(error);
+                }
+            },
+
+            // fn for per ton per NM cost charge
+            tonNMFCostChange: function (FCost) {
+
+                try {
+                    //   const FCost = oEvent.getParameter("value") || 0;
+                    // if (FCost) {
+                    const toNMPortData = this.getView().getModel("voyItemModel").getData();
+                    let totalCost = 0,
+                        tempCost = 0;
+                    toNMPortData.forEach((element, index) => {
+                        tempCost = Number(Decimal(FCost).mul(element.Cargs).mul(element.Pdist).toString());
+                        toNMPortData[index].Frcost = tempCost;
+                        toNMPortData[index].Othco = 0;
+                        toNMPortData[index].Totco = Decimal(tempCost).add(toNMPortData[index].Othco);
+                        totalCost += tempCost;
+                        tempCost = 0;
+
+                    });
+                    voyItemModel.refresh();
+
+                    //   this.byId("tonNMTotalCost").setValue(formatter.costFormat(totalCost))
+
+
+                } catch (error) {
+
+                    throw new Error(error);
+                }
+            },
+
+
+            onAddRow1: function () {
+                let oTableModel = costdetailsModel
+                let oTableData = oTableModel.getData()
+                oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Cargu: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
+                oTableModel.refresh();
+                // let oTable = this.byId("_costTablePlan");
+
+                // // Create a new row
+                // let oNewRow = new sap.m.ColumnListItem({
+                //   cells: [
+                //     new sap.m.Input({ value: ""}),
+                //     new sap.m.Input({ value: "",showValueHelp: true, valueHelpRequest: this.showValueHelpDialogCost.bind(this)}),
+                //     new sap.m.Input({ value: ""}),
+                //     new sap.m.Input({ value: ""}),
+                //     new sap.m.Input({ value: ""}),
+                //     new sap.m.Input({ value: "" }),
+
+                //   ]
+                // });
+
+                // // Add the new row to the table
+                // oTable.addItem(oNewRow);
+            },
+
+            onDeleteRow1: function () {
+
+                let oTable = this.byId("_costTablePlan");
+                let aSelectedItems = oTable.getSelectedItems().slice();
+                let contextArr = oTable.getSelectedContexts();
+
+                let oVlegn;
+                let that = this;
+                aSelectedItems.forEach(function (oSelectedItem) {
+
+                    // oTable.removeItem(oSelectedItem);
+                    let oContext = oSelectedItem.getBindingContext("costdetailsModel")
+                    let sPath = oContext.getPath();
+                    oVlegn = parseInt(oContext.getObject().Vlegn);
+
+                    // simultanelously change other cost from line item also
+                    that.calculateSumAllCharges(oVlegn);
+
+
+
+
+                    // delete costdetailsModel.getData()[Number(oSelectedItem.getBindingContext("costdetailsModel").getPath().replace('/',''))]
+                });
+                let numericContextArr = contextArr.map(context => parseInt(context.sPath.substring(1)));
+
+                // Sort the numeric context paths
+                numericContextArr.sort((a, b) => b - a);
+
+                // Convert the sorted numeric context paths back to strings with '/' prefix
+                let sortedContextArr = numericContextArr.map(num => `/${num}`);
+                sortedContextArr.forEach(x => {
+
+                    let array = costdetailsModel.getData(); // Assuming getData() returns the array
+
+                    let objectToRemove = costdetailsModel.getProperty(x); // Assuming getProperty(sPath) returns the object
+                    let index = array.indexOf(objectToRemove);
+                    if (index !== -1) {
+
+                        array.splice(index, 1); // Remove the object at the found index
+                        // costdetailsModel.refresh(); 
+                    }
+                })
+
+                costdetailsModel.refresh();
+                voyItemModel.refresh();
+
+                console.log("costmodel after refresh ;", costdetailsModel.getData());
+
+                oTable.removeSelections();
+            },
+            calculateSumAllCharges: function (oVlegn) {
+
+
+                let data = costdetailsModel.getData();
+                let sum = data.reduce((accumulator, currentObj) => {
+                    if (oVlegn == currentObj.Vlegn) {
+
+                        return accumulator + parseInt(currentObj.Procost);
+                    } else return accumulator
+                }, 0   // initial value
+                );
+
+                console.log("sum:", sum);
+                this.liveOtherCostChange(oVlegn, sum);
+            },
+            onCostLiveChange: function (oEvent) {
+
+                let oSource = oEvent.getSource();
+                let oValue = oEvent.getParameter('value')
+                let sPath = oSource.getBindingContext("costdetailsModel").getPath();
+                let oVlegn = parseInt(oSource.getBindingContext("costdetailsModel").getObject().Vlegn);
+
+                this.calculateSumAllCharges(oVlegn);
+
+            },
+            // fn after  chnage in cost item model mein description
+            liveOtherCostChange: function (oVlegn, sum) {
+                let temp = 0;
+                let data = voyItemModel.getData();
+                let totalCost = this.byId("_totalCostItem")
+                let totalCostValue = totalCost.getValue();
+
+
+                let filterArr = data.filter(item => item.Vlegn == oVlegn);
+
+                filterArr[0].Othco = sum;
+                temp = parseFloat(filterArr[0].Frcost);
+                filterArr[0].Totco = temp + sum;
+
+                temp = 0;
+                console.log("total cost :", totalCostValue);
+
+
+                voyItemModel.refresh();
+
+
+            },
+
+            // forselection in select control for cost charge unit to be emplty for new entry 
+            formatForceSelection: function (legId) {
+                // You might need to adjust this logic based on your data structure
+                // For example, if legId determines forceSelection, adjust this accordingly
+                return legId ? true : false;
+            },
+
             handleNav: function (evt) {
 
-                let oModel = this.getView().getModel("voyageModal");
-                console.log("named model", oModel);
+                // let oModel = this.getView().getModel("voyageModal");
+                // console.log("named model", oModel);
                 var navCon = this.byId("navCon");
 
                 var target = evt.getSource().data("target");
@@ -265,9 +595,9 @@ sap.ui.define(
             },
             showValueHelpDialogCost: function (oEvent) {
 
-                let oData = oEvent.getSource();
+                let oInputSource = oEvent.getSource();
                 //   console.log(oData);
-                let vv = oEvent.getSource().oParent.getCells()[2];
+                let costDesc = oEvent.getSource().oParent.getCells()[2];
                 console.log("clicked Currency");
                 // Create a dialog
 
@@ -291,10 +621,9 @@ sap.ui.define(
                             var oSelectedItem = oEvent.getParameter("listItem");
                             var oSelectedValue1 = oSelectedItem.getCells()[0].getText();
                             var oSelectedValue2 = oSelectedItem.getCells()[1].getText();
-                            console.log(oSelectedValue1, oSelectedValue2, vv);
-                            var inputVoyageType = this.getView().byId(oData.getId()); // Input field for Voyage Type
-                            this.populateInputField(inputVoyageType, oSelectedValue1);
-                            this.populateInputField(vv, oSelectedValue2);
+                            console.log("selected values :", oSelectedValue1, oSelectedValue2, costDesc);
+                            this.populateInputField(oInputSource, oSelectedValue1);
+                            this.populateInputField(costDesc, oSelectedValue2);
                             oDialog.close();
                         }.bind(this),
                     }),
@@ -1373,9 +1702,17 @@ sap.ui.define(
                 } else {
                     MessageBox.warning("No data available for export.");
                 }
+            },
+            updated: function (oEvent) {
+                console.log(oEvent.getParameter("path"))
+            },
+
+            /**
+             * @override
+             */
+            onAfterRendering1: function () {
+                costdetailsModel.attachPropertyChange(this.updated, this)
             }
-
-
 
 
         });

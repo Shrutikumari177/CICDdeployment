@@ -398,3 +398,11 @@
     position: relative;
 }
 
+.planInfo{
+
+    align-items: center;
+    
+    gap: 20px;
+}
+ 
+

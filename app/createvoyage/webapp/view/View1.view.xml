@@ -122,11 +122,11 @@
                                     >
                                         <layout:content>
                                             <s:LeafletMap width="400px" />
-                                            <Button
+                                            <!-- <Button
                                                 text="zoom"
                                                 class="zoomBtn"
                                                 press=".onZoomButtonPress"
-                                            />
+                                            /> -->
                                         </layout:content>
                                     </layout:BlockLayoutCell>
                                     <layout:BlockLayoutCell
@@ -209,7 +209,7 @@
                                                         id="createVoyageButton"
                                                         press="onVoyageCreate"
                                                         type="Default"
-                                                        width="7rem"
+                                                        width="9rem"
                                                         enabled="false"
                                                     />
                                                     <Button
@@ -222,7 +222,7 @@
                                                     />
                                                     <Button
                                                         text="Calculate"
-                                                        width="5rem"
+                                                        width="6rem"
                                                         id="calculateVoyageButton"
                                                         press="onCalc"
                                                         type="Emphasized"

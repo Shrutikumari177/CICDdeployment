@@ -123,6 +123,7 @@ sap.ui.define(
           let progressIndicator = this.byId('progressIndicatorLSUM');
           try {
             const FCost = oEvent.getParameter("value") || 0;
+  
             // if (FCost) {
             const lumpsumPortData = this.getView().getModel("lumpsummodel").getData();
             let totalCost = 0,
