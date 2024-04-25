@@ -1,4 +1,4 @@
-/* checksum : 74b769bc964457e44847190775b71f47 */
+/* checksum : db1e1ca2a8a86ad233c794f5e5c53ced */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -388,6 +388,79 @@ entity NAUTIMASTER_BTP_SRV.RefrenceDocumentSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Docdesc : String(20) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.PortmasterUpdateSet {
+  @sap.unicode : 'false'
+  @sap.label : 'Country'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Country : String(3) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Port Code'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Portc : String(10) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Port Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Portn : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Related Anchorage'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Reancho : String(30) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Latitude'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Latitude : String(15) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Longitude'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Longitude : String(15) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Country Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Countryn : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Location ID'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Locid : String(10) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Process ind'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Ind : Boolean not null;
 };
 
 @cds.external : true

@@ -1,157 +1,319 @@
 const cds = require('@sap/cds');
+const axios = require('axios');
 
-module.exports = async (srv) => 
-{  
-  const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV"); 
-  srv.on('READ', 'BidTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'CarTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'CargoUnitSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'CurTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'GtTabSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'GtPlanSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'VoyTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'ZCalculateSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('READ', 'ZCreatePlanSet', req => NAUTINAUTICALCV_SRV.run(req.query));
+module.exports = async (srv) => {
+    // Connect to services
+    const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
+    const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
+    const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
+    const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV");
 
-  srv.on('CREATE', 'BidTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'CarTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'CargoUnitSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'CurTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'GtTabSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'GtPlanSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'VoyTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'ZCalculateSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('CREATE', 'ZCreatePlanSet', req => NAUTINAUTICALCV_SRV.run(req.query));
+    // Register handlers for NAUTINAUTICALCV_SRV entities
+    registerHandlers(srv, NAUTINAUTICALCV_SRV, [
+        'BidTypeSet', 'CarTypeSet', 'CargoUnitSet', 'CurTypeSet',
+        'GtTabSet', 'GtPlanSet', 'VoyTypeSet', 'ZCalculateSet', 'ZCreatePlanSet'
+    ]);
 
-  srv.on('UPDATE', 'BidTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'CarTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'CargoUnitSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'CurTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'GtTabSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'GtPlanSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'VoyTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'ZCalculateSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('UPDATE', 'ZCreatePlanSet', req => NAUTINAUTICALCV_SRV.run(req.query));
+    // Register handlers for NAUTIMASTER_BTP_SRV entities
+    registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
+        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet',
+        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet',
+        'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet',
+        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp'
+    ]);
 
-  srv.on('DELETE', 'BidTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'CarTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'CargoUnitSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'CurTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'GtTabSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'GtPlanSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'VoyTypeSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'ZCalculateSet', req => NAUTINAUTICALCV_SRV.run(req.query)); 
-  srv.on('DELETE', 'ZCreatePlanSet', req => NAUTINAUTICALCV_SRV.run(req.query));
+    // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
+    registerHandlers(srv, NAUTIMARINE_TRAFFIC_API_SRV, ['EsPathCollection', 'PortMasterSet', 'es_port_master', 'es_route_map']);
 
-  const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV"); 
-      srv.on('READ', 'BidMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'ClassMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'CostMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'CountryMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'EventMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'MaintainGroupSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'UOMSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'StandardCurrencySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'ReleaseStrategySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'VoyageRealeaseSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'RefrenceDocumentSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'PortmasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'xNAUTIxMASBID', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'xNAUTIxBusinessPartner1', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
+    // Register handlers for NAUTIBTP_NAUTICAL_TRANSACTIO_SRV entities
+    registerHandlers(srv, NAUTIBTP_NAUTICAL_TRANSACTIO_SRV, [
+        'xNAUTIxVOYAGEHEADERTOITEM', 'xNAUTIxCOSTCHARGES', 'xNAUTIxVoygItem',
+        'xNAUTIxBIDITEM']);
+};
 
-      srv.on('CREATE', 'BidMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'ClassMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'CostMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'CountryMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'EventMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'MaintainGroupSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'UOMSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'StandardCurrencySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'ReleaseStrategySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'VoyageRealeaseSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'RefrenceDocumentSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'PortmasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'xNAUTIxMASBID', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'xNAUTIxBusinessPartner1', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('CREATE', 'xNAUTIxvend_btp', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
+function registerHandlers(srv, service, entities) {
+    entities.forEach(entity => {
+        srv.on('READ', entity, req => service.run(req.query));
+        srv.on('CREATE', entity, req => service.run(req.query));
+        srv.on('UPDATE', entity, req => service.run(req.query));
+        srv.on('DELETE', entity, req => service.run(req.query));
+    });
 
-      srv.on('UPDATE', 'BidMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'ClassMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'CostMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'CountryMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'EventMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'MaintainGroupSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'UOMSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'StandardCurrencySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'ReleaseStrategySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'VoyageRealeaseSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'RefrenceDocumentSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'PortmasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'xNAUTIxMASBID', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'xNAUTIxBusinessPartner1', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('UPDATE', 'xNAUTIxvend_btp', req => NAUTIMASTER_BTP_SRV.run(req.query));
+    // Handle 'getRoute' entity
+    srv.on('READ', 'getRoute', async (req) => {
+        const { startLatitude, startLongitude, endLatitude, endLongitude } = req._queryOptions;
+        console.log('Start Latitude:', startLatitude);
+        console.log('Start Longitude:', startLongitude);
+        console.log('End Latitude:', endLatitude);
+        console.log('End Longitude:', endLongitude);
 
-      srv.on('DELETE', 'BidMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'ClassMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'CostMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'CountryMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'EventMasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'MaintainGroupSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'UOMSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'StandardCurrencySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'ReleaseStrategySet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'VoyageRealeaseSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'RefrenceDocumentSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'PortmasterSet', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'xNAUTIxMASBID', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'xNAUTIxBusinessPartner1', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
-      srv.on('DELETE', 'xNAUTIxvend_btp', req => NAUTIMASTER_BTP_SRV.run(req.query)); 
+        try {
 
-  const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV"); 
-  srv.on('READ', 'EsPathCollection', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('READ', 'PortMasterSet', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('READ', 'es_port_master', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('READ', 'es_route_map', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
+            let distances = {
+                "info": {
+                    "copyrights": [
+                        "Viku AS"
+                    ],
+                    "took": 57
+                },
+                "paths": [
+                    {
+                        "distance": 1933.9091252699784,
+                        "bbox": [
+                            72.695488,
+                            5.701832,
+                            86.691673,
+                            20.261633
+                        ],
+                        "points": {
+                            "coordinates": [
+                                [
+                                    72.857384,
+                                    18.937828
+                                ],
+                                [
+                                    72.844163,
+                                    18.928939
+                                ],
+                                [
+                                    72.844985,
+                                    18.927786
+                                ],
+                                [
+                                    72.845178,
+                                    18.92605
+                                ],
+                                [
+                                    72.831252,
+                                    18.836152
+                                ],
+                                [
+                                    72.831252,
+                                    18.836152
+                                ],
+                                [
+                                    72.761484,
+                                    18.701623
+                                ],
+                                [
+                                    72.695488,
+                                    18.137755
+                                ],
+                                [
+                                    73.021381,
+                                    17.0
+                                ],
+                                [
+                                    73.664793,
+                                    15.113611
+                                ],
+                                [
+                                    76.069337,
+                                    9.5
+                                ],
+                                [
+                                    77.076083,
+                                    8.0
+                                ],
+                                [
+                                    79.848519,
+                                    6.062151
+                                ],
+                                [
+                                    80.701832,
+                                    5.701832
+                                ],
+                                [
+                                    81.133712,
+                                    5.866288
+                                ],
+                                [
+                                    81.916943,
+                                    6.369229
+                                ],
+                                [
+                                    81.916943,
+                                    6.369229
+                                ],
+                                [
+                                    82.0,
+                                    6.547532
+                                ],
+                                [
+                                    82.060496,
+                                    6.677404
+                                ],
+                                [
+                                    86.5,
+                                    19.743236
+                                ],
+                                [
+                                    86.679843,
+                                    20.218589
+                                ],
+                                [
+                                    86.682551,
+                                    20.258739
+                                ],
+                                [
+                                    86.681727,
+                                    20.260229
+                                ],
+                                [
+                                    86.679039,
+                                    20.261633
+                                ],
+                                [
+                                    86.684842,
+                                    20.261261
+                                ],
+                                [
+                                    86.691673,
+                                    20.260869
+                                ]
+                            ]
+                        },
+                        "details": {
+                            "eca_distance": [
+                                [
+                                    0,
+                                    25,
+                                    {
+                                        "in_eca": false,
+                                        "name": "",
+                                        "distance": 1933.9091198704104,
+                                        "from": [
+                                            72.857384,
+                                            18.937828
+                                        ],
+                                        "to": [
+                                            86.691673,
+                                            20.260869
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "hra_distance": [
+                                [
+                                    0,
+                                    25,
+                                    {
+                                        "in_hra": false,
+                                        "distance": 1933.9091198704104,
+                                        "from": [
+                                            72.857384,
+                                            18.937828
+                                        ],
+                                        "to": [
+                                            86.691673,
+                                            20.260869
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "name": [
+                                [
+                                    0,
+                                    31,
+                                    ""
+                                ]
+                            ],
+                            "snapped_points": {
+                                "coordinates": [
+                                    [
+                                        72.857384,
+                                        18.937828
+                                    ],
+                                    [
+                                        86.691673,
+                                        20.260869
+                                    ]
+                                ]
+                            }
+                        }
+                    }
+                ]
+            };
 
-  srv.on('CREATE', 'EsPathCollection', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('CREATE', 'PortMasterSet', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('CREATE', 'es_port_master', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('CREATE', 'es_route_map', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query));
+            const firstPath = distances.paths[0];
 
-  srv.on('UPDATE', 'EsPathCollection', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('UPDATE', 'PortMasterSet', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('UPDATE', 'es_port_master', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('UPDATE', 'es_route_map', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query));
+            // Extracting distance
+            const distance = firstPath.distance;
 
-  srv.on('DELETE', 'EsPathCollection', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('DELETE', 'PortMasterSet', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('DELETE', 'es_port_master', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query)); 
-  srv.on('DELETE', 'es_route_map', req => NAUTIMARINE_TRAFFIC_API_SRV.run(req.query));
+            // Extracting coordinates
+            const coordinates = firstPath.points.coordinates;
 
-  const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV"); 
-  srv.on('READ', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('READ', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('READ', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('READ', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+            // Mapping coordinates to an array of objects with lat and lng properties
+            const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
 
+            // Constructing responseData
+            const path = {
+                seaDistance: distance,
+                route: mappedCoordinates,
+                code: 200,
+                message: "SUCCESS"
+            };
 
-  srv.on('CREATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('CREATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('CREATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query));
-  srv.on('CREATE', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+            return path;
+            // Call the custom function to handle the request
+            // return await getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude);
+        } catch (error) {
+            console.error('Error:', error);
+            throw new Error('Error fetching data');
+        }
+    });
+};
 
-  srv.on('UPDATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('UPDATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('UPDATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query));
-  srv.on('UPDATE', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+async function getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude) {
+    console.log('Parameters:', startLatitude, startLongitude, endLatitude, endLongitude);
 
+    // Construct the URL with parameters
+    const url = `https://distances.dataloy.com/route/route?point=${startLatitude},${startLongitude}&point=${endLatitude},${endLongitude}&avoid_eca_factor=1&avoid_hra_factor=1&avoid_ice_factor=1`;
 
+    // Construct request headers
+    const myHeaders = new Headers();
+    myHeaders.append("X-API-Key", process.env.API_KEY);
 
-  srv.on('UPDATE', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('UPDATE', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-  srv.on('UPDATE', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+    // Construct request options
+    const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
 
+    try {
+        // Perform the GET request
+        const response = await fetch(url, requestOptions);
+        const responseData = await response.text();
+        let distances = JSON.parse(responseData);
 
+        const firstPath = distances.paths[0];
 
+        // Extracting distance
+        const distance = firstPath.distance;
+
+        // Extracting coordinates
+        const coordinates = firstPath.points.coordinates;
+
+        // Mapping coordinates to an array of objects with lat and lng properties
+        const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
+
+        // Constructing responseData
+        const path = {
+            seaDistance: distance,
+            route: mappedCoordinates,
+            code: 200,
+            message: "SUCCESS"
+        };
+        return path;
+    } catch (error) {
+        console.error('Error:', error);
+        const pathResponse = {
+            seaDistance: null,
+            route: null,
+            code: 500,
+            message: `${error}`
+        };
+        return pathResponse;
+    }
 }
