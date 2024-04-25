@@ -99,6 +99,7 @@
             <Label
                 id="Label1"
                 text="Voyage No"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input1"
@@ -109,6 +110,7 @@
             <Label
                 id="Label2"
                 text="Voyage Name"
+                 class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input2"
@@ -118,6 +120,7 @@
             <Label
                 id="Label3"
                 text="Voyage Type"
+                 class="sapUiTinyMarginTop"
             />
             <Select
                 id="Select2"
@@ -137,6 +140,7 @@
             <Label
                 id="_Label4"
                 text="Vessel Type"
+                 class="sapUiTinyMarginTop"
             />
             <Select
                 id="Select3"
@@ -158,6 +162,7 @@
             <Label
                 id="Label7"
                 text="Bid Type"
+                 class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input5"
@@ -168,6 +173,7 @@
             <Label
                 id="Label8"
                 text="Status"
+                 class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input6"
@@ -176,16 +182,18 @@
             />
             <Label
                 id="Label6"
-                text="Historical Frieght Cost Name"
+                text="Historical Frieght Cost"
+                 class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input4"
-                width="100px"
+                width="150px"
             />
 
             <Label
                 id="Label5"
                 text="Currency"
+                 class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input3"
@@ -249,7 +257,7 @@
             <contentLeft>
                 <!-- vessel detail button -->
 
-                <Button
+                <!-- <Button
                     id="Button7"
                     text="Vessel Details"
                     press="handleNav"
@@ -268,13 +276,14 @@
                             value="p1"
                         />
                     </customData>
-                </Button>
+                </Button> -->
 
                 <!-- vessel plan/actual plan button -->
                 <Button
                     id="_IDGenButton6"
                     text="Vessel Plan/Actual"
                     press="handleNav"
+                    
                 >
                     <layoutData>
                         <FlexItemData
@@ -399,9 +408,11 @@
             height="auto"
         >
             <!-- start of vessel detail section -->
-            <Panel
+            <!-- <Panel
+                
                 id="p1"
                 class="voyagePanel"
+        
             >
                 <Text
                     id="_IDGenText12"
@@ -600,7 +611,7 @@
                     icon="sap-icon://sys-minus"
                     class="buttonSpacing"
                 />
-            </Panel>
+            </Panel> -->
             <!-- end of vessel detail section -->
 
             <!-- start of vessel plan section -->
@@ -638,7 +649,7 @@
                         <Label text="Unit" />
                         <Select
                             id="_idunit"
-                            width="200px"
+                            width="120px"
                             items="{
                             path: '/CargoUnitSet'
                         }"
@@ -652,8 +663,9 @@
 
                         <Label text="Total Cost" />
                         <Input
+                            width="12rem"
                             id="_totalCostItem"
-                            value=" {path :'voyItemModel>/', formatter:'.totalCost'}"
+                            value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
                         />
 
                         <Label text="Total Dist" />
@@ -1039,7 +1051,7 @@
                             class="table"
                             mode="SingleSelectLeft"
                             headerText="Technical Bidding Details"
-                            items="{bidTechnicalModel>/}"
+                            items="{bidItemModel>/}"
                         >
                             <columns>
                                 <Column
@@ -1076,19 +1088,20 @@
                                     <cells>
                                         <Text
                                             id="_IDnText11"
-                                            text="{bidTechnicalModel>CodeDesc}"
+                                            text="{bidItemModel>CodeDesc}"
                                            
                                         />
                                         <CheckBox
                                             id="checkbox"
-                                            selected="{bidTechnicalModel>RevBid}"
+                                            selected="{bidItemModel>RevBid}"
                                         />
                                         <Input
+                                            editable="{bidItemModel>RevBid}"
                                             id="_IDnText12"
-                                            value="{bidTechnicalModel>Value}"
+                                            value="{bidItemModel>Value}"
                                             showValueHelp="true"
-                                            valueHelpRequest="showValueHelpDialogLastCleaning"
-                                             selectedKey="{bidTechnicalModel>Zcode}"
+                                            valueHelpRequest=".showValueHelpDialogDynamically"
+                                             selectedKey="{bidItemModel>Zcode}"
                                         />
                                     </cells>
                                 </ColumnListItem>
@@ -1261,13 +1274,13 @@
                         <Button
                             id="add"
                             icon="sap-icon://sys-add"
-                            press=".onAddRow1"
+                            press=".onAddRow2"
                             type="Reject"
                         />
                         <Button
                             id="minus"
                             icon="sap-icon://sys-minus"
-                            press=".onDeleteRow1"
+                            press=".onDeleteRow2"
                             type="Reject"
                         />
                     </FlexBox>
@@ -1281,7 +1294,8 @@
                     <FlexBox width="20%">
                         <Label
                             id="_IDGenLabel49"
-                            text="Select Profile:"
+                            text="Select Profile :"
+                             class="sapUiTinyMarginTop sapUiTinyMarginRight"
                         />
                         <Select
                             id="_IDGenSelect4"
@@ -1441,13 +1455,14 @@
                                     value="{costdetailsModel>Costcode}"
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCost"
+                                    liveChange=".showValueHelpDialogCost"
                                 />
                                 <Input
                                     id="_IDGenTe"
                                     value="{costdetailsModel>Cstcodes}"
                                 />
                                 <Select
-                                    forceSelection="{  path: 'costdetailsModel>Vlegn',  formatter: '.formatForceSelection'  }"
+                                
                                     id="_Select4"
                                     items="{
                                                 path: '/CargoUnitSet'
@@ -1472,6 +1487,7 @@
                                     value="{costdetailsModel>Costcurr}"
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCurr"
+                                    liveChange="showValueHelpDialogCurr"
                                 />
                             </cells>
                         </ColumnListItem>

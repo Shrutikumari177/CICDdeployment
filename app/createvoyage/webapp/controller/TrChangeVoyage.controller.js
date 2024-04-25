@@ -11,7 +11,9 @@ sap.ui.define(
         "sap/ui/core/util/ExportTypeCSV",
         "sap/ui/model/type/Date",
         "sap/ui/model/json/JSONModel",
-        "com/ingenx/nauti/createvoyage/model/formatter"
+        "com/ingenx/nauti/createvoyage/model/formatter",
+        "sap/m/MessageToast"
+
     ],
     function (BaseController, Fragment, MessageToast, Filter, FilterOperator, Export, ExportTypeCSV, ExportTypePDF, Date, JSONModel, formatter) {
         "use strict";
@@ -23,10 +25,12 @@ sap.ui.define(
          * @type {sap.ui.model.json.JSONModel}
          */
         let costdetailsModel = {};
-        let bidTechnicalModel = {};
+        let bidItemModel;
 
-        let tempObj = [];
+        let tempDataArr = [];
         let voyageNum;
+        let bidCommericalModel = [];
+        let bidTechnicalModel = [];
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
@@ -35,65 +39,189 @@ sap.ui.define(
 
                 oRouter.getRoute("RouteTrChangeVoyage").attachPatternMatched(this.onObjectMatched, this);
 
-                // console.log("oview named model", oModel);
-
-                var hideButton = this.byId("Hide");
-                var hideButton1 = this.byId("Hide1");
+                let hideButton = this.byId("Hide");
+                let hideButton1 = this.byId("Hide1");
                 if (hideButton) {
                     hideButton.attachPress(this.toggleNavContainer.bind(this));
                 }
                 if (hideButton1) {
                     hideButton1.attachPress(this.toggleBarAndNavContainer.bind(this));
                 }
+                let masBid = [
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "FREIG",
+                        Value: "FREIGHT",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "CURR",
+                        Tablename: "",
+                        MultiChoice: false
+                    },
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "DAT1",
+                        Value: "LAST CLEANING DATE",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "DATE",
+                        Tablename: "",
+                        MultiChoice: false
+                    },
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "DEMURRAGE",
+                        Value: "DEMURRAGE",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "CURR",
+                        Tablename: "",
+                        MultiChoice: false
+                    },
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "COOR",
+                        Value: "COUNTRY OF ORIGIN",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "CHAR",
+                        Tablename: "/NAUTI/ZCOUNTRY",
+                        MultiChoice: true
+                    },
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "PORT",
+                        Value: "LAST PORT OF CALL",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "CHAR",
+                        Tablename: "/NAUTI/ZPORT",
+                        MultiChoice: true
+                    },
+                    {
+                        Bname: "PANKAJ.J",
+                        Code: "CLASS",
+                        Value: "CLASS OF VESSEL",
+                        Cvalue: 0,
+                        Cunit: "",
+                        Datatype: "CHAR",
+                        Tablename: "/NAUTI/CLASS",
+                        MultiChoice: true
+                    }
+                ]
+                let bidTechnicalTemplate = masBid.filter(item => item.Datatype !== "CURR");
+                let bidCommercialTemplate = masBid.filter(item => item.Datatype === "CURR");
+
+                // console.log("tech  and commer details data :",bidTechnicalTemplate, bidCommercialTemplate)   ;
+
+                bidTechnicalModel = new JSONModel(bidTechnicalTemplate);
+                bidCommericalModel = new JSONModel(bidCommercialTemplate);
+
+                this.getView().setModel(bidTechnicalModel, "technicalModel");
+                this.getView().setModel(bidCommericalModel, "commercialModel");
+
+                bidTechnicalModel.refresh();
+                bidTechnicalModel.refresh();
+                let testData = [{
+
+                    Voyno: "1000000034",
+                    Zcode: "CLASS",
+                    Value: "",
+                    Cvalue: 0,
+                    Cunit: "",
+                    CodeDesc: "CLASS OF VESSEL",
+                    RevBid: false,
+                    Good: "",
+                    Mand: "",
+                    Must: "",
+                    Zmin: 0,
+                    Zmax: 0
+                },
+                {
+                    Voyno: "1000000034",
+                    Zcode: "DAT1",
+                    Value: "01.09.2023",
+                    Cvalue: 0,
+                    Cunit: "",
+                    CodeDesc: "LAST CLEANING DATE",
+                    RevBid: false,
+                    Good: "",
+                    Mand: "",
+                    Must: "",
+                    Zmin: 0,
+                    Zmax: 0
+                    } 
+            ]
+                // {
+                //     Voyno: "1000000034",
+                //     Zcode: "FREIG",
+                //     Value: "",
+                //     Cvalue: 0,
+                //     Cunit: "INR",
+                //     CodeDesc: "FREIGHT",
+                //     RevBid: true,
+                //     Good: "",
+                //     Mand: "",
+                //     Must: "",
+                //     Zmin: 0,
+                //     Zmax: 0
+                // }
+                // temporary testing
+                bidItemModel = new JSONModel(testData);
+                this.getView().setModel(bidItemModel, "bidItemModel");
+                bidItemModel.refresh();
+
+                console.log(this.getView().getModel("technicalModel").getData());
+                console.log(this.getView().getModel("commercialModel").getData());
 
             },
             onObjectMatched(oEvent) {
-                tempObj = [];
+
+                tempDataArr = [];
                 let myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
                 voyageNum = myVOYNO;
                 console.log("myVoyno  received:", myVOYNO);
 
-                let omodel = this.getOwnerComponent().getModel();
+                let oModel = this.getOwnerComponent().getModel();
                 let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
-                let oBindList = omodel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
+
+                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
                     $expand: "toitem,tocostcharge,tobiditem"
                 });
 
-
                 let that = this;
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-
-                    if (aContexts.length === 1) { // Check if context exists
+                    if (aContexts.length === 1) {
                         const entityData = aContexts[0].getObject();
-                        tempObj.push(entityData);
-                        voyHeaderModel = new JSONModel();
-                        voyHeaderModel.setData(tempObj)
+                        tempDataArr.push(entityData);
 
-                        voyItemModel = new JSONModel();
+                        // Set models only once
+                        if (!that.voyHeaderModel) {
+                            voyHeaderModel = new JSONModel();
+                            voyItemModel = new JSONModel();
+                            costdetailsModel = new JSONModel();
+                            bidItemModel = new JSONModel();
+                        }
+
+                        voyHeaderModel.setData(tempDataArr);
                         voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
-                        voyItemModel.setData(tempObj[0].toitem)
-
-                        console.table("voyage data : ", voyHeaderModel.getData());
-                        costdetailsModel = new JSONModel();
-                        costdetailsModel.setData(tempObj[0].tocostcharge)
-
-
-                        bidTechnicalModel = new JSONModel();
-                        // temp changes
-                        bidTechnicalModel.setData(tempObj[0].tobiditem);
+                        voyItemModel.setData(tempDataArr[0].toitem);
+                        costdetailsModel.setData(tempDataArr[0].tocostcharge);
+                        // bidItemModel.setData(tempDataArr[0].tobiditem);
 
                         that.getView().setModel(voyHeaderModel, "voyHeaderModel");
                         that.getView().setModel(voyItemModel, "voyItemModel");
                         that.getView().setModel(costdetailsModel, "costdetailsModel");
-                        that.getView().setModel(bidTechnicalModel, "bidTechnicalModel");
+                        // that.getView().setModel(bidItemModel, "bidItemModel");
 
+                        // Refresh models
                         that.getView().getModel("voyHeaderModel").refresh();
                         that.getView().getModel("voyItemModel").refresh();
                         that.getView().getModel("costdetailsModel").refresh();
+
                         console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
                         console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
-                        console.log("bidDetails :", that.getView().getModel("bidTechnicalModel").getData());
-
+                        // console.log("bidDetails :", that.getView().getModel("bidItemModel").getData());
 
                     } else {
                         console.warn("Entity with VOYAGE_NO:", myVOYNO, "not found.");
@@ -101,8 +229,8 @@ sap.ui.define(
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
                 });
-                console.log("my data", tempObj);
 
+                console.log("my data", tempDataArr);
 
             },
             //  totalDistance fn 
@@ -118,6 +246,8 @@ sap.ui.define(
                 return formatter.numberFormat(totalDist);
 
             },
+
+            // fn  for Ui display formated Frcost
             CalcTotalFrcost: function (odata) {
                 console.log(odata);
                 let totalFrCost = 0;
@@ -126,34 +256,28 @@ sap.ui.define(
                     totalFrCost += parseFloat(port.Frcost);
 
                 })
-                console.log("total Distance: ", totalFrCost);
+                console.log("total fr cost: ", totalFrCost);
+
                 return formatter.numberFormat(totalFrCost);
 
             },
-            totalCost: function (odata) {
-                console.log(odata);
+
+            //fn to calculate sum for all freight costs and other costs to show in header of item table
+            calctotalCost: function (voyItemsArr) {
+                console.log(voyItemsArr);
                 let totalCost = 0;
-                let arr = odata;
+                let arr = voyItemsArr;
                 arr.forEach((port) => {
                     totalCost += parseFloat(port.Totco);
 
                 })
-                console.log("total Distance: ", totalCost);
-                return formatter.numberFormat(totalCost);
+                console.log("total Totco cost: ", totalCost);
+                this.byId("_totalCostItem").setValue(formatter.numberFormat(totalCost))
+                return totalCost;
+
 
             },
-            totalOtherCost: function (odata) {
-                console.log(odata);
-                let totalOthCost = 0;
-                let arr = odata;
-                arr.forEach((port) => {
-                    totalOthCost += parseFloat(port.Othco);
 
-                })
-                console.log("total Distance: ", totalOthCost);
-                return formatter.numberFormat(totalOthCost);
-
-            },
             formattedLegId: function (legId) {
                 if (legId) return parseInt(legId);
                 return ''
@@ -172,6 +296,7 @@ sap.ui.define(
             },
             // fn to convert "60,000.000" to "600000"
             parseStringToNumber: function (stringValue) {
+
                 // Remove commas from the string and parse it to a floating-point number
                 if (stringValue) {
 
@@ -181,33 +306,36 @@ sap.ui.define(
             },
 
             // fn to change model value dynamicaly on cargosize change
-            liveCargoChange1: function (oEvent) {
-                const cargosize1 = oEvent.getParameter("value") || 0;
-                const currIndex = oEvent.getSource().getParent().getId().slice(-1);
-                const oTable = this.byId("_itemTable").getItems();
-                const cargosize = this.parseStringToNumber(cargosize1);
-                let selectedUnit = this.byId("_idunit").getSelectedKey();
-                if (selectedUnit === "L/S") {
-                    this.lumpsumFCostChange1(cargosize, currIndex)
-                }
-                else if (selectedUnit === "TO") {
-                    this.pertFCostChange(cargosize);
+            // liveCargoChange1: function (oEvent) {
 
-                } else if (selectedUnit === "PTK") {
+            //     const cargosize1 = oEvent.getParameter("value") || 0;
+            //     const currIndex = oEvent.getSource().getParent().getId().slice(-1);
+            //     const oTable = this.byId("_itemTable").getItems();
+            //     const cargosize = this.parseStringToNumber(cargosize1);
+            //     let selectedUnit = this.byId("_idunit").getSelectedKey();
 
-                    this.tonNMFCostChange(cargosize);
-                }
+            //     if (selectedUnit === "L/S") {
+            //         this.lumpsumFrCostChange1(cargosize, currIndex)
+            //     }
+            //     else if (selectedUnit === "TO") {
+            //         this.pertFCostChange(cargosize);
 
-            },
+            //     } else if (selectedUnit === "PTK") {
+
+            //         this.tonNMFCostChange(cargosize);
+            //     }
+
+            // },
             liveFrCostChange: function (oEvent) {
+
                 const fCost1 = oEvent.getParameter("value") || 0;
-                let FCost = this.parseStringToNumber(fCost1);
+                let FCost =  fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
                 let selectedUnit = this.byId("_idunit").getSelectedKey();
                 if (FCost === undefined) {
                     FCost = 0;
                 }
-                if (selectedUnit === "L/S") {
-                    this.lumpsumFCostChange(FCost)
+                if (selectedUnit === "L/S" || selectedUnit === "LS") {
+                    this.lumpsumFrCostChange(FCost)
                 }
                 else if (selectedUnit === "TO") {
                     this.pertFCostChange(FCost);
@@ -215,16 +343,16 @@ sap.ui.define(
                 } else if (selectedUnit === "PTK") {
 
                     this.tonNMFCostChange(FCost);
+                } else {
+                    MessageToast.show("Select a valid cargo unit")
                 }
 
             },
 
-            lumpsumFCostChange1: function (cargosize, currIndex) {
+            lumpsumFrCostChange1: function (cargosize, currIndex) {
 
                 try {
 
-
-                    // if (FCost) {
                     const items = this.byId("_itemTable").getItems();
 
                     const lumpsumPortData = items;
@@ -244,6 +372,9 @@ sap.ui.define(
                         tempCost = 0;
                     });
                     voyItemModel.refresh();
+
+                    
+                    
                     //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
 
                 } catch (error) {
@@ -252,13 +383,13 @@ sap.ui.define(
                 }
             },
 
-            lumpsumFCostChange: function (FCost) {
+            lumpsumFrCostChange: function (FCost) {
 
                 try {
 
 
                     // if (FCost) {
-                    const lumpsumPortData = this.getView().getModel("voyItemModel").getData();
+                    const lumpsumPortData = voyItemModel.getData();
                     let totalCost = 0,
                         last = 0,
                         tempCost = 0;
@@ -275,6 +406,9 @@ sap.ui.define(
                         tempCost = 0;
                     });
                     voyItemModel.refresh();
+
+                   this.calctotalCost(voyItemModel.getData());
+
                     //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
 
                 } catch (error) {
@@ -313,6 +447,7 @@ sap.ui.define(
 
                     });
                     voyItemModel.refresh();
+                    this.calctotalCost(voyItemModel.getData());
 
                     //   this.byId("pertTotalCost").setValue(formatter.costFormat(totalCost));
 
@@ -342,6 +477,7 @@ sap.ui.define(
 
                     });
                     voyItemModel.refresh();
+                    this.calctotalCost(voyItemModel.getData())
 
                     //   this.byId("tonNMTotalCost").setValue(formatter.costFormat(totalCost))
 
@@ -354,8 +490,8 @@ sap.ui.define(
 
 
             onAddRow1: function () {
-                let oTableModel = costdetailsModel
-                let oTableData = oTableModel.getData()
+                let oTableModel = costdetailsModel;
+                let oTableData = oTableModel.getData();
                 oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Cargu: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
                 oTableModel.refresh();
                 // let oTable = this.byId("_costTablePlan");
@@ -383,17 +519,17 @@ sap.ui.define(
                 let aSelectedItems = oTable.getSelectedItems().slice();
                 let contextArr = oTable.getSelectedContexts();
 
-                let oVlegn;
+                let oVlegnArr = [];
                 let that = this;
                 aSelectedItems.forEach(function (oSelectedItem) {
 
                     // oTable.removeItem(oSelectedItem);
                     let oContext = oSelectedItem.getBindingContext("costdetailsModel")
                     let sPath = oContext.getPath();
-                    oVlegn = parseInt(oContext.getObject().Vlegn);
+                    let oVlegn = parseInt(oContext.getObject().Vlegn);
+                    oVlegnArr.push(oVlegn);
 
                     // simultanelously change other cost from line item also
-                    that.calculateSumAllCharges(oVlegn);
 
 
 
@@ -419,7 +555,9 @@ sap.ui.define(
                         // costdetailsModel.refresh(); 
                     }
                 })
-
+                oVlegnArr.forEach(oVlegn => that.calculateSumAllCharges(oVlegn)
+                )
+                this.calctotalCost(voyItemModel.getData());
                 costdetailsModel.refresh();
                 voyItemModel.refresh();
 
@@ -428,7 +566,6 @@ sap.ui.define(
                 oTable.removeSelections();
             },
             calculateSumAllCharges: function (oVlegn) {
-
 
                 let data = costdetailsModel.getData();
                 let sum = data.reduce((accumulator, currentObj) => {
@@ -442,6 +579,7 @@ sap.ui.define(
                 console.log("sum:", sum);
                 this.liveOtherCostChange(oVlegn, sum);
             },
+            // fn  when any changes happen in cost item projected cost
             onCostLiveChange: function (oEvent) {
 
                 let oSource = oEvent.getSource();
@@ -452,7 +590,7 @@ sap.ui.define(
                 this.calculateSumAllCharges(oVlegn);
 
             },
-            // fn after  chnage in cost item model mein description
+            // fn  called after  change in cost item table  
             liveOtherCostChange: function (oVlegn, sum) {
                 let temp = 0;
                 let data = voyItemModel.getData();
@@ -468,6 +606,7 @@ sap.ui.define(
 
                 temp = 0;
                 console.log("total cost :", totalCostValue);
+                this.calctotalCost(data);
 
 
                 voyItemModel.refresh();
@@ -655,21 +794,25 @@ sap.ui.define(
                 oDialog.open();
             },
 
+
+            // fn for dynamic testing for Zcode
+
             showValueHelpDialogClassMaster: function (oEvent) {
                 let oData = oEvent.getSource();
 
                 // Create a dialog
                 var oDialog = new sap.m.Dialog({
-                    title: "Value(1)",
+                    title: "Bid Details",
                     contentWidth: "60%",
                     contentHeight: "60%",
                     content: new sap.m.Table({
+
                         mode: sap.m.ListMode.SingleSelectMaster,
-                        items: "/CLASS",
+                        items: "/ClassMasterSet",
                         columns: [
                             new sap.m.Column({
-                                header: new sap.m.Text({ text: "Value" }),
-                                width: "150px"
+                                header: new sap.m.Text({ text: "Possible value" }),
+                                width: "250px"
                             }),
                             new sap.m.Column({
                                 header: new sap.m.Text({ text: "Good To Have" }),
@@ -680,21 +823,30 @@ sap.ui.define(
                             new sap.m.Column({
                                 header: new sap.m.Text({ text: "Must Not Have" }),
                             }),
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Min score" }),
+                            }),
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Max score" }),
+                            }),
                         ],
                         items: [new sap.m.ColumnListItem({
                             cells: [
                                 new sap.m.Select({
                                     items: {
-                                        path: '/CLASS',
+                                        path: '/ClassMasterSet',
                                         template: new sap.ui.core.Item({
-                                            key: "{ZF_VALUE}",
-                                            text: " {ZF_VALUE} - {ZF_DESC}"
+                                            key: "{ZfValue}",
+                                            text: "{ZfDesc}"
                                         }),
 
-                                    }
+                                    },
+                                    width:"100%",
+                                    
 
                                 }),
                                 new sap.m.RadioButton({
+                                    selected : true,
                                     groupName: "Group1", // Unique group name for Good To Have
                                     select: function () {
                                         // Handle radio button selection
@@ -712,6 +864,12 @@ sap.ui.define(
                                         // Handle radio button selection
                                     }
                                 }),
+                                new sap.m.Input ({
+
+                                }),
+                                new sap.m.Input ({
+
+                                })
                             ],
                         }),
                         ],
