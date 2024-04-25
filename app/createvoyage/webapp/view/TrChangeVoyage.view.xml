@@ -44,6 +44,7 @@
                 <Button
                     id="Button2"
                     text="Save"
+                    press=".onSaveChange"
                 />
                 <Button
                     id="Button3"
@@ -1100,7 +1101,7 @@
                                             id="_IDnText12"
                                             value="{bidItemModel>Value}"
                                             showValueHelp="true"
-                                            valueHelpRequest=".showValueHelpDialogDynamically"
+                                            valueHelpRequest=".showValueHelpDialogClassMaster"
                                              selectedKey="{bidItemModel>Zcode}"
                                         />
                                     </cells>
@@ -1511,7 +1512,7 @@
                 <Button
                     id="mainPageSave"
                     text="Save"
-                    press="onSave"
+                    press=".onSave"
                     visible="false"
                 />
                 <Button

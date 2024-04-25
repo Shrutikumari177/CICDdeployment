@@ -69,15 +69,15 @@ sap.ui.define(
         var sValue = oInput.getValue();
         
         // Check if the value contains any non-alphanumeric characters
-        if (/[^a-zA-Z]/.test(sValue)) {
+        if (/[^a-zA-Z/]/.test(sValue)) {
             // Remove any non-alphanumeric characters
-            sValue = sValue.replace(/[^a-zA-Z]/g, '');
+            sValue = sValue.replace(/[^a-zA-Z/]/g, '');
             
             // Update the value of the input
             oInput.setValue(sValue);
             
             // Show a message to the user
-            sap.m.MessageToast.show("Only alphabetic characters are allowed.");
+            sap.m.MessageToast.show("Only alphabetic characters and '/' are allowed.");
         }
         
         // Check if the length of the value exceeds 4
