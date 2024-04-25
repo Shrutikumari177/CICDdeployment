@@ -621,6 +621,14 @@ sap.ui.define(
                 return legId ? true : false;
             },
 
+            onSaveChange : function(){
+                let oModel = this.getOwnerComponent().getModel('modelV2');
+                 let voyItemDetail = voyItemModel.getData();
+                 let costData = costdetailsModel.getData();
+                console.log(voyHeaderModel.getData(),voyItemDetail, costData);
+                 let payload = {}
+            },
+
             handleNav: function (evt) {
 
                 // let oModel = this.getView().getModel("voyageModal");
@@ -796,7 +804,11 @@ sap.ui.define(
 
 
             // fn for dynamic testing for Zcode
+            showValueHelpDialogDynamically : function (oEvent) {
 
+
+
+            },
             showValueHelpDialogClassMaster: function (oEvent) {
                 let oData = oEvent.getSource();
 
@@ -836,7 +848,7 @@ sap.ui.define(
                                     items: {
                                         path: '/ClassMasterSet',
                                         template: new sap.ui.core.Item({
-                                            key: "{ZfValue}",
+                                        
                                             text: "{ZfDesc}"
                                         }),
 
