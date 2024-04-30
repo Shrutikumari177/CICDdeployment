@@ -16,35 +16,42 @@
 >
     <Page
         id="page"
+        class="page"
         showHeader="false"
     >
         <!-- <headerContent>
             <Bar id="_IDGenBar2">
                 <contentLeft>
-                    <Button id="_IDGenIcon1"
-                        icon="sap-icon://nav-back"
-                        press="onBackPress"
-                    />
-                    <Button id="_IDGenIcon2"
-                        icon="sap-icon://home"
-                        press="onPressHome"
-                    />
-                   
-                    <Text id="_IDGenText91"
-                        class="text1"
-                        text="Change Voyage"
-                    />
+                <Text
+                    emptyIndicatorMode="Off"
+                    maxLines=""
+                    renderWhitespace="false"
+                    text="Change Voyage details"
+                    textAlign="Begin"
+                    textDirection="Inherit"
+                    width=""
+                    wrapping="true"
+                    wrappingType="Normal"
+                    
+                >
+                    
+                </Text>
+                 
                 </contentLeft>
                 
             </Bar>
         </headerContent> -->
 
-        <Bar id="navbar">
+        <Bar id="navbar" class="topBar" design="SubHeader" >
             <contentLeft>
+                <Text text="Change Voyage Details"  />
+            </contentLeft>
+            <contentRight>
                 <Button
                     id="Button2"
                     text="Save"
                     press=".onSaveChange"
+                    type="Emphasized"
                 />
                 <Button
                     id="Button3"
@@ -53,16 +60,19 @@
                 <Button
                     id="Button4"
                     text="Freight Simulator"
+                    visible="false"
                 />
                 <Button
                     id="Button5"
                     text="Cancel Voyage No."
+                    visible="false"
                 />
                 <Button
                     id="Button6"
                     text="Send for Approval"
+                    visible="false"
                 />
-            </contentLeft>
+            </contentRight>
         </Bar>
 
         <!-- <Text id="_IDGenText11" class="vgheading" text="Voyage Details" /> -->
@@ -95,7 +105,7 @@
         
         </Table> -->
         <!-- For Header Section -->
-        <form:SimpleForm layout="ResponsiveLayout">
+        <form:SimpleForm layout="ResponsiveLayout" >
             <core:Title text="Header details" />
             <Label
                 id="Label1"
@@ -248,10 +258,12 @@
         <Button
             id="Hide"
             icon="sap-icon://minimize"
+             class="sapUiTinyMargin"
         />
         <Text
             id="header1"
-            text="Other Details"
+            text="Items Details"
+            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
         />
 
         <Bar id="HBox10">
@@ -686,6 +698,7 @@
                         class="vesselDetailsTable"
                         items="{voyItemModel>/}"
                         mode="MultiSelect"
+                        
                     >
                         <columns>
                             <Column id="_IDColum">
@@ -808,12 +821,12 @@
                         <items>
                             <ColumnListItem id="_IDGenColumnListItem4">
                                 <cells>
-                                    <Text text="{voyItemModel>Vlegn}" width="5rem"
+                                    <Input value="{voyItemModel>Vlegn}" width="2rem" editable="false"
                                     />
                                         <!--"{path :'voyItemModel>Vlegn', formatter:'.formattedLegId'}" -->
-                                    <Input value="{voyItemModel>Portc}" />
+                                    <Input  width="7rem" value="{voyItemModel>Portc}" showValueHelp="true" valueHelpRequest=".onPortValueHelpRequest" change=".onPortEnterPress" />
                                     <Input value="" />
-                                    <Text text="{voyItemModel>Portn}" />
+                                    <Input value="{voyItemModel>Portn}" editable="false"  width="6rem"/>
 
                                     <Text
                                         text="{path :'voyItemModel>Othco',formatter: '.formatter.numberFormat'}"
@@ -834,13 +847,15 @@
                                     <!-- value="{path :'voyItemModel>Cargs',formatter: '.formatter.numberFormat'}" -->
                                     <!-- liveChange=".liveCargoChange" -->
                                     <!--  formatter:'.liveCostChange'   -->
-                                    <Text
-                                        text="{voyItemModel>Cargu}"
-                                        width="40px"
+                                    <Input
+                                        value="{voyItemModel>Cargu}"
+                                        width="60px"
+                                        showValueHelp="true"
+                                        valueHelpRequest=".cargoUnitValueHelp"
                                     />
-                                    <Text
-                                        text="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}"
-                                        width="100px"
+                                    <Input
+                                        value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}"
+                                        width="100px" editable="false"
                                     />
 
                                     <Input
@@ -849,7 +864,7 @@
                                     />
                                     <Input value="{voyItemModel>Ppdays}" />
                                     <Input value="{voyItemModel>Vwead}" />
-                                    <Input value="{voyItemModel>Vsdays}" />
+                                    <Input value="{voyItemModel>Vsdays}"  editable="false" />
                                     <Input
                                         value="{voyItemModel>Vetad}"
                                         width="90px"
@@ -875,6 +890,21 @@
                             </ColumnListItem>
                         </items>
                     </Table>
+                       <Button
+                    id="addPort1"
+                    text="Add Port"
+             
+                    press=".onAddPortRow1"
+                    type="Emphasized"
+                />
+                <Button
+                    id="minusPort1"
+                    text="Delete Port"
+                  
+                    press=".onDeletePortRow1"
+                    type="Default"
+                    class="sapUiTinyMarginBegin"
+                />
                 </ScrollContainer>
 
                 <ScrollContainer
@@ -1227,7 +1257,7 @@
                                         />
                                     </cells>
                                 </ColumnListItem>
-                                <ColumnListItem id="_IDGenumnListItem2">
+                                <!-- <ColumnListItem id="_IDGenumnListItem2">
                                     <cells>
                                         <Text
                                             id="i4"
@@ -1258,13 +1288,13 @@
                                             value=""
                                         />
                                     </cells>
-                                </ColumnListItem>
+                                </ColumnListItem> -->
                             </items>
                         </Table>
                     </FlexBox>
                 </HBox>
 
-                <HBox
+                <!-- <HBox
                     id="HBox2"
                     width="100%"
                 >
@@ -1276,19 +1306,19 @@
                             id="add"
                             icon="sap-icon://sys-add"
                             press=".onAddRow2"
-                            type="Reject"
+                            type="Default"
                         />
                         <Button
                             id="minus"
                             icon="sap-icon://sys-minus"
                             press=".onDeleteRow2"
-                            type="Reject"
+                            type="Default"
                         />
                     </FlexBox>
                     <FlexBox width="20%">
                         <Button
                             id="saveprofileId"
-                            type="Reject"
+                            type="Default"
                             text="Save Profile"
                         />
                     </FlexBox>
@@ -1312,16 +1342,16 @@
                             id="_IDGenBuon13"
                             icon="sap-icon://sys-add"
                             press=".onAddRow2"
-                            type="Reject"
+                            type="Default"
                         />
                         <Button
                             id="_IDGenBuon14"
                             icon="sap-icon://sys-minus"
                             press=".onDeleteRow2"
-                            type="Reject"
+                            type="Default"
                         />
                     </FlexBox>
-                </HBox>
+                </HBox> -->
             </Panel>
             <!-- end of bid detail section -->
             <Panel
@@ -1362,7 +1392,8 @@
         />
         <Text
             id="header2"
-            text="Item Details"
+            text="Cost Details"
+            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
         />
         <Bar id="HBox20">
             <contentLeft>
@@ -1498,16 +1529,19 @@
                 <Button
                     id="add1"
                     text="Add Row"
-                    icon="sap-icon://sys-add"
+                   
                     press=".onAddRow1"
-                    type="Success"
+                    type="Emphasized"
                 />
                 <Button
                     id="minus1"
                     text="Delete Row"
-                    icon="sap-icon://sys-minus"
+                  
                     press=".onDeleteRow1"
-                    type="Reject"
+                    type="Default"
+                     class="sapUiTinyMarginBegin"
+                    
+                    
                 />
                 <Button
                     id="mainPageSave"

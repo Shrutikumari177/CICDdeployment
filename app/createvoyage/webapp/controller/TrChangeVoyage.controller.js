@@ -233,6 +233,44 @@ sap.ui.define(
                 console.log("my data", tempDataArr);
 
             },
+            // onPortEnterPress fn
+            onPortEnterPress : function(oEvent){
+                   console.log("port code cell chnage detected");
+            },
+
+            onAddPortRow1: function(oEvent){
+                let oTableItemModel = voyItemModel;
+                let oTableData = oTableItemModel.getData();
+                // let itemLength = oTableData.length  + 1;
+                // console.log(itemLength);
+                oTableData.push({
+                    "Cargs": "0",
+                    "Cargu": "",
+                    "Frcost": "0",
+                    "Maktx": "",
+                    "Matnr": "",
+                    "Medst": "NM",
+                    "Othco": "0",
+                    "Pdist": "0",
+                    "Portc": "",
+                    "Portn": "",
+                    "Ppdays": "",
+                    "Pstat": "",
+                    "Totco": "0",
+                    "Vetad": "",
+                    "Vetat": "",
+                    "Vetdd": "",
+                    "Vetdt": "",
+                    "Vlegn": "0",
+                    "Voyno": voyageNum,
+                    "Vsdays": "0",
+                    "Vspeed": "23",
+                    "Vwead": "00"
+                  });
+                oTableItemModel.refresh();
+
+
+            },
             //  totalDistance fn 
             totalDistanceCalc: function (odata) {
                 console.log(odata);
@@ -276,6 +314,67 @@ sap.ui.define(
                 return totalCost;
 
 
+            },
+            // port value help
+            onPortValueHelpRequest: function(oEvent){
+                let oInputSource = oEvent.getSource();
+                //   console.log(oData);
+                let portCellObj = oEvent.getSource().oParent.getCells()[3];  // getting port name cell refrence
+                console.log("clicked port value help");
+                // Create a dialog
+
+                var oDialog = new sap.m.Dialog({
+                    title: "Select: Cost Types",
+                    contentWidth: "50%",
+                    contentHeight: "60%",
+                    content: new sap.m.Table({
+                        mode: sap.m.ListMode.SingleSelectMaster,
+
+                        columns: [
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Port code" }),
+                            }),
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Port name" }),
+                            }),
+                        ],
+
+                        selectionChange: function (oEvent) {
+                            var oSelectedItem = oEvent.getParameter("listItem");
+                            var oSelectedValue1 = oSelectedItem.getCells()[0].getText();
+                            var oSelectedValue2 = oSelectedItem.getCells()[1].getText();
+                            console.log("selected values :", oSelectedValue1, oSelectedValue2, portCellObj);
+                            this.populateInputField(oInputSource, oSelectedValue1);
+                            // this.populateInputField(portCellObj, oSelectedValue2);
+                            oDialog.close();
+                        }.bind(this),
+                    }),
+                    beginButton: new sap.m.Button({
+                        text: "Cancel",
+                        type: "Reject",
+                        press: function () {
+                            oDialog.close();
+                        },
+                    }),
+
+                });
+
+                let oValueHelpTable = oDialog.getContent()[0]; // Assuming the table is the first content element
+
+                oValueHelpTable.bindItems({
+                    path: "/PortMasterSet", // Replace with your entity set
+                    template: new sap.m.ColumnListItem({
+                        cells: [
+                            new sap.m.Text({ text: "{Portc}" }),
+                            new sap.m.Text({ text: "{Portn}" }),
+                        ],
+                    }),
+                });
+                // Bind the dialog to the view
+                this.getView().addDependent(oDialog);
+
+                // Open the dialog
+                oDialog.open()
             },
 
             formattedLegId: function (legId) {
@@ -487,8 +586,7 @@ sap.ui.define(
                     throw new Error(error);
                 }
             },
-
-
+           
             onAddRow1: function () {
                 let oTableModel = costdetailsModel;
                 let oTableData = oTableModel.getData();
@@ -529,12 +627,7 @@ sap.ui.define(
                     let oVlegn = parseInt(oContext.getObject().Vlegn);
                     oVlegnArr.push(oVlegn);
 
-                    // simultanelously change other cost from line item also
-
-
-
-
-                    // delete costdetailsModel.getData()[Number(oSelectedItem.getBindingContext("costdetailsModel").getPath().replace('/',''))]
+                   
                 });
                 let numericContextArr = contextArr.map(context => parseInt(context.sPath.substring(1)));
 
@@ -586,8 +679,12 @@ sap.ui.define(
                 let oValue = oEvent.getParameter('value')
                 let sPath = oSource.getBindingContext("costdetailsModel").getPath();
                 let oVlegn = parseInt(oSource.getBindingContext("costdetailsModel").getObject().Vlegn);
-
-                this.calculateSumAllCharges(oVlegn);
+                if( oVlegn){
+                    
+                    this.calculateSumAllCharges(oVlegn);
+                }else {
+                    MessageToast.show(`Invalid LegId ${oVlegn}`);
+                }
 
             },
             // fn  called after  change in cost item table  
@@ -745,7 +842,7 @@ sap.ui.define(
                 let oInputSource = oEvent.getSource();
                 //   console.log(oData);
                 let costDesc = oEvent.getSource().oParent.getCells()[2];
-                console.log("clicked Currency");
+                console.log("clicked Cost value help");
                 // Create a dialog
 
                 var oDialog = new sap.m.Dialog({

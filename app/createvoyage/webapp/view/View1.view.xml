@@ -140,6 +140,45 @@
                                 </layout:content>
                             </layout:BlockLayoutRow>
                             <layout:BlockLayoutRow>
+                                                           <layout:BlockLayoutCell
+                                    class="cellNoPadding"
+                                >
+                                 <layout:content>
+                                 <OverflowToolbar style="Standard">
+                                                    <!-- <Text text="All Routes"/> -->
+                                                    <!-- <Switch
+															id="idRoutes"
+															state="false"
+															customTextOn="Yes"
+															customTextOff="No"
+														/> -->
+                                                    <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
+                                                    <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="NW PASSAGE" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="NE PASSAGE" select=".onCheckBoxSelect" />
+                                                    
+                                                    <CheckBox text="TORRES" select=".onCheckBoxSelect"/>
+                                                    
+                                                    <CheckBox text="CORINTH" select=".onCheckBoxSelect" />
+
+                                                    
+                                                    <!-- <CheckBox text="NORTH WEST PASSAGE" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="NORTH EAST PASSAGE" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="CORINTH" selec=".onCheckBoxSelect"/>
+                                                    <CheckBox text="TORRES STRAIT" selec=".onCheckBoxSelect"/> -->
+                                                    <ToolbarSpacer />
+                                                    </OverflowToolbar>
+
+                                 </layout:content>
+                                
+                                
+                                </layout:BlockLayoutCell>
+
+                            </layout:BlockLayoutRow>
+
+                            <layout:BlockLayoutRow>
+  
                                 <layout:BlockLayoutCell
                                     class="cellNoPadding cellFixedHeight"
                                 >
@@ -160,9 +199,14 @@
 															customTextOn="Yes"
 															customTextOff="No"
 														/> -->
-                                                    <CheckBox text="SUEZ" />
+                                                    <!-- <CheckBox text="SUEZ" />
                                                     <CheckBox text="PANAMA" />
-                                                    <CheckBox text="KIEL" />
+                                                    <CheckBox text="KIEL" /> -->
+                                                    
+                                                    <!-- <CheckBox text="North West Passage" />
+                                                    <CheckBox text="North East Passage" />
+                                                    <CheckBox text="Corinth" />
+                                                    <CheckBox text="Torres Strait" /> -->
                                                     <ToolbarSpacer />
                                                     <!--<Button text="Calculate" />-->
                                                     <!-- <Button

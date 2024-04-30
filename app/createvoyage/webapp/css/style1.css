@@ -3,15 +3,15 @@
     background-color: rgb(193, 230, 252) !important;
 }
 
-.sapMLIBShowSeparator>td{
+/* .sapMLIBShowSeparator>td{
     border: 1px solid rgb(214, 211, 211);
- }
-.mastertables th {
+ }  */
+ /* .mastertables th {
     border: 1px solid rgb(214, 211, 211);
-}
-.entrytables th {
-    border: 1px solid rgb(214, 211, 211);
-}
+}  */
+/* .entrytables th {
+     border: 1px solid rgb(214, 211, 211);
+}  */
 .mastertables{
     height: 450px;
 }
@@ -21,10 +21,12 @@
 
  .vesselDetailsTable{
     margin-top: 2%;
+    border-radius: 2%;
+    border: 1px solid #ddd;
  }
- .vesselDetailsTable th{
+ /* .vesselDetailsTable th{
     border: 1px solid rgb(214, 211, 211);
- }
+ } */
 
  .stickyBar{
    margin-top: 1%;
@@ -46,9 +48,9 @@
     padding :1% 2% 1% 2%;
     
 }
-.scrollContainer {
+/* .scrollContainer {
     border-bottom: 1px solid #ccc; /* Add a border to the bottom of the scroll container */
-}
+*/
 
  
  .stickyBar{
@@ -407,6 +409,32 @@
 /*  making flex space  in  flex box between label and  input */
 .sapMFlexItem {
     width : fit-content
+}
+
+
+.topBar{
+    position:sticky;
+    top:0;
+    left : 0;
+    z-index: 100;
+    height: 36px;
+    font-size: 24px;
+    border: none;
+    
+}
+
+.sapMPage>section.sapMPageEnableScrolling{
+    scrollbar-width: none;
+}
+.scrollContainer{
+    scrollbar-width: none;
+}
+.page{
+    background-color: white;
+}
+/* block layout space reduced */
+.sapUiBlockLayoutBackgroundDashboard .sapUiBlockLayoutCell{
+    margin:-2.0rem;
 }
 
 

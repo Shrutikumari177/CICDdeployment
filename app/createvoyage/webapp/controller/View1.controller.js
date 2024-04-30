@@ -53,7 +53,7 @@ sap.ui.define(
           title: "Loading...",
         });
         this._BusyTimeout = setTimeout(() => {
-          if (this._BusyDialog) this._BusyDialog.setText("This is taking forever, please wait...");
+          if (this._BusyDialog) this._BusyDialog.setText("This is taking time, please wait...");
         }, 5000);
 
         this._BusyTimeout = setTimeout(() => {
@@ -444,7 +444,14 @@ sap.ui.define(
 
         })
       },
+      //  for canal selection
+      onCheckBoxSelect :  function (oEvent){
+        let oSource = oEvent.getSource();
+        let textType = oSource.getText();
+        let isSelected = oEvent.getParameter("selected");
+        console.log( textType, isSelected);
 
+      },
       onClear: function (oEvent) {
         latLngArr.length = 0;
         oJsonModel.getData().portData.length = 0;
@@ -552,6 +559,13 @@ sap.ui.define(
       onVoyageCreate: function (oEvent) {
         that = window.that;
 
+        let oRouter = this.getOwnerComponent().getRouter();
+
+        // oRouter.navTo("RouteTrChangeVoyage", {
+        //   "VOYAGE_NO": "1000000112"
+        // });
+        // return;
+
         const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();
         let selectedPorts = oJsonModel.getData().portData;
@@ -646,10 +660,10 @@ sap.ui.define(
           return;
         }
         console.log("payload for create:", oPayload);
-        let oRouter = this.getOwnerComponent().getRouter();
+        // let oRouter = this.getOwnerComponent().getRouter();
 
         // oRouter.navTo("RouteTrChangeVoyage", {
-        //   "VOYAGE_NO": "1000000034"
+        //   "VOYAGE_NO": "1000000112"
         // });
         // return;
         oDataModelV2.create("/ZCreatePlanSet", oPayload, {
