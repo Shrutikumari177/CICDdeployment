@@ -38,16 +38,6 @@ sap.ui.define(
       formatter: formatter,
       onInit: function () {
 
-        // let x  = new JSONModel({});
-
-        // x.loadData("/odata/v4/nauticalcv-srv").then(function(){
-        //   console.log(x.getData().value);
-        // })
-        // x.loadData("/odata/v4/nauticalcv-srv/BidTypeSet").then(function(){
-        //   console.log(x.getData().value);
-        // });
-
-       
         let that = this;
         this._BusyDialog = new sap.m.BusyDialog({
           title: "Loading...",
@@ -267,6 +257,7 @@ sap.ui.define(
       },
 
       onMarkerClick: async function (oEvent) {
+        
         // debugger;
         // var that = window.that;
         // const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
@@ -288,7 +279,7 @@ sap.ui.define(
            if( existFlag !== -1){
             var that = window.that;
             sap.ui.core.BusyIndicator.hide();
-            MessageBox.error("Port can not be repeated, Please select diffrent port.");
+            MessageBox.error("Port can not be repeated,select a diffrent port.");
             return;
            }
         let legId = oJsonModel.getData().portData.length + 1;
@@ -318,13 +309,15 @@ sap.ui.define(
         // console.log("json model port data", oJsonModel.getData().portData);
         oJsonModel.refresh();
         var portLng = oJsonModel.getData().portData.length;
+        var that = window.that;
+         that.byId("blockRow2").setVisible(true);
+          that.byId("blockRow3").setVisible(true);
         if (portLng < 2) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
           that.byId("speedInput").setEditable(true);
           return;
         } else {
-          var that = window.that;
           that.byId("createVoyageButton").setEnabled(true);
           that.byId("freighSimButton").setEnabled(true);
           that.byId("calculateVoyageButton").setEnabled(true);
@@ -333,6 +326,8 @@ sap.ui.define(
           let ToPortName = oJsonModel.getData().portData[portLng - 1].PortName;
           var IvFromPort = oJsonModel.getData().portData[portLng - 2].PortId;
           let FromPortName = oJsonModel.getData().portData[portLng - 2].PortName;
+
+         
          
           var IvOptimized;
           // if (that.getView().byId("idRoutes").getState()) {
@@ -466,6 +461,8 @@ sap.ui.define(
         this.byId("headerCarty").setValue("");
         this.byId("headerCurr").setValue("");
         this.byId("headerBidty").setValue("");
+        this.byId("blockRow2").setVisible(false);
+        this.byId("blockRow3").setVisible(false);
       },
 
       onCalc: function (oEvent) {
@@ -573,52 +570,52 @@ sap.ui.define(
         let legOneCargoSize = selectedPorts[0].CargoSize;
         let totalCargoSize = 0;
 
-        if (!headerData[0].voynm) {
-          MessageBox.error("Please enter Voyage Name.");
-          return false;
-        }
+        // if (!headerData[0].voynm) {
+        //   MessageBox.error("Please enter Voyage Name.");
+        //   return false;
+        // }
 
-        if (!headerData[0].voyty) {
-          MessageBox.error("Please select Voyage Type.");
-          return false;
-        }
+        // if (!headerData[0].voyty) {
+        //   MessageBox.error("Please select Voyage Type.");
+        //   return false;
+        // }
 
-        if (!headerData[0].carty) {
-          MessageBox.error("Please select Cargo Type.");
-          return false;
-        }
+        // if (!headerData[0].carty) {
+        //   MessageBox.error("Please select Cargo Type.");
+        //   return false;
+        // }
 
-        if (!headerData[0].curty) {
-          MessageBox.error("Please select Currency.");
-          return false;
-        }
-        if (!headerData[0].bidty) {
-          MessageBox.error("Please select Bidtype ");
-          return false;
-        }
-        for (let i = 0; i < selectedPorts.length; i++) {
-          if (!selectedPorts[i].Weather) {
-            // MessageBox.error("Please enter Weather ");
-            // return false;
-            selectedPorts[i].Weather = "0";
-          }
-          if (!selectedPorts[i].CargoSize) {
-            MessageBox.error("Please enter CargoSize ");
-            return false;
-          }
-          if (!selectedPorts[i].CargoUnit) {
-            MessageBox.error("Please enter Cargo Unit");
-            return false;
-          }
-          if (!GvSpeed) {
-            MessageBox.error("Please enter Speed ");
-            return false;
-          }
-        }
-        if (!selectedPorts[0].DepartureDate) {
-          MessageBox.error("Please select Departure Date and Time");
-          return false;
-        }
+        // if (!headerData[0].curty) {
+        //   MessageBox.error("Please select Currency.");
+        //   return false;
+        // }
+        // if (!headerData[0].bidty) {
+        //   MessageBox.error("Please select Bidtype ");
+        //   return false;
+        // }
+        // for (let i = 0; i < selectedPorts.length; i++) {
+        //   if (!selectedPorts[i].Weather) {
+        //     // MessageBox.error("Please enter Weather ");
+        //     // return false;
+        //     selectedPorts[i].Weather = "0";
+        //   }
+        //   if (!selectedPorts[i].CargoSize) {
+        //     MessageBox.error("Please enter CargoSize ");
+        //     return false;
+        //   }
+        //   if (!selectedPorts[i].CargoUnit) {
+        //     MessageBox.error("Please enter Cargo Unit");
+        //     return false;
+        //   }
+        //   if (!GvSpeed) {
+        //     MessageBox.error("Please enter Speed ");
+        //     return false;
+        //   }
+        // }
+        // if (!selectedPorts[0].DepartureDate) {
+        //   MessageBox.error("Please select Departure Date and Time");
+        //   return false;
+        // }
 
         let ZCreatePlanNav = [];
 
@@ -662,10 +659,10 @@ sap.ui.define(
         console.log("payload for create:", oPayload);
         // let oRouter = this.getOwnerComponent().getRouter();
 
-        // oRouter.navTo("RouteTrChangeVoyage", {
-        //   "VOYAGE_NO": "1000000112"
-        // });
-        // return;
+        oRouter.navTo("RouteTrChangeVoyage", {
+          "VOYAGE_NO": "1000000112"
+        });
+        return;
         oDataModelV2.create("/ZCreatePlanSet", oPayload, {
           success: function (oData) {
             // console.log(oData);

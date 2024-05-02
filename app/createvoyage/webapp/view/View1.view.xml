@@ -139,7 +139,7 @@
                                     </layout:BlockLayoutCell>
                                 </layout:content>
                             </layout:BlockLayoutRow>
-                            <layout:BlockLayoutRow>
+                            <layout:BlockLayoutRow visible="false" id="blockRow2">
                                                            <layout:BlockLayoutCell
                                     class="cellNoPadding"
                                 >
@@ -177,7 +177,7 @@
 
                             </layout:BlockLayoutRow>
 
-                            <layout:BlockLayoutRow>
+                            <layout:BlockLayoutRow id="blockRow3" visible="false">
   
                                 <layout:BlockLayoutCell
                                     class="cellNoPadding cellFixedHeight"

@@ -3,19 +3,21 @@ sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
         "sap/ui/core/Fragment",
-        "sap/m/MessageToast",
         "sap/ui/model/Filter",
         "sap/ui/model/FilterOperator",
         "sap/ui/core/util/Export",
         "sap/ui/export/ExportUtils",
         "sap/ui/core/util/ExportTypeCSV",
-        "sap/ui/model/type/Date",
+
         "sap/ui/model/json/JSONModel",
         "com/ingenx/nauti/createvoyage/model/formatter",
-        "sap/m/MessageToast"
+
+
 
     ],
-    function (BaseController, Fragment, MessageToast, Filter, FilterOperator, Export, ExportTypeCSV, ExportTypePDF, Date, JSONModel, formatter) {
+    function (BaseController, Fragment, Filter, FilterOperator, Export, ExportTypeCSV, ExportTypePDF, JSONModel, formatter,
+
+    ) {
         "use strict";
 
 
@@ -31,10 +33,22 @@ sap.ui.define(
         let voyageNum;
         let bidCommericalModel = [];
         let bidTechnicalModel = [];
+        let portData = [];
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
             onInit() {
+                let portDataModel = new JSONModel();
+                let model = this.getOwnerComponent().getModel();
+                let oBindList = model.bindList("/PortMasterSet");
+                oBindList.requestContexts(0, Infinity).then(function (oContext) {
+                    oContext.forEach(item =>
+                        portData.push(item.getObject())
+                    );
+                }).catch(function (oError) {
+                    console.error("Error fetching Port Data:", oError);
+                });
+                console.log("port Data", portData);
                 let oRouter = this.getOwnerComponent().getRouter();
 
                 oRouter.getRoute("RouteTrChangeVoyage").attachPatternMatched(this.onObjectMatched, this);
@@ -150,8 +164,8 @@ sap.ui.define(
                     Must: "",
                     Zmin: 0,
                     Zmax: 0
-                    } 
-            ]
+                }
+                ]
                 // {
                 //     Voyno: "1000000034",
                 //     Zcode: "FREIG",
@@ -234,40 +248,209 @@ sap.ui.define(
 
             },
             // onPortEnterPress fn
-            onPortEnterPress : function(oEvent){
-                   console.log("port code cell chnage detected");
+            onPortEnterPress: function (oEvent) {
+                console.log("port code cell chnage detected");
             },
 
-            onAddPortRow1: function(oEvent){
+            onPortDaysChange: function (oEvent) {
+                let oValue = oEvent.getParameter('value');
+                voyItemModel.refresh();
+                console.log("on port days change ",voyItemModel.getData())
+                this.onCalc();
+            },
+            getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
+                let oModel = this.getOwnerComponent().getModel();
+                console.log("oModel", oModel);
+                let url = `/getRoute?startLatitude=${startLatitude}&startLongitude=${startLongitude}&endLatitude=${endLatitude}&endLongitude=${endLongitude}`;
+                let oBindList = oModel.bindList(url, null, null, null);
+
+                return new Promise((resolve, reject) => {
+                    oBindList.requestContexts(0, Infinity).then(function (context) {
+                        let oData = {};
+                        context.forEach((oContext, index) => {
+                            oData = oContext.getObject();
+                            console.log("Sea Path ", oData);
+                        });
+                        resolve(oData);
+                    }).catch(error => {
+                        reject(error);
+                    });
+                });
+            },
+            dateFormat: function (date) {
+                // Get day, month, and year components
+                const day = date.getDate();
+                // Note: Months in JavaScript are zero-based, so we add 1 to get the correct month
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+
+                // Format the date string
+                // const formattedDate = `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
+                const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+
+                console.log(formattedDate);
+                return formattedDate;
+            },
+            timeformat1: function (date) {
+
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const seconds = date.getSeconds();
+
+                // Format the time string
+                const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                console.log(formattedTime);
+                return formattedTime;
+            },
+            // getting route distance fn
+             time2Format : function(timeString){
+                const date = new Date(0); // 0 represents the Unix epoch time, which is January 1, 1970, 00:00:00 UTC
+
+                // Extract hours, minutes, and seconds from the time string "06:40:03"
+                const [hours, minutes, seconds] = timeString.split(':').map(Number);
+                
+                // Set the time part to the extracted values
+                date.setTime(0);
+                date.setHours(hours);
+                date.setMinutes(minutes);
+                date.setSeconds(seconds);
+                
+                console.log(date);
+                return date;
+             },
+
+            onCalc: function () {
+                let selectedPorts = voyItemModel.getData();
+                let GvSpeed = selectedPorts[0].Vspeed;
+
+                let that = this;
+
+                let ZCalcNav = [];
+                for (let i = 0; i < selectedPorts.length; i++) {
+                    //   if (!selectedPorts[i].Weather) {
+                    //     // new sap.ui.m.MessageBox.error("Please enter Weather ");
+                    //     // return false;
+                    //     selectedPorts[i].Weather = "0";
+                    //   }
+                    //   if (!selectedPorts[i].Cargs) {
+                    //     new sap.ui.m.MessageBox.error("Please enter CargoSize ");
+                    //     return false;
+                    //   }
+                    //   if (!selectedPorts[i].Cargu) {
+                    //     new sap.ui.m.MessageBox.error("Please enter Cargo Unit");
+                    //     return false;
+                    //   }
+                    //   if (!GvSpeed) {
+                    //     new sap.ui.m.MessageBox.error("Please enter Speed ");
+                    //     return false;
+                    //   }
+                    //   if (!selectedPorts[i].Ppdays) {
+                    //     // new sap.ui.m.MessageBox.error("Please enter PortDays ");
+                    //     new sap.ui.m.MessageBox.error("Please enter PortDays")
+                    //     return false;
+                    //   }
+                }
+                // if (!selectedPorts[0].Vetdd) {
+                //   new sap.ui.m.MessageBox.error("Please select Departure Date and Time");
+                //   return false;
+                // }
+                ZCalcNav.push({
+                    Portc: selectedPorts[0].Portc,
+                    Portn: selectedPorts[0].Portn,
+                    Pdist: selectedPorts[0].Pdist,
+                    Medst: "NM",
+                    Vspeed: GvSpeed,
+                    Ppdays: selectedPorts[0].Ppdays,
+                    // Vsdays: selectedPorts[0].SeaDays,
+                    // Vetdd: selectedPorts[0].DepartureDate, // Bad JS Date Value - DDMMYYYY 00:00:00 Timezone
+                    Vetdd: new Date(selectedPorts[0].Vetdd), // DepartureDateValue must be in MM/DD/YYYY format for this to work
+                    Vetdt: formatter.timeFormat(that.time2Format(selectedPorts[0].Vetdt)),
+                    Vwead: selectedPorts[0].Vwead,
+                });
+                for (let i = 1; i < selectedPorts.length; i++) {
+                    ZCalcNav.push({
+                        Portc: selectedPorts[i].Portc,
+                        Portn: selectedPorts[i].Portn,
+                        Pdist: selectedPorts[i].Pdist,
+                        Medst: "NM",
+                        Vspeed: GvSpeed,
+                        Ppdays: selectedPorts[i].Ppdays,
+                        // Vsdays: selectedPorts[i].SeaDays,
+                        Vwead: selectedPorts[i].Vwead,
+                    });
+                }
+                let oPayload = {
+                    GvSpeed: GvSpeed,
+                    ZCalcNav: ZCalcNav,
+                };
+                console.log(oPayload);
+                const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
+                oDataModelV2.create("/ZCalculateSet", oPayload, {
+                    success: function (oData) {
+                        console.log(oData);
+                        let totalDays = 0;
+                        oData.ZCalcNav.results.forEach((data, index) => {
+                            selectedPorts[index].Vsdays = data.Vsdays;
+                            selectedPorts[index].Vspeed = GvSpeed;
+                            selectedPorts[index].Weather = data.Vwead;
+
+                            selectedPorts[index].Vetad = that.dateFormat(data.Vetad);
+
+                            selectedPorts[index].Vetat = that.timeformat1(new Date(formatter.timestampToUtc(data.Vetat.ms)));
+
+                            selectedPorts[index].Vetdd = that.dateFormat(data.Vetdd);
+
+                            selectedPorts[index].Vetdt = that.timeformat1(new Date(formatter.timestampToUtc(data.Vetdt.ms)));
+
+                            totalDays += Number(selectedPorts[index].Vsdays) + Number(selectedPorts[index].Ppdays);
+                        });
+                        voyItemModel.refresh();
+                        // that.byId("daysInput").setValue(totalDays.toFixed(1));
+                    },
+                    error: function (oResponse) {
+                        console.log(oResponse);
+                    },
+                });
+            },
+            onAddPortRow1: function (oEvent) {
                 let oTableItemModel = voyItemModel;
                 let oTableData = oTableItemModel.getData();
                 // let itemLength = oTableData.length  + 1;
                 // console.log(itemLength);
-                oTableData.push({
-                    "Cargs": "0",
-                    "Cargu": "",
-                    "Frcost": "0",
-                    "Maktx": "",
-                    "Matnr": "",
-                    "Medst": "NM",
-                    "Othco": "0",
-                    "Pdist": "0",
-                    "Portc": "",
-                    "Portn": "",
-                    "Ppdays": "",
-                    "Pstat": "",
-                    "Totco": "0",
-                    "Vetad": "",
-                    "Vetat": "",
-                    "Vetdd": "",
-                    "Vetdt": "",
-                    "Vlegn": "0",
-                    "Voyno": voyageNum,
-                    "Vsdays": "0",
-                    "Vspeed": "23",
-                    "Vwead": "00"
-                  });
-                oTableItemModel.refresh();
+                let lastEntry = oTableData[oTableData.length - 1];
+                if (lastEntry.Vlegn && lastEntry.Pdist && lastEntry.Portn && lastEntry.Portc) {
+                    console.log("valid row");
+                    oTableData.push({
+                        "Cargs": "0",
+                        "Cargu": "",
+                        "Frcost": "0",
+                        "Maktx": "",
+                        "Matnr": "",
+                        "Medst": "NM",
+                        "Othco": "0",
+                        "Pdist": "0",
+                        "Portc": "",
+                        "Portn": "",
+                        "Ppdays": "",
+                        "Pstat": "",
+                        "Totco": "0",
+                        "Vetad": "",
+                        "Vetat": "",
+                        "Vetdd": "",
+                        "Vetdt": "",
+                        "Vlegn": "0",
+                        "Voyno": voyageNum,
+                        "Vsdays": "0",
+                        "Vspeed": "23",
+                        "Vwead": "00"
+                    });
+                    oTableItemModel.refresh();
+                } else {
+                    MessageToast.show("Please fill last row details first");
+                }
+
+
 
 
             },
@@ -316,19 +499,28 @@ sap.ui.define(
 
             },
             // port value help
-            onPortValueHelpRequest: function(oEvent){
+            onPortValueHelpRequest: function (oEvent) {
                 let oInputSource = oEvent.getSource();
                 //   console.log(oData);
-                let portCellObj = oEvent.getSource().oParent.getCells()[3];  // getting port name cell refrence
+                let portNameCellObj = oEvent.getSource().oParent.getCells()[3];  // getting port name cell refrence
+                let portDistObj = oEvent.getSource().oParent.getCells()[9];
+                let portIdObj = oEvent.getSource().oParent.getCells()[0];
+                let itemsData = voyItemModel.getData();
+                let currentLength = itemsData.length;
+                let lastPortObj = itemsData[currentLength - 2];
+                let lastPort = portData.find(port => port.Portc === lastPortObj.Portc);
+                let startLatitude = parseFloat(lastPort.Latitude);
+                let startLongitude = parseFloat(lastPort.Longitude);
                 console.log("clicked port value help");
                 // Create a dialog
 
                 var oDialog = new sap.m.Dialog({
-                    title: "Select: Cost Types",
-                    contentWidth: "50%",
+                    title: "Select: Port ",
+                    contentWidth: "20%",
                     contentHeight: "60%",
                     content: new sap.m.Table({
                         mode: sap.m.ListMode.SingleSelectMaster,
+                        noDataText: "Loading...",
 
                         columns: [
                             new sap.m.Column({
@@ -339,13 +531,33 @@ sap.ui.define(
                             }),
                         ],
 
-                        selectionChange: function (oEvent) {
+                        selectionChange: async function (oEvent) {
                             var oSelectedItem = oEvent.getParameter("listItem");
                             var oSelectedValue1 = oSelectedItem.getCells()[0].getText();
                             var oSelectedValue2 = oSelectedItem.getCells()[1].getText();
-                            console.log("selected values :", oSelectedValue1, oSelectedValue2, portCellObj);
-                            this.populateInputField(oInputSource, oSelectedValue1);
-                            // this.populateInputField(portCellObj, oSelectedValue2);
+                            let selectedPort = portData.find(x => x.Portc == oSelectedValue1);
+                            if (selectedPort) {
+
+                                let endLatitude = parseFloat(selectedPort.Latitude);
+                                let endLongitude = parseFloat(selectedPort.Longitude);
+                                let oData = await this.getRouteSeaPath((startLatitude), startLongitude, endLatitude, endLongitude);
+                                console.log("result from api", oData);
+                                if (oData.seaDistance) {
+
+
+                                    this.populateInputField(oInputSource, oSelectedValue1);
+                                    this.populateInputField(portNameCellObj, oSelectedValue2);
+                                    this.populateInputField(portDistObj, oData.seaDistance);
+                                    this.populateInputField(portIdObj, currentLength);
+                                    voyItemModel.refresh();
+                                } else {
+                                    new sap.ui.m.MessageBox.error(`No Route exist between ${lastPort.Portn} and ${selectedPort.Portn}`)
+                                }
+
+                            } else {
+                                MessageToast.show("Invalid Port or port not exists");
+                            }
+                            // console.log("selected values :", oSelectedValue1, oSelectedValue2, portNameCellObj);
                             oDialog.close();
                         }.bind(this),
                     }),
@@ -428,7 +640,7 @@ sap.ui.define(
             liveFrCostChange: function (oEvent) {
 
                 const fCost1 = oEvent.getParameter("value") || 0;
-                let FCost =  fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
+                let FCost = fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
                 let selectedUnit = this.byId("_idunit").getSelectedKey();
                 if (FCost === undefined) {
                     FCost = 0;
@@ -472,8 +684,8 @@ sap.ui.define(
                     });
                     voyItemModel.refresh();
 
-                    
-                    
+
+
                     //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
 
                 } catch (error) {
@@ -506,7 +718,7 @@ sap.ui.define(
                     });
                     voyItemModel.refresh();
 
-                   this.calctotalCost(voyItemModel.getData());
+                    this.calctotalCost(voyItemModel.getData());
 
                     //   this.byId("lumpsumTotalCost").setValue(formatter.costFormat(totalCost));
 
@@ -586,7 +798,7 @@ sap.ui.define(
                     throw new Error(error);
                 }
             },
-           
+
             onAddRow1: function () {
                 let oTableModel = costdetailsModel;
                 let oTableData = oTableModel.getData();
@@ -627,7 +839,7 @@ sap.ui.define(
                     let oVlegn = parseInt(oContext.getObject().Vlegn);
                     oVlegnArr.push(oVlegn);
 
-                   
+
                 });
                 let numericContextArr = contextArr.map(context => parseInt(context.sPath.substring(1)));
 
@@ -679,10 +891,10 @@ sap.ui.define(
                 let oValue = oEvent.getParameter('value')
                 let sPath = oSource.getBindingContext("costdetailsModel").getPath();
                 let oVlegn = parseInt(oSource.getBindingContext("costdetailsModel").getObject().Vlegn);
-                if( oVlegn){
-                    
+                if (oVlegn) {
+
                     this.calculateSumAllCharges(oVlegn);
-                }else {
+                } else {
                     MessageToast.show(`Invalid LegId ${oVlegn}`);
                 }
 
@@ -718,12 +930,12 @@ sap.ui.define(
                 return legId ? true : false;
             },
 
-            onSaveChange : function(){
+            onSaveChange: function () {
                 let oModel = this.getOwnerComponent().getModel('modelV2');
-                 let voyItemDetail = voyItemModel.getData();
-                 let costData = costdetailsModel.getData();
-                console.log(voyHeaderModel.getData(),voyItemDetail, costData);
-                 let payload = {}
+                let voyItemDetail = voyItemModel.getData();
+                let costData = costdetailsModel.getData();
+                console.log(voyHeaderModel.getData(), voyItemDetail, costData);
+                let payload = {}
             },
 
             handleNav: function (evt) {
@@ -901,7 +1113,7 @@ sap.ui.define(
 
 
             // fn for dynamic testing for Zcode
-            showValueHelpDialogDynamically : function (oEvent) {
+            showValueHelpDialogDynamically: function (oEvent) {
 
 
 
@@ -945,17 +1157,17 @@ sap.ui.define(
                                     items: {
                                         path: '/ClassMasterSet',
                                         template: new sap.ui.core.Item({
-                                        
+
                                             text: "{ZfDesc}"
                                         }),
 
                                     },
-                                    width:"100%",
-                                    
+                                    width: "100%",
+
 
                                 }),
                                 new sap.m.RadioButton({
-                                    selected : true,
+                                    selected: true,
                                     groupName: "Group1", // Unique group name for Good To Have
                                     select: function () {
                                         // Handle radio button selection
@@ -973,10 +1185,10 @@ sap.ui.define(
                                         // Handle radio button selection
                                     }
                                 }),
-                                new sap.m.Input ({
+                                new sap.m.Input({
 
                                 }),
-                                new sap.m.Input ({
+                                new sap.m.Input({
 
                                 })
                             ],
@@ -1824,7 +2036,7 @@ sap.ui.define(
                         oMenu.openBy(oButton);
                         this._oMenuFragment = oMenu;
                     }.bind(this)).catch(function (oError) {
-                        MessageBox.error("Error while loading the fragment: " + oError);
+                        new sap.ui.m.MessageBox.error("Error while loading the fragment: " + oError);
                     });
                 } else {
                     this._oMenuFragment.openBy(oButton);
@@ -1843,7 +2055,7 @@ sap.ui.define(
                         oMenu.openBy(oButton);
                         this._oMenuFragment = oMenu;
                     }.bind(this)).catch(function (oError) {
-                        MessageBox.error("Error while loading the fragment: " + oError);
+                        new sap.ui.m.MessageBox.error("Error while loading the fragment: " + oError);
                     });
                 } else {
                     this._oMenuFragment.openBy(oButton);
@@ -1880,10 +2092,10 @@ sap.ui.define(
                     });
 
                     oExport.saveFile("Table1_exportedData.csv").catch(function (oError) {
-                        MessageBox.error("Error while exporting data: " + oError);
+                        new sap.ui.m.MessageBox.error("Error while exporting data: " + oError);
                     });
                 } else {
-                    MessageBox.warning("No data available for export.");
+                    new sap.ui.m.MessageBox.warning("No data available for export.");
                 }
             },
             tab2spreadsheet: function () {
@@ -1917,10 +2129,10 @@ sap.ui.define(
                     });
 
                     oExport.saveFile("Table2_exportedData.csv").catch(function (oError) {
-                        MessageBox.error("Error while exporting data: " + oError);
+                        new sap.ui.m.MessageBox.error("Error while exporting data: " + oError);
                     });
                 } else {
-                    MessageBox.warning("No data available for export.");
+                    new sap.ui.m.MessageBox.warning("No data available for export.");
                 }
             },
 
@@ -1964,10 +2176,10 @@ sap.ui.define(
                     });
 
                     oPdfExporter.saveFile("exportedData.pdf").catch(function (oError) {
-                        MessageBox.error("Error while exporting data to PDF: " + oError);
+                        new sap.ui.m.MessageBox.error("Error while exporting data to PDF: " + oError);
                     });
                 } else {
-                    MessageBox.warning("No data available for export.");
+                    new sap.ui.m.MessageBox.warning("No data available for export.");
                 }
             },
             updated: function (oEvent) {

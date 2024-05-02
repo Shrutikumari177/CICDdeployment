@@ -199,6 +199,7 @@
             <Input
                 id="Input4"
                 width="150px"
+                value="0.00"
             />
 
             <Label
@@ -632,12 +633,6 @@
                 id="p2"
                 class="voyagePanel"
             >
-                <ScrollContainer
-                    id="_IDGenScrollContainer2"
-                    horizontal="true"
-                    vertical="false"
-                    class="scrollContainer"
-                >
                     <Text
                         id="_IDGenText3"
                         text="Plan Info Details"
@@ -692,12 +687,19 @@
                         />
                     </FlexBox>
 
+                <ScrollContainer
+                    id="_IDGenScrollContainer2"
+                    horizontal="true"
+                    vertical="false"
+                    class="scrollContainer"
+                >
                     <Table
                         id="_itemTable"
                         fixedLayout="false"
                         class="vesselDetailsTable"
                         items="{voyItemModel>/}"
                         mode="MultiSelect"
+                        
                         
                     >
                         <columns>
@@ -854,34 +856,65 @@
                                         valueHelpRequest=".cargoUnitValueHelp"
                                     />
                                     <Input
-                                        value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}"
+                                       value="{voyItemModel>Pdist}"
                                         width="100px" editable="false"
                                     />
-
+                                                <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
                                     <Input
                                         value="{voyItemModel>Medst}"
                                         width="40px"
                                     />
-                                    <Input value="{voyItemModel>Ppdays}" />
+                                    <Input value="{voyItemModel>Ppdays}" change=".onPortDaysChange"  liveChange=".onPortDaysChange" />
                                     <Input value="{voyItemModel>Vwead}" />
                                     <Input value="{voyItemModel>Vsdays}"  editable="false" />
                                     <Input
                                         value="{voyItemModel>Vetad}"
                                         width="90px"
+                                        editable="false"
                                     />
+                                    <!-- <DatePicker
+                                                            displayFormat="dd-MM-yyyy"
+                                                            valueFormat="MM/dd/yyyy"
+                                                            value="{voyItemModel>Vetad}"
+                                                            width="120px"
+                                                        /> -->
+                                                 <!-- <TimePicker
+                                                            
+                                                            width="120px"
+                                                            value="{voyItemModel>Vetat}"
+                                                            valueFormat="HH:mm:ss"
+                                                            support2400="true"
+                                                            displayFormat="HH:mm:ss"
+                                                        />          -->
                                     <Input
                                         value="{voyItemModel>Vetat}"
-                                        width="90px"
+                                        width="130px" editable="false"
                                     />
-                                    <Input
+                                     <DatePicker
+                                                            displayFormat="dd-MM-yyyy"
+                                                            valueFormat="MM/dd/yyyy"
+                                                            value="{voyItemModel>Vetdd}"
+                                                            width="120px"
+                                                        />
+                                                            <!-- dateValue="{voyItemModel>Vetdd}" -->
+                                    <!-- <Input
                                         value="{voyItemModel>Vetdd}"
                                         width="90px"
-                                    />
+                                        
+                                    /> -->
 
-                                    <Input
+                                    <!-- <Input
                                         value="{voyItemModel>Vetdt}"
                                         width="90px"
-                                    />
+                                    /> -->
+                                     <TimePicker
+                                                            
+                                                            width="120px"
+                                                            value="{voyItemModel>Vetdt}"
+                                                            valueFormat="HH:mm:ss"
+                                                            support2400="true"
+                                                            displayFormat="HH:mm:ss"
+                                                        />
                                     <Input
                                         value="{voyItemModel>Pstat}"
                                         width="90px"
@@ -907,11 +940,6 @@
                 />
                 </ScrollContainer>
 
-                <ScrollContainer
-                    horizontal="true"
-                    vertical="false"
-                    class="scrollContainer"
-                >
                     <Text
                         id="_IDGnText3"
                         text="Actual Info Details"
@@ -946,6 +974,11 @@
                         </form:SimpleForm>
                     </HBox>
 
+                <ScrollContainer
+                    horizontal="true"
+                    vertical="false"
+                    class="scrollContainer"
+                >
                     <Table
                         id="_IDGenTable10"
                         fixedLayout="false"
