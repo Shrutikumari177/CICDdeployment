@@ -42,15 +42,19 @@
             </Bar>
         </headerContent> -->
 
-        <Bar id="navbar" class="topBar" design="SubHeader" >
+        <Bar
+            id="navbar"
+            class="topBar"
+            design="SubHeader"
+        >
             <contentLeft>
-                <Text text="Change Voyage Details"  />
+                <Text text="Change Voyage Details" />
             </contentLeft>
             <contentRight>
                 <Button
                     id="Button2"
                     text="Save"
-                    press=".onSaveChange"
+                    press=".onSavePress"
                     type="Emphasized"
                 />
                 <Button
@@ -105,7 +109,7 @@
         
         </Table> -->
         <!-- For Header Section -->
-        <form:SimpleForm layout="ResponsiveLayout" >
+        <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />
             <Label
                 id="Label1"
@@ -121,7 +125,7 @@
             <Label
                 id="Label2"
                 text="Voyage Name"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input2"
@@ -131,7 +135,7 @@
             <Label
                 id="Label3"
                 text="Voyage Type"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Select
                 id="Select2"
@@ -151,7 +155,7 @@
             <Label
                 id="_Label4"
                 text="Vessel Type"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Select
                 id="Select3"
@@ -173,7 +177,7 @@
             <Label
                 id="Label7"
                 text="Bid Type"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input5"
@@ -184,7 +188,7 @@
             <Label
                 id="Label8"
                 text="Status"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input6"
@@ -194,7 +198,7 @@
             <Label
                 id="Label6"
                 text="Historical Frieght Cost"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input4"
@@ -205,7 +209,7 @@
             <Label
                 id="Label5"
                 text="Currency"
-                 class="sapUiTinyMarginTop"
+                class="sapUiTinyMarginTop"
             />
             <Input
                 id="Input3"
@@ -259,7 +263,7 @@
         <Button
             id="Hide"
             icon="sap-icon://minimize"
-             class="sapUiTinyMargin"
+            class="sapUiTinyMargin"
         />
         <Text
             id="header1"
@@ -297,7 +301,6 @@
                     id="_IDGenButton6"
                     text="Vessel Plan/Actual"
                     press="handleNav"
-                    
                 >
                     <layoutData>
                         <FlexItemData
@@ -633,59 +636,59 @@
                 id="p2"
                 class="voyagePanel"
             >
-                    <Text
-                        id="_IDGenText3"
-                        text="Plan Info Details"
-                        class="vgheading"
+                <Text
+                    id="_IDGenText3"
+                    text="Plan Info Details"
+                    class="vgheading"
+                />
+
+                <FlexBox class="planInfo">
+                    <Label
+                        text="Plan Speed"
+                        required="true"
+                    />
+                    <Input value="{voyItemModel>/0/Vspeed}" />
+
+                    <Label text="Freight Cost" />
+                    <Input
+                        id="_friegthId"
+                        value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
+                        liveChange=".liveFrCostChange"
+                        width="200px"
                     />
 
-                    <FlexBox class="planInfo">
-                        <Label
-                            text="Plan Speed"
-                            required="true"
-                        />
-                        <Input value="{voyItemModel>/0/Vspeed}" />
-
-                        <Label text="Freight Cost" />
-                        <Input
-                            id="_friegthId"
-                            value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
-                            liveChange=".liveFrCostChange"
-                            width="200px"
-                        />
-
-                        <Label text="Unit" />
-                        <Select
-                            id="_idunit"
-                            width="120px"
-                            items="{
+                    <Label text="Unit" />
+                    <Select
+                        id="_idunit"
+                        width="120px"
+                        items="{
                             path: '/CargoUnitSet'
                         }"
-                            selectedKey="{voyHeaderModel>/0/Frtu}"
-                        >
-                            <core:Item
-                                key="{Uom}"
-                                text="{Uomdes}"
-                            />
-                        </Select>
-
-                        <Label text="Total Cost" />
-                        <Input
-                            width="12rem"
-                            id="_totalCostItem"
-                            value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
+                        selectedKey="{voyHeaderModel>/0/Frtu}"
+                    >
+                        <core:Item
+                            key="{Uom}"
+                            text="{Uomdes}"
                         />
+                    </Select>
 
-                        <Label text="Total Dist" />
-                        <Input
-                            value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
-                        />
+                    <Label text="Total Cost" />
+                    <Input
+                        width="12rem"
+                        id="_totalCostItem"
+                        value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
+                    />
 
-                        <Label text="Total Days" />
-                        <Input
-                            value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
-                        />
-                    </FlexBox>
+                    <Label text="Total Dist" />
+                    <Input
+                        value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
+                    />
+
+                    <Label text="Total Days" />
+                    <Input
+                        value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
+                    />
+                </FlexBox>
 
                 <ScrollContainer
                     id="_IDGenScrollContainer2"
@@ -699,8 +702,6 @@
                         class="vesselDetailsTable"
                         items="{voyItemModel>/}"
                         mode="MultiSelect"
-                        
-                        
                     >
                         <columns>
                             <Column id="_IDColum">
@@ -823,12 +824,25 @@
                         <items>
                             <ColumnListItem id="_IDGenColumnListItem4">
                                 <cells>
-                                    <Input value="{voyItemModel>Vlegn}" width="2rem" editable="false"
+                                    <Input
+                                        value="{voyItemModel>Vlegn}"
+                                        width="2rem"
+                                        editable="false"
                                     />
-                                        <!--"{path :'voyItemModel>Vlegn', formatter:'.formattedLegId'}" -->
-                                    <Input  width="7rem" value="{voyItemModel>Portc}" showValueHelp="true" valueHelpRequest=".onPortValueHelpRequest" change=".onPortEnterPress" />
+                                    <!--"{path :'voyItemModel>Vlegn', formatter:'.formattedLegId'}" -->
+                                    <Input
+                                        width="7rem"
+                                        value="{voyItemModel>Portc}"
+                                        showValueHelp="true"
+                                        valueHelpRequest=".onPortValueHelpRequest"
+                                        change=".onPortEnterPress"
+                                    />
                                     <Input value="" />
-                                    <Input value="{voyItemModel>Portn}" editable="false"  width="6rem"/>
+                                    <Input
+                                        value="{voyItemModel>Portn}"
+                                        editable="false"
+                                        width="6rem"
+                                    />
 
                                     <Text
                                         text="{path :'voyItemModel>Othco',formatter: '.formatter.numberFormat'}"
@@ -845,58 +859,74 @@
                                     <Input
                                         value="{voyItemModel>Cargs}"
                                         width="100px"
+                                        change=".onPortTabCargoSizeChange"
                                     />
                                     <!-- value="{path :'voyItemModel>Cargs',formatter: '.formatter.numberFormat'}" -->
                                     <!-- liveChange=".liveCargoChange" -->
                                     <!--  formatter:'.liveCostChange'   -->
                                     <Input
                                         value="{voyItemModel>Cargu}"
-                                        width="60px"
+                                        width="70px"
                                         showValueHelp="true"
-                                        valueHelpRequest=".cargoUnitValueHelp"
+                                        valueHelpRequest=".showValueHelpDialogCargoUnit"
                                     />
                                     <Input
-                                       value="{voyItemModel>Pdist}"
-                                        width="100px" editable="false"
+                                        value="{voyItemModel>Pdist}"
+                                        width="100px"
+                                        editable="false"
                                     />
-                                                <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
+                                    <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
                                     <Input
                                         value="{voyItemModel>Medst}"
                                         width="40px"
                                     />
-                                    <Input value="{voyItemModel>Ppdays}" change=".onPortDaysChange"  liveChange=".onPortDaysChange" />
-                                    <Input value="{voyItemModel>Vwead}" />
-                                    <Input value="{voyItemModel>Vsdays}"  editable="false" />
                                     <Input
+
+                                        value="{voyItemModel>Ppdays}"
+                                        change=".onPortDaysChange"
+                                        
+                                        liveChange=".onPortDaysChange"
+                                    />
+                                    <Input value="{voyItemModel>Vwead}" />
+                                    <Input
+                                        value="{voyItemModel>Vsdays}"
+                                        editable="false"
+                                    />
+                                    <DatePicker
+                                        displayFormat="dd-MM-yyyy"
+                                        valueFormat="MM/dd/yyyy"
+                                        value="{voyItemModel>Vetad}"
+                                        width="120px"
+                                        editable="false"
+                                    />
+                                    <TimePicker
+                                        width="120px"
+                                        value="{voyItemModel>Vetat}"
+                                        valueFormat="HH:mm:ss"
+                                        support2400="true"
+                                        displayFormat="HH:mm:ss"
+                                        editable="false"
+                                    />
+                                    <!-- <Input
                                         value="{voyItemModel>Vetad}"
                                         width="90px"
                                         editable="false"
-                                    />
-                                    <!-- <DatePicker
-                                                            displayFormat="dd-MM-yyyy"
-                                                            valueFormat="MM/dd/yyyy"
-                                                            value="{voyItemModel>Vetad}"
-                                                            width="120px"
-                                                        /> -->
-                                                 <!-- <TimePicker
-                                                            
-                                                            width="120px"
-                                                            value="{voyItemModel>Vetat}"
-                                                            valueFormat="HH:mm:ss"
-                                                            support2400="true"
-                                                            displayFormat="HH:mm:ss"
-                                                        />          -->
-                                    <Input
+                                    /> -->
+                                    <!-- <Input
                                         value="{voyItemModel>Vetat}"
                                         width="130px" editable="false"
+                                    /> -->
+                                    <DatePicker
+                                        id="myDatePicker"
+                                        displayFormat="dd-MM-yyyy"
+                                        valueFormat="MM/dd/yyyy"
+                                        value="{voyItemModel>Vetdd}"
+                                        width="120px"
+                                        liveChange=".onVetddDatePickerLiveChange1"
+                                        change=".onVetddDatePickerChange"
+                                        
                                     />
-                                     <DatePicker
-                                                            displayFormat="dd-MM-yyyy"
-                                                            valueFormat="MM/dd/yyyy"
-                                                            value="{voyItemModel>Vetdd}"
-                                                            width="120px"
-                                                        />
-                                                            <!-- dateValue="{voyItemModel>Vetdd}" -->
+                                    <!-- dateValue="{voyItemModel>Vetdd}" -->
                                     <!-- <Input
                                         value="{voyItemModel>Vetdd}"
                                         width="90px"
@@ -907,14 +937,13 @@
                                         value="{voyItemModel>Vetdt}"
                                         width="90px"
                                     /> -->
-                                     <TimePicker
-                                                            
-                                                            width="120px"
-                                                            value="{voyItemModel>Vetdt}"
-                                                            valueFormat="HH:mm:ss"
-                                                            support2400="true"
-                                                            displayFormat="HH:mm:ss"
-                                                        />
+                                    <TimePicker
+                                        width="120px"
+                                        value="{voyItemModel>Vetdt}"
+                                        valueFormat="HH:mm:ss"
+                                        support2400="true"
+                                        displayFormat="HH:mm:ss"
+                                    />
                                     <Input
                                         value="{voyItemModel>Pstat}"
                                         width="90px"
@@ -923,56 +952,54 @@
                             </ColumnListItem>
                         </items>
                     </Table>
-                       <Button
-                    id="addPort1"
-                    text="Add Port"
-             
-                    press=".onAddPortRow1"
-                    type="Emphasized"
-                />
-                <Button
-                    id="minusPort1"
-                    text="Delete Port"
-                  
-                    press=".onDeletePortRow1"
-                    type="Default"
-                    class="sapUiTinyMarginBegin"
-                />
+                    <Button
+                        id="addPort1"
+                        text="Add Port"
+                        press=".onAddPortRow1"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="minusPort1"
+                        text="Delete Port"
+                        press=".onDeletePort"
+                        type="Default"
+                        class="sapUiTinyMarginBegin"
+                    />
                 </ScrollContainer>
 
-                    <Text
-                        id="_IDGnText3"
-                        text="Actual Info Details"
-                        class="vgheading"
-                    />
-                    <HBox>
-                        <form:SimpleForm labelSpanS="4">
-                            <Label text="Plan Speed" />
-                            <Input />
-                        </form:SimpleForm>
+                <Text
+                    id="_IDGnText3"
+                    text="Actual Info Details"
+                    class="vgheading"
+                />
+                <HBox>
+                    <form:SimpleForm labelSpanS="4">
+                        <Label text="Plan Speed" />
+                        <Input />
+                    </form:SimpleForm>
 
-                        <form:SimpleForm labelSpanS="4">
-                            <Label text="Freight Cost" />
-                            <Input />
-                        </form:SimpleForm>
+                    <form:SimpleForm labelSpanS="4">
+                        <Label text="Freight Cost" />
+                        <Input />
+                    </form:SimpleForm>
 
-                        <form:SimpleForm labelSpanS="4">
-                            <Label text="Unit" />
-                            <Input />
-                        </form:SimpleForm>
-                        <form:SimpleForm labelSpanS="3">
-                            <Label text="Total Cost" />
-                            <Input />
-                        </form:SimpleForm>
-                        <form:SimpleForm labelSpanS="3">
-                            <Label text="Total Dist" />
-                            <Input />
-                        </form:SimpleForm>
-                        <form:SimpleForm labelSpanS="3">
-                            <Label text="Total Days" />
-                            <Input />
-                        </form:SimpleForm>
-                    </HBox>
+                    <form:SimpleForm labelSpanS="4">
+                        <Label text="Unit" />
+                        <Input />
+                    </form:SimpleForm>
+                    <form:SimpleForm labelSpanS="3">
+                        <Label text="Total Cost" />
+                        <Input />
+                    </form:SimpleForm>
+                    <form:SimpleForm labelSpanS="3">
+                        <Label text="Total Dist" />
+                        <Input />
+                    </form:SimpleForm>
+                    <form:SimpleForm labelSpanS="3">
+                        <Label text="Total Days" />
+                        <Input />
+                    </form:SimpleForm>
+                </HBox>
 
                 <ScrollContainer
                     horizontal="true"
@@ -1153,7 +1180,6 @@
                                         <Text
                                             id="_IDnText11"
                                             text="{bidItemModel>CodeDesc}"
-                                           
                                         />
                                         <CheckBox
                                             id="checkbox"
@@ -1165,7 +1191,7 @@
                                             value="{bidItemModel>Value}"
                                             showValueHelp="true"
                                             valueHelpRequest=".showValueHelpDialogClassMaster"
-                                             selectedKey="{bidItemModel>Zcode}"
+                                            selectedKey="{bidItemModel>Zcode}"
                                         />
                                     </cells>
                                 </ColumnListItem>
@@ -1457,7 +1483,6 @@
                     id="_IDGenText14"
                     text="Plan Details"
                     class="vgheading"
-                    
                 />
 
                 <Table
@@ -1527,7 +1552,6 @@
                                     value="{costdetailsModel>Cstcodes}"
                                 />
                                 <Select
-                                
                                     id="_Select4"
                                     items="{
                                                 path: '/CargoUnitSet'
@@ -1562,19 +1586,15 @@
                 <Button
                     id="add1"
                     text="Add Row"
-                   
                     press=".onAddRow1"
                     type="Emphasized"
                 />
                 <Button
                     id="minus1"
                     text="Delete Row"
-                  
                     press=".onDeleteRow1"
                     type="Default"
-                     class="sapUiTinyMarginBegin"
-                    
-                    
+                    class="sapUiTinyMarginBegin"
                 />
                 <Button
                     id="mainPageSave"

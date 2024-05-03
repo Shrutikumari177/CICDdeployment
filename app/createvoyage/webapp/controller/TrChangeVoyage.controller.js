@@ -136,6 +136,7 @@ sap.ui.define(
 
                 bidTechnicalModel.refresh();
                 bidTechnicalModel.refresh();
+
                 let testData = [{
 
                     Voyno: "1000000034",
@@ -164,7 +165,8 @@ sap.ui.define(
                     Must: "",
                     Zmin: 0,
                     Zmax: 0
-                }
+                },
+
                 ]
                 // {
                 //     Voyno: "1000000034",
@@ -252,18 +254,12 @@ sap.ui.define(
                 console.log("port code cell chnage detected");
             },
 
-            onPortDaysChange: function (oEvent) {
-                let oValue = oEvent.getParameter('value');
-                voyItemModel.refresh();
-                console.log("on port days change ",voyItemModel.getData())
-                this.onCalc();
-            },
             getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
                 let oModel = this.getOwnerComponent().getModel();
                 console.log("oModel", oModel);
                 let url = `/getRoute?startLatitude=${startLatitude}&startLongitude=${startLongitude}&endLatitude=${endLatitude}&endLongitude=${endLongitude}`;
                 let oBindList = oModel.bindList(url, null, null, null);
-
+                
                 return new Promise((resolve, reject) => {
                     oBindList.requestContexts(0, Infinity).then(function (context) {
                         let oData = {};
@@ -277,36 +273,52 @@ sap.ui.define(
                     });
                 });
             },
+            
+            onVetddDatePickerChange : function(oEvent){
+                let selectedDate = oEvent.getParameter("value");
+                var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+                    pattern: "MM/dd/yyyy" // Match the value format
+                });
+                let parsedDate = dateFormat.parse(selectedDate);
+                if (parsedDate < new Date()) {
+                    sap.m.MessageToast.show("You cannot select a past date.");
+                    oEvent.getSource().setValue("");
+                }
+            },
             dateFormat: function (date) {
                 // Get day, month, and year components
                 const day = date.getDate();
                 // Note: Months in JavaScript are zero-based, so we add 1 to get the correct month
                 const month = date.getMonth() + 1;
                 const year = date.getFullYear();
-
+                
                 // Format the date string
                 // const formattedDate = `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
                 const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-
+                
                 console.log(formattedDate);
                 return formattedDate;
             },
+            //  FUNCTION: TO FORMAT TIME WHILE PUSH BACK TO MODEL AFTER FETCHING RESPONSE FROM API
             timeformat1: function (date) {
-
+                
                 const hours = date.getHours();
                 const minutes = date.getMinutes();
                 const seconds = date.getSeconds();
-
+                
                 // Format the time string
                 const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
+                
                 console.log(formattedTime);
                 return formattedTime;
             },
             // getting route distance fn
-             time2Format : function(timeString){
+            //  FUNCTION: TO FORMAT TIME WHILE SENDING DATA TO API
+            
+            
+            time2Format: function (timeString) {
                 const date = new Date(0); // 0 represents the Unix epoch time, which is January 1, 1970, 00:00:00 UTC
-
+                
                 // Extract hours, minutes, and seconds from the time string "06:40:03"
                 const [hours, minutes, seconds] = timeString.split(':').map(Number);
                 
@@ -314,12 +326,20 @@ sap.ui.define(
                 date.setTime(0);
                 date.setHours(hours);
                 date.setMinutes(minutes);
-                date.setSeconds(seconds);
+                date.setSeconds(seconds);  
                 
                 console.log(date);
                 return date;
-             },
+            },
+            
+            onPortDaysChange: function (oEvent) {
+                let oValue = oEvent.getParameter('value');
+                voyItemModel.refresh();
+                console.log("on port days change ", voyItemModel.getData())
 
+                // CALLING ONCALC FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
+                this.onCalc();
+            },
             onCalc: function () {
                 let selectedPorts = voyItemModel.getData();
                 let GvSpeed = selectedPorts[0].Vspeed;
@@ -447,12 +467,46 @@ sap.ui.define(
                     });
                     oTableItemModel.refresh();
                 } else {
-                    MessageToast.show("Please fill last row details first");
+                    new sap.m.MessageToast.show("Please fill last row details first");
                 }
 
 
 
 
+            },
+            onPortTabCargoSizeChange: function (oEvent) {
+                let oSource = oEvent.getSource();
+                // let CargoSizePathInModel = oSource.getBindingContext("oJsonModel").getPath();
+                let path = oSource.getBindingContext("voyItemModel").getPath();
+                let value = oEvent.getParameter("value");
+                // removing "," from "12,000.00"
+                let formatedValue = value.replace(/\,/g, '');
+                voyItemModel.setProperty(path + "/Cargs", formatedValue);
+                if( path =="/0" && voyItemModel.getData().length === 2){
+                  voyItemModel.getData()[1].Cargs = formatedValue;
+                  voyItemModel.refresh();
+                }
+            },
+
+            onDeletePort: function () {
+                var oTable = this.getView().byId("_itemTable"); // Replace "yourTableId" with your actual table ID
+                var aSelectedItems = oTable.getSelectedItems();
+
+                if (aSelectedItems.length === 0) {
+                    sap.m.MessageToast.show("Please select a row to delete.");
+                    return;
+                }
+
+                var oTableItemModel = voyItemModel;
+                var oTableData = oTableItemModel.getData();
+
+                aSelectedItems.forEach(function (oSelectedItem) {
+                    var iIndex = oTable.indexOfItem(oSelectedItem);
+                    oTableData.splice(iIndex, 1);
+                    oTable.removeSelections();
+                });
+
+                oTableItemModel.setData(oTableData);
             },
             //  totalDistance fn 
             totalDistanceCalc: function (odata) {
@@ -547,7 +601,7 @@ sap.ui.define(
 
                                     this.populateInputField(oInputSource, oSelectedValue1);
                                     this.populateInputField(portNameCellObj, oSelectedValue2);
-                                    this.populateInputField(portDistObj, oData.seaDistance);
+                                    this.populateInputField(portDistObj, parseInt(oData.seaDistance));
                                     this.populateInputField(portIdObj, currentLength);
                                     voyItemModel.refresh();
                                 } else {
@@ -804,23 +858,9 @@ sap.ui.define(
                 let oTableData = oTableModel.getData();
                 oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Cargu: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
                 oTableModel.refresh();
-                // let oTable = this.byId("_costTablePlan");
+    
 
-                // // Create a new row
-                // let oNewRow = new sap.m.ColumnListItem({
-                //   cells: [
-                //     new sap.m.Input({ value: ""}),
-                //     new sap.m.Input({ value: "",showValueHelp: true, valueHelpRequest: this.showValueHelpDialogCost.bind(this)}),
-                //     new sap.m.Input({ value: ""}),
-                //     new sap.m.Input({ value: ""}),
-                //     new sap.m.Input({ value: ""}),
-                //     new sap.m.Input({ value: "" }),
-
-                //   ]
-                // });
-
-                // // Add the new row to the table
-                // oTable.addItem(oNewRow);
+              
             },
 
             onDeleteRow1: function () {
@@ -930,7 +970,7 @@ sap.ui.define(
                 return legId ? true : false;
             },
 
-            onSaveChange: function () {
+            onSavePress: function () {
                 let oModel = this.getOwnerComponent().getModel('modelV2');
                 let voyItemDetail = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
@@ -999,9 +1039,9 @@ sap.ui.define(
                 // Create a dialog
                 console.log("clicked Currency type");
                 var oDialog = new sap.m.Dialog({
-                    title: "Select: Vessel Types",
-                    contentWidth: "60%",
-                    contentHeight: "60%",
+                    title: "Select: Currency",
+                    contentWidth: "25%",
+                    contentHeight: "50%",
                     content: new sap.m.Table({
                         mode: sap.m.ListMode.SingleSelectMaster,
 
@@ -1049,6 +1089,62 @@ sap.ui.define(
                 // Open the dialog
                 oDialog.open();
             },
+            showValueHelpDialogCargoUnit: function (oEvent) {
+                let oSource = oEvent.getSource();
+                // console.log(oSource);
+                // Create a dialog
+                console.log("clicked CargoUnit");
+                var oDialog = new sap.m.Dialog({
+                    title: "Select: Cargo Unit",
+                    contentWidth: "30%",
+                    contentHeight: "50%",
+                    content: new sap.m.Table({
+                        mode: sap.m.ListMode.SingleSelectMaster,
+
+                        columns: [
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Code" }),
+                            }),
+                            new sap.m.Column({
+                                header: new sap.m.Text({ text: "Description" }),
+                            }),
+                        ],
+
+                        selectionChange: function (oEvent) {
+                            var oSelectedItem = oEvent.getParameter("listItem");
+                            var oSelectedValue = oSelectedItem.getCells()[0].getText();
+                            var inputVoyageType = oSource; // Input field for Voyage Type
+                            this.populateInputField(inputVoyageType, oSelectedValue);
+                            oDialog.close();
+                        }.bind(this),
+                    }),
+                    beginButton: new sap.m.Button({
+                        text: "Cancel",
+                        type: "Reject",
+                        press: function () {
+                            oDialog.close();
+                        },
+                    }),
+
+                });
+
+                let oValueHelpTable = oDialog.getContent()[0]; // Assuming the table is the first content element
+
+                oValueHelpTable.bindItems({
+                    path: "/CargoUnitSet", // Replace with your entity set
+                    template: new sap.m.ColumnListItem({
+                        cells: [
+                            new sap.m.Text({ text: "{Uom}" }),
+                            new sap.m.Text({ text: "{Uomdes}" }),
+                        ],
+                    }),
+                });
+                // Bind the dialog to the view
+                this.getView().addDependent(oDialog);
+
+                // Open the dialog
+                oDialog.open();
+            },
             showValueHelpDialogCost: function (oEvent) {
 
                 let oInputSource = oEvent.getSource();
@@ -1059,8 +1155,8 @@ sap.ui.define(
 
                 var oDialog = new sap.m.Dialog({
                     title: "Select: Cost Types",
-                    contentWidth: "60%",
-                    contentHeight: "60%",
+                    contentWidth: "25%",
+                    contentHeight: "50%",
                     content: new sap.m.Table({
                         mode: sap.m.ListMode.SingleSelectMaster,
 
@@ -1118,6 +1214,111 @@ sap.ui.define(
 
 
             },
+            showValueHelpDialogClassMaster1: function (oEvent) {
+                let oData = oEvent.getSource();
+                let x = "profile2"
+
+                // Create a dialog
+                var oDialog = new sap.m.Dialog({
+                    title: "Bid Details",
+                    contentWidth: "60%",
+                    contentHeight: "60%",
+                    content: new sap.m.Table({
+                        mode: sap.m.ListMode.SingleSelectMaster,
+                        columns: [
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Possible value" }), width: "250px" }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Good To Have" }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Mandatory" }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Must Not Have" }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Min score" }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: "Max score" }) }),
+                        ],
+                        items: {
+                            path: '/ClassMasterSet',
+                            factory: (sId, oContext) => {
+                                var oModel = this.getView().getModel();
+                                var sPath = oContext.getPath();
+                                var oObject = oModel.getProperty(sPath);
+                                var oInput;
+
+                                // Dynamically create input based on x
+                                switch (x) {
+                                    case "profile1":
+                                        oInput = new sap.m.Input({
+                                            showValueHelp: true,
+                                            valueHelpRequest: function () {
+                                                // Open value help dialog for profile1
+                                                this.openValueHelpDialog(oObject.ZfValue, oObject.ZfDesc);
+                                            }.bind(this)
+                                        });
+                                        break;
+                                    case "profile2":
+                                        // Use DatePicker for profile2
+                                        oInput = new sap.m.DatePicker({
+                                            valueFormat: "yyyy-MM-dd",
+                                            displayFormat: "yyyy-MM-dd",
+                                        });
+                                        break;
+                                    case "profile3":
+                                        // Use Table for profile3
+                                        oInput = new sap.m.Input({
+                                            showValueHelp: true,
+                                            valueHelpRequest: function () {
+                                                // Open value help dialog for profile3
+                                                this.openValueHelpTableDialog();
+                                            }.bind(this)
+                                        });
+                                        break;
+                                    default:
+                                        oInput = new sap.m.Input(); // Default input
+                                }
+
+                                return new sap.m.ColumnListItem({
+                                    cells: [
+                                        oInput, // Dynamically created input
+                                        new sap.m.RadioButton({ selected: true, groupName: "Group1" }),
+                                        new sap.m.RadioButton({ groupName: "Group1" }),
+                                        new sap.m.RadioButton({ groupName: "Group1" }),
+                                        new sap.m.Input(),
+                                        new sap.m.Input()
+                                    ]
+                                });
+                            }
+                        },
+                        selectionChange: function (oEvent) {
+                            var oSelectedItem = oEvent.getParameter("listItem");
+                            var oSelectedValue = oSelectedItem.getCells()[0].getValue();
+                            // No need to close the dialog here as it's done in the "OK" button press event
+                        }.bind(this),
+                    }),
+                    beginButton: new sap.m.Button({
+                        text: "OK",
+                        type: "Accept",
+                        press: function () {
+                            var inputVoyageType = this.getView().byId(oData.getId()); // Input field for Voyage Type
+                            var selectedValue = oDialog.getContent()[0].getItems()[0].getCells()[0].getValue();
+                            this.populateInputField(inputVoyageType, selectedValue);
+                            oDialog.close();
+                        }.bind(this),
+                    }),
+                    endButton: new sap.m.Button({
+                        text: "Cancel",
+                        type: "Reject",
+                        press: function () {
+                            oDialog.close();
+                        },
+                    }),
+                });
+
+                // Bind the dialog to the view
+                this.getView().addDependent(oDialog);
+
+                // Open the dialog
+                oDialog.open();
+                console.log(oData);
+            },
+
+
             showValueHelpDialogClassMaster: function (oEvent) {
                 let oData = oEvent.getSource();
 
