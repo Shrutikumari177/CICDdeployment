@@ -1,11 +1,148 @@
 
 ### getting Header details
 
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
+# GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=toitem,tocostcharge
 
-### getting Header details
+### POST REQUEST FOR VOYAGE TYPE WITH iTEM AND COST DETAILS
+POST http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM
+Content-Type: application/json
 
-GET  http://localhost:4004/odata/v4/nauticalservice/CargoUnitSet
+{
+   "Voyno": "1000000034",
+  "Voynm": "Test Voyage 9/11",
+  "Vnomtk": "",
+  "Refdoc": "",
+  "Docind": "",
+  "Vessn": "",
+  "Vimo": "",
+  "Chtyp": "",
+  "Chpno": "",
+  "Currkeys": "",
+  "Frtco": 0,
+  "Vstat": "",
+  "Voyty": "1000",
+  "Carty": "1000",
+  "Curr": "INR",
+  "Freght": 150000,
+  "Party": "",
+  "Bidtype": "SB",
+  "Frcost": 60000,
+  "Frtu": "LSUM",
+  "Frcost_Act": 0,
+  "Frtu_Act": "",
+  "Ref_Voyno": "",
+  "GV_CSTATUS": "Voyage Created",
+   "toitem": [
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 1,
+      "Portc": "INBOM",
+      "Portn": "MUMBAI",
+      "Pdist": 0,
+      "Medst": "NM",
+      "Vspeed": 9.5,
+      "Ppdays": 3,
+      "Vsdays": 0,
+      "Vetad": "2023-09-07",
+      "Vetat": "00:00:00",
+      "Vetdd": "2023-09-10",
+      "Vetdt": "00:00:00",
+      "Vwead": "1",
+      "Pstat": "",
+      "Matnr": "",
+      "Maktx": "",
+      "Cargs": 10000,
+      "Cargu": "TO",
+      "Othco": 10000,
+      "Frcost": 0,
+      "Totco": 10000
+    },
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 2,
+      "Portc": "INVTZ",
+      "Portn": "VISAKHAPATNAM",
+      "Pdist": 1768,
+      "Medst": "NM",
+      "Vspeed": 9.5,
+      "Ppdays": 2,
+      "Vsdays": 7.909,
+      "Vetad": "2023-09-17",
+      "Vetat": "21:48:00",
+      "Vetdd": "2023-09-19",
+      "Vetdt": "21:48:00",
+      "Vwead": "2",
+      "Pstat": "",
+      "Matnr": "",
+      "Maktx": "",
+      "Cargs": 8000,
+      "Cargu": "TO",
+      "Othco": 5000,
+      "Frcost": 48000,
+      "Totco": 53000
+    },
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 3,
+      "Portc": "INPRT",
+      "Portn": "PARADIP",
+      "Pdist": 270,
+      "Medst": "NM",
+      "Vspeed": 9.5,
+      "Ppdays": 1,
+      "Vsdays": 1.22,
+      "Vetad": "2023-09-21",
+      "Vetat": "03:04:00",
+      "Vetdd": "2023-09-22",
+      "Vetdt": "03:04:00",
+      "Vwead": "3",
+      "Pstat": "",
+      "Matnr": "",
+      "Maktx": "",
+      "Cargs": 2000,
+      "Cargu": "TO",
+      "Othco": 2000,
+      "Frcost": 12000,
+      "Totco": 17000
+    }
+  ],
+  "tocostcharge": [
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 1,
+      "Costcode": "1001",
+      "Costu": "LSUM",
+      "Prcunit": "",
+      "Procost": 10000,
+      "Costcurr": "INR",
+      "Cstcodes": "PORT CHARGES",
+      "CostCheck": false
+    },
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 2,
+      "Costcode": "1001",
+      "Costu": "LSUM",
+      "Prcunit": "",
+      "Procost": 5000,
+      "Costcurr": "INR",
+      "Cstcodes": "PORT CHARGES",
+      "CostCheck": false
+    },
+    {
+      "Voyno": "1000000034",
+      "Vlegn": 3,
+      "Costcode": "1001",
+      "Costu": "LSUM",
+      "Prcunit": "",
+      "Procost": 2000,
+      "Costcurr": "INR",
+      "Cstcodes": "PORT CHARGES",
+      "CostCheck": false
+    }
+  ]
+}
 
 
 ### posting data
@@ -38,6 +175,59 @@ Content-Type: application/json
   ]
 }
 
+
+
+
+ "toitem":[
+                        {
+                            "Cargs": "50000",
+                            "Cargu": "TO",
+                            "Frcost": "0",
+                            "Maktx": "",
+                            "Matnr": "",
+                            "Medst": "NM",
+                            "Othco": "0",
+                            "Pdist": "0",
+                            "Portc": "INBOM",
+                            "Portn": "MUMBAI",
+                            "Ppdays": "2",
+                            "Pstat": "",
+                            "Totco": "0",
+                            "Vetad": "2024-05-06",
+                            "Vetat": "06:40:03",
+                            "Vetdd": "2024-05-08",
+                            "Vetdt": "06:40:03",
+                            "Vlegn": "1",
+                            "Voyno": "1000000112",
+                            "Vsdays": "0",
+                            "Vspeed": "23",
+                            "Vwead": "00"
+                          },
+                          {
+                            "Cargs": "50000",
+                            "Cargu": "TO",
+                            "Frcost": "0",
+                            "Maktx": "",
+                            "Matnr": "",
+                            "Medst": "NM",
+                            "Othco": "0",
+                            "Pdist": "1971",
+                            "Portc": "INPRT",
+                            "Portn": "PARADIP",
+                            "Ppdays": "2",
+                            "Pstat": "",
+                            "Totco": "0",
+                            "Vetad": "2024-05-11",
+                            "Vetat": "21:22:03",
+                            "Vetdd": "2024-05-13",
+                            "Vetdt": "21:22:03",
+                            "Vlegn": "2",
+                            "Voyno": "1000000112",
+                            "Vsdays": "3.571",
+                            "Vspeed": "23",
+                            "Vwead": "0"
+                          }
+                    ]
 
 {
 
@@ -177,7 +367,83 @@ Content-Type: application/json
   ]
 }
 
-
+# {
+#                     "Bidtype": "SB",
+#                     "Carty": "1001",
+#                     "Chpno": "",
+#                     "Chtyp": "",
+#                     "Curr": "INR",
+#                     "Currkeys": "",
+#                     "Docind": "",
+#                     "Frcost": 0,
+#                     "Frcost_Act": 0,
+#                     "Freght": 0,
+#                     "Frtco": "23450",
+#                     "Frtu": "L/S",
+#                     "Frtu_Act": "",
+#                     "GV_CSTATUS": "Voyage Created",
+#                     "Party": "",
+#                     "Ref_Voyno": "",
+#                     "Refdoc": "",
+#                     "Vessn": "",
+#                     "Vimo": "",
+#                     "Vnomtk": "",
+#                     "Voynm": "test07-05(3)",
+#                     "Voyno": "1000000112",
+#                     "Voyty": "1002",
+#                     "Vstat": "",
+#                     "toitem":[
+#                         {
+#                             "Cargs": "20000",
+#                             "Cargu": "TO",
+#                             "Frcost": "0",
+#                             "Maktx": "",
+#                             "Matnr": "",
+#                             "Medst": "NM",
+#                             "Othco": 0,
+#                             "Pdist": 0,
+#                             "Portc": "INBOM",
+#                             "Portn": "MUMBAI",
+#                             "Ppdays": 2,
+#                             "Pstat": "",
+#                             "Totco": 0,
+#                             "Vetad": "2024-05-06",
+#                             "Vetat": "06:40:03",
+#                             "Vetdd": "2024-05-08",
+#                             "Vetdt": "06:40:03",
+#                             "Vlegn":  1        ,  
+#                             "Voyno": "1000000112",
+#                             "Vsdays": 0,
+#                             "Vspeed": 23,
+#                             "Vwead": "00"
+#                           },
+#                           {
+#                             "Cargs": "20000",
+#                             "Cargu": "TO",
+#                             "Frcost": "23450",
+#                             "Maktx": "",
+#                             "Matnr": "",
+#                             "Medst": "NM",
+#                             "Othco": 0,
+#                             "Pdist": 1971,
+#                             "Portc": "INPRT",
+#                             "Portn": "PARADIP",
+#                             "Ppdays": 2,
+#                             "Pstat": "",
+#                             "Totco": 0,
+#                             "Vetad": "2024-05-11",
+#                             "Vetat": "21:22:03",
+#                             "Vetdd": "2024-05-13",
+#                             "Vetdt": "21:22:03",
+#                             "Vlegn":  2,
+#                             "Voyno": "1000000112",
+#                             "Vsdays": "3.571",
+#                             "Vspeed": 23,
+#                             "Vwead": "0"
+#                           }
+#                     ]
+                   
+# }
 ###
 
 GET http://localhost:4004/odata/v4/nauticalservice/getRoute?startLatitude=18.941&startLongitude=72.855&endLatitude=20.27769&endLongitude=86.69277

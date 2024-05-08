@@ -88,10 +88,6 @@
           }
         }
       },
-      "[production]": {
-        "db": "hana",
-        "auth": "xsuaa"
-      },
       "NAUTIBTP_NAUTICAL_TRANSACTIO_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/NAUTIBTP_NAUTICAL_TRANSACTIO_SRV",
@@ -109,6 +105,28 @@
             "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         }
+      },
+      "NAUTIZVOYAPPROVAL_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIZVOYAPPROVAL_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
+          }
+        }
+      },
+      "[production]": {
+        "db": "hana",
+        "auth": "xsuaa"
       }
     }
   }

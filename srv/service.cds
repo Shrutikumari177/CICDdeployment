@@ -1,9 +1,9 @@
 using NAUTIMASTER_BTP_SRV from './external/NAUTIMASTER_BTP_SRV.cds';
 using NAUTINAUTICALCV_SRV from './external/NAUTINAUTICALCV_SRV.cds';
 using NAUTIMARINE_TRAFFIC_API_SRV from './external/NAUTIMARINE_TRAFFIC_API_SRV.cds';
-// using NAUTITRANSACTION_BTP_SRV from './external/NAUTITRANSACTION_BTP_SRV.cds';
 using NAUTIBTP_NAUTICAL_TRANSACTIO_SRV from './external/NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.cds';
 using {nauticalschema} from '../db/schema';
+using NAUTIZVOYAPPROVAL_SRV from './external/NAUTIZVOYAPPROVAL_SRV.cds';
 
 
 service nauticalservice {
@@ -198,6 +198,7 @@ service nauticalservice {
                 Erdat,
                 DateTo
         };
+
     entity BidTypeSet                as
         projection on NAUTINAUTICALCV_SRV.BidTypeSet {
                 Ddtext,
@@ -328,5 +329,7 @@ service nauticalservice {
                 Zmax
         };
 
+    entity voyapprovalSet            as projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet
+         {        key Vreqno, key Voyno, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }  
 
 }

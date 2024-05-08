@@ -660,7 +660,7 @@ sap.ui.define(
         // let oRouter = this.getOwnerComponent().getRouter();
 
         oRouter.navTo("RouteTrChangeVoyage", {
-          "VOYAGE_NO": "1000000112"
+          "VOYAGE_NO": "1000000034"
         });
         return;
         oDataModelV2.create("/ZCreatePlanSet", oPayload, {
@@ -690,7 +690,9 @@ sap.ui.define(
             });
           },
           error: function (oResponse) {
-            // console.log(oResponse);
+            let errObject = JSON.parse(oResponse.responseText);
+            console.log(errObject);
+            new sap.m.MessageBox.error(errObject.error.message.value);
           },
         });
       },

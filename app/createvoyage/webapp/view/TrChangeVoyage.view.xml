@@ -54,7 +54,7 @@
                 <Button
                     id="Button2"
                     text="Save"
-                    press=".onSavePress"
+                    press=".onSaveVoyage"
                     type="Emphasized"
                 />
                 <Button
@@ -74,7 +74,9 @@
                 <Button
                     id="Button6"
                     text="Send for Approval"
-                    visible="false"
+                    visible="true"
+                    press=".sendApproval"
+                    type="Emphasized"
                 />
             </contentRight>
         </Bar>
@@ -203,7 +205,9 @@
             <Input
                 id="Input4"
                 width="150px"
-                value="0.00"
+                value="{voyHeaderModel>/0/Freght}"
+                editable="false"
+                
             />
 
             <Label
@@ -215,6 +219,8 @@
                 id="Input3"
                 width="100px"
                 value="{voyHeaderModel>/0/Curr}"
+                showValueHelp="true"
+                valueHelpRequest=".showValueHelpDialogCurr"
             />
         </form:SimpleForm>
         <!-- <HBox id="_IDGenHBox1" class="vdHeaderLayout" >
@@ -260,6 +266,8 @@
              -->
 
         <!-- for nav container buttons  -->
+        <Panel>  
+        </Panel>
         <Button
             id="Hide"
             icon="sap-icon://minimize"
@@ -651,7 +659,7 @@
 
                     <Label text="Freight Cost" />
                     <Input
-                        id="_friegthId"
+                        id="_friegthIdPlan"
                         value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
                         liveChange=".liveFrCostChange"
                         width="200px"
@@ -659,7 +667,7 @@
 
                     <Label text="Unit" />
                     <Select
-                        id="_idunit"
+                        id="_idFrunitPlan"
                         width="120px"
                         items="{
                             path: '/CargoUnitSet'
@@ -675,7 +683,7 @@
                     <Label text="Total Cost" />
                     <Input
                         width="12rem"
-                        id="_totalCostItem"
+                        id="_totalCostPlId"
                         value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
                     />
 
@@ -689,7 +697,22 @@
                         value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
                     />
                 </FlexBox>
-
+                 <HBox  class="sapUiTinyMarginTop">
+                 
+                   <Button
+                        id="addPort1"
+                        text="Add Port"
+                        press=".onAddPortRow1"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="minusPort1"
+                        text="Delete Port"
+                        press=".onDeletePort"
+                        type="Default"
+                        class="sapUiTinyMarginBegin"
+                    />
+                 </HBox>
                 <ScrollContainer
                     id="_IDGenScrollContainer2"
                     horizontal="true"
@@ -872,7 +895,7 @@
                                     />
                                     <Input
                                         value="{voyItemModel>Pdist}"
-                                        width="100px"
+                                        width="80px"
                                         editable="false"
                                     />
                                     <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
@@ -919,7 +942,7 @@
                                     <DatePicker
                                         id="myDatePicker"
                                         displayFormat="dd-MM-yyyy"
-                                        valueFormat="MM/dd/yyyy"
+                                        valueFormat="yyyy-MM-dd"
                                         value="{voyItemModel>Vetdd}"
                                         width="120px"
                                         liveChange=".onVetddDatePickerLiveChange1"
@@ -952,19 +975,7 @@
                             </ColumnListItem>
                         </items>
                     </Table>
-                    <Button
-                        id="addPort1"
-                        text="Add Port"
-                        press=".onAddPortRow1"
-                        type="Emphasized"
-                    />
-                    <Button
-                        id="minusPort1"
-                        text="Delete Port"
-                        press=".onDeletePort"
-                        type="Default"
-                        class="sapUiTinyMarginBegin"
-                    />
+                    
                 </ScrollContainer>
 
                 <Text
@@ -1552,18 +1563,19 @@
                                     value="{costdetailsModel>Cstcodes}"
                                 />
                                 <Select
-                                    id="_Select4"
+                                    width="200px"
+                                    id="_Select5"
                                     items="{
                                                 path: '/CargoUnitSet'
                                             }"
-                                    selectedKey="{costdetailsModel>Cargu}"
-                                    valueState="Information"
                                     valueStateText="Select"
+                                    selectedKey="{costdetailsModel>Costu}"
+                                
                                 >
                                     <core:Item
                                         id="_Item4"
-                                        key="{Uom}"
                                         text="{Uomdes}"
+                                        key="{Uom}"
                                     />
                                 </Select>
                                 <Input
@@ -1585,13 +1597,13 @@
 
                 <Button
                     id="add1"
-                    text="Add Row"
+                    text="Add Cost"
                     press=".onAddRow1"
                     type="Emphasized"
                 />
                 <Button
                     id="minus1"
-                    text="Delete Row"
+                    text="Delete Cost"
                     press=".onDeleteRow1"
                     type="Default"
                     class="sapUiTinyMarginBegin"

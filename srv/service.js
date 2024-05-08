@@ -7,6 +7,13 @@ module.exports = async (srv) => {
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
     const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV");
+    const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV"); 
+    
+
+    // Register handlers for NAUTIZVOYAPPROVAL_SRV entities
+    registerHandlers(srv, NAUTIZVOYAPPROVAL_SRV, [
+        'voyapprovalSet'
+    ]);
 
     // Register handlers for NAUTINAUTICALCV_SRV entities
     registerHandlers(srv, NAUTINAUTICALCV_SRV, [

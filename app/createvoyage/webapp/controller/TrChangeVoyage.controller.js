@@ -413,7 +413,7 @@ sap.ui.define(
                         oData.ZCalcNav.results.forEach((data, index) => {
                             selectedPorts[index].Vsdays = data.Vsdays;
                             selectedPorts[index].Vspeed = GvSpeed;
-                            selectedPorts[index].Weather = data.Vwead;
+                            selectedPorts[index].Vwead = data.Vwead;
 
                             selectedPorts[index].Vetad = that.dateFormat(data.Vetad);
 
@@ -467,11 +467,8 @@ sap.ui.define(
                     });
                     oTableItemModel.refresh();
                 } else {
-                    new sap.m.MessageToast.show("Please fill last row details first");
+                    new sap.m.MessageToast.show("Please fill last row details.");
                 }
-
-
-
 
             },
             onPortTabCargoSizeChange: function (oEvent) {
@@ -539,15 +536,15 @@ sap.ui.define(
 
             //fn to calculate sum for all freight costs and other costs to show in header of item table
             calctotalCost: function (voyItemsArr) {
-                console.log(voyItemsArr);
+                // console.log(voyItemsArr);
                 let totalCost = 0;
                 let arr = voyItemsArr;
                 arr.forEach((port) => {
                     totalCost += parseFloat(port.Totco);
 
                 })
-                console.log("total Totco cost: ", totalCost);
-                this.byId("_totalCostItem").setValue(formatter.numberFormat(totalCost))
+                // console.log("total Totco cost: ", totalCost);
+                this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
                 return totalCost;
 
 
@@ -695,7 +692,7 @@ sap.ui.define(
 
                 const fCost1 = oEvent.getParameter("value") || 0;
                 let FCost = fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
-                let selectedUnit = this.byId("_idunit").getSelectedKey();
+                let selectedUnit = this.byId("_idFrunitPlan").getSelectedKey();
                 if (FCost === undefined) {
                     FCost = 0;
                 }
@@ -852,11 +849,11 @@ sap.ui.define(
                     throw new Error(error);
                 }
             },
-
+            // FUNCTION : adding cost row 
             onAddRow1: function () {
                 let oTableModel = costdetailsModel;
                 let oTableData = oTableModel.getData();
-                oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Cargu: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
+                oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
                 oTableModel.refresh();
     
 
@@ -943,7 +940,7 @@ sap.ui.define(
             liveOtherCostChange: function (oVlegn, sum) {
                 let temp = 0;
                 let data = voyItemModel.getData();
-                let totalCost = this.byId("_totalCostItem")
+                let totalCost = this.byId("_totalCostPlId")
                 let totalCostValue = totalCost.getValue();
 
 
@@ -970,13 +967,142 @@ sap.ui.define(
                 return legId ? true : false;
             },
 
-            onSavePress: function () {
+            onSaveVoyage: function () {
                 let oModel = this.getOwnerComponent().getModel('modelV2');
-                let voyItemDetail = voyItemModel.getData();
+                let headerDetail = voyHeaderModel.getData();
+                let itemDetails = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
-                console.log(voyHeaderModel.getData(), voyItemDetail, costData);
-                let payload = {}
+                // console.log(voyHeaderModel.getData(), voyItemDetail, costData);
+
+                let frcostPlValue = this.byId("_friegthIdPlan").getValue();
+                let frUnitPl  = this.byId("_idFrunitPlan").getSelectedKey();
+                let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
+                let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
+                let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
+
+                let payload = {
+                    "Bidtype": headerDetail[0].Bidtype ,
+                    "Carty":   headerDetail[0].Carty,
+                    "Chpno":   headerDetail[0].Chpno,
+                    "Chtyp":   headerDetail[0].Chtyp,
+                    "Curr":    headerDetail[0].Curr,
+                    "Currkeys": headerDetail[0].Currkeys,
+                    "Docind":   headerDetail[0].Docind,
+
+                    "Frcost":    frCostPlanformatted,
+                    "Frcost_Act": headerDetail[0].Frcost_Act,
+                    "Freght":   headerDetail[0].Freght,
+                    "Frtco":    headerDetail[0].Frtco,
+                    "Frtu":     frUnitPl,
+                    "Frtu_Act": headerDetail[0].Frtu_Act,
+                    "GV_CSTATUS": "Voyage Created",
+                    "Party": "",
+                    "Ref_Voyno": "",
+                    "Refdoc": "",
+                    "Vessn": "",
+                    "Vimo": "",
+                    "Vnomtk": "",
+                    "Voynm": headerDetail[0].Voynm,
+                    "Voyno": headerDetail[0].Voyno,
+                    "Voyty": headerDetail[0].Voyty,
+                    "Vstat": "",
+                    "toitem": itemDetails,
+                    "tocostcharge":costData
+                  };
+                  let that = this;
+                console.log( "voyage payload :",payload );
+                oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload,{
+                    success: function (oData){
+                        console.log ("result :",oData);
+                        new sap.m.MessageBox.success("Succcesfully Updated");
+                        that.getOwnerComponent().getModel().refresh(); 
+                        
+
+                    },
+                    error : function ( err){
+                        console.log( err);
+                        let errMsg = JSON.parse(err.responseText).error.message.value;
+                        console.log(text);
+                        new sap.m.MessageBox.success(errMsg)
+                        
+
+                    }
+                })
             },
+            /*
+            [
+                        {
+                            "Cargs": "100000",
+                            "Cargu": "TO",
+                            "Frcost": "0",
+                            "Maktx": "",
+                            "Matnr": "",
+                            "Medst": "NM",
+                            "Othco": "0",
+                            "Pdist": "0",
+                            "Portc": "INBOM",
+                            "Portn": "MUMBAI",
+                            "Ppdays": "2",
+                            "Pstat": "",
+                            "Totco": "0",
+                            "Vetad": "2024-05-06",
+                            "Vetat": "06:40:03",
+                            "Vetdd": "2024-05-08",
+                            "Vetdt": "06:40:03",
+                            "Vlegn": 1,
+                            "Voyno": "1000000112",
+                            "Vsdays": "0",
+                            "Vspeed": "23",
+                            "Vwead": "00"
+                          },
+                          {
+                            "Cargs": "100000",
+                            "Cargu": "TO",
+                            "Frcost": "0",
+                            "Maktx": "",
+                            "Matnr": "",
+                            "Medst": "NM",
+                            "Othco": "0",
+                            "Pdist": "1971",
+                            "Portc": "INPRT",
+                            "Portn": "PARADIP",
+                            "Ppdays": "2",
+                            "Pstat": "",
+                            "Totco": "0",
+                            "Vetad": "2024-05-11",
+                            "Vetat": "21:22:03",
+                            "Vetdd": "2024-05-13",
+                            "Vetdt": "21:22:03",
+                            "Vlegn": 2,
+                            "Voyno": "1000000112",
+                            "Vsdays": "3.571",
+                            "Vspeed": "23",
+                            "Vwead": "0"
+                          }
+                    ]
+
+
+            */
+            sendApproval : function (oEvent){
+                let payload = {
+                    "Vreqno": "",
+                    "Voyno":"",
+                   
+                    }
+                console.log("payload for approval", payload);
+                let oModel = this.getOwnerComponent().getModel('modelV2');
+                
+                oModel.create('/voyapprovalSet', payload,{
+                    success: function (oData){
+                        console.log (oData);
+
+                    },
+                    error : function ( err){
+                        console.log( err);
+
+                    }
+                })
+             },
 
             handleNav: function (evt) {
 

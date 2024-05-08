@@ -1,4 +1,4 @@
-/* checksum : 4e39044656675045290e2ab383e44b24 */
+/* checksum : a2a36857fff66abce11fb4dcb3f63861 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -404,6 +404,104 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem {
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'
   key Chrnmin : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Ext.No'
+  Chrnmex : String(20);
+  @sap.display.format : 'Date'
+  @sap.label : 'Creation Date'
+  @sap.quickinfo : 'Charter Request Creation Date'
+  Chrcdate : Date;
+  @sap.label : 'Creation Time'
+  @sap.quickinfo : 'Charter Request Creation Time'
+  Chrctime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding Start Date'
+  Chrqsdate : Date;
+  @sap.label : 'Bidding Start Time'
+  Chrqstime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding End Date'
+  Chrqedate : Date;
+  @sap.label : 'Bidding End Time'
+  Chrqetime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Quot.Deadline Date'
+  @sap.quickinfo : 'Charter Quatation Deadline date'
+  Chrqdate : Date;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Purchase Org'
+  @sap.quickinfo : 'Charter Purchase Organization'
+  Chrporg : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pur.Org.Name'
+  @sap.quickinfo : 'Charter Purchase Organization name'
+  Chrporgn : String(40);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Purchase Group'
+  @sap.quickinfo : 'Charter Purchase Group'
+  Chrpgrp : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pur.Grp.Name'
+  @sap.quickinfo : 'Charter Purchase Group Name'
+  Chrpgrpn : String(30);
+  @sap.label : 'Exch.Rate'
+  @sap.quickinfo : 'Exhange Rate'
+  Chrexcr : Decimal(14, 0);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Payment Terms'
+  Chrpayt : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pay.term.dis'
+  @sap.quickinfo : 'Chartering payterms description'
+  Chrpaytxt : String(30);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Inco Terms'
+  Chrinco : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chate.Incotrm.dis'
+  @sap.quickinfo : 'Chartering inco terms description'
+  Chrincodis : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Inco Location'
+  @sap.quickinfo : 'Incoterms Location'
+  Chrincol : String(70);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Mat.'
+  @sap.quickinfo : 'Material'
+  Cimater : String(18);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Material Short Text'
+  Cimatdes : String(40);
+  @sap.unit : 'Ciuom'
+  @sap.label : 'Quantity'
+  Ciqty : Decimal(17, 0);
+  @sap.label : 'Unit of Measure'
+  @sap.semantics : 'unit-of-measure'
+  Ciuom : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  Voyno : String(20);
+  @sap.label : 'Voyage name'
+  @sap.quickinfo : 'Voyage Name'
+  Voynm : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor Code'
+  Chrven : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor Name'
+  Chrvenn : String(35);
+  @sap.label : 'Freight Currency'
+  @sap.semantics : 'currency-code'
+  Ciprec : String(5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Indicator'
+  @sap.quickinfo : 'General Flag'
+  Zdelete : Boolean;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Reference Chartering'
+  @sap.quickinfo : 'Reference Chartering No.'
+  RefChrnmin : String(10);
   @cds.ambiguous : 'missing on condition?'
   tocharteringasso : Association to NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERING {  };
   @cds.ambiguous : 'missing on condition?'
@@ -634,10 +732,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVoygItem {
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   key Voyno : String(20) not null;
-  @sap.display.format : 'NonNegative'
-  @sap.label : 'LegID'
-  @sap.quickinfo : 'Unique leg under a Voyage'
-  key Vlegn : String(10) not null;
+  key Vlegn : Integer not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Port Code'
   @sap.quickinfo : 'Unified Port Code - Unique'

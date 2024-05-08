@@ -121,6 +121,35 @@
                     <PropertyRef Name="Chrnmin"/>
                 </Key>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Chrnmex" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Charter Ext.No"/>
+                <Property Name="Chrcdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Creation Date" sap:quickinfo="Charter Request Creation Date"/>
+                <Property Name="Chrctime" Type="Edm.Time" Precision="0" sap:label="Creation Time" sap:quickinfo="Charter Request Creation Time"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
+                <Property Name="Chrqdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Quot.Deadline Date" sap:quickinfo="Charter Quatation Deadline date"/>
+                <Property Name="Chrporg" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Purchase Org" sap:quickinfo="Charter Purchase Organization"/>
+                <Property Name="Chrporgn" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Pur.Org.Name" sap:quickinfo="Charter Purchase Organization name"/>
+                <Property Name="Chrpgrp" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Purchase Group" sap:quickinfo="Charter Purchase Group"/>
+                <Property Name="Chrpgrpn" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Pur.Grp.Name" sap:quickinfo="Charter Purchase Group Name"/>
+                <Property Name="Chrexcr" Type="Edm.Decimal" Precision="14" Scale="0" sap:label="Exch.Rate" sap:quickinfo="Exhange Rate"/>
+                <Property Name="Chrpayt" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Payment Terms"/>
+                <Property Name="Chrpaytxt" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Pay.term.dis" sap:quickinfo="Chartering payterms description"/>
+                <Property Name="Chrinco" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Inco Terms"/>
+                <Property Name="Chrincodis" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Chate.Incotrm.dis" sap:quickinfo="Chartering inco terms description"/>
+                <Property Name="Chrincol" Type="Edm.String" MaxLength="70" sap:display-format="UpperCase" sap:label="Inco Location" sap:quickinfo="Incoterms Location"/>
+                <Property Name="Cimater" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Mat." sap:quickinfo="Material"/>
+                <Property Name="Cimatdes" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material Short Text"/>
+                <Property Name="Ciqty" Type="Edm.Decimal" Precision="17" Scale="0" sap:unit="Ciuom" sap:label="Quantity"/>
+                <Property Name="Ciuom" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="Voyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Voynm" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
+                <Property Name="Chrven" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor Code"/>
+                <Property Name="Chrvenn" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Vendor Name"/>
+                <Property Name="Ciprec" Type="Edm.String" MaxLength="5" sap:label="Freight Currency" sap:semantics="currency-code"/>
+                <Property Name="Zdelete" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Indicator" sap:quickinfo="General Flag"/>
+                <Property Name="RefChrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Reference Chartering" sap:quickinfo="Reference Chartering No."/>
                 <NavigationProperty Name="tocharteringasso" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_052323BC3B7A6CFE6B68E4F06860948D" FromRole="FromRole_assoc_052323BC3B7A6CFE6B68E4F06860948D" ToRole="ToRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
                 <NavigationProperty Name="tovendor" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_6D9BD14E9661496A3CFDD20FD22245DD" FromRole="FromRole_assoc_6D9BD14E9661496A3CFDD20FD22245DD" ToRole="ToRole_assoc_6D9BD14E9661496A3CFDD20FD22245DD"/>
             </EntityType>
@@ -210,7 +239,7 @@
                     <PropertyRef Name="Vlegn"/>
                 </Key>
                 <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
-                <Property Name="Vlegn" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="NonNegative" sap:label="LegID" sap:quickinfo="Unique leg under a Voyage"/>
+                <Property Name="Vlegn" Type="Edm.Int32" Nullable="false"/>
                 <Property Name="Portc" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Port Code" sap:quickinfo="Unified Port Code - Unique"/>
                 <Property Name="Portn" Type="Edm.String" MaxLength="25" sap:label="Port Name"/>
                 <Property Name="Pdist" Type="Edm.Decimal" Precision="13" Scale="3" sap:label="Distance" sap:quickinfo="The Post Master Fetched Using External API"/>
