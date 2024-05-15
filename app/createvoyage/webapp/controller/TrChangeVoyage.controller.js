@@ -1007,7 +1007,38 @@ sap.ui.define(
                     "Voyty": headerDetail[0].Voyty,
                     "Vstat": "",
                     "toitem": itemDetails,
-                    "tocostcharge":costData
+                    "tocostcharge":costData,
+                    "tobiditem": [
+                        {
+                    
+                                        Voyno: "1000000034",
+                                        Zcode: "CLASS",
+                                        Value: "A",
+                                        Cvalue: 0,
+                                        Cunit: "",
+                                        CodeDesc: "CLASS OF VESSEL",
+                                        RevBid: true,
+                                        Good: "X",
+                                        Mand: "",
+                                        Must: "",
+                                        Zmin: 3,
+                                        Zmax: 4
+                                    },
+                                    {
+                                        Voyno: "1000000034",
+                                        Zcode: "DAT1",
+                                        Value: "01.09.2023",
+                                        Cvalue: 0,
+                                        Cunit: "",
+                                        CodeDesc: "LAST CLEANING DATE",
+                                        RevBid: true,
+                                        Good: "X",
+                                        Mand: "",
+                                        Must: "",
+                                        Zmin: 2,
+                                        Zmax: 5
+                                    }
+                      ]
                   };
                   let that = this;
                 console.log( "voyage payload :",payload );
@@ -1022,7 +1053,7 @@ sap.ui.define(
                     error : function ( err){
                         console.log( err);
                         let errMsg = JSON.parse(err.responseText).error.message.value;
-                        console.log(text);
+                        console.log(errMsg);
                         new sap.m.MessageBox.success(errMsg)
                         
 

@@ -41,7 +41,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "Ingenx_OData_SAP1",
             "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
           }
         },
@@ -59,7 +59,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "Ingenx_OData_SAP1",
             "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
           }
         },
@@ -77,7 +77,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "Ingenx_OData_SAP1",
             "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
           }
         },
@@ -95,7 +95,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "Ingenx_OData_SAP1",
             "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         },
@@ -113,7 +113,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "Ingenx_OData_SAP1",
             "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
           }
         },

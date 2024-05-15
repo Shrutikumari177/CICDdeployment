@@ -2,14 +2,14 @@
 ### getting Header details
 
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=toitem,tocostcharge
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=toitem,tocostcharge,tobiditem
 
 ### POST REQUEST FOR VOYAGE TYPE WITH iTEM AND COST DETAILS
 POST http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM
 Content-Type: application/json
 
 {
-   "Voyno": "1000000034",
+  "Voyno": "1000000034",
   "Voynm": "Test Voyage 9/11",
   "Vnomtk": "",
   "Refdoc": "",
@@ -28,12 +28,12 @@ Content-Type: application/json
   "Party": "",
   "Bidtype": "SB",
   "Frcost": 60000,
-  "Frtu": "LSUM",
+  "Frtu": "L/S",
   "Frcost_Act": 0,
   "Frtu_Act": "",
   "Ref_Voyno": "",
   "GV_CSTATUS": "Voyage Created",
-   "toitem": [
+  "toitem": [
     {
       "Voyno": "1000000034",
       "Vlegn": 1,
@@ -112,7 +112,7 @@ Content-Type: application/json
       "Voyno": "1000000034",
       "Vlegn": 1,
       "Costcode": "1001",
-      "Costu": "LSUM",
+      "Costu": "L/S",
       "Prcunit": "",
       "Procost": 10000,
       "Costcurr": "INR",
@@ -123,7 +123,7 @@ Content-Type: application/json
       "Voyno": "1000000034",
       "Vlegn": 2,
       "Costcode": "1001",
-      "Costu": "LSUM",
+      "Costu": "L/S",
       "Prcunit": "",
       "Procost": 5000,
       "Costcurr": "INR",
@@ -134,12 +134,56 @@ Content-Type: application/json
       "Voyno": "1000000034",
       "Vlegn": 3,
       "Costcode": "1001",
-      "Costu": "LSUM",
+      "Costu": "L/S",
       "Prcunit": "",
       "Procost": 2000,
       "Costcurr": "INR",
       "Cstcodes": "PORT CHARGES",
       "CostCheck": false
+    }
+  ],
+  "tobiditem": [
+    {
+      "Voyno": "1000000034",
+      "Zcode": "CLASS",
+      "Value": "A",
+      "Cvalue": 0,
+      "Cunit": "",
+      "CodeDesc": "CLASS OF VESSEL",
+      "RevBid": false,
+      "Good": "X",
+      "Mand": "",
+      "Must": "",
+      "Zmin": 3,
+      "Zmax": 4
+    },
+    {
+      "Voyno": "1000000034",
+      "Zcode": "DAT1",
+      "Value": "01.09.2023",
+      "Cvalue": 0,
+      "Cunit": "",
+      "CodeDesc": "LAST CLEANING DATE",
+      "RevBid": false,
+      "Good": "X",
+      "Mand": "",
+      "Must": "",
+      "Zmin": 0,
+      "Zmax": 0
+    },
+    {
+      "Voyno": "1000000034",
+      "Zcode": "COOR",
+      "Value": "IN",
+      "Cvalue": 0,
+      "Cunit": "",
+      "CodeDesc": "COUNTRY OF ORIGIN",
+      "RevBid": false,
+      "Good": "X",
+      "Mand": "",
+      "Must": "",
+      "Zmin": 0,
+      "Zmax": 5
     }
   ]
 }
