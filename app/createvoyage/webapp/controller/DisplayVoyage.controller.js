@@ -37,7 +37,7 @@ sap.ui.define(
         let bidItemModel;
         let bidPayload = [];
 
-        return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
+        return BaseController.extend("com.ingenx.nauti.createvoyage.controller.DisplayVoyage", {
             formatter: formatter,
             onInit: async function () {
                 let portDataModel = new JSONModel();
@@ -55,7 +55,8 @@ sap.ui.define(
                 let oRouter = this.getOwnerComponent().getRouter();
 
 
-                oRouter.getRoute("RouteTrChangeVoyage").attachPatternMatched(this.onObjectMatched, this);
+                // oRouter.getRoute("RouteDisplayVoyage").attachPatternMatched(this.onObjectMatched, this);
+                oRouter.getRoute("RouteDisplayVoyage");
 
                 let hideButton = this.byId("Hide");
                 let hideButton1 = this.byId("Hide1");
@@ -73,7 +74,8 @@ sap.ui.define(
                 let that = this;
                 oModel.read("/xNAUTIxBIDITEM", {
                     success: function (oData) {
-                        data = oData.results.filter(item => item.Voyno === "1000000034");
+                        // data = oData.results.filter(item => item.Voyno === "1000000034");
+                        data = oData.results;
                         console.log(data);
                         data.forEach((el) => delete el.__metadata);
                         bidItemModel.setData(data);
@@ -149,6 +151,53 @@ sap.ui.define(
             },
 
             //  code and function for bid details
+            getDataforvoyage: function (){
+                let oModel = this.getOwnerComponent().getModel();
+                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
+
+                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
+                    $expand: "toitem,tocostcharge,tobiditem"
+                });
+
+                let that = this;
+                oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+                    if (aContexts.length === 1) {
+                        const entityData = aContexts[0].getObject();
+                        tempDataArr.push(entityData);
+
+                        // Set models only once
+                        if (!that.voyHeaderModel) {
+                            voyHeaderModel = new JSONModel();
+                            voyItemModel = new JSONModel();
+                            costdetailsModel = new JSONModel();
+                        }
+
+                        voyHeaderModel.setData(tempDataArr);
+                        voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+                        // voyItemModel.setData(tempDataArr[0].toitem);
+                        // costdetailsModel.setData(tempDataArr[0].tocostcharge);
+
+
+                        that.getView().setModel(voyHeaderModel, "voyHeaderModel");
+                        // that.getView().setModel(voyItemModel, "voyItemModel");
+                        // that.getView().setModel(costdetailsModel, "costdetailsModel");
+
+
+                        // Refresh models
+                        that.getView().getModel("voyHeaderModel").refresh();
+                        that.getView().getModel("voyItemModel").refresh();
+                        that.getView().getModel("costdetailsModel").refresh();
+
+                        console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
+                        console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
+                    }
+                })
+
+
+
+            },
+            showVoyageValueHelp : function (oEvent) {},
+
 
             _initBidTemplate: function () {
                 let that = this;

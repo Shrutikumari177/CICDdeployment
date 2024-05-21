@@ -2,7 +2,7 @@
 ### getting Header details
 
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=toitem,tocostcharge,tobiditem
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tobiditem
 
 ### POST REQUEST FOR VOYAGE TYPE WITH iTEM AND COST DETAILS
 POST http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM
@@ -142,50 +142,92 @@ Content-Type: application/json
       "CostCheck": false
     }
   ],
-  "tobiditem": [
+  "tobiditem":[
     {
-      "Voyno": "1000000034",
-      "Zcode": "CLASS",
-      "Value": "A",
-      "Cvalue": 0,
-      "Cunit": "",
-      "CodeDesc": "CLASS OF VESSEL",
-      "RevBid": false,
-      "Good": "X",
-      "Mand": "",
-      "Must": "",
-      "Zmin": 3,
-      "Zmax": 4
+        "Voyno": "1000000034",
+        "Zcode": "CLASS",
+        "Value": "A",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "CLASS OF VESSEL",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "4",
+        "Zmax": "5"
     },
     {
-      "Voyno": "1000000034",
-      "Zcode": "DAT1",
-      "Value": "01.09.2023",
-      "Cvalue": 0,
-      "Cunit": "",
-      "CodeDesc": "LAST CLEANING DATE",
-      "RevBid": false,
-      "Good": "X",
-      "Mand": "",
-      "Must": "",
-      "Zmin": 0,
-      "Zmax": 0
+        "Voyno": "1000000034",
+        "Zcode": "CLASS",
+        "Value": "B",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "CLASS OF VESSEL",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "2",
+        "Zmax": "3"
     },
     {
-      "Voyno": "1000000034",
-      "Zcode": "COOR",
-      "Value": "IN",
-      "Cvalue": 0,
-      "Cunit": "",
-      "CodeDesc": "COUNTRY OF ORIGIN",
-      "RevBid": false,
-      "Good": "X",
-      "Mand": "",
-      "Must": "",
-      "Zmin": 0,
-      "Zmax": 5
+        "Voyno": "1000000034",
+        "Zcode": "PORT",
+        "Value": "INBOM",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "LAST PORT OF CALL",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "0",
+        "Zmax": "5"
+    },
+    {
+        "Voyno": "1000000034",
+        "Zcode": "COOR",
+        "Value": "IN",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "COUNTRY OF ORIGIN",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "0",
+        "Zmax": "5"
+    },
+    {
+        "Voyno": "1000000034",
+        "Zcode": "DAT1",
+        "Value": "20.09.2023",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "LAST CLEANING DATE",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "3",
+        "Zmax": "5"
+    },
+    {
+        "Voyno": "1000000034",
+        "Zcode": "PORT",
+        "Value": "INBOM",
+        "Cvalue": "0.000",
+        "Cunit": "",
+        "CodeDesc": "LAST PORT OF CALL",
+        "RevBid": false,
+        "Good": "X",
+        "Mand": "",
+        "Must": "",
+        "Zmin": "3",
+        "Zmax": "5"
     }
-  ]
+] 
 }
 
 
@@ -489,5 +531,52 @@ Content-Type: application/json
                    
 # }
 ###
+
+
+
+# [
+#     {
+#       "Voyno": "1000000034",
+#       "Zcode": "CLASS",
+#       "Value": "A",
+#       "Cvalue": "0.00",
+#       "Cunit": "",
+#       "CodeDesc": "CLASS OF VESSEL",
+#       "RevBid": false,
+#       "Good": "X",
+#       "Mand": "",
+#       "Must": "",
+#       "Zmin": "3",
+#       "Zmax": "4"
+#     },
+#     {
+#       "Voyno": "1000000034",
+#       "Zcode": "DAT1",
+#       "Value": "01.09.2023",
+#       "Cvalue": 0,
+#       "Cunit": "",
+#       "CodeDesc": "LAST CLEANING DATE",
+#       "RevBid": false,
+#       "Good": "X",
+#       "Mand": "",
+#       "Must": "",
+#       "Zmin": 0,
+#       "Zmax": 0
+#     },
+#     {
+#       "Voyno": "1000000034",
+#       "Zcode": "COOR",
+#       "Value": "IN",
+#       "Cvalue": 0,
+#       "Cunit": "",
+#       "CodeDesc": "COUNTRY OF ORIGIN",
+#       "RevBid": false,
+#       "Good": "X",
+#       "Mand": "",
+#       "Must": "",
+#       "Zmin": 0,
+#       "Zmax": 5
+#     }
+#   ]
 
 GET http://localhost:4004/odata/v4/nauticalservice/getRoute?startLatitude=18.941&startLongitude=72.855&endLatitude=20.27769&endLongitude=86.69277

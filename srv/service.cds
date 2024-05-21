@@ -4,6 +4,8 @@ using NAUTIMARINE_TRAFFIC_API_SRV from './external/NAUTIMARINE_TRAFFIC_API_SRV.c
 using NAUTIBTP_NAUTICAL_TRANSACTIO_SRV from './external/NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.cds';
 using {nauticalschema} from '../db/schema';
 using NAUTIZVOYAPPROVAL_SRV from './external/NAUTIZVOYAPPROVAL_SRV.cds';
+using NAUTIVENDOR_SRV from './external/NAUTIVENDOR_SRV.cds';
+
 
 
 service nauticalservice {
@@ -331,5 +333,21 @@ service nauticalservice {
 
     entity voyapprovalSet            as projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet
          {        key Vreqno, key Voyno, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }  
+
+      entity MasBidTemplateSet as projection on NAUTIVENDOR_SRV.MasBidTemplateSet
+    {        key Code, Value, Cvalue, Cunit, Datatype, Tablename, MultiChoice     }    
+;
+    
+    entity DynamicTableSet as projection on NAUTIVENDOR_SRV.DynamicTableSet
+     
+;
+    
+    entity ITEM_BIDSet as projection on NAUTIVENDOR_SRV.ITEM_BIDSet
+    {        key Voyno, Zcode, Value, CodeDesc, RevBid, Good, Mand, Must, Zmin, Zmax     }    
+;
+    
+    entity PortsSet as projection on NAUTIVENDOR_SRV.PortsSet
+    {        key ZfValue, ZfDesc, Country, Countryn     }    
+;     
 
 }

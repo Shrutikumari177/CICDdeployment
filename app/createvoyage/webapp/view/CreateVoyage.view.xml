@@ -2,7 +2,7 @@
     xmlns:table="sap.ui.mdc.table"
     xmlns:filterbar="sap.ui.comp.filterbar"
     xmlns:layout="sap.ui.layout"
-    controllerName="com.ingenx.nauti.createvoyage.controller.View1"
+    controllerName="com.ingenx.nauti.createvoyage.controller.CreateVoyage"
     xmlns:ui="sap.ui.table"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
@@ -139,19 +139,13 @@
                                     </layout:BlockLayoutCell>
                                 </layout:content>
                             </layout:BlockLayoutRow>
-                            <layout:BlockLayoutRow visible="false" id="blockRow2">
-                                                           <layout:BlockLayoutCell
-                                    class="cellNoPadding"
+                            <layout:BlockLayoutRow >
+                                 <layout:BlockLayoutCell
+                                    class="cellNoPadding1"
+                                    width="1"
+
                                 >
-                                 <layout:content>
-                                 <OverflowToolbar style="Standard">
-                                                    <!-- <Text text="All Routes"/> -->
-                                                    <!-- <Switch
-															id="idRoutes"
-															state="false"
-															customTextOn="Yes"
-															customTextOff="No"
-														/> -->
+                                                   <FlexBox >
                                                     <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
                                                     <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
                                                     <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
@@ -161,23 +155,19 @@
                                                     <CheckBox text="TORRES" select=".onCheckBoxSelect"/>
                                                     
                                                     <CheckBox text="CORINTH" select=".onCheckBoxSelect" />
+                                                
 
-                                                    
-                                                    <!-- <CheckBox text="NORTH WEST PASSAGE" select=".onCheckBoxSelect"/>
-                                                    <CheckBox text="NORTH EAST PASSAGE" select=".onCheckBoxSelect"/>
-                                                    <CheckBox text="CORINTH" selec=".onCheckBoxSelect"/>
-                                                    <CheckBox text="TORRES STRAIT" selec=".onCheckBoxSelect"/> -->
-                                                    <ToolbarSpacer />
-                                                    </OverflowToolbar>
+                                                   </FlexBox>
+                                                 
 
-                                 </layout:content>
+                        
                                 
                                 
                                 </layout:BlockLayoutCell>
 
                             </layout:BlockLayoutRow>
 
-                            <layout:BlockLayoutRow id="blockRow3" visible="false">
+                            <layout:BlockLayoutRow >
   
                                 <layout:BlockLayoutCell
                                     class="cellNoPadding cellFixedHeight"
@@ -192,35 +182,11 @@
                                         >
                                             <ui:extension>
                                                 <OverflowToolbar>
-                                                    <!-- <Text text="All Routes"/> -->
-                                                    <!-- <Switch
-															id="idRoutes"
-															state="false"
-															customTextOn="Yes"
-															customTextOff="No"
-														/> -->
-                                                    <!-- <CheckBox text="SUEZ" />
-                                                    <CheckBox text="PANAMA" />
-                                                    <CheckBox text="KIEL" /> -->
+                                                
                                                     
-                                                    <!-- <CheckBox text="North West Passage" />
-                                                    <CheckBox text="North East Passage" />
-                                                    <CheckBox text="Corinth" />
-                                                    <CheckBox text="Torres Strait" /> -->
+                                       
                                                     <ToolbarSpacer />
-                                                    <!--<Button text="Calculate" />-->
-                                                    <!-- <Button
-														text="Create VC Request"
-														press="onPress"
-														type="Default"
-														width="9rem"
-													/> -->
-                                                    <!-- <Button
-														text="Compare Quot."
-														press="onPress"
-														type="Default"
-														width="8rem"
-													/> -->
+                                                
                                                     <Label
                                                         design="Bold"
                                                         text="Speed:"
