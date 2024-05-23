@@ -1,4 +1,4 @@
-/* checksum : db1e1ca2a8a86ad233c794f5e5c53ced */
+/* checksum : 2f50167239935045cf7160b4e0655017 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -98,30 +98,6 @@ entity NAUTIMASTER_BTP_SRV.MaintainGroupSet {
   @sap.unicode : 'false'
   @sap.label : 'User ID group'
   Zgroup : String(12) not null;
-};
-
-@cds.external : true
-@cds.persistence.skip : true
-@sap.pageable : 'false'
-@sap.content.version : '1'
-entity NAUTIMASTER_BTP_SRV.ReleaseStrategySet {
-  @sap.unicode : 'false'
-  @sap.label : 'User ID group'
-  @sap.updatable : 'false'
-  key Zgroup : String(12) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'User Name'
-  @sap.updatable : 'false'
-  key App1 : String(12) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Release Strategy'
-  Rels : String(10) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Voyage Type'
-  Voyty : String(4) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Vessel Type'
-  Vesty : String(4) not null;
 };
 
 @cds.external : true
@@ -243,6 +219,46 @@ entity NAUTIMASTER_BTP_SRV.BidMasterSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   MultiChoice : Boolean not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.addressable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.GROUPIDSet {
+  @sap.unicode : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key GroupId : LargeString not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.addressable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.GROUPIDUSERSSet {
+  @sap.unicode : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key GroupId : LargeString not null;
+  @sap.unicode : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  UserId : LargeString not null;
 };
 
 @cds.external : true
@@ -615,6 +631,65 @@ entity NAUTIMASTER_BTP_SRV.StandardCurrencySet {
 @sap.creatable : 'false'
 @sap.updatable : 'false'
 @sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.RelStrategySet {
+  @sap.unicode : 'false'
+  @sap.label : 'Release Strategy'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Rels : String(10) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Voyage Type'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Voyty : String(4) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Vessel Type'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Vesty : String(4) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'User ID group'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Zgroup : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'User Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  App1 : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'User Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  App2 : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'User Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  App3 : String(12) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
 @sap.content.version : '1'
 @sap.label : 'cds for bp master'
 entity NAUTIMASTER_BTP_SRV.xNAUTIxBusinessPartner1 {
@@ -715,6 +790,55 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Multiple Choice'
   Multi_Choice : Boolean;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'cds view for fetching sap user in btp'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxSAPUSERS {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User'
+  @sap.quickinfo : 'User Name in User Master Record'
+  key bname : String(12) not null;
+  @odata.Type : 'Edm.Byte'
+  @sap.label : 'User Lock'
+  @sap.quickinfo : 'User Lock Status'
+  uflag : Integer;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'user and userid group'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxUIIDUSRGROUP {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User Name'
+  key Zuser : String(12) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User ID group'
+  Zgroup : String(12);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'user and userid association'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxuseridassociation {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User ID group'
+  key Zgroup : String(12) not null;
+  @cds.ambiguous : 'missing on condition?'
+  to_association : Association to many NAUTIMASTER_BTP_SRV.xNAUTIxUIIDUSRGROUP {  };
 };
 
 @cds.external : true

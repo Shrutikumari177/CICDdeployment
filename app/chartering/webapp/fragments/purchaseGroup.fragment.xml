@@ -1,0 +1,25 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="mySelect"
+        noDataText="Loading..."
+        title="Select Purchase Group"
+       
+        confirm="onPurchaseGroupValueHelpClose"
+        cancel="onPurchaseGroupValueHelpClose"
+        items="{/xNAUTIxpurchGroup}"
+       
+        >
+        <StandardListItem id="_IDGenStand"
+       
+            title="{Ekgrp}"
+            description="{Eknam}"
+         
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

@@ -1,0 +1,72 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDDialog"  title="Details" class="sapUiSmallMargin" contentHeight="400px" contentWidth="60%">
+
+ <Panel >
+       <FlexBox id="_IDGenFlexBox111" class="flex" >
+    <VBox id="_IDGenVBox" class="flex" alignItems="End" >
+  <FlexBox id="_IDGenFlexBox211"  class="headerItem">
+     <Label id="_IDGenLabel" text="Voyage Number :" class="sapUiTinyMarginTop"/>
+  <Input id="_IDGenText111"  value="{charteringsetModel>/0/Chrnmin}" width="200px" editable="false"/>  
+    </FlexBox>
+     <FlexBox id="_IDGenFlexBox31" class="headerItem">
+
+     <Label id="_IDGenLabel21" class="sapUiTinyMarginTop" text="Vendor : "/>
+  <Input id="_IDGenText21"  value="{charteringsetModel>/0/Chrporg}" width="200px" editable="false"/>  
+    </FlexBox>
+<FlexBox id="_IDGenFlexBox41" class="headerItem">
+     <Label id="_IDGenLabel31"  class="sapUiTinyMarginTop"
+     text="Commercial Ranking : "/> 
+  <Input id="_IDGenText34"  value="{charteringsetModel>/0/Chrpgrpn}" width="200px" editable="false"/>  
+    </FlexBox>
+    <FlexBox id="_IDGenFlexBox515" class="headerItem">
+     <Label id="_IDGenLabel46" class="sapUiTinyMarginTop" text="Technical Ranking : "/>
+      <Input id="_IDGenText47"  value="{charteringsetModel>/0/Chrpayt}" width="200px" editable="false"/>  
+
+     </FlexBox>
+     <FlexBox id="_IDGenFlexBox91"  class="headerItem">
+     <Label id="_IDGenLabel81"  class="sapUiTinyMarginTop" text="Value : "/>
+      <Input id="_IDGenText51"  value="{charteringsetModel>/0/Chrpaytxt}" width="200px" editable="false"/>  
+
+     </FlexBox>
+     </VBox>
+
+     <VBox id="_IDGenVBox21" class="flex" alignItems="End">
+     <FlexBox id="_IDGenFlexBox61" class="headerItem">
+      <Label id="_IDGenLabel59" class="sapUiTinyMarginTop" text="Bid Date : "/>
+  <Input id="_IDGenText60"  value="{charteringsetModel>/0/Voyno}" width="200px" editable="false"/>  
+     </FlexBox>
+     <FlexBox id="_IDGenFlexBox72" class="headerItem">
+     <Label id="_IDGenLabel61" class="sapUiTinyMarginTop" text="Bid Time : "/>
+  <Input id="_IDGenText71"  value="{charteringsetModel>/0/Voynm}" width="200px" editable="false"/>  
+     </FlexBox>
+     <FlexBox id="_IDGenFlexBox78" class="headerItem">
+      <Label id="_IDGenLabel77" class="sapUiTinyMarginTop" text="Charter No. : "/>
+  <Input id="_IDGenText87"  value="{charteringsetModel>/0/Chrpgrp}"  width="200px" editable="false"/>  
+     </FlexBox>
+     <FlexBox id="_IDGenFlexBox101"  class="headerItem">
+     <Label id="_IDGenLabel91"  class="sapUiTinyMarginTop" text="Code Descr : "/>
+      <Input id="_IDGenText97"  value="{charteringsetModel>/0/Chrpgrp}" width="200px" editable="false"/>  
+
+     </FlexBox>
+     
+     </VBox>
+     </FlexBox>
+     
+     
+     
+   </Panel>
+
+    
+
+
+         <footer>
+        	<OverflowToolbar id="_IDGenOverflowToolbar2" >	
+                <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+                <Button id="_IDGenButto" text="Close" press="oncancell">
+				</Button>
+			</OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>   

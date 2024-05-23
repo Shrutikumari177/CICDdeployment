@@ -1,0 +1,8 @@
+using NAUTIVENDOR_BTP_SRV from './external/NAUTIVENDOR_BTP_SRV.cds';
+
+service NAUTIVENDOR_BTP_SRVSampleService {
+    
+    entity xNAUTIxvend_btp as projection on NAUTIVENDOR_BTP_SRV.xNAUTIxvend_btp
+    {        key Supplier, key CompanyCode, key BusinessPartner, key PurchasingOrganization, key BankCountry, key Bank, key BankAccount, key Country, SupplierName, OrganizationBPName1, OrganizationBPName2, SupplierCountryName, PostalCode, CityName, StreetName, PhoneNumber1, FaxNumber, CreationDate, CreatedByUser, PhoneNumber2, IsNaturalPerson, TaxNumber1, TaxNumber2, TaxNumber3, TaxNumber4, TaxNumber5, VATRegistration, ResponsibleType, TaxNumberType, TaxNumberResponsible, AddressID, DeletionIndicator, SupplierAccountGroup, AccountGroupName, AuthorizationGroup, AccountIsBlockedForPosting, PaymentIsBlockedForSupplier, AlternativePayeeAccountNumber, SearchString, LayoutSortingRule, ReconciliationAccount, PaymentMethodsList, AccountingClerk, AccountingClerkFaxNumber, SupplierClerkURL, AccountingClerkPhoneNumber, SuplrCoCodePaymentTerms, PaymentBlockingReason, SuplrIsDeltdCoCode, CashPlanningGroup, IsToBeCheckedForDuplicates, SupplierIsBlockedForPosting, PurOrdAutoGenerationIsAllowed, PurchasingGroup, SupplierPurgOrgPaymentTerms, PurchasingIsBlockedForSupplier, SuplrIsDeltdPurgOrg, InvoiceIsGoodsReceiptBased, PurchaseOrderCurrency, EmailAddress, BankName, BankInternalID, SWIFTCode, IBAN, BankControlKey, BankAccountHolderName, CountryName, BusPartPOBoxDvtgCityName, VATLiability, WithholdingTaxCountry, FullName, SearchTerm1, SearchTerm2, BranchCode, TH_BranchCodeDescription, IsDefaultValue, PreviousAccountNumber     }    
+;
+}

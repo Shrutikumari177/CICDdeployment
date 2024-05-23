@@ -17,7 +17,7 @@
                     </TileContent>
                 </GenericTile>
                 <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
-                    header="Change Voayge" press="onChangeVoyage">
+                    header="Change Voyage" press="onChangeVoyage">
                     <TileContent id="_IDGenTileContent8" >
                     <ImageContent  src="sap-icon://request"></ImageContent>                
                     </TileContent>

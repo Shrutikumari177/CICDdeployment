@@ -1,0 +1,334 @@
+
+<mvc:View
+	xmlns:layout="sap.ui.layout"
+	controllerName="com.ingenx.nauti.submitquotation.controller.Main"
+	 xmlns:viz="sap.viz.ui5.controls" 
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" 
+    xmlns:viz.data="sap.viz.ui5.data" 
+	xmlns:f="sap.f" 
+    xmlns:micro="sap.suite.ui.microchart" 
+    xmlns:cards="sap.f.cards" 
+    xmlns:w="sap.ui.integration.widgets" 
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns="sap.m"
+>
+	<Page
+		id="page"
+		title="{i18n>title}"
+	>
+		<content>
+		
+			<FlexBox id="_IDGenFlexBox1"
+				alignContent="Center"
+				justifyContent="SpaceAround"
+				alignItems="Center"
+				class="details_box"
+			>
+				<VBox id="_IDGenVBox1"
+					width="140%"
+					class="sapUiResponsiveMargin"
+				>
+					<ObjectHeader id="_IDGenObjectHeader1"
+						backgroundDesign="Translucent"
+						fullScreenOptimized="true"
+						condensed="false"
+						icon="sap-icon://employee"
+						iconAlt="vendorinfo>/name"
+						iconDensityAware="true"
+						iconTooltip=""
+						imageShape="Circle"
+						intro="Vendor Information"
+						number="2100000001"
+						numberState="Success"
+						responsive="false"
+						title="VR Maritime Services Private Limited"
+						class="sapUiSmallMarginTop sapUiLargeMarginBegin addShadow"
+					>
+						<additionalNumbers>
+						</additionalNumbers>
+						<attributes>
+							<ObjectAttribute id="_IDGenObjectAttribute1"
+								text="vendorinfo>/description"
+								tooltip="vendorinfo>/description"
+							/>
+							<ObjectAttribute id="_IDGenObjectAttribute2"
+								title="Address"
+								text="304 Akashdeep Building, 26 A 110001 New Delhi"
+								tooltip="vendorinfo>/address"
+							/>
+							<ObjectAttribute id="_IDGenObjectAttribute3"
+								title="Qualified"
+								text="VendorInfo"
+								tooltip="From vendorinfo>/qualified/from To vendorinfo>/qualified/to"
+							/>
+							<!-- <ObjectAttribute
+								title="From"
+								text="vendorinfo>/qualified/from}"
+							/>
+							<ObjectAttribute
+								title="To"
+								text="{vendorinfo>/qualified/to}"
+							/> -->
+						</attributes>
+						<headerContainer>
+						</headerContainer>
+						<markers>
+						</markers>
+						<statuses>
+						</statuses>
+					</ObjectHeader>
+				</VBox>
+				<VBox id="_IDGenHBox1"
+					width="100%"
+					class="sapUiResponsiveMargin"
+				>
+				 <f:Card id="_IDGenCard2"
+                       width="400px"
+                       class="sapUiSmallMarginTop sapUiLargeMarginBegin statusCard"
+                     >
+                         <f:header>
+                                <cards:Header id="_IDGenHeader3"
+                                    iconAlt="sap-icon://cargo-train"
+                                    iconBackgroundColor="Accent6"
+                                    iconDisplayShape="Circle"
+                                    iconSrc="sap-icon://open-folder"
+                                    iconVisible="true"
+                                    statusText="Active"
+                                    subtitle="Bids: 0 Open"
+                                    title="Open"
+                                    titleMaxLines="30"
+                                    press="pressOpen"
+                                />
+                         </f:header>
+                </f:Card>
+				<f:Card id="_IDGenCard3"
+                       width="400px"
+                       class="sapUiSmallMarginTop sapUiLargeMarginBegin statusCard"
+                     >
+                  <f:header>
+                                <cards:Header id="_IDGenHeader4"
+                                    iconAlt="sap-icon://cargo-train"
+                                    iconBackgroundColor="Accent2"
+                                    iconDisplayShape="Circle"
+                                    iconSrc="sap-icon://folder-full"
+                                    iconVisible="true"
+                                    statusText="Active"
+                                    subtitle="Bids: 0 Closed"
+                                    title="Close"
+                                    titleMaxLines="30"
+                                    press="pressClose"
+                                />
+                            </f:header>
+                </f:Card>
+				 <f:Card id="_IDGenCard6"
+                       width="400px"
+                       class="sapUiSmallMarginTop sapUiLargeMarginBegin statusCard"
+                     >
+                  <f:header>
+                                <cards:Header id="_IDGenHeader7"
+                                    iconAlt="sap-icon://cargo-train"
+                                    iconBackgroundColor="Accent5"
+                                    iconDisplayShape="Circle"
+                                    iconSrc="sap-icon://browse-folder"
+                                    iconVisible="true"
+                                    statusText="Active"
+                                    subtitle="Bids: 0 All"
+                                    title="All"
+                                    titleMaxLines="30"
+                                    press="pressAll"
+                                />
+                            </f:header>
+            </f:Card>
+					<!-- <GenericTile id="_IDGenGenericTile1"
+						class="sapUiLargeMarginBegin sapUiSmallMarginTop"
+						header="Open"
+						subheader="Chartering Requests"
+						press="pressOpen"
+						frameType="Auto"
+					>
+						<TileContent id="_IDGenTileContent1">
+							<NumericContent
+								id="openCharters"
+								valueColor="Critical"
+								value="chartertilemodel>/Open"
+								icon="sap-icon://open-folder"
+								withMargin="false"
+							/>
+						</TileContent>
+					</GenericTile> -->
+					<!-- <GenericTile id="_IDGenGenericTile2"
+						class="sapUiLargeMarginBegin sapUiSmallMarginTop"
+						header="Closed/Submitted"
+						subheader="Chartering Requests"
+						press="pressClosed"
+						frameType="Auto"
+					>
+						<TileContent id="_IDGenTileContent2">
+							<NumericContent
+								id="closedCharters"
+								valueColor="Good"
+								value="chartertilemodel>/Closed"
+								icon="sap-icon://folder-full"
+								withMargin="false"
+							/>
+						</TileContent>
+					</GenericTile> -->
+					<!-- <GenericTile id="_IDGenGenericTile3"
+						class="sapUiLargeMarginBegin sapUiSmallMarginTop"
+						header="All"
+						subheader="Requests"
+						press="pressAll"
+						frameType="Auto"
+					>
+						<TileContent id="_IDGenTileContent3">
+							<NumericContent
+								id="allCharters"
+								valueColor="Neutral"
+								value="chartertilemodel>/All"
+								icon="sap-icon://browse-folder"
+								withMargin="false"
+							/>
+						</TileContent>
+					</GenericTile> -->
+				</VBox>
+
+			</FlexBox>
+			<layout:BlockLayout id="_IDGenBlockLayout1" background="Dashboard">
+				<layout:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+					<layout:BlockLayoutCell id="_IDGenBlockLayoutCell1"
+						title="Charter List for vendorinfo>/name"
+						class="cellFixedHeight cellNoPadding cellContentText"
+						titleLevel="H6"
+						titleAlignment="Center"
+					>
+						<layout:content>
+							<Panel id="_IDGenPanel1"
+								height="30vh"
+								class="panelNoPadding"
+							>
+								<content>
+									<Table
+										id="centerDataTable"
+										autoPopinMode="true"
+										contextualWidth="Auto"
+										alternateRowColors="true"
+										inset="true"
+										fixedLayout="true"
+										width="auto"
+										items="{sample>/jsonData}"
+										sticky="ColumnHeaders"
+
+									>
+										<columns>
+											<Column id="_IDGenColumn1">
+												<Label id="_IDGenLabel1" text="Chartering Req. No."/>
+											</Column>
+											<!-- <Column
+														demandPopin="true"
+														hAlign="Left"
+														minScreenWidth="phone"
+													>
+														<Label text="Voyage Number"/>
+													</Column> -->
+											<!-- <Column
+														demandPopin="true"
+														hAlign="Left"
+														minScreenWidth="phone"
+													>
+														<Label text="Voyage Name"/>
+													</Column> -->
+											<Column id="_IDGenColumn2"
+												minScreenWidth="phone"
+												hAlign="Right"
+											>
+												<Label id="_IDGenLabel2" text="RFQ Date"/>
+											</Column>
+											<Column id="_IDGenColumn3" hAlign="Right">
+												<Label id="_IDGenLabel3" text="Bid Start Date"/>
+											</Column>
+											<Column id="_IDGenColumn4">
+												<Label id="_IDGenLabel4" text="Bid End Date"/>
+											</Column>
+											<Column id="_IDGenColumn5" hAlign="Right">
+												<Label id="_IDGenLabel5" text="Bid Start Time"/>
+											</Column>
+											<Column id="_IDGenColumn6">
+												<Label id="_IDGenLabel6" text="Bid End Time"/>
+											</Column>
+											<Column id="_IDGenColumn7"
+												demandPopin="true"
+												hAlign="Center"
+												minScreenWidth="phone"
+											>
+												<Label id="_IDGenLabel7" text="Status"/>
+											</Column>
+											<!-- <Column
+														demandPopin="true"
+														minScreenWidth="tablet"
+													>
+														<Label text=""/>
+													</Column>
+													<Column
+														demandPopin="true"
+														minScreenWidth="tablet"
+													>
+														<Label text=""/>
+													</Column> -->
+										</columns>
+										<items>
+											<ColumnListItem id="_IDGenColumnListItem1"
+												type="Navigation"
+												press="toBiddingDetail"
+											>
+												<cells>
+													<Text id="_IDGenText1" text="{sample>reqNo}"/>
+													<!-- <Text text="{charterlist>Voyno}"/> -->
+													<Text id="_IDGenText7" text="{sample>rfq}"/>
+													<Text id="_IDGenText8" text="{sample>startDate}"/>
+													<Text id="_IDGenText9" text="{sample>startTime}"/>
+													<Text id="_IDGenText10" text="{sample>endDate}"/>
+													<Text id="_IDGenText11" text="{sample>endTime}"/>
+													<!-- <Text id="_IDGenText2" text="{
+														path: 'sample>rfq}',
+														formatter: '.formatter.dateFormat'
+													}"/> -->
+													<!-- <Text id="_IDGenText3" text="{
+														path: '{sample>startDate}',
+														formatter: '.formatter.dateFormat'
+													}"/> -->
+													<!-- <Text id="_IDGenText4" text="{
+														path: 'charterlist>Chrqstime',
+														formatter: '.formatter.formatTime'
+													}"/> -->
+													<Text id="_IDGenText5" text="{
+														path: 'charterlist>Chrqedate',
+														formatter: '.formatter.dateFormat'
+													}"/>
+													<Text id="_IDGenText6" text="{
+														path: 'charterlist>Chrqetime',
+														formatter: '.formatter.formatTime'
+													}"/>
+													<!-- <Text text="{charterlist>status}"/> -->
+													<ObjectStatus id="_IDGenObjectStatus1"
+														text="{charterlist>status}"
+														state="{
+															path: 'charterlist>status',
+															formatter: '.formatter.statusFormatter'
+														}"
+													/>
+													<!-- <Text text=""/>
+															<Text text=""/> -->
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</content>
+							</Panel>
+						</layout:content>
+					</layout:BlockLayoutCell>
+				</layout:BlockLayoutRow>
+			</layout:BlockLayout>
+		</content>
+	</Page>
+</mvc:View>

@@ -61,17 +61,6 @@
                 <Property Name="Zuser" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:updatable="false"/>
                 <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User ID group"/>
             </EntityType>
-            <EntityType Name="ReleaseStrategy" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Zgroup"/>
-                    <PropertyRef Name="App1"/>
-                </Key>
-                <Property Name="Rels" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Release Strategy"/>
-                <Property Name="Voyty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Voyage Type"/>
-                <Property Name="Vesty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Vessel Type"/>
-                <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User ID group" sap:updatable="false"/>
-                <Property Name="App1" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:updatable="false"/>
-            </EntityType>
             <EntityType Name="CountryMaster" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="ZfValue"/>
@@ -113,6 +102,19 @@
                 <Property Name="Datatype" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Datatype" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Tablename" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Table Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="MultiChoice" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Multiple Choice" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GROUPID" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="GroupId"/>
+                </Key>
+                <Property Name="GroupId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GROUPIDUSERS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="GroupId"/>
+                </Key>
+                <Property Name="GroupId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="UserId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="UOM" sap:content-version="1">
                 <Key>
@@ -203,6 +205,21 @@
                 <Property Name="Waers" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
                 <Property Name="Ltext" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Long Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
+            <EntityType Name="RelStrategy" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Rels"/>
+                    <PropertyRef Name="Voyty"/>
+                    <PropertyRef Name="Vesty"/>
+                    <PropertyRef Name="Zgroup"/>
+                </Key>
+                <Property Name="Rels" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Release Strategy" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Voyty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Voyage Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vesty" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Vessel Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User ID group" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="App1" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="App2" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="App3" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
             <EntityType Name="xNAUTIxBusinessPartner1Type" sap:label="cds for bp master" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Lifnr"/>
@@ -243,6 +260,27 @@
                 <Property Name="Datatype" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Datatype" sap:quickinfo="RSM Data type"/>
                 <Property Name="Tablename" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Table Name"/>
                 <Property Name="Multi_Choice" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Multiple Choice"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxSAPUSERSType" sap:label="cds view for fetching sap user in btp" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="bname"/>
+                </Key>
+                <Property Name="bname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User" sap:quickinfo="User Name in User Master Record"/>
+                <Property Name="uflag" Type="Edm.Byte" sap:label="User Lock" sap:quickinfo="User Lock Status"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxUIIDUSRGROUPType" sap:label="user and userid group" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zuser"/>
+                </Key>
+                <Property Name="Zuser" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="Zgroup" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User ID group"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxuseridassociationType" sap:label="user and userid association" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zgroup"/>
+                </Key>
+                <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User ID group"/>
+                <NavigationProperty Name="to_association" Relationship="NAUTI.MASTER_BTP_SRV.assoc_F2CADB88EE0507B82C8BFE1F7B426327" FromRole="FromRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327" ToRole="ToRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
             </EntityType>
             <EntityType Name="xNAUTIxvend_btpType" sap:label="Vendor Master data for BTP" sap:content-version="1">
                 <Key>
@@ -414,15 +452,20 @@
                 <Property Name="ltext" Type="Edm.String" MaxLength="40" sap:label="Long Text"/>
                 <Property Name="ktext" Type="Edm.String" MaxLength="15" sap:label="Short text"/>
             </EntityType>
+            <Association Name="assoc_F2CADB88EE0507B82C8BFE1F7B426327" sap:content-version="1">
+                <End Type="NAUTI.MASTER_BTP_SRV.xNAUTIxuseridassociationType" Multiplicity="1" Role="FromRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
+                <End Type="NAUTI.MASTER_BTP_SRV.xNAUTIxUIIDUSRGROUPType" Multiplicity="*" Role="ToRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
+            </Association>
             <EntityContainer Name="NAUTI_MASTER_BTP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="BusinessPartnerSet" EntityType="NAUTI.MASTER_BTP_SRV.BusinessPartner" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="MaintainGroupSet" EntityType="NAUTI.MASTER_BTP_SRV.MaintainGroup" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="ReleaseStrategySet" EntityType="NAUTI.MASTER_BTP_SRV.ReleaseStrategy" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="CountryMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.CountryMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="CostMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.CostMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="EventMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.EventMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="ClassMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.ClassMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="BidMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.BidMaster" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GROUPIDSet" EntityType="NAUTI.MASTER_BTP_SRV.GROUPID" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="GROUPIDUSERSSet" EntityType="NAUTI.MASTER_BTP_SRV.GROUPIDUSERS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
                 <EntitySet Name="UOMSet" EntityType="NAUTI.MASTER_BTP_SRV.UOM" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="country_updSet" EntityType="NAUTI.MASTER_BTP_SRV.country_upd" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="PortmasterSet" EntityType="NAUTI.MASTER_BTP_SRV.Portmaster" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
@@ -432,8 +475,12 @@
                 <EntitySet Name="CountrySet" EntityType="NAUTI.MASTER_BTP_SRV.Country" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="CurrencySet" EntityType="NAUTI.MASTER_BTP_SRV.Currency" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="StandardCurrencySet" EntityType="NAUTI.MASTER_BTP_SRV.StandardCurrency" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="RelStrategySet" EntityType="NAUTI.MASTER_BTP_SRV.RelStrategy" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxBusinessPartner1" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxBusinessPartner1Type" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxMASBID" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxMASBIDType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxSAPUSERS" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxSAPUSERSType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxUIIDUSRGROUP" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxUIIDUSRGROUPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxuseridassociation" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxuseridassociationType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxvend_btp" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxvend_btpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxVOY" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxVOYType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="I_Bank_Acct_VH" EntityType="NAUTI.MASTER_BTP_SRV.I_Bank_Acct_VHType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
@@ -443,6 +490,10 @@
                 <EntitySet Name="I_Supplier_VH" EntityType="NAUTI.MASTER_BTP_SRV.I_Supplier_VHType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
                 <EntitySet Name="P_CityValueHelp" EntityType="NAUTI.MASTER_BTP_SRV.P_CityValueHelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="ZBTP_NAUTICAL_CURRENCY" EntityType="NAUTI.MASTER_BTP_SRV.ZBTP_NAUTICAL_CURRENCYType" sap:content-version="1"/>
+                <AssociationSet Name="assoc_F2CADB88EE0507B82C8BFE1F7B426327" Association="NAUTI.MASTER_BTP_SRV.assoc_F2CADB88EE0507B82C8BFE1F7B426327" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="xNAUTIxuseridassociation" Role="FromRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
+                    <End EntitySet="xNAUTIxUIIDUSRGROUP" Role="ToRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
+                </AssociationSet>
             </EntityContainer>
             <Annotations Target="NAUTI.MASTER_BTP_SRV.xNAUTIxvend_btpType/Supplier"
                 xmlns="http://docs.oasis-open.org/odata/ns/edm">

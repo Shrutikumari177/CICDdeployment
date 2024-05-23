@@ -1,0 +1,23 @@
+<mvc:View controllerName="com.ingenx.nauti.quotation.controller.QuotationDashboard"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" showHeader="false" >
+         <FlexBox id="_IDGenFlexBox3"  class="transactionFlexBox">
+                <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Request for Quotation" press="onRequestForQuotation" >
+                    <TileContent id="_IDGenTileContent7" >
+                    <ImageContent  src="sap-icon://email-read"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Compare Request for Quotation" press="onCompareRequestForQuotation">
+                    <TileContent id="_IDGenTileContent8" >
+                    <ImageContent  src="sap-icon://compare"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                
+                
+                
+        </FlexBox>
+    </Page>
+</mvc:View>

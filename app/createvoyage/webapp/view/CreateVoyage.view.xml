@@ -146,7 +146,7 @@
 
                                 >
                                                    <FlexBox >
-                                                    <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
+                                                    <Label text="Select to exclude path :" class="sapUiTinyMargin"></Label>                                                    <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
                                                     <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
                                                     <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
                                                     <CheckBox text="NW PASSAGE" select=".onCheckBoxSelect"/>

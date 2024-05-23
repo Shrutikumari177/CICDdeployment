@@ -1,0 +1,26 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="mySelectDialog1"
+        noDataText="Loading..."
+        title="Select Vendor"
+        search="onValueHelpSearchvendor"
+        confirm="onValueHelpClose"
+        cancel="onValueHelpClose"
+        items="{/xNAUTIxBusinessPartner1}"
+        multiSelect="true"
+       
+        >
+        <StandardListItem id="_IDGenStandardListItem2"
+       
+            title="{Lifnr}"
+            description="{Name1}"
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

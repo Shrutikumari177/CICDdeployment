@@ -5,7 +5,9 @@ using NAUTIBTP_NAUTICAL_TRANSACTIO_SRV from './external/NAUTIBTP_NAUTICAL_TRANSA
 using {nauticalschema} from '../db/schema';
 using NAUTIZVOYAPPROVAL_SRV from './external/NAUTIZVOYAPPROVAL_SRV.cds';
 using NAUTIVENDOR_SRV from './external/NAUTIVENDOR_SRV.cds';
-
+using NAUTIZCHATAPPROVAL_SRV from './external/NAUTIZCHATAPPROVAL_SRV.cds';
+using NAUTIZVOY_VALUEHELP_CDS from './external/NAUTIZVOY_VALUEHELP_CDS.cds';
+using NAUTIVENDOR_BTP_SRV from './external/NAUTIVENDOR_BTP_SRV.cds';
 
 
 service nauticalservice {
@@ -124,14 +126,7 @@ service nauticalservice {
                 Ltext
         };
 
-    entity ReleaseStrategySet        as
-        projection on NAUTIMASTER_BTP_SRV.ReleaseStrategySet {
-                Rels,
-                Voyty,
-                Vesty,
-            key Zgroup,
-            key App1
-        };
+    
 
     entity VoyageRealeaseSet         as
         projection on NAUTIMASTER_BTP_SRV.VoyageRealeaseSet {
@@ -331,6 +326,66 @@ service nauticalservice {
                 Zmax
         };
 
+     entity CharteringSet as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.CharteringSet
+    {        Zdelete, Chrcdate, Chrqsdate, Chrqedate, Chrqdate, Chrexcr, Ciqty, key Chrnmin, Chrnmex, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, RefChrnmin, Chrctime, Chrqstime, Chrqetime     }    
+;
+    
+ 
+    
+    entity xNAUTIxCHARTERING as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERING
+    {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin     }    
+;
+    
+    entity xNAUTIxCHARTPURCHASEITEM as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEM
+    {        key Ekorg, Ekotx     }    
+;
+     
+    entity xNAUTIxNAVOYGCT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCT
+    {        key Voyno, key Vlegn, key Costcode, Costu, Prcunit, Procost, Costcurr, Cstcodes, CostCheck     }    
+;
+    
+    entity xNAUTIxNAVYGIP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP
+    {        key Voyno, key Vlegn, Portc, Portn, Pdist, Medst, Vspeed, Ppdays, Vsdays, Vetad, Vetat, Vetdd, Vetdt, Vwead, Pstat, Matnr, Maktx, Cargs, Cargu, Othco, Frcost, Totco     }    
+;
+    
+ 
+    
+    entity xNAUTIxRFQCHARTERING as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQCHARTERING
+    {        key Voyno, Voynm, Vnomtk, Refdoc, Docind, Vessn, Vimo, Chtyp, Chpno, Currkeys, Frtco, Vstat, Voyty, Carty, Curr, Freght, Party, Bidtype, Frcost, Frtu, FrcostAct, FrtuAct, Zdelete, RefVoyno     }    
+;
+    
+    entity xNAUTIxRFQPORTAL as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL
+    {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo     }    
+;
+    
+    entity xNAUTIxSUBMITQUATATIONHEADITEM as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONHEADITEM
+    {        key Voyno, Lifnr, Chrnmin, Vimono, Vname, Biddate, Bidtime     }    
+;
+    
+  
+    
+    entity xNAUTIxVENDBID as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID
+    {        key Voyno, Lifnr, Zcode, Value, Cvalue, Cunit, Chrnmin, CodeDesc, Biddate, Bidtime, Zcom     }    
+;
+    
+    entity xNAUTIxVENDBIDH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDH
+    {        key Voyno, key Lifnr, Chrnmin, Vimono, Vname, Biddate, Bidtime     }    
+;
+    
+    entity xNAUTIxVENFBID as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID
+    {        key Voyno, Lifnr, Zcode, Biddate, Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, currentdate, currenttime     }    
+;
+    
+    
+    
+    entity xNAUTIxZCHATVEN as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN
+    {        key Chrnmin, key Lifnr, Voyno     }    
+;
+    
+    entity xNAUTIxpaymTerm as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpaymTerm
+    {        key Paytrm, Paytrmtxt     }    
+        
+
     entity voyapprovalSet            as projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet
          {        key Vreqno, key Voyno, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }  
 
@@ -348,6 +403,45 @@ service nauticalservice {
     
     entity PortsSet as projection on NAUTIVENDOR_SRV.PortsSet
     {        key ZfValue, ZfDesc, Country, Countryn     }    
-;     
+;   
+
+// for chArtering
+
+entity xNAUTIxCharteringHeaderItem as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem
+
+    {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin ,tovendor,tocharteringasso     }    
+
+;
+
+    entity xNAUTIxVEND as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVEND
+
+    {        key Chrnmin, key Lifnr, Voyno     }    
+
+;
+
+    entity xNAUTIxpurchGroup as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpurchGroup
+
+    {        key Ekgrp, Eknam     }    
+
+;
+
+
+entity chartapprSet as projection on NAUTIZCHATAPPROVAL_SRV.chartapprSet
+
+    {        key Creqno, key Chrnmin, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }    
+
+;
+   entity xNAUTIxchaApp1 as projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1
+    {        key Creqno, key Chrnmin, key Zlevel, key Uname, key Zdate, key Ztime, Zcomm, Zaction     }    
+;
+
+entity xNAUTIxvoy_valuehelp as projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp
+
+    {        key Voyno, Voynm, Zaction     }    
+
+;
+
+   
+
 
 }

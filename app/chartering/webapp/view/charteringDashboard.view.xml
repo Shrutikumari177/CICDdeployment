@@ -1,0 +1,38 @@
+<mvc:View controllerName="com.ingenx.nauti.chartering.controller.charteringDashboard"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" showHeader="false">
+        <FlexBox id="_IDGenFlexBox3"  class="transactionFlexBox">
+                <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Create Chartering" press="onCreateChartering" >
+                    <TileContent id="_IDGenTileContent7" >
+                    <ImageContent  src="sap-icon://create-form"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Change Chartering" press="onChangeChartering">
+                    <TileContent id="_IDGenTileContent8" >
+                    <ImageContent  src="sap-icon://request"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Display Chartering" press="onDisplayChartering">
+                    <TileContent id="_IDGenTileContent9" >
+                    <ImageContent  src="sap-icon://accelerated"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile4" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Chartering Approval" press="onCharteringApproval">
+                    <TileContent id="_IDGenTileConte10" >
+                    <ImageContent  src="sap-icon://approvals"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile5" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Show Bid Score" press="onCharteringApproval" visible="false">
+                    <TileContent id="_IDGenTileContent10" >
+                    <ImageContent  src="sap-icon://form"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+        </FlexBox>
+    </Page>
+</mvc:View>

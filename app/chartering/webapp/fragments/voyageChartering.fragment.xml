@@ -1,0 +1,22 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"> 
+    <SelectDialog
+        id="mySelectDialog12"
+        noDataText="Loading..."
+        title="Select Voyage"
+        search="onValueHelpSearch"
+        confirm="onValueHelpClosevoy"
+        cancel="onValueHelpClosevoy"
+        items="{/xNAUTIxvoy_valuehelp}">
+        <StandardListItem id="_IDGenStandardListItem1"
+            title="{Voyno}"
+       
+            description="{Voynm}"
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

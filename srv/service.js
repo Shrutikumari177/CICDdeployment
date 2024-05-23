@@ -4,13 +4,25 @@ const axios = require('axios');
 module.exports = async (srv) => {
     // Connect to services
     const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
+    
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
     const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV");
     const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV"); 
-    
-    const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV"); 
+    const NAUTIZVOY_VALUEHELP_CDS = await cds.connect.to("NAUTIZVOY_VALUEHELP_CDS");
+    const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV"); 
 
+    
+    
+    const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
+    
+    registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, [
+        'xNAUTIxchaApp1','chartapprSet'
+    ]);
+
+    registerHandlers(srv, NAUTIZVOY_VALUEHELP_CDS, [
+        'xNAUTIxvoy_valuehelp'
+    ]);
     registerHandlers(srv, NAUTIVENDOR_SRV, [
         'MasBidTemplateSet','DynamicTableSet','ITEM_BIDSet','PortsSet'
     ]);
@@ -39,7 +51,7 @@ module.exports = async (srv) => {
     // Register handlers for NAUTIBTP_NAUTICAL_TRANSACTIO_SRV entities
     registerHandlers(srv, NAUTIBTP_NAUTICAL_TRANSACTIO_SRV, [
         'xNAUTIxVOYAGEHEADERTOITEM', 'xNAUTIxCOSTCHARGES', 'xNAUTIxVoygItem',
-        'xNAUTIxBIDITEM']);
+        'xNAUTIxBIDITEM', 'xNAUTIxCharteringHeaderItem','xNAUTIxVEND','CharteringSet','xNAUTIxCHARTERING','xNAUTIxCHARTPURCHASEITEM','xNAUTIxpaymTerm','xNAUTIxpurchGroup','']);
 };
 
 function registerHandlers(srv, service, entities) {
@@ -61,214 +73,214 @@ function registerHandlers(srv, service, entities) {
 
         try {
 
-            // let distances = {
-            //     "info": {
-            //         "copyrights": [
-            //             "Viku AS"
-            //         ],
-            //         "took": 57
-            //     },
-            //     "paths": [
-            //         {
-            //             "distance": 1933.9091252699784,
-            //             "bbox": [
-            //                 72.695488,
-            //                 5.701832,
-            //                 86.691673,
-            //                 20.261633
-            //             ],
-            //             "points": {
-            //                 "coordinates": [
-            //                     [
-            //                         72.857384,
-            //                         18.937828
-            //                     ],
-            //                     [
-            //                         72.844163,
-            //                         18.928939
-            //                     ],
-            //                     [
-            //                         72.844985,
-            //                         18.927786
-            //                     ],
-            //                     [
-            //                         72.845178,
-            //                         18.92605
-            //                     ],
-            //                     [
-            //                         72.831252,
-            //                         18.836152
-            //                     ],
-            //                     [
-            //                         72.831252,
-            //                         18.836152
-            //                     ],
-            //                     [
-            //                         72.761484,
-            //                         18.701623
-            //                     ],
-            //                     [
-            //                         72.695488,
-            //                         18.137755
-            //                     ],
-            //                     [
-            //                         73.021381,
-            //                         17.0
-            //                     ],
-            //                     [
-            //                         73.664793,
-            //                         15.113611
-            //                     ],
-            //                     [
-            //                         76.069337,
-            //                         9.5
-            //                     ],
-            //                     [
-            //                         77.076083,
-            //                         8.0
-            //                     ],
-            //                     [
-            //                         79.848519,
-            //                         6.062151
-            //                     ],
-            //                     [
-            //                         80.701832,
-            //                         5.701832
-            //                     ],
-            //                     [
-            //                         81.133712,
-            //                         5.866288
-            //                     ],
-            //                     [
-            //                         81.916943,
-            //                         6.369229
-            //                     ],
-            //                     [
-            //                         81.916943,
-            //                         6.369229
-            //                     ],
-            //                     [
-            //                         82.0,
-            //                         6.547532
-            //                     ],
-            //                     [
-            //                         82.060496,
-            //                         6.677404
-            //                     ],
-            //                     [
-            //                         86.5,
-            //                         19.743236
-            //                     ],
-            //                     [
-            //                         86.679843,
-            //                         20.218589
-            //                     ],
-            //                     [
-            //                         86.682551,
-            //                         20.258739
-            //                     ],
-            //                     [
-            //                         86.681727,
-            //                         20.260229
-            //                     ],
-            //                     [
-            //                         86.679039,
-            //                         20.261633
-            //                     ],
-            //                     [
-            //                         86.684842,
-            //                         20.261261
-            //                     ],
-            //                     [
-            //                         86.691673,
-            //                         20.260869
-            //                     ]
-            //                 ]
-            //             },
-            //             "details": {
-            //                 "eca_distance": [
-            //                     [
-            //                         0,
-            //                         25,
-            //                         {
-            //                             "in_eca": false,
-            //                             "name": "",
-            //                             "distance": 1933.9091198704104,
-            //                             "from": [
-            //                                 72.857384,
-            //                                 18.937828
-            //                             ],
-            //                             "to": [
-            //                                 86.691673,
-            //                                 20.260869
-            //                             ]
-            //                         }
-            //                     ]
-            //                 ],
-            //                 "hra_distance": [
-            //                     [
-            //                         0,
-            //                         25,
-            //                         {
-            //                             "in_hra": false,
-            //                             "distance": 1933.9091198704104,
-            //                             "from": [
-            //                                 72.857384,
-            //                                 18.937828
-            //                             ],
-            //                             "to": [
-            //                                 86.691673,
-            //                                 20.260869
-            //                             ]
-            //                         }
-            //                     ]
-            //                 ],
-            //                 "name": [
-            //                     [
-            //                         0,
-            //                         31,
-            //                         ""
-            //                     ]
-            //                 ],
-            //                 "snapped_points": {
-            //                     "coordinates": [
-            //                         [
-            //                             72.857384,
-            //                             18.937828
-            //                         ],
-            //                         [
-            //                             86.691673,
-            //                             20.260869
-            //                         ]
-            //                     ]
-            //                 }
-            //             }
-            //         }
-            //     ]
-            // };
+            let distances = {
+                "info": {
+                    "copyrights": [
+                        "Viku AS"
+                    ],
+                    "took": 57
+                },
+                "paths": [
+                    {
+                        "distance": 1933.9091252699784,
+                        "bbox": [
+                            72.695488,
+                            5.701832,
+                            86.691673,
+                            20.261633
+                        ],
+                        "points": {
+                            "coordinates": [
+                                [
+                                    72.857384,
+                                    18.937828
+                                ],
+                                [
+                                    72.844163,
+                                    18.928939
+                                ],
+                                [
+                                    72.844985,
+                                    18.927786
+                                ],
+                                [
+                                    72.845178,
+                                    18.92605
+                                ],
+                                [
+                                    72.831252,
+                                    18.836152
+                                ],
+                                [
+                                    72.831252,
+                                    18.836152
+                                ],
+                                [
+                                    72.761484,
+                                    18.701623
+                                ],
+                                [
+                                    72.695488,
+                                    18.137755
+                                ],
+                                [
+                                    73.021381,
+                                    17.0
+                                ],
+                                [
+                                    73.664793,
+                                    15.113611
+                                ],
+                                [
+                                    76.069337,
+                                    9.5
+                                ],
+                                [
+                                    77.076083,
+                                    8.0
+                                ],
+                                [
+                                    79.848519,
+                                    6.062151
+                                ],
+                                [
+                                    80.701832,
+                                    5.701832
+                                ],
+                                [
+                                    81.133712,
+                                    5.866288
+                                ],
+                                [
+                                    81.916943,
+                                    6.369229
+                                ],
+                                [
+                                    81.916943,
+                                    6.369229
+                                ],
+                                [
+                                    82.0,
+                                    6.547532
+                                ],
+                                [
+                                    82.060496,
+                                    6.677404
+                                ],
+                                [
+                                    86.5,
+                                    19.743236
+                                ],
+                                [
+                                    86.679843,
+                                    20.218589
+                                ],
+                                [
+                                    86.682551,
+                                    20.258739
+                                ],
+                                [
+                                    86.681727,
+                                    20.260229
+                                ],
+                                [
+                                    86.679039,
+                                    20.261633
+                                ],
+                                [
+                                    86.684842,
+                                    20.261261
+                                ],
+                                [
+                                    86.691673,
+                                    20.260869
+                                ]
+                            ]
+                        },
+                        "details": {
+                            "eca_distance": [
+                                [
+                                    0,
+                                    25,
+                                    {
+                                        "in_eca": false,
+                                        "name": "",
+                                        "distance": 1933.9091198704104,
+                                        "from": [
+                                            72.857384,
+                                            18.937828
+                                        ],
+                                        "to": [
+                                            86.691673,
+                                            20.260869
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "hra_distance": [
+                                [
+                                    0,
+                                    25,
+                                    {
+                                        "in_hra": false,
+                                        "distance": 1933.9091198704104,
+                                        "from": [
+                                            72.857384,
+                                            18.937828
+                                        ],
+                                        "to": [
+                                            86.691673,
+                                            20.260869
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "name": [
+                                [
+                                    0,
+                                    31,
+                                    ""
+                                ]
+                            ],
+                            "snapped_points": {
+                                "coordinates": [
+                                    [
+                                        72.857384,
+                                        18.937828
+                                    ],
+                                    [
+                                        86.691673,
+                                        20.260869
+                                    ]
+                                ]
+                            }
+                        }
+                    }
+                ]
+            };
 
-            // const firstPath = distances.paths[0];
+            const firstPath = distances.paths[0];
 
-            // // Extracting distance
-            // const distance = firstPath.distance;
+            // Extracting distance
+            const distance = firstPath.distance;
 
-            // // Extracting coordinates
-            // const coordinates = firstPath.points.coordinates;
+            // Extracting coordinates
+            const coordinates = firstPath.points.coordinates;
 
-            // // Mapping coordinates to an array of objects with lat and lng properties
-            // const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
+            // Mapping coordinates to an array of objects with lat and lng properties
+            const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
 
-            // // Constructing responseData
-            // const path = {
-            //     seaDistance: distance,
-            //     route: mappedCoordinates,
-            //     code: 200,
-            //     message: "SUCCESS"
-            // };
+            // Constructing responseData
+            const path = {
+                seaDistance: distance,
+                route: mappedCoordinates,
+                code: 200,
+                message: "SUCCESS"
+            };
 
-            // return path;
+            return path;
             // Call the custom function to handle the request
-            return await getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude);
+            // return await getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude);
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Error fetching data');

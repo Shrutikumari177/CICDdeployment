@@ -36,11 +36,15 @@ sap.ui.define(
         let oBidCharterModel;
         let bidItemModel;
         let bidPayload = [];
+        let myVOYNO;
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
             onInit: async function () {
-                let portDataModel = new JSONModel();
+                      
+                // Set the model to the view
+                // let portDataModel = new JSONModel();
+                bidPayload =[];
                 let model = this.getOwnerComponent().getModel();
                 let oBindList = model.bindList("/PortMasterSet");
                 oBindList.requestContexts(0, Infinity).then(function (oContext) {
@@ -67,13 +71,21 @@ sap.ui.define(
                 }
                 oBidCharterModel = new JSONModel();
                 this.getView().setModel(oBidCharterModel, "oBidCharterModel");
-                let oModel = this.getOwnerComponent().getModel("modelV2");
-                bidItemModel = new JSONModel();
+                
+                await this._initBidTemplate();
+                
+                
+            },
+            getBidDetails : function (voyageNumber){
                 let data;
                 let that = this;
+                bidItemModel = new JSONModel();
+                bidPayload =[];
+                let oModel = this.getOwnerComponent().getModel("modelV2");
+
                 oModel.read("/xNAUTIxBIDITEM", {
                     success: function (oData) {
-                        data = oData.results.filter(item => item.Voyno === "1000000034");
+                        data = oData.results.filter(item => item.Voyno === voyageNumber);
                         console.log(data);
                         data.forEach((el) => delete el.__metadata);
                         bidItemModel.setData(data);
@@ -83,17 +95,15 @@ sap.ui.define(
 
                     },
                     error: function (err) {
+                        console.log("Error occured :", err);
 
                     }
                 })
-                await that._initBidTemplate();
-
 
             },
             onObjectMatched(oEvent) {
-
                 tempDataArr = [];
-                let myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
+                myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
                 voyageNum = myVOYNO;
                 console.log("myVoyno  received:", myVOYNO);
 
@@ -105,6 +115,43 @@ sap.ui.define(
                 });
 
                 let that = this;
+                let  oCommerModel = new JSONModel({
+                    myData: [
+                        {
+                            "CodeDesc": "DEMURRAGE",
+                            "Cunit": "",
+                            "Cvalue": 0,
+                            "Good": "",
+                            "Mand": "",
+                            "Must": "",
+                            "RevBid": false,
+                            "Value": "",
+                            "Voyno": myVOYNO,
+                            "Zcode": "DEMURRAGE",
+                            "Zmax": "0",
+                            "Zmin": "0"
+                          }
+                         ,
+                         {
+                            "CodeDesc": "FREIGHT",
+                            "Cunit": "",
+                            "Cvalue": 0,  // Decimal 
+                            "Good": "",
+                            "Mand": "",
+                            "Must": "",
+                            "RevBid": false,
+                            "Value": "",
+                            "Voyno": myVOYNO,
+                            "Zcode": "FREIG",
+                            "Zmax": "0",
+                            "Zmin": "0"
+                          }
+                    ]
+                });
+                // Set the model to the view
+                this.getView().setModel(oCommerModel, "commercialModel");
+                this.getBidDetails(myVOYNO);
+
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
                     if (aContexts.length === 1) {
                         const entityData = aContexts[0].getObject();
@@ -228,7 +275,9 @@ sap.ui.define(
                     oTable.addItem(oItem);
                 });
             },
-
+            showValueHelpBasedOnRevBid: function (bRevBid) {
+                return bRevBid;
+            },
             selectionChanged: function (oEvent) {
                 let value = oEvent.getParameter('selected');
                 let oSource = oEvent.getSource();
@@ -487,13 +536,13 @@ sap.ui.define(
                 var newData = {
                     CodeDesc: description, // dynamic code description
                     Cunit: "", // Fixed value, can be changed if required
-                    Cvalue: "0.000", // Fixed value, can be changed if required
-                    Good: "", // Empty initially, can be changed by user
+                    Cvalue: "0", // Fixed value, can be changed if required
+                    Good: "X", // Empty initially, can be changed by user
                     Mand: "", // Empty initially, can be changed by user
                     Must: "", // Empty initially, can be changed by user
-                    RevBid: false, // Fixed value, can be changed if required
+                    RevBid: true, // Fixed value, can be changed if required
                     Value: "", // Empty initially, can be changed by user
-                    Voyno: "1000000034", // Fixed value for particular voyage
+                    Voyno: myVOYNO , // Fixed value for particular voyage
                     Zcode: Code, // dynamic code respective to description
                     Zmax: "0", // Fixed value, can be changed if required
                     Zmin: "0" // Fixed value, can be changed if required
@@ -691,7 +740,15 @@ sap.ui.define(
                 }
                 let tempModel = new JSONModel();
                 let oData = bidItemModel.getData();
-                let filterdata = oData.filter(item => item.CodeDesc === description);
+                let filterdata =[];
+                oData.forEach(item =>{ 
+                    if( item.CodeDesc === description ){
+                        item.RevBid = true;
+                        filterdata.push(item);
+                        
+                    }
+                   
+                });
                 tempModel.setData(filterdata);
                 that.getView().setModel(tempModel, 'tempModel');
                 let filterData = tempModel.getData()
@@ -806,7 +863,7 @@ sap.ui.define(
                         icon: "sap-icon://arrow-right",
                         type: "Accept",
                         press: function () {
-                            var oInput = oSource;
+                            
                             var oTable = oDialog.getContent()[2];
                             // let selectedValue;
                             if (oTable.getItems().length) {
@@ -933,6 +990,10 @@ sap.ui.define(
 
                 // CALLING ONCALC FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
                 this.onCalc();
+                //  whenever port  days changes
+                let updatedTotalDays =  this.totalSeaDaysCalc(voyItemModel.getData());
+                this.byId('_totalDays').setValue(updatedTotalDays);
+
             },
             onCalc: function () {
                 let selectedPorts = voyItemModel.getData();
@@ -1074,7 +1135,7 @@ sap.ui.define(
                 let formatedValue = value.replace(/\,/g, '');
                 voyItemModel.setProperty(path + "/Cargs", formatedValue);
                 if (path == "/0" && voyItemModel.getData().length === 2) {
-                    voyItemModel.getData()[1].Cargs = formatedValue;
+                    voyItemModel.getData()[1].Cargs = parseFloat(formatedValue);
                     voyItemModel.refresh();
                 }
             },
@@ -1105,11 +1166,11 @@ sap.ui.define(
                 let totalDist = 0;
                 let arr = odata;
                 arr.forEach((port) => {
-                    totalDist += parseFloat(port.Pdist);
+                    totalDist += parseInt(port.Pdist);
 
                 })
                 console.log("total Distance: ", totalDist);
-                return formatter.numberFormat(totalDist);
+                return totalDist;
 
             },
 
@@ -1243,11 +1304,12 @@ sap.ui.define(
                 let totalSeaDays = 0;
                 let arr = odata;
                 arr.forEach((port) => {
-                    totalSeaDays += parseFloat(port.Vsdays);
+                    totalSeaDays += parseFloat(port.Vsdays) + parseFloat(port.Ppdays);
 
                 })
                 console.log("total SeaDays: ", totalSeaDays);
-                return formatter.numberFormat(totalSeaDays);
+                
+                return totalSeaDays.toFixed(1);
 
             },
             // fn to convert "60,000.000" to "600000"
@@ -1287,9 +1349,9 @@ sap.ui.define(
                 const fCost1 = oEvent.getParameter("value") || 0;
                 let FCost = fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
                 let selectedUnit = this.byId("_idFrunitPlan").getSelectedKey();
-                if (FCost === undefined) {
-                    FCost = 0;
-                }
+                // if (FCost === undefined || FCost === NaN) {
+                //     FCost = 0;
+                // }
                 if (selectedUnit === "L/S" || selectedUnit === "LS") {
                     this.lumpsumFrCostChange(FCost)
                 }
@@ -1449,9 +1511,6 @@ sap.ui.define(
                 let oTableData = oTableModel.getData();
                 oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
                 oTableModel.refresh();
-
-
-
             },
 
             onDeleteRow1: function () {
@@ -1574,37 +1633,7 @@ sap.ui.define(
                 let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
                 let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
 
-                let payload = {
-                    Bidtype: headerDetail[0].Bidtype,
-                    Carty: headerDetail[0].Carty,
-                    Chpno: headerDetail[0].Chpno,
-                    Chtyp: headerDetail[0].Chtyp,
-                    Curr: headerDetail[0].Curr,
-                    Currkeys: headerDetail[0].Currkeys,
-                    Docind: headerDetail[0].Docind,
-
-                    Frcost: frCostPlanformatted,
-                    Frcost_Act: headerDetail[0].Frcost_Act,
-                    Freght: headerDetail[0].Freght,
-                    Frtco: headerDetail[0].Frtco,
-                    Frtu: frUnitPl,
-                    Frtu_Act: headerDetail[0].Frtu_Act,
-                    GV_CSTATUS: "Voyage Created",
-                    Party: "",
-                    Ref_Voyno: "",
-                    Refdoc: "",
-                    Vessn: "",
-                    Vimo: "",
-                    Vnomtk: "",
-                    Voynm: headerDetail[0].Voynm,
-                    Voyno: headerDetail[0].Voyno,
-                    Voyty: headerDetail[0].Voyty,
-                    Vstat: "",
-                    toitem: itemDetails,
-                    tocostcharge: costData,
-                    biditem: bidPayload
-
-                };
+               
                 //   tobiditem: [
                 //     {
 
@@ -1637,23 +1666,54 @@ sap.ui.define(
                 //                 }
                 //   ]
                 let that = this;
+                console.table("bid details payload :",bidPayload);
+                let commerDetailPayload = that.getView().getModel("commercialModel").getData().myData;
+                console.log("commercial details", commerDetailPayload);
+
+                //preparing paoylod
+                let payload = {
+                    Bidtype: headerDetail[0].Bidtype,
+                    Carty: headerDetail[0].Carty,
+                    Chpno: headerDetail[0].Chpno,
+                    Chtyp: headerDetail[0].Chtyp,
+                    Curr: headerDetail[0].Curr,
+                    Currkeys: headerDetail[0].Currkeys,
+                    Docind: headerDetail[0].Docind,
+                    Frcost: frCostPlanformatted,
+                    Frcost_Act:headerDetail[0].Frcost_Act,
+                    Freght: headerDetail[0].Freght,
+                    Frtco: headerDetail[0].Frtco,
+                    Frtu: frUnitPl,
+                    Frtu_Act: headerDetail[0].Frtu_Act,
+                    GV_CSTATUS: "Voyage Created",
+                    Party: "",
+                    Ref_Voyno: "",
+                    Refdoc: "",
+                    Vessn: "",
+                    Vimo: "",
+                    Vnomtk: "",
+                    Voynm: headerDetail[0].Voynm,
+                    Voyno: headerDetail[0].Voyno,
+                    Voyty: headerDetail[0].Voyty,
+                    Vstat: "",
+                    toitem: itemDetails,
+                    tocostcharge: costData,
+                    tobiditem: [...bidPayload, ...commerDetailPayload]
+                    
+                };
                 console.log("voyage payload :", payload);
-                console.table(bidPayload);
-                return;
                 oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
                     success: function (oData) {
                         console.log("result :", oData);
-                        new sap.m.MessageBox.success("Succcesfully Updated");
+                        new sap.m.MessageBox.success("Data Succcesfully Updated");
                         that.getOwnerComponent().getModel().refresh();
-
 
                     },
                     error: function (err) {
                         console.log(err);
                         let errMsg = JSON.parse(err.responseText).error.message.value;
                         console.log(errMsg);
-                        new sap.m.MessageBox.success(errMsg)
-
+                        new sap.m.MessageBox.error(errMsg)
 
                     }
                 })
@@ -1790,8 +1850,8 @@ sap.ui.define(
             },
             // for dialog open
             showValueHelpDialogCurr: function (oEvent) {
-                let oData = oEvent.getSource();
-                console.log(oData);
+                let oSource = oEvent.getSource();
+                
                 // Create a dialog
                 console.log("clicked Currency type");
                 var oDialog = new sap.m.Dialog({
@@ -1813,7 +1873,7 @@ sap.ui.define(
                         selectionChange: function (oEvent) {
                             var oSelectedItem = oEvent.getParameter("listItem");
                             var oSelectedValue = oSelectedItem.getCells()[0].getText();
-                            var inputVoyageType = this.getView().byId(oData.getId()); // Input field for Voyage Type
+                            var inputVoyageType = oSource // Input field for Voyage Type
                             this.lateInputField(inputVoyageType, oSelectedValue);
                             oDialog.close();
                         }.bind(this),

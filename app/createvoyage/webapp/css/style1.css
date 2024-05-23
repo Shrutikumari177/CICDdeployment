@@ -252,7 +252,7 @@
 }
 .voyagePanel{
     background-color: white;
-    margin: 1%;
+    margin: 1% 0.5% ;
 }
  
 /* Voyage vessel Plan section  */
@@ -407,7 +407,7 @@
     padding:0px !important;
 }
 
-.planInfo{
+.planInfoFlexHeader, .actualInfoFlexHeader{
 
     align-items: center;
     
@@ -451,6 +451,12 @@
 }
 .sapUiBlockLayoutSizeL:not(.sapUiBlockLayoutKeepFontSize) .sapUiBlockCellContent{
     padding: 0 !important;
+}
+
+/*  for all panel scroll truw and scroll width none */
+.sapMPanelContent {
+    overflow:scroll !important;
+    scrollbar-width: none !important;
 }
 
 

@@ -185,6 +185,13 @@
                     ]
                 },
                 {
+                    "name": "RouteChangeVoyage",
+                    "pattern": "changeVoyage",
+                    "target": [
+                        "TargetChangeVoyage"
+                    ]
+                },
+                {
                     "name": "freightsim",
                     "pattern": "freightSimulator",
                     "target": [
@@ -234,6 +241,13 @@
                     "clearControlAggregation": false,
                     "viewId": "DisplayVoyage",
                     "viewName": "DisplayVoyage"
+                },
+                "TargetChangeVoyage": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "changeVoyage",
+                    "viewName": "changeVoyage"
                 }
             }
         },

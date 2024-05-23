@@ -1,0 +1,412 @@
+<mvc:View
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:semantic="sap.m.semantic"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt"
+    xmlns:cards="sap.f.cards"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:ui="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m"
+    controllerName="com.ingenx.nauti.chartering.controller.ChangeChartering"
+    displayBlock="true"
+>
+    <Page
+        id="page"
+        class="Page"
+    >
+        <headerContent>
+            
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    <Text
+                        id="_IDGenText1"
+                        class="text1"
+                        text="Change Chartering"
+                    />
+                </contentLeft>
+            </Bar>
+        </headerContent>
+        <subHeader>
+            <Bar id="navbar">
+                <contentLeft>
+                    <Button
+                        id="Button1"
+                        text="Save"
+                        press="onSaveChartering"
+                         type="Emphasized"
+                    />
+                    <Button
+                        id="Button3"
+                        text="Refresh"
+                        press="onRefresh"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="Button4"
+                        text="Cancel Chartering No."
+                        press="onCancelChartering"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="Button5"
+                        text="Send For Approval"
+                        press="onSendForApproval"
+                         type="Emphasized"
+                        
+                    />
+                </contentLeft>
+            </Bar>
+        </subHeader>
+
+           <Panel  >
+            <FlexBox class="charteringHeader">
+                <VBox
+                    id="_IDGenVBox1"
+                    alignItems="End"
+                    class="charteringheader"
+                >
+                    <FlexBox
+                        id="_IDHBox1"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Lbel1"
+                            text="Chartering Request No:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="charteringNo"
+                            value=""
+                            width="200px"
+                            valueHelpRequest="charteringValueHelp"
+                            showValueHelp="true"
+                        />
+                    </FlexBox>
+                    <FlexBox
+                        id="_IDGenHBox4"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label3"
+                            text="Ext.Chartering Req. No:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="chartExt"
+                            value=""
+                            width="200px"
+                        />
+                    </FlexBox>
+
+                    <FlexBox
+                        id="_IDGenHBox2"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label1"
+                            text="Voyage No:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="VoyageNo"
+                            editable="false"
+                            width="200px"
+                        />
+                    </FlexBox>
+
+                    <FlexBox
+                        id="_IDGenHBox3"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label2"
+                            text="Vendor No:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <MultiInput
+                            id="VendorNo"
+                            valueHelpRequest="vendorNo"
+                            showValueHelp="true"
+                            width="200px"
+                              liveChange="vendorNo"   valueHelpOnly="true" tokenUpdate="onTokenUpdate"
+                        />
+                    </FlexBox>
+                </VBox>
+
+                <VBox
+                    id="_IDGenVBox2"
+                    alignItems="End"
+                    class="charteringheader"
+                >
+                    <FlexBox
+                        id="_IDGenHBox5"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="_Label4"
+                            text="Voyage Name:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="voyname"
+                            editable="false"
+                            width="200px"
+                        />
+                    </FlexBox>
+                    <FlexBox
+                        id="_IDGenHBox6"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label5"
+                            text="Creation Date:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="creationDate"
+                            width="200px"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    <FlexBox
+                        id="_IDGenHBox8"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label7"
+                            text="Creation Time:"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="creationTime"
+                            width="200px"
+                            editable="false"
+                        />
+                    </FlexBox>
+                </VBox>
+
+                <VBox
+                    id="_IDGenVBox3"
+                    alignItems="End"
+                    class="charteringheader"
+                >
+                    <FlexBox
+                        id="_IDGenHBox7"
+                        class="headerItem"
+                    >
+                               <Label
+                                    id="Label"
+                                    text="Purchase Org :"
+                                    class="sapUiTinyMarginTop"
+                                />
+                                <Input
+                                    id="PurchaseOrg"
+                                    width="200px"
+                                    valueHelpRequest="purchaseOrgValueHelp"
+                                    showValueHelp="true"
+                                    editable="false"
+                                />
+                    </FlexBox>
+
+                    <FlexBox
+                        id="_IDGHBox8"
+                        class="headerItem"
+                    >
+                               <Label
+                                    id="Labe"
+                                    text="Purchase Group :"
+                                    class="sapUiTinyMarginTop"
+                                />
+                                <Input
+                                    id="PurchaseGroup"
+                                    width="200px"
+                                    showValueHelp="true"
+                                    valueHelpRequest="purchaseGroupValueHelp"
+                                    editable="false"
+                                />
+                    </FlexBox>
+                    <FlexBox
+                        id="_IDGenHBox9"
+                        class="headerItem"
+                    >
+                        <Label
+                                    id="PaymentLabel"
+                                    text="Payment Terms :"
+                                    class="sapUiTinyMarginTop"
+                                />
+                                <Input
+                                    id="PaymentTerm"
+                                    width="200px"
+                                    valueHelpRequest="paymentTermValueHelp"
+                                    showValueHelp="true"
+                                    editable="false"
+                                />
+                    </FlexBox>
+
+                    
+                </VBox>
+
+                <VBox
+                    id="_IDGenVBox4"
+                    alignItems="End"
+                    class="charteringheader"
+                />
+            </FlexBox>
+            </Panel>
+        
+
+        <IconTabBar
+            id="IconTabBar"
+            tabDensityMode="Compact"
+            class="icontab"
+            visible="false"
+        
+        >
+            <items>
+                <IconTabFilter
+                    text="Vendor Detail"
+                    key="info"
+                >
+                     <Panel
+                        id="p1"
+                        height="600px"
+                     >
+                            
+                       
+
+                        
+                           
+                             <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" horizontal="true" class="scrollContainer">
+                                <Table id="myTable" items="{vendorModel1>/}" visible="false"  	inset="false" sticky="ColumnHeaders">
+                                        
+                        
+                                    <columns >
+                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Vendor No"  />
+                                        </Column>
+                                        <Column width="80px"  minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Title" />
+                                        </Column>
+                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Address" />
+                                        </Column>
+                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Name1" />
+                                        </Column>
+                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Name2" />
+                                        </Column>
+                                        
+                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Street" />
+                                        </Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Postal" />
+                                        </Column>
+                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="City" />
+                                        </Column>
+                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Country" />
+                                        </Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Region" />
+                                        </Column>
+                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Telephone1" />
+                                        </Column>
+                                        
+                                        <Column minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="fax No" />
+                                        </Column>
+                                        <Column width="150px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Creation Date" />
+                                        </Column>
+                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+                                            <Text text="Language" />
+                                        </Column>
+                        
+                            
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{vendorModel1>Lifnr}"  />
+                                                <Text text="{vendorModel1>Anred}" />
+                                                <Text text="{vendorModel1>Adrnr}" />
+                                                <Text text="{vendorModel1>Name1}" />
+                                                <Text text="{vendorModel1>Name2}" />
+                                               
+                                                <Text text="{vendorModel1>Stras}" />
+                                                <Text text="{vendorModel1>Pstlz}" />
+                                                <Text text="{vendorModel1>Ort01}" />
+                                                <Text text="{vendorModel1>Land1}" />
+                                                <Text text="{vendorModel1>Regio}" />
+                                                <Text text="{vendorModel1>Telf1}" />
+                                            
+                        
+                                                <Text text="{vendorModel1>Telfx}" />
+                                                <Text text="{vendorModel1>Erdat}" />
+                                                <Text text="{vendorModel1>Spras}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                                </ScrollContainer>
+                                
+                          
+                         
+                    </Panel>
+                </IconTabFilter>
+               
+                <IconTabFilter
+                    text="Bidding Score"
+                    key="notes"
+                    visible="false"
+                >
+                    <Panel
+                        id="p3"
+                        height="300px"
+                    >
+                        <HBox
+                            id="HBox1"
+                            width="100%"
+                        >
+                            <Text
+                                id="_IDText12"
+                                text="Vendor Bidding Details"
+                                class="vgheading"
+                            />
+                        </HBox>
+                    </Panel>
+                </IconTabFilter>
+                <IconTabFilter
+                    text="Document Upload"
+                    key="people"
+                    visible="false"
+                >
+                    <Panel
+                        id="p5"
+                        height="300px"
+                    >
+                        <l:VerticalLayout id="_IDGenVerticalLayout1">
+                            <u:FileUploader
+                                id="fileUploader"
+                                name="myFileUpload"
+                                uploadUrl="upload/"
+                                tooltip="Upload your file to the local server"
+                                uploadComplete="handleUploadComplete"
+                                buttonText="Choose File"
+                                icon="sap-icon://value-help"
+                            />
+                        </l:VerticalLayout>
+                    </Panel>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
+    </Page>
+</mvc:View>

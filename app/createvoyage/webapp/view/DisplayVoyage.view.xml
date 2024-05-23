@@ -47,6 +47,8 @@
                 <Button
                     id="Button3"
                     text="Refresh"
+                    type="Emphasized"
+                    press=".onRefresh"
                 />
                 <Button
                     id="Button4"
@@ -61,36 +63,7 @@
             </contentRight>
         </Bar>
 
-        <!-- <Text id="_IDGenText11" class="vgheading" text="Voyage Details" /> -->
-        <!-- <Table id="idTable"  items="{voyHeaderModel>/}">    
-        
-          <columns>
-            <Column >
-            
-             <Text text="voyageno"/>
-            </Column>
-             <Column >
-            
-             <Text text="Voyage name"/>
-            </Column>
-
-            
-          </columns>
-        <items> 
-          <ColumnListItem>
-
-
-                 <cells>
-
-                     <Text text="{voyHeaderModel>Voyno}" />
-                     <Text text="{voyHeaderModel>Voynm}" />
-
-                         </cells> 
-          </ColumnListItem>
-        </items>
-        
-        </Table> -->
-        <!-- For Header Section -->
+      
         <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />
             <Label
@@ -99,7 +72,7 @@
                 class="sapUiTinyMarginTop"
             />
             <Input
-                id="Input1"
+                id="_voyageInput1"
                 width="200px"
                 editable="true"
                 showValueHelp="true"
@@ -114,6 +87,7 @@
                 id="Input2"
                 width="200px"
                 value="{voyHeaderModel>/0/Voynm}"
+                editable="false"
             />
             <Label
                 id="Label3"
@@ -128,6 +102,7 @@
                             path: '/VoyTypeSet'
                         }"
                 selectedKey="{voyHeaderModel>/0/Voyty}"
+                editable="false"
             >
                 <core:Item
                     id="_Item2"
@@ -148,6 +123,7 @@
                         path: '/CarTypeSet'
                     }"
                 selectedKey="{voyHeaderModel>/0/Carty}"
+                editable="false"
             >
                 <core:Item
                     id="_Item3"
@@ -166,6 +142,7 @@
                 id="Input5"
                 width="50%"
                 value="{voyHeaderModel>/0/Bidtype}"
+                editable="false"
             />
 
             <Label
@@ -177,6 +154,7 @@
                 id="Input6"
                 width="50%"
                 value="{voyHeaderModel>/0/GV_CSTATUS}"
+                editable="false"
             />
             <Label
                 id="Label6"
@@ -202,6 +180,7 @@
                 value="{voyHeaderModel>/0/Curr}"
                 showValueHelp="true"
                 valueHelpRequest=".showValueHelpDialogCurr"
+                editable="false"
             />
         </form:SimpleForm>
         <!-- <HBox id="_IDGenHBox1" class="vdHeaderLayout" >
@@ -262,28 +241,9 @@
 
         <Bar id="HBox10">
             <contentLeft>
-                <!-- vessel detail button -->
+            
 
-                <!-- <Button
-                    id="Button7"
-                    text="Vessel Details"
-                    press="handleNav"
-                    icon="sap-icon://inspection"
-                    visible="false"
-                >
-                    <layoutData>
-                        <FlexItemData
-                            id="_IDGenFlexItemData1"
-                            growFactor="1"
-                        />
-                    </layoutData>
-                    <customData>
-                        <core:CustomData
-                            key="target"
-                            value="p1"
-                        />
-                    </customData>
-                </Button> -->
+             
 
                 <!-- vessel plan/actual plan button -->
                 <Button
@@ -631,12 +591,12 @@
                     class="vgheading"
                 />
 
-                <FlexBox class="planInfo">
+                <FlexBox class="planInfoFlexHeader">
                     <Label
                         text="Plan Speed"
                         required="true"
                     />
-                    <Input value="{voyItemModel>/0/Vspeed}" />
+                    <Input value="{voyItemModel>/0/Vspeed}"  editable="false"/>
 
                     <Label text="Freight Cost" />
                     <Input
@@ -644,6 +604,7 @@
                         value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
                         liveChange=".liveFrCostChange"
                         width="200px"
+                        editable="false"
                     />
 
                     <Label text="Unit" />
@@ -654,6 +615,7 @@
                             path: '/CargoUnitSet'
                         }"
                         selectedKey="{voyHeaderModel>/0/Frtu}"
+                        editable="false"
                     >
                         <core:Item
                             key="{Uom}"
@@ -666,34 +628,20 @@
                         width="12rem"
                         id="_totalCostPlId"
                         value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
+                        editable="false"
                     />
 
                     <Label text="Total Dist" />
                     <Input
-                        value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
+                        value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}" editable="false"
                     />
 
                     <Label text="Total Days" />
                     <Input
-                        value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
+                        value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}" editable="false"
                     />
                 </FlexBox>
-                 <HBox  class="sapUiTinyMarginTop">
-                 
-                   <Button
-                        id="addPort1"
-                        text="Add Port"
-                        press=".onAddPortRow1"
-                        type="Emphasized"
-                    />
-                    <Button
-                        id="minusPort1"
-                        text="Delete Port"
-                        press=".onDeletePort"
-                        type="Default"
-                        class="sapUiTinyMarginBegin"
-                    />
-                 </HBox>
+              
                 <ScrollContainer
                     id="_IDGenScrollContainer2"
                     horizontal="true"
@@ -705,10 +653,10 @@
                         fixedLayout="false"
                         class="vesselDetailsTable"
                         items="{voyItemModel>/}"
-                        mode="MultiSelect"
+                        
                     >
                         <columns>
-                            <Column id="_IDColum">
+                            <Column id="_IDColum" >
                                 <Label
                                     id="_IDGel15"
                                     text="LegID"
@@ -720,14 +668,14 @@
                                     text="Port Code"
                                 />
                             </Column>
-                            <Column id="_IDGenComn7">
+                            <!-- <Column id="_IDGenComn7">
                                 <Label
                                     id="_IDGenbel16"
                                     text="Events"
                                 />
-                            </Column>
+                            </Column> -->
 
-                            <Column id="_IDGenColn6">
+                            <Column id="_IDGenColn6" >
                                 <Label
                                     id="_IDGenLel15"
                                     text="Port name"
@@ -840,8 +788,9 @@
                                         showValueHelp="true"
                                         valueHelpRequest=".onPortValueHelpRequest"
                                         change=".onPortEnterPress"
+                                        editable="false"
                                     />
-                                    <Input value="" />
+                                    <!-- <Input value="" /> -->
                                     <Input
                                         value="{voyItemModel>Portn}"
                                         editable="false"
@@ -864,6 +813,7 @@
                                         value="{voyItemModel>Cargs}"
                                         width="100px"
                                         change=".onPortTabCargoSizeChange"
+                                        editable="false"
                                     />
                                     <!-- value="{path :'voyItemModel>Cargs',formatter: '.formatter.numberFormat'}" -->
                                     <!-- liveChange=".liveCargoChange" -->
@@ -873,6 +823,7 @@
                                         width="70px"
                                         showValueHelp="true"
                                         valueHelpRequest=".showValueHelpDialogCargoUnit"
+                                        editable="false"
                                     />
                                     <Input
                                         value="{voyItemModel>Pdist}"
@@ -883,6 +834,7 @@
                                     <Input
                                         value="{voyItemModel>Medst}"
                                         width="40px"
+                                        editable="false"
                                     />
                                     <Input
 
@@ -890,8 +842,9 @@
                                         change=".onPortDaysChange"
                                         
                                         liveChange=".onPortDaysChange"
+                                        editable="false"
                                     />
-                                    <Input value="{voyItemModel>Vwead}" />
+                                    <Input value="{voyItemModel>Vwead}"  editable="false"/>
                                     <Input
                                         value="{voyItemModel>Vsdays}"
                                         editable="false"
@@ -928,6 +881,7 @@
                                         width="120px"
                                         liveChange=".onVetddDatePickerLiveChange1"
                                         change=".onVetddDatePickerChange"
+                                        editable="false"
                                         
                                     />
                                     <!-- dateValue="{voyItemModel>Vetdd}" -->
@@ -947,51 +901,94 @@
                                         valueFormat="HH:mm:ss"
                                         support2400="true"
                                         displayFormat="HH:mm:ss"
+                                        editable="false"
                                     />
                                     <Input
                                         value="{voyItemModel>Pstat}"
                                         width="90px"
+                                        editable="false"
                                     />
                                 </cells>
                             </ColumnListItem>
                         </items>
                     </Table>
+
                     
                 </ScrollContainer>
+                   <!-- <HBox  class="sapUiTinyMarginTop">
+                 
+                   <Button
+                        id="addPort1"
+                        text="Add Port"
+                        press=".onAddPortRow1"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="minusPort1"
+                        text="Remove Port"
+                        press=".onDeletePort"
+                        type="Default"
+                        class="sapUiTinyMarginBegin"
+                    />
+                 </HBox> -->
 
                 <Text
                     id="_IDGnText3"
                     text="Actual Info Details"
                     class="vgheading"
                 />
-                <HBox>
-                    <form:SimpleForm labelSpanS="4">
-                        <Label text="Plan Speed" />
-                        <Input />
-                    </form:SimpleForm>
+                  <FlexBox class="actualInfoFlexHeader">
+                    <Label
+                        text="Plan Speed"
+                        required="true"
+                    />
+                    <Input value="{voyItemModel1>/0/Vspeed}" editable="false" />
 
-                    <form:SimpleForm labelSpanS="4">
-                        <Label text="Freight Cost" />
-                        <Input />
-                    </form:SimpleForm>
+                    <Label text="Freight Cost" />
+                    <Input
+                        id="_friegthIdPlan2"
+                        value=" {path :'voyItemModel1>/', formatter:'.CalcTotalFrcost'}"
+                        liveChange=".liveFrCostChange"
+                        width="200px"
+                        editable="false"
+                    />
 
-                    <form:SimpleForm labelSpanS="4">
-                        <Label text="Unit" />
-                        <Input />
-                    </form:SimpleForm>
-                    <form:SimpleForm labelSpanS="3">
-                        <Label text="Total Cost" />
-                        <Input />
-                    </form:SimpleForm>
-                    <form:SimpleForm labelSpanS="3">
-                        <Label text="Total Dist" />
-                        <Input />
-                    </form:SimpleForm>
-                    <form:SimpleForm labelSpanS="3">
-                        <Label text="Total Days" />
-                        <Input />
-                    </form:SimpleForm>
-                </HBox>
+                    <Label text="Unit" />
+                    <Select
+                        id="_idFrunitPlan2"
+                        width="120px"
+                        items="{
+                            path: '/CargoUnitSet'
+                        }"
+                        selectedKey="{voyHeaderModel1>/0/Frtu}"
+                        editable="false"
+                    >
+                        <core:Item
+                            key="{Uom}"
+                            text="{Uomdes}"
+                        />
+                    </Select>
+
+                    <Label text="Total Cost" />
+                    <Input
+                        width="12rem"
+                        id="_totalCostPlId2"
+                        value=" {path :'voyItemModel1>/', formatter:'.calctotalCost'}"
+                        editable="false"
+                    />
+
+                    <Label text="Total Dist" />
+                    <Input
+                        value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
+                        editable="false"
+                    />
+
+                    <Label text="Total Days" />
+                    <Input
+                        value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}"
+                        editable="false"
+                    />
+                </FlexBox>
 
                 <ScrollContainer
                     horizontal="true"
@@ -1010,9 +1007,9 @@
                             <Column>
                                 <Label text="Port Cost" />
                             </Column>
-                            <Column>
+                            <!-- <Column>
                                 <Label text="Events" />
-                            </Column>
+                            </Column> -->
 
                             <Column>
                                 <Label text="Port name" />
@@ -1328,7 +1325,7 @@
                 <Table
                     id="_costTablePlan"
                     class="costplantables"
-                    mode="MultiSelect"
+                    
                     items="{costdetailsModel>/}"
                 >
                     <columns>
@@ -1379,6 +1376,7 @@
                                 <Input
                                     id="_IDGenInput15"
                                     value="{costdetailsModel>Vlegn}"
+                                    editable="false"
                                 />
                                 <Input
                                     id="cost"
@@ -1386,10 +1384,12 @@
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCost"
                                     liveChange=".showValueHelpDialogCost"
+                                    editable="false"
                                 />
                                 <Input
                                     id="_IDGenTe"
                                     value="{costdetailsModel>Cstcodes}"
+                                    editable="false"
                                 />
                                 <Select
                                     width="200px"
@@ -1399,6 +1399,7 @@
                                             }"
                                     valueStateText="Select"
                                     selectedKey="{costdetailsModel>Costu}"
+                                    editable="false"
                                 
                                 >
                                     <core:Item
@@ -1411,6 +1412,7 @@
                                     id="DGene"
                                     value="{costdetailsModel>Procost}"
                                     change=".onCostLiveChange"
+                                    editable="false"
                                 />
                                 <Input
                                     id="Curr"
@@ -1418,13 +1420,14 @@
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCurr"
                                     liveChange="showValueHelpDialogCurr"
+                                    editable="false"
                                 />
                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>
 
-                <Button
+                <!-- <Button
                     id="add1"
                     text="Add Cost"
                     press=".onAddRow1"
@@ -1436,7 +1439,7 @@
                     press=".onDeleteRow1"
                     type="Default"
                     class="sapUiTinyMarginBegin"
-                />
+                /> -->
                 <Button
                     id="mainPageSave"
                     text="Save"
@@ -1511,15 +1514,18 @@
                                     value=""
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCost"
+                                    editable="false"
                                 />
                                 <Input
                                     id="_IDGTe"
                                     value=""
+                                    editable="false"
                                 />
                                 <Select
                                     id="Select5"
                                     width="200px"
                                     forceSelection="false"
+                                    editable="false"
                                     items="{
                                                 path: '/CargoUnitSet'
                                             }"
@@ -1533,12 +1539,14 @@
                                 <Input
                                     id="DGe"
                                     value=""
+                                    editable="false"
                                 />
                                 <Input
                                     id="curr1"
                                     value=""
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCurr"
+                                    editable="false"
                                 />
                             </cells>
                         </ColumnListItem>

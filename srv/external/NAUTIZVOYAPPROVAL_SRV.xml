@@ -12,6 +12,7 @@
                     <PropertyRef Name="Voyno"/>
                 </Key>
                 <Property Name="Vreqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Voyage Approval Requ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zemail" Type="Edm.String" Nullable="false" MaxLength="241" sap:unicode="false" sap:label="E-Mail Address" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Approver Level" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>

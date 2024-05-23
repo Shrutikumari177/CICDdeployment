@@ -28,14 +28,15 @@ sap.ui.define(
          * @type {sap.ui.model.json.JSONModel}
          */
         let costdetailsModel = {};
-
-        let tempDataArr = [];
         let voyageNum;
 
         let portData = [];
         let oBidCharterModel;
         let bidItemModel;
         let bidPayload = [];
+        let voyageNumModel = [];
+        let tempDataArr = [];
+        let voyageNoArr = [];
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.DisplayVoyage", {
             formatter: formatter,
@@ -66,16 +67,25 @@ sap.ui.define(
                 if (hideButton1) {
                     hideButton1.attachPress(this.toggleBarAndNavContainer.bind(this));
                 }
-                oBidCharterModel = new JSONModel();
-                this.getView().setModel(oBidCharterModel, "oBidCharterModel");
+                // oBidCharterModel = new JSONModel();
+                // this.getView().setModel(oBidCharterModel, "oBidCharterModel");
+                
+                
+                let that = this;
+               
+
+                await that.getDataforvoyage();
+                await that._initBidTemplate();
+
+            },
+            getBidDetails : function (VoyageNo){
+                let that = this;
+                let data;
                 let oModel = this.getOwnerComponent().getModel("modelV2");
                 bidItemModel = new JSONModel();
-                let data;
-                let that = this;
                 oModel.read("/xNAUTIxBIDITEM", {
                     success: function (oData) {
-                        // data = oData.results.filter(item => item.Voyno === "1000000034");
-                        data = oData.results;
+                        data = oData.results.filter(item => item.Voyno === VoyageNo);
                         console.log(data);
                         data.forEach((el) => delete el.__metadata);
                         bidItemModel.setData(data);
@@ -85,118 +95,154 @@ sap.ui.define(
 
                     },
                     error: function (err) {
+                        console.log("my error :  ", err);
 
                     }
                 })
-                await that._initBidTemplate();
-
 
             },
-            onObjectMatched(oEvent) {
 
-                tempDataArr = [];
-                let myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
-                voyageNum = myVOYNO;
-                console.log("myVoyno  received:", myVOYNO);
-
+            getDataforvoyage: function () {
+                // let tempDataArr =[];
+                // let voyageNoArr = [];
+                console.log("hi there");
                 let oModel = this.getOwnerComponent().getModel();
-                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
+                // let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
 
-                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
+                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, undefined, {
                     $expand: "toitem,tocostcharge,tobiditem"
                 });
 
                 let that = this;
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                    if (aContexts.length === 1) {
-                        const entityData = aContexts[0].getObject();
-                        tempDataArr.push(entityData);
 
-                        // Set models only once
-                        if (!that.voyHeaderModel) {
-                            voyHeaderModel = new JSONModel();
-                            voyItemModel = new JSONModel();
-                            costdetailsModel = new JSONModel();
-                        }
+                    const entityData = aContexts;
+                    entityData.forEach(data => {
 
-                        voyHeaderModel.setData(tempDataArr);
-                        voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
-                        voyItemModel.setData(tempDataArr[0].toitem);
-                        costdetailsModel.setData(tempDataArr[0].tocostcharge);
+                        tempDataArr.push(data.getObject());
+                        voyageNoArr.push(data.getObject().Voyno)
+                    })
+                    // console.log("voyage Numbers :", voyageNoArr);
 
+                    // Set models only once
+                    if (!that.voyHeaderModel) {
+                        voyHeaderModel = new JSONModel();
+                        voyItemModel = new JSONModel();
+                        costdetailsModel = new JSONModel();
+                        voyageNumModel = new JSONModel();
 
-                        that.getView().setModel(voyHeaderModel, "voyHeaderModel");
-                        that.getView().setModel(voyItemModel, "voyItemModel");
-                        that.getView().setModel(costdetailsModel, "costdetailsModel");
-
-
-                        // Refresh models
-                        that.getView().getModel("voyHeaderModel").refresh();
-                        that.getView().getModel("voyItemModel").refresh();
-                        that.getView().getModel("costdetailsModel").refresh();
-
-                        console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
-                        console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
-
-
-                    } else {
-                        console.warn("Entity with VOYAGE_NO:", myVOYNO, "not found.");
                     }
-                }).catch(function (oError) {
-                    console.error("Error fetching entity:", oError);
-                });
-
-                console.log("my data", tempDataArr);
-
-            },
-
-            //  code and function for bid details
-            getDataforvoyage: function (){
-                let oModel = this.getOwnerComponent().getModel();
-                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
-
-                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
-                    $expand: "toitem,tocostcharge,tobiditem"
-                });
-
-                let that = this;
-                oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                    if (aContexts.length === 1) {
-                        const entityData = aContexts[0].getObject();
-                        tempDataArr.push(entityData);
-
-                        // Set models only once
-                        if (!that.voyHeaderModel) {
-                            voyHeaderModel = new JSONModel();
-                            voyItemModel = new JSONModel();
-                            costdetailsModel = new JSONModel();
-                        }
-
-                        voyHeaderModel.setData(tempDataArr);
-                        voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
-                        // voyItemModel.setData(tempDataArr[0].toitem);
-                        // costdetailsModel.setData(tempDataArr[0].tocostcharge);
+                    voyageNumModel.setData({ voyageNumbers: voyageNoArr });
+                    voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
 
 
-                        that.getView().setModel(voyHeaderModel, "voyHeaderModel");
-                        // that.getView().setModel(voyItemModel, "voyItemModel");
-                        // that.getView().setModel(costdetailsModel, "costdetailsModel");
+
+                    that.getView().setModel(voyageNumModel, "voyageNumModel");
 
 
-                        // Refresh models
-                        that.getView().getModel("voyHeaderModel").refresh();
-                        that.getView().getModel("voyItemModel").refresh();
-                        that.getView().getModel("costdetailsModel").refresh();
+                    that.getView().getModel("voyageNumModel").refresh();
 
-                        console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
-                        console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
-                    }
+                    //  console.log("voyage number data :", that.getView().getModel("voyageNumModel").getData());
+
+
                 })
 
 
 
             },
-            showVoyageValueHelp : function (oEvent) {},
+            showVoyageValueHelp: function () {
+                if (!this._CharteringDialog) {
+                    this._VoyageDialog = sap.ui.xmlfragment(
+                        "com.ingenx.nauti.createvoyage.view.voyageValueHelp",
+                        this
+                    );
+                    this.getView().addDependent(this._VoyageDialog);
+                }
+                // this.loadData(); // Call the function to load data
+                this._VoyageDialog.open();
+            },
+
+            onVoyageValueHelpClose: function (oEvent) {
+                let that = this;
+
+                var oSelectedItem = oEvent.getParameter("selectedItem");
+                // oEvent.getSource().getBinding("items").filter([]);
+
+                if (!oSelectedItem) {
+                    return;
+                }
+                that.byId("_voyageInput1").setValue(oSelectedItem.getTitle());
+                var voyageInputObj = this.getView().byId("_voyageInput1");
+                let voyageNoValue = voyageInputObj.getProperty("value");
+
+                //  Calling getBidDetails function to get bid Detsils 
+
+                that.getBidDetails(voyageNoValue);
+
+                let filteredObj = tempDataArr.filter(function (data) {
+                    return data.Voyno === voyageNoValue;
+                })
+                voyHeaderModel.setData(filteredObj);
+
+                voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+                voyItemModel.setData(filteredObj[0].toitem);
+                costdetailsModel.setData(filteredObj[0].tocostcharge);
+
+
+                that.getView().setModel(voyHeaderModel, "voyHeaderModel");
+                that.getView().setModel(voyItemModel, "voyItemModel");
+                that.getView().setModel(costdetailsModel, "costdetailsModel");
+                // that.getView().setModel(voyageNumModel, "voyageNumModel");
+
+
+                // Refresh models
+                that.getView().getModel("voyHeaderModel").refresh();
+
+                console.log(that.getView().getModel("voyHeaderModel").getData());
+                that.getView().getModel("voyItemModel").refresh();
+                that.getView().getModel("costdetailsModel").refresh();
+                // that.getView().getModel( "voyageNumModel").refresh();
+
+                console.log("voyage number data :", that.getView().getModel("voyageNumModel").getData());
+                console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
+                console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
+
+                this._VoyageDialog.destroy();
+
+            },
+       
+            onVoyageFilterSearch: function (oEvent) {
+                // Get the value entered by the user
+                var sQuery = oEvent.getParameter("value");
+
+                // Get the SelectDialog and its binding
+                var oSelectDialog = oEvent.getSource();
+                var oBinding = oSelectDialog.getBinding("items");
+
+                // Define the filter logic
+                var aFilters = [];
+                if (sQuery) {
+                    aFilters.push(new Filter({
+                        path: "", // as the numbers are direct values in the array
+                        test: function (value) {
+                            return value.includes(sQuery);
+                        }
+                    }));
+                }
+
+                // Apply the filter
+                oBinding.filter(aFilters);
+            },
+            
+            onRefresh : function (){
+               voyItemModel.setData([]);
+               costdetailsModel.setData([]);
+               bidItemModel.setData([]);
+               this.getView().getModel("voyItemModel").refresh();
+               this.getView().getModel("costdetailsModel").refresh();
+               this.getView().getModel("bidItemModel").refresh();
+               
+            },
 
 
             _initBidTemplate: function () {
@@ -233,11 +279,11 @@ sap.ui.define(
                         success: (oData) => {
                             oData.results.forEach((el, i) => {
                                 delete el.__metadata;
-                                if (el.Code === "FREIG" || el.Code === "DEMURRAGE") index = i;
-                                if (index !== "Not Found") {
-                                    oData.results.splice(index, 1);
-                                    index = "Not Found";
-                                }
+                                // if (el.Code === "FREIG" || el.Code === "DEMURRAGE") index = i;
+                                // if (index !== "Not Found") {
+                                //     oData.results.splice(index, 1);
+                                //     index = "Not Found";
+                                // }
                             });
                             resolve(oData.results);
                         },
@@ -256,7 +302,7 @@ sap.ui.define(
                     let oItem;
                     let oCells = [];
                     oCells.push(new sap.m.Text({ text: el.Value }));
-                    oCells.push(new sap.m.CheckBox({ select: this.selectionChanged }));
+                    oCells.push(new sap.m.CheckBox({ select: this.selectionChanged , editable :false }));
 
                     // Temp changes by deepanshu
                     oCells.push(
@@ -366,7 +412,7 @@ sap.ui.define(
 
                 let oCloseButton = new sap.m.Button({
                     text: "Close",
-                    type:"Emphasized",
+                    type: "Emphasized",
                     press: function () {
                         this._oHelpTableDialog.close();
                     }.bind(this),
@@ -377,7 +423,7 @@ sap.ui.define(
                     content: oHelpTable,
                     // Add the close button to the footer
                     endButton: oCloseButton,
-                    afterClose: function() {
+                    afterClose: function () {
                         // Optional: Destroy the dialog after closing to free resources
                         this._oHelpTableDialog.destroy();
                     }.bind(this)
@@ -474,6 +520,7 @@ sap.ui.define(
                 oSource.setValue(fieldValue);
                 this._oHelpTableDialog.close();
             },
+
             formatRadioButtonSelection: function (sMand) {
                 // Check if Mand property equals "X"
                 if (sMand === "X") {
@@ -754,14 +801,14 @@ sap.ui.define(
                     contentHeight: "60%",
                     content: [
                         new sap.m.Button({
-                            text: "Add row", 
+                            text: "Add row",
                             type: "Emphasized",
-                             press: function (oEvent) {
+                            press: function (oEvent) {
                                 that.onAddNewBid(oEvent, Code, description)
                             }
                         }).addStyleClass("sapUiTinyMargin"),
                         new sap.m.Button({
-                            text: "delete",                     
+                            text: "delete",
                             press: function (oEvent) {
                                 that.onDeleteBidDetail(oEvent)
                             }
@@ -982,6 +1029,8 @@ sap.ui.define(
 
                 // CALLING ONCALC FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
                 this.onCalc();
+                let updatedTotalDays =  this.totalSeaDaysCalc(voyItemModel.getData());
+                this.byId('_totalDays').setValue(updatedTotalDays);
             },
             onCalc: function () {
                 let selectedPorts = voyItemModel.getData();
@@ -1153,12 +1202,15 @@ sap.ui.define(
                 console.log(odata);
                 let totalDist = 0;
                 let arr = odata;
-                arr.forEach((port) => {
-                    totalDist += parseFloat(port.Pdist);
+                if (arr && arr.length) {
 
-                })
-                console.log("total Distance: ", totalDist);
-                return formatter.numberFormat(totalDist);
+                    arr.forEach((port) => {
+                        totalDist += parseFloat(port.Pdist);
+
+                    })
+                    console.log("total Distance: ", totalDist);
+                    return formatter.numberFormat(totalDist);
+                }
 
             },
 
@@ -1166,14 +1218,18 @@ sap.ui.define(
             CalcTotalFrcost: function (odata) {
                 console.log(odata);
                 let totalFrCost = 0;
+
                 let arr = odata;
-                arr.forEach((port) => {
-                    totalFrCost += parseFloat(port.Frcost);
+                if (arr && arr.length) {
 
-                })
-                console.log("total fr cost: ", totalFrCost);
+                    arr.forEach((port) => {
+                        totalFrCost += parseFloat(port.Frcost);
 
-                return formatter.numberFormat(totalFrCost);
+                    })
+                    console.log("total fr cost: ", totalFrCost);
+
+                    return formatter.numberFormat(totalFrCost);
+                }
 
             },
 
@@ -1182,13 +1238,16 @@ sap.ui.define(
                 // console.log(voyItemsArr);
                 let totalCost = 0;
                 let arr = voyItemsArr;
-                arr.forEach((port) => {
-                    totalCost += parseFloat(port.Totco);
+                if (arr && arr.length) {
 
-                })
-                // console.log("total Totco cost: ", totalCost);
-                this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
-                return totalCost;
+                    arr.forEach((port) => {
+                        totalCost += parseFloat(port.Totco);
+
+                    })
+                    // console.log("total Totco cost: ", totalCost);
+                    this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
+                    return totalCost;
+                }
 
 
             },
@@ -1292,11 +1351,13 @@ sap.ui.define(
                 let totalSeaDays = 0;
                 let arr = odata;
                 arr.forEach((port) => {
-                    totalSeaDays += parseFloat(port.Vsdays);
+                    totalSeaDays += parseFloat(port.Vsdays) + parseFloat(port.Ppdays);
 
                 })
                 console.log("total SeaDays: ", totalSeaDays);
-                return formatter.numberFormat(totalSeaDays);
+                
+                return totalSeaDays.toFixed(1);
+                
 
             },
             // fn to convert "60,000.000" to "600000"

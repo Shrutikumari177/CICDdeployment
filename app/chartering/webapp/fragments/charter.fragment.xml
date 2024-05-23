@@ -1,0 +1,25 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"> 
+    <SelectDialog
+        id="mySelectDialog12"
+        noDataText="Loading..."
+        title="Select Charter"
+        search="onValueHelpSearch"
+        confirm="onValueHelpCloseChar"
+        cancel="onValueHelpCloseChar"
+        items="{/xNAUTIxchaApp1}"
+        multiSelect="true"
+        >
+            
+        <StandardListItem id="_IDGenStandardListItem1"
+            title="{Chrnmin}"
+       
+            description="{Creqno}"
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>
