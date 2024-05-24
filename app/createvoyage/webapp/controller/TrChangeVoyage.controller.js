@@ -278,6 +278,14 @@ sap.ui.define(
             showValueHelpBasedOnRevBid: function (bRevBid) {
                 return bRevBid;
             },
+            onVspeedInputLiveChange: function (oEvent) {
+                let value = oEvent.getSource().getValue();
+                let items = voyItemModel.getData();
+                items.forEach ( item =>{
+                    item.Vspeed = value;
+                })
+
+            },
             selectionChanged: function (oEvent) {
                 let value = oEvent.getParameter('selected');
                 let oSource = oEvent.getSource();
@@ -1362,7 +1370,7 @@ sap.ui.define(
 
                     this.tonNMFCostChange(FCost);
                 } else {
-                    MessageToast.show("Select a valid cargo unit")
+                   new sap.m.MessageToast.show("Select a valid cargo unit")
                 }
 
             },
@@ -1775,11 +1783,13 @@ sap.ui.define(
             sendApproval: function (oEvent) {
                 let payload = {
                     "Vreqno": "",
-                    "Voyno": voyageNum
+                    "Voyno": voyageNum,
+                    "Zemail":"deepanshu.goyal@ingenxtec.com"
 
                 }
                 console.log("payload for approval", payload);
                 let oModel = this.getOwnerComponent().getModel('modelV2');
+                new sap.m.MessageToast.show( 'Sending  for approval..')
 
                 oModel.create('/voyapprovalSet', payload, {
                     success: function (oData) {

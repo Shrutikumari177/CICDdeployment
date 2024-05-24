@@ -4,27 +4,27 @@ const axios = require('axios');
 module.exports = async (srv) => {
     // Connect to services
     const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
-    
+
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
     const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV");
-    const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV"); 
+    const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV");
     const NAUTIZVOY_VALUEHELP_CDS = await cds.connect.to("NAUTIZVOY_VALUEHELP_CDS");
-    const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV"); 
+    const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV");
 
-    
-    
+
+
     const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
-    
+
     registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, [
-        'xNAUTIxchaApp1','chartapprSet'
+        'xNAUTIxchaApp1', 'chartapprSet'
     ]);
 
     registerHandlers(srv, NAUTIZVOY_VALUEHELP_CDS, [
         'xNAUTIxvoy_valuehelp'
     ]);
     registerHandlers(srv, NAUTIVENDOR_SRV, [
-        'MasBidTemplateSet','DynamicTableSet','ITEM_BIDSet','PortsSet'
+        'MasBidTemplateSet', 'DynamicTableSet', 'ITEM_BIDSet', 'PortsSet'
     ]);
     // Register handlers for NAUTIZVOYAPPROVAL_SRV entities
     registerHandlers(srv, NAUTIZVOYAPPROVAL_SRV, [
@@ -50,8 +50,24 @@ module.exports = async (srv) => {
 
     // Register handlers for NAUTIBTP_NAUTICAL_TRANSACTIO_SRV entities
     registerHandlers(srv, NAUTIBTP_NAUTICAL_TRANSACTIO_SRV, [
-        'xNAUTIxVOYAGEHEADERTOITEM', 'xNAUTIxCOSTCHARGES', 'xNAUTIxVoygItem',
-        'xNAUTIxBIDITEM', 'xNAUTIxCharteringHeaderItem','xNAUTIxVEND','CharteringSet','xNAUTIxCHARTERING','xNAUTIxCHARTPURCHASEITEM','xNAUTIxpaymTerm','xNAUTIxpurchGroup','']);
+        'xNAUTIxVOYAGEHEADERTOITEM',
+        'xNAUTIxCOSTCHARGES',
+        'xNAUTIxVoygItem',
+        'xNAUTIxBIDITEM',
+        'xNAUTIxCharteringHeaderItem',
+        'xNAUTIxVEND',
+        'CharteringSet',
+        'xNAUTIxCHARTERING',
+        'xNAUTIxCHARTPURCHASEITEM',
+        'xNAUTIxpaymTerm',
+        'xNAUTIxpurchGroup',
+        'xNAUTIxRFQPORTAL',
+        'xNAUTIxRFQCHARTERING',
+        'xNAUTIxNAVYGIP',
+        'xNAUTIxNAVOYG',
+        'xNAUTIxZCHATVEN',
+        'xNAUTIxVENDBID'
+    ]);
 };
 
 function registerHandlers(srv, service, entities) {

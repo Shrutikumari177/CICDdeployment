@@ -29,7 +29,7 @@
         <subHeader >
           <Bar id="navar">
             <contentLeft>
-                <Button id="ButtonInvite" text="Invite" visible="false" enabled="false" press="onSubmitInvite" type="Emphasized"/>  
+                <Button id="ButtonInvite" text="Invite" visible="false" press="onSubmitInvite" type="Emphasized"/>  
                 <!-- <Button id="ButtonRefresh" text="Refresh" visible="false" press="onRefresh" type="Emphasized"/>             -->
 
                              
@@ -64,7 +64,7 @@
                         <Input
                        
                             editable="false"
-                            value="{charteringsetModel>/0/Voyno}"
+                            value="{testDataModel>/0/VoyageNumber}"
                             width="200px"
                             
                            
@@ -77,7 +77,10 @@
                    
  <VBox class="Vboxtab" id="idVbox" visible="false">
  
-                     <Table id="table" items="{path: 'charteringsetModel>/', sorter: { path: 'Chrnmin' }}" mode="MultiSelect" selectionChange="onSelectItem"  >
+                     <Table id="table" items="{ path: 'testDataModel>/' ,  sorter: {
+                path: 'Score',
+                descending: true
+            }}" mode="MultiSelect"  selectionChange="onSelectItem" >
                 <columns >
                     
                     <!-- <Column id="_IDGenColumn1" width="8rem">
@@ -88,78 +91,81 @@
                         <Label id="_IDGenLabel2" text="Voyage No." />
                     </Column> -->
                     <Column id="_IDGenColumn3" width="8rem">
-                        <Label id="_IDGenLabel3" text="Vendor Code" />
+                        <Label id="_IDGenLabel3" text="Vendor" />
                     </Column>
                     <Column id="_IDGenColumn4" width="13rem">
-                        <Label id="_IDGenLabel4" text="Vender Name" />
+                        <Label id="_IDGenLabel4" text="Commercial Ranking" />
                     </Column>
-                    <Column id="_IDGenColumn5" width="8rem">
-                        <Label id="_IDGenLabel5" text="Country Of Origin" />
+                     <Column id="_IDGenColumn5" width="8rem" >
+                        <Label id="_IDGenLabel5" text="Score"  />
                     </Column>
                     <!-- <Column id="_IDGenColumn6" width="13rem">
-                        <Label id="_IDGenLabel6" text="Score-Country Of Origin" />
+                        <Label id="_IDGenLabel6" text="Bid Date" />
                     </Column> -->
-                    <!-- <Column id="_IDGenColumn7" width="8rem">
-                        <Label id="_IDGenLabel7" text="Class Of Vessel" />
-                    </Column> -->
+                    <Column id="_IDGenColumn7" width="8rem">
+                        <Label id="_IDGenLabel7" text="Eligibility" />
+                    </Column>
                     <!-- <Column id="_IDGenColumn8" width="8rem">
                         <Label id="_IDGenLabel8" text="Last Port Of Call" />
                     </Column> -->
-                    <Column id="_IDGenColumn9" width="8rem">
-                        <Label id="_IDGenLabel9" text="Freight" />
+                    <!-- <Column id="_IDGenColumn9" width="8rem">
+                        <Label id="_IDGenLabel9" text="Value" />
                     </Column>
                      <Column id="_IDGenColumn10" width="8rem">
-                        <Label id="_IDGenLabel10" text="Freight UOM" />
+                        <Label id="_IDGenLabel10" text="Currency" />
                     </Column>
-                     <!-- <Column id="_IDGenColumn11" width="8rem">
-                        <Label id="_IDGenLabel11" text="Currency" />
-                    </Column> -->
-                     <!-- <Column id="_IDGenColumn12" width="8rem">
+                     <Column id="_IDGenColumn11" width="8rem">
+                        <Label id="_IDGenLabel11" text="" />
+                    </Column>
+                     <Column id="_IDGenColumn12" width="8rem">
                         <Label id="_IDGenLabel12" text="Total Score" />
                     </Column> -->
-                     <Column id="_IDGenColumn13" width="13rem">
+                     <!-- <Column id="_IDGenColumn13" width="13rem">
                         <Label id="_IDGenLabel13" text="Eligibility for Reverse Bidding" />
                     </Column>
-                     <!-- <Column id="_IDGenColumn14" width="11rem">
+                     <Column id="_IDGenColumn14" width="11rem">
                         <Label id="_IDGenLabel14" text="Commercial Ranking" />
-                    </Column> -->
-                     <!-- <Column id="_IDGenColumn15" width="11rem">
+                    </Column>
+                     <Column id="_IDGenColumn15" width="11rem">
                         <Label id="_IDGenLabel15" text="Technical Ranking" />
-                    </Column> -->
+                    </Column>  -->
                 </columns>
 
                     <items>
-                    <ColumnListItem id="_IDGenColumnListItem1"
-                    type="Navigation" press="onNavigateDetails"
+                    <ColumnListItem id="_IDGenColumnListItem1" type="Navigation" press="onNavigateDetails"
+                    
                     >
                         <cells>
                             <!-- <Text id="_IDGenText2"
-                                text="{charteringsetModel>Chrnmin}"
+                                text="{testDataModel>CharterNumber}"
                             />
 
                             <Text id="_IDGenText3"
-                                text="{charteringsetModel>Chrnmex}"
+                                text="{testDataModel>VoyageNumber}"
                             /> -->
 
                             <Text id="_IDGenText4"
-                                text="{charteringsetModel>Chrporg}"
+                                text="{testDataModel>Vendor}"
                             />
 
                             <Text id="_IDGenText5"
-                                text="{charteringsetModel>Chrporgn}"
+                                text="{testDataModel>CommercialRanking}"
                             />
-
-                            <Text id="_IDGenText6"
-                                text="{charteringsetModel>Chrpayt}"
+                            <Text id="_IDGenText6" 
+                                text="{testDataModel>Score}"
                             />
 
                             <Text id="_IDGenText7"
-                                text="{charteringsetModel>Voyno}"
+                                text="{testDataModel>Eligible}"
+                            />
+
+                            <!-- <Text id="_IDGenText7"
+                                text="{testDataModel>Bidtype}"
                             />
 
                             <Text id="_IDGenText8"
-                                text="{charteringsetModel>Voynm}"
-                            />
+                                text="{testDataModel>Frcost}"
+                            /> -->
 
                            
                         </cells>
@@ -169,6 +175,7 @@
  
  
             </Table>
+
 
 
 

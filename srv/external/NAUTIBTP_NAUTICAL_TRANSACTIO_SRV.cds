@@ -1,4 +1,4 @@
-/* checksum : f2f11c6918c80c5db0ff2c6f46ed1350 */
+/* checksum : b53ded652f676c09624f8a7c0a1d9e8a */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -613,17 +613,111 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxMASBID {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
+@sap.label : 'cds view for /nauti/navoygh'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.label : 'Voyage name'
+  @sap.quickinfo : 'Voyage Name'
+  Voynm : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Nomination no'
+  @sap.quickinfo : 'Nautical being used for Is-OIL'
+  Vnomtk : String(20);
+  @sap.label : 'Refrence Doc'
+  @sap.quickinfo : 'Nautical being used for S4H or other non Oil Modules'
+  Refdoc : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Ref Doc .ind'
+  @sap.quickinfo : 'Reference document indicator (PSX)'
+  Docind : String(1);
+  @sap.label : 'Vessel name'
+  @sap.quickinfo : 'Vessel Name'
+  Vessn : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel IMO no'
+  @sap.quickinfo : 'Vessel IMO Number - Unique'
+  Vimo : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Type'
+  @sap.quickinfo : 'SPOT/Time Charter'
+  Chtyp : String(5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Party Agree'
+  @sap.quickinfo : 'Freight Contract'
+  Chpno : String(10);
+  @sap.label : 'Freight charges'
+  @sap.quickinfo : 'Currency key'
+  @sap.semantics : 'currency-code'
+  Currkeys : String(5);
+  @sap.unit : 'Currkeys'
+  @sap.label : 'Freight Cost'
+  @sap.quickinfo : 'Freight Cost for the Voyage'
+  Frtco : Decimal(14, 3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage Status'
+  @sap.quickinfo : 'Not Started, Ballast, Port, EnRoute, Anchorage, Completed'
+  Vstat : String(5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage Type'
+  Voyty : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel Type'
+  Carty : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Currency'
+  Curr : String(3);
+  @sap.unit : 'Currkeys'
+  @sap.label : 'Freight cost'
+  Freght : Decimal(12, 3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Party Agreem'
+  @sap.quickinfo : 'Charter Party Agreement'
+  Party : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : ''
+  @sap.quickinfo : 'Bid Type'
+  Bidtype : String(2);
+  @sap.unit : 'Currkeys'
+  @sap.label : 'Freight Cost'
+  Frcost : Decimal(17, 5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Freight Unit'
+  Frtu : String(10);
+  @sap.unit : 'Currkeys'
+  @sap.label : 'Actual Freight Cost'
+  FrcostAct : Decimal(17, 5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Actual Freight Unit'
+  FrtuAct : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Indicator'
+  @sap.quickinfo : 'General Flag'
+  Zdelete : Boolean;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Refrence Voyage No.'
+  RefVoyno : String(20);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
 @sap.label : 'cds view for /nauti/navoygcit'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCT {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   key Voyno : String(20) not null;
-  key Vlegn : Integer not null;
+  Vlegn : Integer;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Cost.Code'
   @sap.quickinfo : 'Cost Code'
-  key Costcode : String(4) not null;
+  Costcode : String(4);
   @sap.display.format : 'UpperCase'
   @sap.label : 'Cost Unit'
   Costu : String(10);
@@ -659,10 +753,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP {
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   key Voyno : String(20) not null;
-  @sap.display.format : 'NonNegative'
-  @sap.label : 'LegID'
-  @sap.quickinfo : 'Unique leg under a Voyage'
-  key Vlegn : String(10) not null;
+  key Vlegn : Integer not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Port Code'
   @sap.quickinfo : 'Unified Port Code - Unique'
@@ -772,92 +863,71 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQCHARTERING {
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   key Voyno : String(20) not null;
-  @sap.label : 'Voyage name'
-  @sap.quickinfo : 'Voyage Name'
-  Voynm : String(20);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Nomination no'
-  @sap.quickinfo : 'Nautical being used for Is-OIL'
-  Vnomtk : String(20);
-  @sap.label : 'Refrence Doc'
-  @sap.quickinfo : 'Nautical being used for S4H or other non Oil Modules'
-  Refdoc : String(10);
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  Lifnr : String(10);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Ref Doc .ind'
-  @sap.quickinfo : 'Reference document indicator (PSX)'
-  Docind : String(1);
-  @sap.label : 'Vessel name'
-  @sap.quickinfo : 'Vessel Name'
-  Vessn : String(20);
+  @sap.label : 'Code'
+  Zcode : String(12);
+  @sap.display.format : 'Date'
+  @sap.label : 'Bid Date'
+  Biddate : Date;
+  @sap.label : 'Bid Time'
+  Bidtime : Time;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Vessel IMO no'
-  @sap.quickinfo : 'Vessel IMO Number - Unique'
-  Vimo : String(20);
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  Chrnmin : String(10);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Charter Type'
-  @sap.quickinfo : 'SPOT/Time Charter'
-  Chtyp : String(5);
+  @sap.label : 'Code Description'
+  CodeDesc : String(50);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Charter Party Agree'
-  @sap.quickinfo : 'Freight Contract'
-  Chpno : String(10);
-  @sap.label : 'Freight charges'
-  @sap.quickinfo : 'Currency key'
-  @sap.semantics : 'currency-code'
-  Currkeys : String(5);
-  @sap.unit : 'Currkeys'
-  @sap.label : 'Freight Cost'
-  @sap.quickinfo : 'Freight Cost for the Voyage'
-  Frtco : Decimal(14, 3);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Voyage Status'
-  @sap.quickinfo : 'Not Started, Ballast, Port, EnRoute, Anchorage, Completed'
-  Vstat : String(5);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Voyage Type'
-  Voyty : String(4);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Vessel Type'
-  Carty : String(4);
-  @sap.display.format : 'UpperCase'
+  @sap.label : 'Value'
+  Value : String(50);
+  @sap.label : 'Revaluation'
+  @sap.quickinfo : 'Revaluation amount on back-posting to a previous period'
+  Cvalue : Decimal(14, 3);
   @sap.label : 'Currency'
-  Curr : String(3);
-  @sap.unit : 'Currkeys'
-  @sap.label : 'Freight cost'
-  Freght : Decimal(12, 3);
+  @sap.quickinfo : 'Currency Key'
+  @sap.semantics : 'currency-code'
+  Cunit : String(5);
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding Start Date'
+  Chrqsdate : Date;
+  @sap.label : 'Bidding Start Time'
+  Chrqstime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding End Date'
+  Chrqedate : Date;
+  @sap.label : 'Bidding End Time'
+  Chrqetime : Time;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Charter Party Agreem'
-  @sap.quickinfo : 'Charter Party Agreement'
-  Party : String(10);
+  @sap.label : 'Done by Vendor ?'
+  DoneBy : Boolean;
   @sap.display.format : 'UpperCase'
-  @sap.label : ''
-  @sap.quickinfo : 'Bid Type'
-  Bidtype : String(2);
-  @sap.unit : 'Currkeys'
-  @sap.label : 'Freight Cost'
-  Frcost : Decimal(17, 5);
+  @sap.label : 'Created by'
+  Uname : String(12);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Freight Unit'
-  Frtu : String(10);
-  @sap.unit : 'Currkeys'
-  @sap.label : 'Actual Freight Cost'
-  FrcostAct : Decimal(17, 5);
+  @sap.label : 'Status'
+  Stat : String(4);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Actual Freight Unit'
-  FrtuAct : String(10);
+  @sap.label : 'Type (Auto/manual)'
+  Zmode : String(4);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Indicator'
-  @sap.quickinfo : 'General Flag'
-  Zdelete : Boolean;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Refrence Voyage No.'
-  RefVoyno : String(20);
+  @sap.label : 'Comments'
+  Zcom : String(250);
+  @sap.display.format : 'Date'
+  currentdate : Date;
+  currenttime : Time;
   @cds.ambiguous : 'missing on condition?'
   toassociation1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCT {  };
   @cds.ambiguous : 'missing on condition?'
-  toassociation2 : Association to NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
+  toassociation2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG {  };
   @cds.ambiguous : 'missing on condition?'
   toassociation3 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP {  };
+  @cds.ambiguous : 'missing on condition?'
+  toassociation4 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {  };
 };
 
 @cds.external : true
@@ -966,7 +1036,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONHEADITEM {
   @sap.label : 'Bid Time'
   Bidtime : Time;
   @cds.ambiguous : 'missing on condition?'
-  toitem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
+  tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true

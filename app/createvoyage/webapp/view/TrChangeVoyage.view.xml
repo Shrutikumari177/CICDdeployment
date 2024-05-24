@@ -225,16 +225,19 @@
 
         <!-- for nav container buttons  -->
         <Panel />
+        <HBox>
         <Button
             id="Hide"
             icon="sap-icon://minimize"
-            class="sapUiTinyMargin"
+            visible="false"
+            
         />
         <Text
             id="header1"
             text="Items Details"
-            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
+             class="sapUiMediumMarginBegin"
         />
+        </HBox>
 
         <Bar id="HBox10">
             <contentLeft>
@@ -404,7 +407,7 @@
                         text="Plan Speed"
                         required="true"
                     />
-                    <Input value="{voyItemModel>/0/Vspeed}" />
+                    <Input value="{voyItemModel>/0/Vspeed}" change="onVspeedInputLiveChange" />
 
                     <Label text="Freight Cost" />
                     <Input
@@ -421,7 +424,9 @@
                         items="{
                             path: '/CargoUnitSet'
                         }"
-                        selectedKey="{voyHeaderModel>/0/Frtu}"
+                        selectedKey="{voyHeaderModel>/0/Cargu}"
+                        forceSelection="false"
+                        
                     >
                         <core:Item
                             key="{Uom}"
@@ -639,7 +644,7 @@
                                         width="40px"
                                     />
                                     <Input
-                                        value="{voyItemModel>Ppdays'}"
+                                        value="{voyItemModel>Ppdays}"
                                         change=".onPortDaysChange"
                                     />
                                     <!-- liveChange=".onPortDaysChange" -->
@@ -728,9 +733,10 @@
                     id="_IDGnText3"
                     text="Actual Info Details"
                     class="vgheading"
+                    visible="false"
                 />
 
-                <FlexBox class="actualInfoFlexHeader">
+                <FlexBox class="actualInfoFlexHeader" visible="false">
                     <Label
                         text="Plan Speed"
                         required="true"
@@ -811,6 +817,7 @@
                     horizontal="true"
                     vertical="false"
                     class="scrollContainer"
+                    visible="false"
                 >
                     <Table
                         id="_IDGenTable10"
@@ -1122,15 +1129,19 @@
         <!-- header detail ends here -->
 
         <!-- item details start from here  -->
+        <HBox>
         <Button
             id="Hide1"
             icon="sap-icon://minimize"
+            visible="false"
         />
         <Text
             id="header2"
             text="Cost Details"
-            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
+            class="sapUiMediumMarginBegin"
+            
         />
+        </HBox>
         <Bar id="HBox20">
             <contentLeft>
                 <Button
@@ -1142,6 +1153,7 @@
                     id="ButtonB"
                     text="TimeSheet Plan/Actual"
                     press="handleNavToPanelB"
+                    visible="false"
                 />
             </contentLeft>
         </Bar>
@@ -1197,16 +1209,17 @@
                                 text="Unit Of Cost"
                             />
                         </Column>
-                        <Column id="_IDGenColumn41">
-                            <Label
-                                id="_IDGenLabel53"
-                                text="Projected Cost"
-                            />
-                        </Column>
+                       
                         <Column id="_IDGenColumn42">
                             <Label
                                 id="_IDGenLabel54"
                                 text="Currency"
+                            />
+                        </Column>
+                         <Column id="_IDGenColumn41">
+                            <Label
+                                id="_IDGenLabel53"
+                                text="Projected Cost"
                             />
                         </Column>
                     </columns>
@@ -1231,6 +1244,7 @@
                                 <Select
                                     width="200px"
                                     id="_Select5"
+                                    forceSelection="false"
                                     items="{
                                                 path: '/CargoUnitSet'
                                             }"
@@ -1243,18 +1257,19 @@
                                         key="{Uom}"
                                     />
                                 </Select>
-                                <Input
-                                    id="DGene"
-                                    value="{costdetailsModel>Procost}"
-                                    change=".onCostLiveChange"
-                                />
-                                <Input
+                                   <Input
                                     id="Curr"
                                     value="{costdetailsModel>Costcurr}"
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCurr"
                                     liveChange="showValueHelpDialogCurr"
                                 />
+                                <Input
+                                    id="DGene"
+                                    value="{costdetailsModel>Procost}"
+                                    change=".onCostLiveChange"
+                                />
+                             
                             </cells>
                         </ColumnListItem>
                     </items>
@@ -1291,11 +1306,13 @@
                     id="_IDGenText18"
                     text="Actual Details"
                     class="vgheading"
+                    visible="false"
                 />
                 <Table
                     id="Table6"
                     class="costplantables"
                     mode="MultiSelect"
+                    visible="false"
                 >
                     <columns>
                         <Column id="_IDGenlu36">
@@ -1323,18 +1340,19 @@
                                 text="Unit Of Cost"
                             />
                         </Column>
+                           <Column id="_IDGenCumn42">
+                            <Label
+                                id="_IDGeabel54"
+                                text="Currency"
+                            />
+                        </Column>
                         <Column id="_IDGenCumn41">
                             <Label
                                 id="_IDGenbel53"
                                 text="Projected Cost"
                             />
                         </Column>
-                        <Column id="_IDGenCumn42">
-                            <Label
-                                id="_IDGeabel54"
-                                text="Currency"
-                            />
-                        </Column>
+                     
                     </columns>
                     <items>
                         <ColumnListItem id="_IDGenColuListItem7">
@@ -1360,6 +1378,7 @@
                                     items="{
                                                 path: '/CargoUnitSet'
                                             }"
+
                                 >
                                     <core:Item
                                         id="_Item5"
@@ -1367,16 +1386,17 @@
                                         text="{Uomdes}"
                                     />
                                 </Select>
-                                <Input
-                                    id="DGe"
-                                    value=""
-                                />
-                                <Input
+                                  <Input
                                     id="curr1"
                                     value=""
                                     showValueHelp="true"
                                     valueHelpRequest="showValueHelpDialogCurr"
                                 />
+                                <Input
+                                    id="DGe"
+                                    value=""
+                                />
+                              
                             </cells>
                         </ColumnListItem>
                     </items>

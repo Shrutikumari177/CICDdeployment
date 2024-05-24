@@ -4,6 +4,17 @@
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
 GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tobiditem
 
+###vhd
+
+POST http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet
+Content-Type: application/json
+
+{
+  "Vreqno":"",
+  "Zemail":"sarath.venkateswara@ingenxtec.com",
+  "Voyno": "1000000147"
+}
+
 ### POST REQUEST FOR VOYAGE TYPE WITH iTEM AND COST DETAILS
 POST http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM
 Content-Type: application/json

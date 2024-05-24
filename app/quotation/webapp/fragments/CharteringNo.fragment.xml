@@ -8,9 +8,9 @@
         search="onChartSearch1"
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
-        items="{/CharteringSet}"> 
+        items="{CharterNumberModel>/}"> 
         <StandardListItem id="_IDGenStandardListItem11"
-            title="{Chrnmin}"
+            title="{CharterNumberModel>CharterNumber}"
             iconDensityAware="false"
             iconInset="false"
             type="Active" />

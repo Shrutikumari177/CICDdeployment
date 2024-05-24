@@ -29,7 +29,7 @@
 									design="Bold"
 								/>
 								<Text
-									text="Voyage Charter"
+									text="{headerDetailModel>/voyageType}"
 									id="voyageType"
 								/>
 								<Label id="_IDGenLabel2"
@@ -39,7 +39,7 @@
 
 								/>
 								<Text
-									text="1000"
+									text="{headerDetailModel>/vesselType}"
 									id="vesselType"
 								/>
 							</form:SimpleForm>
@@ -54,7 +54,7 @@
 									design="Bold"
 								/>
 								<Text
-									text="2024-05-15 10:15:00"
+									text="{headerDetailModel>/bStartDate}:{headerDetailModel>/bStartTime}"
 									id="bidStart"
 								/>
 								<Label id="_IDGenLabel4"
@@ -63,7 +63,7 @@
 									design="Bold"
 								/>
 								<Text
-									text="2024-05-15 10:55:00"
+									text="{headerDetailModel>/bEndDate}:{headerDetailModel>/bEndTime}"
 									id="bidEnd"
 								/>
 							</form:SimpleForm>
@@ -78,7 +78,7 @@
 									design="Bold"
 								/>
 								<Text
-									text="1 bidding System"
+									text="{headerDetailModel>/biddingType}"
 									id="biddingType"
 								/>
 								<Label id="_IDGenLabel6"
@@ -87,7 +87,7 @@
 									design="Bold"
 								/>
 								<Text
-									text="INR"
+									text="{headerDetailModel>/Currency}"
 									id="currency"
 								/>
 							</form:SimpleForm>
@@ -107,7 +107,7 @@
 									<table:Table
 										id="idPortTab"
 										selectionMode="None"
-										rows="{sample>biddingData}"
+										rows="{voyageDetailsModel>/}"
 										visibleRowCountMode="Auto"
 									>
 										<table:extension>
@@ -121,7 +121,7 @@
 												<Label id="_IDGenLabel7" text="LegID"/>
 												<table:template>
 													<Input id="_IDGenInput1"
-														value="12"
+														value="{voyageDetailsModel>Vlegn}"
 														editable="false"
 														textAlign="Center"
 													/>
@@ -131,7 +131,7 @@
 												<Label id="_IDGenLabel8" text="Port Code"/>
 												<table:template>
 													<Input id="_IDGenInput2"
-														value="INBOM"
+														value="{voyageDetailsModel>Portc}"
 														editable="false"
 													/>
 												</table:template>
@@ -140,7 +140,7 @@
 												<Label id="_IDGenLabel9" text="Port Name"/>
 												<table:template>
 													<Input id="_IDGenInput3"
-														value="Portn"
+														value="{voyageDetailsModel>Portn}"
 														editable="false"
 													/>
 												</table:template>
@@ -152,7 +152,7 @@
 												<Label id="_IDGenLabel10" text="Cargo Size"/>
 												<table:template>
 													<Input id="_IDGenInput4"
-														value="Cargs"
+														value="{voyageDetailsModel>Cargs}"
 														editable="false"
 														textAlign="Right"
 													/>
@@ -162,7 +162,7 @@
 												<Label id="_IDGenLabel11" text="Unit"/>
 												<table:template>
 													<Input id="_IDGenInput5"
-														value="Cargu"
+														value="{voyageDetailsModel>Cargu}"
 														editable="false"
 													/>
 												</table:template>
@@ -174,7 +174,7 @@
 												<Label id="_IDGenLabel12" text="Distance(NM)"/>
 												<table:template>
 													<Input id="_IDGenInput6"
-														value="Pdist"
+														value="{voyageDetailsModel>Medst}"
 														editable="false"
 														textAlign="Right"
 													/>
@@ -186,7 +186,8 @@
 											>
 												<Label id="_IDGenLabel13" text="Arrival Date"/>
 												<table:template>
-													<DatePicker id="_IDGenDatePicker1"
+													<Input id="_IDGenDatePicker1"
+												    	value="{voyageDetailsModel>Vetad}"
 														editable="false"
 														textAlign="Right"
 													/>
@@ -196,9 +197,7 @@
 												<Label id="_IDGenLabel14" text="Arrival Time"/>
 												<table:template>
 													<Input id="_IDGenInput7"
-														value="
-															path: 
-														"
+														value="{voyageDetailsModel>Vetat}"
 														editable="false"
 													/>
 												</table:template>
@@ -209,7 +208,8 @@
 											>
 												<Label id="_IDGenLabel15" text="Departure Date"/>
 												<table:template>
-													<DatePicker id="_IDGenDatePicker2"
+													<Input id="_IDGenDatePicker2"
+													    value="{voyageDetailsModel>Vetdd}"
 														editable="false"
 														textAlign="Right"
 													/>
@@ -219,9 +219,7 @@
 												<Label id="_IDGenLabel16" text="Departure Time"/>
 												<table:template>
 													<Input id="_IDGenInput8"
-														value="
-															path
-														"
+														value="{voyageDetailsModel>Vetdt}"
 														editable="false"
 													/>
 												</table:template>
@@ -229,7 +227,7 @@
 										</table:columns>
 									</table:Table>
 								</IconTabFilter>
-								<IconTabFilter id="_IDGenIconTabFilter7"
+								<!-- <IconTabFilter id="_IDGenIconTabFilter7"
 									text="Vessel Details"
 									visible="true"
 								>
@@ -249,7 +247,7 @@
 											text="Vimo"
 										/>
 									</form:SimpleForm>
-								</IconTabFilter>
+								</IconTabFilter> -->
 								
 								<IconTabFilter id="_IDGenIconTabFilter4"
 									text="Submit Vessel Details"
@@ -278,112 +276,7 @@
 										/>
 									</form:SimpleForm>
 								</IconTabFilter>
-								<IconTabFilter id="_IDGenIconTabFilter6"
-									text="Bid Details"
-								>
-									<l:BlockLayout id="_IDGenBlockLayout4" background="Dashboard">
-										<l:BlockLayoutRow id="_IDGenBlockLayoutRow5">
-											<l:BlockLayoutCell id="_IDGenBlockLayoutCell7"
-												title="Technical Details"
-												titleAlignment="Center"
-												titleLevel="Auto"
-												width="1"
-											>
-												<Table
-													alternateRowColors="true"
-													id="techDetailTable"
-													sticky="ColumnHeaders"
-												>
-													<columns>
-														<Column id="_IDGenColumn11" width="42.5%">
-															<Text id="_IDGenText11" text="Technical Details"/>
-														</Column>
-														<Column id="_IDGenColumn12" width="42.5%">
-															<Text id="_IDGenText12" text="Value"/>
-														</Column>
-														<Column id="_IDGenColumn13" width="15%">
-															<Text id="_IDGenText13"
-																text="Pref. Req."
-																tooltip="Preferred Requirements"
-															/>
-														</Column>
-													</columns>
-													<items>
-														<ColumnListItem id="_IDGenColumnListItem1">
-															<Text id="_IDGenText14" text="{CodeDesc}"/>
-															<Text id="_IDGenText15" text="{Value}"/>
-															<Button id="_IDGenButton1"
-																icon="sap-icon://hint"
-																press="_onHintPress"
-															/>
-														</ColumnListItem>
-													</items>
-												</Table>
-												<!-- <table:Table
-													id="bidDetailTable"
-													selectionMode="None"
-													visibleRowCountMode="Auto"
-													alternateRowColors="true"
-													editable="false"
-												>
-													<table:columns>
-														<table:Column>
-															<Label text="Technical Details"/>
-															<table:template>
-																<Text text="{CodeDesc}"/>
-															</table:template>
-														</table:Column>
-														<table:Column>
-															<Label text="Value"/>
-															<table:template>
-																<Text text="{Value}"/>
-															</table:template>
-														</table:Column>
-													</table:columns>
-												</table:Table> -->
-											</l:BlockLayoutCell>
-											<l:BlockLayoutCell id="_IDGenBlockLayoutCell8"
-												title="Commercial Details"
-												titleAlignment="Center"
-												titleLevel="Auto"
-												width="1"
-											>
-												<form:SimpleForm id="_IDGenSimpleForm8"
-													editable="true"
-													backgroundDesign="Transparent"
-													width="50%"
-												>
-													<Label id="_IDGenLabel21"
-														text="Freight cost(Lumpsum)"
-														labelFor="fCost"
-													/>
-													<Input
-														id="fCost"
-														liveChange="fCostChange"
-														editable="false"
-													/>
-													<Label id="_IDGenLabel32"
-														text="Total Cost"
-														labelFor="totalCost"
-													/>
-													<l:HorizontalLayout id="_IDGenHorizontalLayout4">
-														<Input
-															id="totalCost"
-															editable="false"
-															width="120%"
-														/>
-														<Label id="_IDGenLabel33"
-															text="INR"
-															design="Bold"
-															labelFor="totalCost"
-															class="sapUiTinyMarginBegin sapUiTinyMarginTop"
-														/>
-													</l:HorizontalLayout>
-												</form:SimpleForm>
-											</l:BlockLayoutCell>
-										</l:BlockLayoutRow>
-									</l:BlockLayout>
-								</IconTabFilter>
+								
 								<IconTabFilter id="_IDGenIconTabFilter5"
 									text="Submit Bid"
 									visible="true"

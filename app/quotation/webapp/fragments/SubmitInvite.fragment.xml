@@ -10,13 +10,13 @@
     <VBox id="_IDGenVBoxh" alignItems="End" class="flex">
   <FlexBox id="_IDGenFlexBox221"  class="headerItem">
      <Label id="_IDGenLab" text="Bidding Start Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="_IDGenDatePicker1" width="150px" value="{addBiddingModel>/BiddingStartDate}" />
+     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}" change="onselectBSD"/>
      
     </FlexBox>
      <FlexBox id="_IDGenFlexBox3" class="headerItem">
 
      <Label id="_IDGenLabel2" text="Bidding End Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="_IDGenDatePicker2" width="150px" value="{addBiddingModel>/BiddingEndDate}" />
+     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" change="onselectBSD" />
      
     </FlexBox>
 <FlexBox id="_IDGenFlexBox4" class="headerItem" >
@@ -27,9 +27,8 @@
     <FlexBox id="_IDGenFlexBox51" class="headerItem">
      <Label id="_IDGenLabel4" class="sapUiTinyMarginTop" text="Mode of Bidding :" required="true"/>
      <Select id="modeSelect" selectedKey="{addBiddingModel>/Mode}" width="150px">
-                <core:Item key="Mode1" text="Mode 1"/>
-                <core:Item key="Mode2" text="Mode 2"/>
-                <core:Item key="Mode3" text="Mode 3"/>
+                <core:Item key="Mode1" text="Auto"/>
+                <core:Item key="Mode2" text="Manual"/>
             </Select>
      </FlexBox>
      </VBox>
@@ -55,7 +54,7 @@
          <footer>
         	<OverflowToolbar id="_IDGenOverflowToolbar1" >	
                 <ToolbarSpacer id="_IDGenToolbarSpacer1"/>		
-				<Button id="_IDGenButton1" type="Accept" text="Save" press="onSave">
+				<Button id="_IDGenButton1" type="Accept" text="Send Email" press="onSave">
 				</Button>
                 <Button id="_IDGenButton2" type="Reject" text="Cancel" press="onCancel">
 				</Button>

@@ -5,35 +5,58 @@ sap.ui.define(
       "sap/ui/model/FilterOperator",
       "sap/ui/model/json/JSONModel",
       'sap/ui/core/Fragment',
-      'sap/m/MessageBox'
+      'sap/m/MessageBox',
+      'sap/m/MessageToast'
   ],
-  function(BaseController,Filter,FilterOperator,JSONModel,Fragment,MessageBox) {
+  function(BaseController,Filter,FilterOperator,JSONModel,Fragment,MessageBox,MessageToast) {
     "use strict";
     let sloc;
     let getModelData = [];
     let dataArray = [];
     let charteringsetModel;
+    let BidStart;
+    let voyagesetModel;
+    let oModel;
+    let testDataModel;
+    let chdata;
+    let ChartModel;
+    let CharterNumberModel;
 
     return BaseController.extend("com.ingenx.nauti.quotation.controller.CompareRequestForQuotation", {
       onInit: function() {
-        var that = this;
+        // var that = this;
 
-        charteringsetModel = new sap.ui.model.json.JSONModel();
-        this.getView().setModel(charteringsetModel, "charteringsetModel");
- 
-        let oModel1 = this.getOwnerComponent().getModel();
-        let oBindList = oModel1.bindList("/CharteringSet");
- 
-        oBindList.requestContexts(0,Infinity).then(function (aContexts) {
-          // dataArray = [];
-          aContexts.forEach(function (oContext) {
-            dataArray.push(oContext.getObject());
-          });
-          // console.log("CharteringSet ",dataArray);
-          // CharteringSet.setData(dataArray);
-        }).catch(function (error) {
-          console.error("Error fetching Chartering no items:", error);
-        });
+        oModel = new sap.ui.model.json.JSONModel();
+        CharterNumberModel = new sap.ui.model.json.JSONModel();
+   var oView = this.getView();
+
+   // Load the JSON file
+   $.getJSON("model/data/TestData.json", function(data) {
+     let ChartDataArr=data?.TestData
+     console.log("ChartNumber",ChartDataArr);
+     var uniqueArray = removeDuplicates(ChartDataArr);
+     
+     CharterNumberModel.setData(uniqueArray)
+     oView.setModel(CharterNumberModel,"CharterNumberModel")
+     console.log("uniqueArray",oView.getModel("CharterNumberModel"));
+
+       oModel.setData(data);
+       chdata = data?.TestData
+       oView.setModel(oModel, "testDataModel");
+     
+   });
+
+   function removeDuplicates(arr) {
+     var seen = new Set();
+     return arr.filter(item => {
+         if (seen.has(item.CharterNumber)) {
+             return false;
+         } else {
+             seen.add(item.CharterNumber);
+             return true;
+         }
+     });
+ }
          
       },
 
@@ -47,6 +70,9 @@ sap.ui.define(
           oView.addDependent(this._oTankInfomat);
 
         }
+         // Refresh the binding to ensure data is reloaded
+         var oBinding = this._oTankInfomat.getBinding("items");
+         oBinding.filter([]);
         
         this._oTankInfomat.open();
 
@@ -67,56 +93,69 @@ onValueHelpClose1: function (oEvent) {
         this.byId("charteringNo").setValue(oSelectedItem.getTitle());
         var loc = this.getView().byId("charteringNo")
         sloc = loc.getValue();
-        console.log("sloc",sloc);
-        // console.log("Final Value", loc);
-        // console.log("CharteringSet",dataArray);
-        var filterChrValueData=dataArray.filter(obj=>obj.Chrnmin==sloc)
-        console.log("filterChrValueData",filterChrValueData);
-        charteringsetModel.setData(filterChrValueData)
-
-        console.log("charteringsetModel",this.getView().getModel("charteringsetModel")?.oData);
-        // var ChrModel=this.getModel()
+        var filterValueData = chdata.filter(obj => obj.CharterNumber === sloc);
+        console.log("filterValueData", filterValueData);
+        oModel.setData(filterValueData);
+        console.log("testDataModel", this.getView().getModel("testDataModel")?.oData);
+    
+        var btn = this.getView().byId("ButtonInvite");
+        btn.setVisible(true);
         var idVoyge = this.getView().byId("idVoyge");
         idVoyge.setVisible(true);
-        var btnIn = this.getView().byId("ButtonInvite");
-        btnIn.setVisible(true);
-        // var btnRef = this.getView().byId("ButtonRefresh");
-        // btnRef.setVisible(true);
-        var Compare = this.getView().byId("_IdCompare");
-        Compare.setVisible(false);
-        var Invite = this.getView().byId("_IdInvite");
-        Invite.setVisible(true);
-
+    var compare = this.getView().byId("_IdCompare");
+    compare.setVisible(false);
+    var invite = this.getView().byId("_IdInvite");
+    invite.setVisible(true)
         if (sloc) {
-          var oVBox = this.getView().byId("idVbox"); 
-          if (oVBox) {
-              oVBox.setVisible(true);
-          }
-      }
-
-
+            var oVBox = this.getView().byId("idVbox");
+            if (oVBox) {
+                oVBox.setVisible(true);
+            }
+        }
+    
         console.log("get model data", getModelData);
         var filter = getModelData.filter(function (data) {
-
-          return data.Voyno === sloc
-
-        })
-
-
-      },
+            return data.Voyno === sloc;
+        });
+    },
       onChartSearch1: function (oEvent) {
         var sValue1 = oEvent.getParameter("value");
-
-        var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
-
+    
+        var oFilter1 = new Filter("CharterNumber", FilterOperator.Contains, sValue1);
+    
         oEvent.getSource().getBinding("items").filter([oFilter1]);
-      },
+    },
 
       onSubmitInvite: function () {
-        if (!this._oDialog) {
+        var oTable = this.byId("table");
+        var aSelectedItems = oTable.getSelectedItems();
+        
+        if (aSelectedItems.length === 0) {
+            MessageBox.error("Please select at least one row.");
+            return;
+        }
+                      
+        var aIneligibleVendors = aSelectedItems.reduce(function (aAccumulator,oItem) {
+            var oContext = oItem.getBindingContext("testDataModel");
+            if (oContext.getProperty("Eligible") === "No"){
+              aAccumulator.push(oContext.getProperty("Vendor"));
+            }
+            return aAccumulator;
+          }, []);
+
+          if (aIneligibleVendors.length > 0) {
+            var sVendors = aIneligibleVendors.join(", ");
+            MessageBox.error(`You have selected ineligible vendor(s): ${sVendors}.`);
+        } else {
+          if (!this._oDialog) {
             this._oDialog = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.SubmitInvite", this);
             this.getView().addDependent(this._oDialog);
-        }
+     
+        // if (!this._oDialog) {
+        //     this._oDialog = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.SubmitInvite", this);
+        //     this.getView().addDependent(this._oDialog);
+        // }
+        
     
         // Initialize model data
         var oModel = new sap.ui.model.json.JSONModel({
@@ -125,12 +164,13 @@ onValueHelpClose1: function (oEvent) {
             BiddingStartTime: null,
             BiddingEndTime: null,
             ControllerQuotedValue: "",
-            Unit: "",
+            Unit: "TO",
             Mode: "Mode1" // Set default mode if needed
         });
         this._oDialog.setModel(oModel, "addBiddingModel");
-    
+      }
         this._oDialog.open();
+    }
     },
     
     onSave: function () {
@@ -150,7 +190,6 @@ onValueHelpClose1: function (oEvent) {
           MessageBox.error("Please fill all fields");
           return;
       }
-    
         // Close the dialog
         this._oDialog.close();
     
@@ -162,7 +201,9 @@ onValueHelpClose1: function (oEvent) {
         console.log("Controller Quoted Value:", ControllerQuotedValue);
         console.log("Unit:", Unit);
         console.log("Mode of Bidding:", Mode);
-        MessageBox.success("Vendor invite successfully");
+        MessageBox.success("Email send successfully");
+      // addBiddingModel.setValue("");
+
     },
     
     onCancel: function () {
@@ -170,7 +211,18 @@ onValueHelpClose1: function (oEvent) {
     },
     
 
-    onNavigateDetails: function() {
+    onNavigateDetails: function(oEvent) {
+      ChartModel=new sap.ui.model.json.JSONModel();
+      var oSelectedItem = oEvent.getSource();
+      var oBindingContext = oSelectedItem.getBindingContext("testDataModel");
+      var selectedData=this.getView().getModel("testDataModel")?.oData;
+      var iIndex = oBindingContext.getPath().split("/").pop();
+      var SelectedChartData=selectedData[iIndex];
+      ChartModel.setData(SelectedChartData);
+      this.getView().setModel(ChartModel,"ChartingFilterModel")
+      console.log("selectedData",this.getView().getModel("ChartingFilterModel")?.oData);
+  
+      console.log("Selected Row Index:", SelectedChartData);
       var oView = this.getView();
       if (!this._oDialog1) {
           this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.InviteNegoDetails", this);
@@ -184,8 +236,36 @@ oncancell: function () {
   this._oDialog1.close();
 },
 onSelectItem: function(){
-this.getView().byId("ButtonInvite").setEnabled(true)
+var oTable = this.byId("table");
+var aSelectedItems = oTable.getSelectedItems();
+var EnableInvite = aSelectedItems.some(function (oItem) {
+    var oContext = oItem.getBindingContext("testDataModel");
+    return oContext.getProperty("Eligible") === "Yes";
+});
+
+// this.byId("ButtonInvite").setEnabled(EnableInvite);
+// this.getView().byId("ButtonInvite").setEnabled(true)
+
+},
+
+
+onselectBSD:function (oEvent) {
+var oDatePicker = oEvent.getSource();
+var oSelectedDate = oDatePicker.getDateValue();
+var oCurrentDate = new Date();
+
+// Clear time portion of current date for comparison
+oCurrentDate.setHours(0, 0, 0, 0);
+
+if (oSelectedDate < oCurrentDate) {
+// oDatePicker.setValueState("Error");
+oDatePicker.setValue("");
+MessageBox.error("Past dates are not allowed. Please select a current or future date.");
+} else {
+oDatePicker.setValueState("None");
 }
+},
+
      
     });
   }

@@ -347,15 +347,17 @@ service nauticalservice {
     entity xNAUTIxNAVYGIP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP
     {        key Voyno, key Vlegn, Portc, Portn, Pdist, Medst, Vspeed, Ppdays, Vsdays, Vetad, Vetat, Vetdd, Vetdt, Vwead, Pstat, Matnr, Maktx, Cargs, Cargu, Othco, Frcost, Totco     }    
 ;
+    entity xNAUTIxNAVOYG as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG
+    {        key Voyno, Voynm, Vnomtk, Refdoc, Docind, Vessn, Vimo, Chtyp, Chpno, Currkeys, Frtco, Vstat, Voyty, Carty, Curr, Freght, Party, Bidtype, Frcost, Frtu, FrcostAct, FrtuAct, Zdelete, RefVoyno     }    
+;
     
  
     
     entity xNAUTIxRFQCHARTERING as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQCHARTERING
-    {        key Voyno, Voynm, Vnomtk, Refdoc, Docind, Vessn, Vimo, Chtyp, Chpno, Currkeys, Frtco, Vstat, Voyty, Carty, Curr, Freght, Party, Bidtype, Frcost, Frtu, FrcostAct, FrtuAct, Zdelete, RefVoyno     }    
+    {        key Voyno, Lifnr, Zcode, Biddate, Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, currentdate, currenttime, toassociation1, toassociation2, toassociation3, toassociation4   }    
 ;
-    
-    entity xNAUTIxRFQPORTAL as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL
-    {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo     }    
+     entity xNAUTIxRFQPORTAL as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL
+    {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo, toassociation1, toassociation2  }    
 ;
     
     entity xNAUTIxSUBMITQUATATIONHEADITEM as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONHEADITEM
@@ -387,7 +389,7 @@ service nauticalservice {
         
 
     entity voyapprovalSet            as projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet
-         {        key Vreqno, key Voyno, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }  
+         {        key Vreqno, Zemail, key Voyno, Zlevel, Uname, Zdate, Ztime, Zcomm, Zaction     }  
 
       entity MasBidTemplateSet as projection on NAUTIVENDOR_SRV.MasBidTemplateSet
     {        key Code, Value, Cvalue, Cunit, Datatype, Tablename, MultiChoice     }    
