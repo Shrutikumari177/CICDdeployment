@@ -41,6 +41,11 @@ sap.ui.define(
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
             onInit: async function () {
+            
+                 this._BusyDialog = new sap.m.BusyDialog({
+                 title: "fetching data  ...",
+                 });
+                 this._BusyDialog.open();
                       
                 // Set the model to the view
                 // let portDataModel = new JSONModel();
@@ -157,12 +162,16 @@ sap.ui.define(
                         const entityData = aContexts[0].getObject();
                         tempDataArr.push(entityData);
 
+                        that._BusyDialog.close();
+                        new sap.m.MessageBox.information("Data fetched successfully.")
+
                         // Set models only once
                         if (!that.voyHeaderModel) {
                             voyHeaderModel = new JSONModel();
                             voyItemModel = new JSONModel();
                             costdetailsModel = new JSONModel();
                         }
+
 
                         voyHeaderModel.setData(tempDataArr);
                         voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
@@ -194,6 +203,20 @@ sap.ui.define(
                 console.log("my data", tempDataArr);
 
             },
+
+            // onRefresh : function (){
+            //     voyHeaderModel.setData([]);
+            //     voyItemModel.setData([]);
+            //     costdetailsModel.setData([]);
+            //     bidItemModel.setData([]);
+
+            //     voyHeaderModel.refresh();
+            //     voyItemModel.refresh();
+            //     costdetailsModel.refresh();
+            //     bidItemModel().refresh();
+                
+
+            // },
 
             //  code and function for bid details
 

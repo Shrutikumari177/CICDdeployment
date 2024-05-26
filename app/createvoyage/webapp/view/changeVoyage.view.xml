@@ -48,6 +48,7 @@
                     id="Button3"
                     text="Refresh"
                     type="Emphasized"
+                    press=".onRefresh"
                 />
                 <Button
                     id="Button4"

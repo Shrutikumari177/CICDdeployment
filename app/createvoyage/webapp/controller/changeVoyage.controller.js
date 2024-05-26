@@ -69,16 +69,16 @@ sap.ui.define(
                 }
                 oBidCharterModel = new JSONModel();
                 this.getView().setModel(oBidCharterModel, "oBidCharterModel");
-                
-                
+
+
                 let that = this;
-               
+
 
                 await that.getDataforvoyage();
                 await that._initBidTemplate();
 
             },
-            getBidDetails : function (VoyageNo){
+            getBidDetails: function (VoyageNo) {
                 let that = this;
                 let data;
                 let oModel = this.getOwnerComponent().getModel("modelV2");
@@ -210,7 +210,7 @@ sap.ui.define(
                 this._VoyageDialog.destroy();
 
             },
-       
+
             onVoyageFilterSearch: function (oEvent) {
                 // Get the value entered by the user
                 var sQuery = oEvent.getParameter("value");
@@ -245,7 +245,7 @@ sap.ui.define(
                     let oModel = that.getOwnerComponent().getModel("modelV2");
                     //   let open = that.getOwnerComponent().getModel("status").getProperty("/open");
                     let oView = that.getView();
-                    let templateData = await that._getBidTemplate(oModel,"technical");
+                    let templateData = await that._getBidTemplate(oModel, "technical");
                     let templateData2 = await that._getBidTemplate(oModel, "commercial");
                     let oBidTemplateModel = new JSONModel(templateData);
                     oView.setModel(oBidTemplateModel, "bidtemplate");
@@ -255,7 +255,7 @@ sap.ui.define(
 
                     if (Array.isArray(templateData, oTable1)) {
                         if (open) {
-                            that._setBidTemplate(templateData,oTable1);
+                            that._setBidTemplate(templateData, oTable1);
                         } else {
                             that._setClosedBidTemplate();
                         }
@@ -263,7 +263,7 @@ sap.ui.define(
                         console.log({ ErrorResponse: templateData });
                     }
 
-                              // future code for frieght table setting templete if necessary
+                    // future code for frieght table setting templete if necessary
                     // if (Array.isArray(templateData2, oTable2)) {
                     //     if (open) {
                     //         that._setBidTemplate(templateData);
@@ -284,17 +284,17 @@ sap.ui.define(
                     oModel.read(`/MasBidTemplateSet`, {
                         success: (oData) => {
                             oData.results.forEach((el, i) => {
-                                
+
                                 delete el.__metadata;
-                                if( detailType === "technical"){
+                                if (detailType === "technical") {
 
                                     if (el.Code === "FREIG" || el.Code === "DEMURRAGE") index = i;
                                     if (index !== "Not Found") {
                                         oData.results.splice(index, 1);
                                         index = "Not Found";
                                     }
-                                }else if( detailType === "commercial"){
-                                    if (el.Code ==! "FREIG" || el.Code ==! "DEMURRAGE") index = i;
+                                } else if (detailType === "commercial") {
+                                    if (el.Code == ! "FREIG" || el.Code == ! "DEMURRAGE") index = i;
                                     if (index !== "Not Found") {
                                         oData.results.splice(index, 1);
                                         index = "Not Found";
@@ -310,7 +310,7 @@ sap.ui.define(
                     });
                 });
             },
-          
+
             _setBidTemplate: function (templateData, oTable) {
                 let editFlag = true;
                 let oView = this.getView();
@@ -1047,7 +1047,7 @@ sap.ui.define(
 
                 // CALLING ONCALC FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
                 this.onCalc();
-                let updatedTotalDays =  this.totalSeaDaysCalc(voyItemModel.getData());
+                let updatedTotalDays = this.totalSeaDaysCalc(voyItemModel.getData());
                 this.byId('_totalDays').setValue(updatedTotalDays);
             },
             onCalc: function () {
@@ -1373,9 +1373,9 @@ sap.ui.define(
 
                 })
                 console.log("total SeaDays: ", totalSeaDays);
-                
+
                 return totalSeaDays.toFixed(1);
-                
+
 
             },
             // fn to convert "60,000.000" to "600000"
@@ -1767,7 +1767,7 @@ sap.ui.define(
                 let that = this;
                 console.log("voyage payload :", payload);
                 console.table(bidPayload);
-                
+
                 oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
                     success: function (oData) {
                         console.log("result :", oData);
@@ -1840,6 +1840,21 @@ sap.ui.define(
 
 
             */
+
+            onRefresh: function () {
+                this.byId('_voyageInput1').setValue("");
+                voyHeaderModel.setData([]);
+                voyItemModel.setData([]);
+                costdetailsModel.setData([]);
+                bidItemModel.setData([]);
+
+                voyHeaderModel.refresh();
+                voyItemModel.refresh();
+                costdetailsModel.refresh();
+                bidItemModel.refresh();
+
+
+            },
             sendApproval: function (oEvent) {
                 let payload = {
                     "Vreqno": "",

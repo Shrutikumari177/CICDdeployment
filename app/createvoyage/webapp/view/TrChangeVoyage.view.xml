@@ -67,6 +67,8 @@
                 <Button
                     id="Button3"
                     text="Refresh"
+                    press=".onRefresh"
+                    visible="false"
                 />
                 <Button
                     id="Button4"

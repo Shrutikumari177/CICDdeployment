@@ -13,7 +13,7 @@
         
     >
         
-        <StandardListItem id="arde"
+        <StandardListItem 
             
             title="{voyageNumModel>}"
 

@@ -33,6 +33,7 @@ sap.ui.define(
     var oVoyageDetailModel;
     var pathFetchedFromDb;
     let boolPortsLoaded = false;
+    let pathToExclude =[];
 
     return Controller.extend("com.ingenx.nauti.createvoyage.controller.CreateVoyage", {
       formatter: formatter,
@@ -445,6 +446,15 @@ sap.ui.define(
         let textType = oSource.getText();
         let isSelected = oEvent.getParameter("selected");
         console.log( textType, isSelected);
+        if( !pathToExclude.includes(textType) && isSelected){
+                pathToExclude.push(textType);
+        }else {
+          let index = pathToExclude.indexOf(textType);
+          pathToExclude.splice(index, 1);
+        }
+        console.log(pathToExclude);
+        
+        // that.onMarkerClick();
 
       },
       onClear: function (oEvent) {
@@ -674,6 +684,7 @@ sap.ui.define(
               onClose: function () {
 
                 console.log("sent voyage no. :", oData.Voyno)
+                sap.ui.core.BusyIndicator.show(0);
                 oRouter.navTo("RouteTrChangeVoyage", {
                   "VOYAGE_NO": oData.Voyno
                 });
