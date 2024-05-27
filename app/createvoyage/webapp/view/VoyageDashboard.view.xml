@@ -23,9 +23,15 @@
                     </TileContent>
                 </GenericTile>
                 <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
-                    header="Display voayge" press="onDisplayVoyage">
+                    header="Display Voyage" press="onDisplayVoyage">
                     <TileContent id="_IDGenTileContent9" >
                     <ImageContent  src="sap-icon://accelerated"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                 <GenericTile id="GenGenericTile4" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Voyage Approval" press=".onVoyageApproval">
+                    <TileContent id="_IDGenTileContent92" >
+                    <ImageContent id="_IDGenImageContent4"  src="sap-icon://accelerated"></ImageContent>                
                     </TileContent>
                 </GenericTile>
              

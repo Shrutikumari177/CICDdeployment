@@ -204,6 +204,13 @@
                     "target": [
                         "TargetTrChangeVoyage"
                     ]
+                },
+                {
+                    "name": "RouteVoyageApproval",
+                    "pattern": "VoyageApproval",
+                    "target": [
+                        "TargetVoyageApproval"
+                    ]
                 }
             ],
             "targets": {
@@ -248,6 +255,13 @@
                     "clearControlAggregation": false,
                     "viewId": "changeVoyage",
                     "viewName": "changeVoyage"
+                },
+                "TargetVoyageApproval": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "VoyageApproval",
+                    "viewName": "VoyageApproval"
                 }
             }
         },

@@ -268,7 +268,7 @@
                                                         <Input
                                                             value="{
 																path: 'oJsonModel>Distance',
-																formatter: '.formatnumberFormatter.'
+																formatter: '.formatter.numberFormat'
 															}"
                                                             editable="false"
                                                         />

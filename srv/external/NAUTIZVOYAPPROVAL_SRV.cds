@@ -1,6 +1,7 @@
-/* checksum : 439ac4c0f9f1e5d1db1cc855270bcdad */
+/* checksum : 68fc35f884aff09ff97a180304c456e7 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
+@sap.message.scope.supported : 'true'
 @sap.supported.formats : 'atom json xlsx'
 service NAUTIZVOYAPPROVAL_SRV {};
 
@@ -77,5 +78,42 @@ entity NAUTIZVOYAPPROVAL_SRV.voyapprovalSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Zaction : String(4) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'voy approval1'
+entity NAUTIZVOYAPPROVAL_SRV.xNAUTIxvoyapproval1 {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage Approval Requ'
+  @sap.quickinfo : 'Voyage Approval Request Number'
+  key Vreqno : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Approver Level'
+  key Zlevel : String(2) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User Name'
+  key Uname : String(12) not null;
+  @sap.display.format : 'Date'
+  @sap.label : 'Date'
+  key Zdate : Date not null;
+  @sap.label : 'Time'
+  key Ztime : Time not null;
+  @sap.label : 'E-Mail Address'
+  key Zemail : String(241) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Comments'
+  Zcomm : String(250);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Action Taken'
+  Zaction : String(4);
 };
 

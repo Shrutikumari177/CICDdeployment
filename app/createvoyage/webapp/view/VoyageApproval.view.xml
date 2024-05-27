@@ -1,5 +1,6 @@
 <mvc:View
-    controllerName="com.ingenx.nauti.chartering.controller.CharteringApproval"
+    xmlns:controls="sap.viz.ui5.controls"
+    controllerName="com.ingenx.nauti.createvoyage.controller.VoyageApproval"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:semantic="sap.m.semantic"
     xmlns:core="sap.ui.core"
@@ -14,72 +15,44 @@
     xmlns:l="sap.ui.layout"
     xmlns="sap.m"
 >
-    <Page
+     <Page
         id="page"
         class="Page"
+        showHeader="false"
     >
-        <headerContent>
-            <Bar id="_IDGenBar1" class="customHeader">
-                <contentLeft>
-                    <!-- <core:Icon
-                        src="sap-icon://nav-back"
-                        class="size1"
-                        press="onBackPress"
-                    /> -->
-                    <!-- <Image
-                   class="size1"
-                  src="./images/ignxlogo.png"
-                  height="75%"
-              /> -->
-                    <Text id="_IDGenText31"
-                        class="textBid size1"
-                        text="Chartering Approval Dashboard"
-                    />
-                </contentLeft>
-                <contentRight>
-                    <core:Icon id="_IDGenIcon1"
-                        src="sap-icon://search"
-                        class="size1"
-                        color="#FFFFFF"
-                    >
-                        <core:layoutData>
-                            <FlexItemData id="_IDGenFlexItemData1" growFactor="1" />
-                        </core:layoutData>
-                    </core:Icon>
-                    <core:Icon id="_IDGenIcon2"
-                        src="sap-icon://SAP-icons-TNT/user"
-                        class="size1"
-                        color="#FFFFFF"
-                    >
-                        <core:layoutData>
-                            <FlexItemData id="_IDGenFlexItemData2" growFactor="1" />
-                        </core:layoutData>
-                    </core:Icon>
-                </contentRight>
-            </Bar>
-        </headerContent>
-        <subHeader>
-            <Bar id="navbar">
-                <contentLeft>
-                    <Button
-                        id="_IDGenButton11"
-                        text="Execute"
-                        type="Emphasized"
-                    />
-                    <Button
-                        id="_IDGenButton12"
-                        text="refresh"
-                        type="Emphasized"
-                        press="onRefresh"
-                    />
-                </contentLeft>
-            </Bar>
-        </subHeader>
+        
+           <Bar
+            id="navbar"
+            class="topBar"
+            design="SubHeader"
+        >
+            <contentLeft>
+                <Text text="Voyage Approval Dashboard" />
+            </contentLeft>
+            <contentRight>
+                <Button
+                    id="Button2"
+                    text="Save"
+                    press=".onSaveVoyage"
+                    type="Emphasized"
+                />
+               
+                <Button
+                    id="Button3"
+                    text="Refresh"
+                    press=".onRefresh"
+                    visible="false"
+                />
+              
+              
+            </contentRight>
+        </Bar>
+   
 
-        <Panel id="_IDGenPanel1">
+        <Panel id="_IDGenPanel1" >
             <FlexBox
                 id="_IDGenFlexBox1"
-                class="charteringHeader"
+                class="VoyageHeader"
             >
                 <Text
                     id="EnterDetailsId"
@@ -97,15 +70,16 @@
                     >
                         <Label
                             id="_IDGenLabel1"
-                            text="Chartering No: "
+                            text="Voyage No: "
                             class="sapUiTinyMarginTop"
                         />
                         <MultiInput
-                            id="ChartNo"
+                            id="VoyageNo"
                             showValueHelp="true"
-                            valueHelpRequest="CharterNo"
-                            liveChange="CharterNo"
-                          
+                            valueHelpRequest="ValueHelpVoyage"
+                            
+                           liveChange="ValueHelpVoyage"
+                            valueHelpOnly="true"
                             tokenUpdate="onTokenUpdate"
                             width="200px"
                         />
@@ -117,14 +91,14 @@
                     >
                         <Label
                             id="_IDGLabel1"
-                            text="Charter Approval Request No. "
+                            text="Voyage Approval Request No. "
                             class="sapUiTinyMarginTop"
                         />
                         <MultiInput
                             id="searchField3"
                             editable="false"
                             width="200px"
-                           
+                            tokenUpdate="onTokenUpdate2"
                         />
                     </FlexBox>
                 </VBox>
@@ -142,11 +116,11 @@
                 >
                     <core:ListItem
                         id="_IDGenListItem1"
-                        text="Approve Charter"
+                        text="Approve Voyage"
                     />
                     <core:ListItem
                         id="_IDGenListItem2"
-                        text="Charter Approval Status Report"
+                        text="Voyage Approval Status Report"
                     />
                 </Select>
             </FlexBox>
@@ -165,7 +139,7 @@
                 <items>
                     <IconTabFilter
                         id="_IDGenIconTabFilter1"
-                        text="Charter Approval Status Report "
+                        text="Voyage Approval Status Report "
                         key="info"
                     >
                         <Panel
@@ -187,7 +161,7 @@
                                     <Column id="_IDGenColumn2">
                                         <Text
                                             id="_IDGenText3"
-                                            text="Chartering No"
+                                            text="Voyage No"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn3">
@@ -268,11 +242,11 @@
                                         <cells>
                                             <Text
                                                 id="_IDGenText18"
-                                                text="{chartner>Creqno}"
+                                                text="{chartner>Vreqno}"
                                             />
                                             <Text
                                                 id="_IDGenText19"
-                                                text="{chartner>Chrnmin}"
+                                                text="{chartner>Voyno}"
                                             />
                                             <Text
                                                 id="_IDGenText20"
@@ -320,7 +294,7 @@
                                             />
 
                                             <Text
-                                                id="_IDGenText311234"
+                                                id="_IDGenText31"
                                                 text="{chartner>Telfx}"
                                             />
                                         </cells>
@@ -346,7 +320,7 @@
                 <items>
                     <IconTabFilter
                         id="_IDGenIconTabFilter11"
-                        text="Charter Approval"
+                        text="Voyage Approval"
                         key="info"
                     >
                         <Panel
@@ -386,7 +360,7 @@
                                     <Column id="_IDGenColumn211">
                                         <Text
                                             id="_IDGenText311"
-                                            text="Chartering No"
+                                            text="Voyage No"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn311">
@@ -433,11 +407,11 @@
                                         <cells>
                                             <Text
                                                 id="_IDGenText181"
-                                                text="{chartner>Creqno}"
+                                                text="{chartner>Vreqno}"
                                             />
                                             <Text
                                                 id="_IDGenText191"
-                                                text="{chartner>Chrnmin}"
+                                                text="{chartner>Voyno}"
                                             />
                                             <Text
                                                 id="_IDGenText201"

@@ -18,7 +18,9 @@ xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
         </headerContent>
         <Bar id="navbar">
             <contentLeft>
-            <Button id="Button2" text="Submit Quotation" press="onSubmitQuotation" />
+         <Button id="Button1" text="Save" press="onSave"  type="Emphasized"/>
+
+            <Button id="sumbit" text="Submit Quotation" press="onSubmitQuotation"   type="Emphasized"  enabled="false"/>
             </contentLeft>
         </Bar>
             
@@ -43,22 +45,7 @@ xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
         
         </form:SimpleForm>
         
-        <!-- <form:SimpleForm  editable="true">
-            <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
-            <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest=" requestForQuatation"/>
-
-            <Label id="_IDGenLabel2" text="Bidding Start Date"  required="true" ></Label>
-            <DatePicker id="bidStartD" width="150px" placeholder="MM:DD:YY" />
-
-            <Label id="_IDGenLabel3" text="Bidding Start Time"  required="true" />
-            <TimePicker id="bidStartT" width="120px" placeholder="00:00:00" displayFormat="HH:mm:ss" />
-
-            <Label id="_IDGenLabel4" text="Bidding End Date"  required="true" ></Label>
-            <DatePicker id="bidEndD" width="150px" placeholder="MM:DD:YY"></DatePicker>
-
-            <Label id="_IDGenLabel5" text="Bidding End Time"   required="true" ></Label>
-            <TimePicker id="bidEndT" width="120px" placeholder="00:00:00" displayFormat="HH:mm:ss"></TimePicker>
-        </form:SimpleForm> -->
+        
         
         
  

@@ -26,6 +26,11 @@ sap.ui.define([
                 const oRouter = this.getOwnerComponent().getRouter();
                 oRouter.navTo("RouteChangeVoyage");
               }
+              ,
+              onVoyageApproval : function(){
+                const oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo("RouteVoyageApproval");
+              }
             
         
         });

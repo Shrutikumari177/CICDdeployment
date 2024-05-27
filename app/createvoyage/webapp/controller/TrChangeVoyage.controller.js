@@ -40,13 +40,12 @@ sap.ui.define(
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
-            onInit: async function () {
-            
-                 this._BusyDialog = new sap.m.BusyDialog({
-                 title: "fetching data  ...",
-                 });
-                 this._BusyDialog.open();
-                      
+            onInit: async function () {      
+              
+                this._BusyDialog = new sap.m.BusyDialog({
+                    title: "fetching data  ...",
+                    });
+                    this._BusyDialog.open();  
                 // Set the model to the view
                 // let portDataModel = new JSONModel();
                 bidPayload =[];
@@ -107,6 +106,7 @@ sap.ui.define(
 
             },
             onObjectMatched(oEvent) {
+               
                 tempDataArr = [];
                 myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
                 voyageNum = myVOYNO;
@@ -154,16 +154,16 @@ sap.ui.define(
                     ]
                 });
                 // Set the model to the view
-                this.getView().setModel(oCommerModel, "commercialModel");
-                this.getBidDetails(myVOYNO);
+                that.getView().setModel(oCommerModel, "commercialModel");
+                that.getBidDetails(myVOYNO);
 
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
                     if (aContexts.length === 1) {
                         const entityData = aContexts[0].getObject();
                         tempDataArr.push(entityData);
 
-                        that._BusyDialog.close();
-                        new sap.m.MessageBox.information("Data fetched successfully.")
+                        new sap.m.MessageToast.show("Data fetched successfully.")
+                        // that._BusyDialog.close();
 
                         // Set models only once
                         if (!that.voyHeaderModel) {
@@ -198,6 +198,10 @@ sap.ui.define(
                     }
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
+                }).finally(function (){
+                    that._BusyDialog.close();
+                    console.log("busy Dilaog closed fn");
+
                 });
 
                 console.log("my data", tempDataArr);
@@ -1807,12 +1811,12 @@ sap.ui.define(
                 let payload = {
                     "Vreqno": "",
                     "Voyno": voyageNum,
-                    "Zemail":"deepanshu.goyal@ingenxtec.com"
+                    "Zemail":"sarath.venkateswara@ingenxtec.com"
 
                 }
                 console.log("payload for approval", payload);
                 let oModel = this.getOwnerComponent().getModel('modelV2');
-                new sap.m.MessageToast.show( 'Sending  for approval..')
+                new sap.m.MessageToast.show( 'Sending  for approval ...')
 
                 oModel.create('/voyapprovalSet', payload, {
                     success: function (oData) {

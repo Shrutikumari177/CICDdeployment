@@ -19,27 +19,195 @@ sap.ui.define([
 
     "use strict";
     let getModelData = [];
+    let getVendorModelData = [];
+    let getVoyageModelData = [];
     var BidStartDateFormat;
     var BidEndDateFormat;
+    let ChartNoValue;
+    let chartObject = {};
 
     let sloc;
+    let _oDialog1;
+
 
     return Controller.extend("com.ingenx.nauti.quotation.controller.ReqForQuotation", {
 
       onInit: function () {
+        getModelData = [];
+        let oModel = new sap.ui.model.json.JSONModel();
+        this.getView().setModel(oModel, "dataModel");
+        var oModel3 = this.getOwnerComponent().getModel();
+
+        var oBindList3 = oModel3.bindList("/xNAUTIxCharteringHeaderItem?$expand=tovendor");
+        oBindList3.requestContexts(0, Infinity).then(function (aContexts) {
+          aContexts.forEach(function (oContext) {
+            getModelData.push(oContext.getObject());
+          });
+          oModel.setData(getModelData);
+
+        }.bind(this));
+        console.log("mydata", getModelData);
+
+
+        let oVoyModel = new sap.ui.model.json.JSONModel();
+        this.getView().setModel(oVoyModel, "voydatamodel");
+        var oVoyModel2 = this.getOwnerComponent().getModel();
+        var oVoyBindList = oVoyModel2.bindList("/xNAUTIxVOYAGEHEADERTOITEM?$expand=toitem");
+        oVoyBindList.requestContexts(0, Infinity).then(function (aContexts) {
+          aContexts.forEach(function (oContext) {
+            getVoyageModelData.push(oContext.getObject());
+          });
+          oModel.setData(getVoyageModelData);
+
+        }.bind(this));
+        console.log("myVoydata", getVoyageModelData);
+
+
+        let oModel2 = new sap.ui.model.json.JSONModel();
+        this.getView().setModel(oModel2, "dataModel2");
+        let oModel4 = this.getOwnerComponent().getModel();
+        let oBindList4 = oModel4.bindList("/xNAUTIxBusinessPartner1");
+        oBindList4.requestContexts(0, Infinity).then(function (aContexts) {
+          aContexts.forEach(function (oContext) {
+            getVendorModelData.push(oContext.getObject());
+          });
+          oModel2.setData(getVendorModelData);
+        }.bind(this))
+        console.log("myvendorData", getVendorModelData)
+
+
 
       },
+      loadData: function () {
+        var ChartNo = this.getView().byId("CharteringRqNo");
+        var ChartNoValue = ChartNo.getValue();
+        var obidStartD = this.byId("bidStartD").getValue();
+        var obidStartT = this.byId("bidStartT").getValue();
+        var obidEndD = this.byId("bidEndD").getValue();
+        var obidEndT = this.byId("bidEndT").getValue();
+
+        var filter = getModelData.filter(function (data) {
+          return data.Chrnmin === ChartNoValue;
+        });
+
+
+        if (filter.length > 0) {
+          var vendorData = filter[0].tovendor;
+          console.log("Vendor Data:", vendorData);
+
+          var vendorString = "";
+          vendorData.forEach(function (x) {
+            vendorString += x.Lifnr + ",";
+          });
+          console.log("Vendor String:", vendorString);
+
+          var voyData = filter[0].Voyno;
+          var voyageNo = voyData;
+
+
+          var filter2 = getVoyageModelData.filter(function (data) {
+            return data.Voyno === voyageNo;
+          });
+
+          if (filter2.length > 0) {
+            var portdata = filter2[0].toitem;
+            console.log("Voyage Data:", portdata);
+
+            var portsByLeg = {};
+            var cargsByLeg = {};
+            var carguByLeg = {};
+
+            portdata.forEach(function (item, index) {
+              if (!portsByLeg.hasOwnProperty(item.Vlegn)) {
+                portsByLeg[item.Vlegn] = [];
+              }
+              portsByLeg[item.Vlegn].push(item.Portc);
+
+              if (!cargsByLeg.hasOwnProperty(item.Vlegn)) {
+                cargsByLeg[item.Vlegn] = [];
+              }
+              cargsByLeg[item.Vlegn].push(item.Cargs);
+
+              if (!carguByLeg.hasOwnProperty(item.Vlegn)) {
+                carguByLeg[item.Vlegn] = [];
+              }
+              carguByLeg[item.Vlegn].push(item.Cargu);
+
+
+            });
+            var CargoUnit = carguByLeg[1]
+            var CargoSize = cargsByLeg[1]
+
+            var startPort = portsByLeg[1] 
+            var midPort = portsByLeg[2]
+            var endPort = portsByLeg[3] 
+
+            console.log("Cargs for Port1:", CargoUnit);
+          }
+
+
+
+
+
+
+          var vendorData = filter2[0].tovendor;
+          var voyTyp = filter2[0].Voyty;
+          var vesselTyp = filter2[0].Carty
+          var bidTyp = filter2[0].Bidtype
+          console.log("voytypoe",voyTyp);
+
+         
+
+          var dataToStore = {
+            "ChartNoValue": ChartNoValue,
+            "obidStartD": obidStartD,
+            "obidStartT": obidStartT,
+            "obidEndD": obidEndD,
+            "obidEndT": obidEndT,
+            "vendorData": vendorData,
+            "vendorString": vendorString,
+            "voyageType": voyTyp,
+            "vesselType": vesselTyp,
+            "BidType": bidTyp,
+            "startPort": startPort,
+            "midPort": midPort,
+            "endPort": endPort,
+            "cargoSize": CargoSize,
+            "cargoUnit": CargoUnit
+
+          };
+          this.newDataMethod(dataToStore)
+
+
+          console.log("Stored Data:", dataToStore);
+        } else {
+          console.log("No data found for ChartNoValue:", ChartNoValue);
+        }
+      },
+     
+
+
+      newDataMethod: function (data) {
+
+        var oModel = new sap.ui.model.json.JSONModel();
+        oModel.setData(data);
+        this._oDialog1.setModel(oModel, "storedDataModel"); // Use "storedDataModel" instead of "storeDataModel"
+        this._oDialog1.getModel("storedDataModel").refresh();
+        console.log("get data", this._oDialog1.getModel("storedDataModel")); // Use "storedDataModel" here as well
+      },
+
+
 
 
       requestForQuatation: function () {
         var oView = this.getView();
 
 
-        if (!this._oTankInfomat) {
-          this._oTankInfomat = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.quotation.fragments.requestForQuotation", this);
-          oView.addDependent(this._oTankInfomat);
+        if (!this._ochart) {
+          this._ochart = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.quotation.fragments.requestForQuotation", this);
+          oView.addDependent(this._ochart);
         }
-        this._oTankInfomat.open();
+        this._ochart.open();
 
       },
       onValueHelpCloseChartering: function (oEvent) {
@@ -72,31 +240,85 @@ sap.ui.define([
 
         oEvent.getSource().getBinding("items").filter([oFilter1]);
       },
-      onSubmitQuotation: function () {
+      onSave: function () {
+        let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
+        let obidStartD = this.byId("bidStartD").getValue();
+        let obidStartT = this.byId("bidStartT").getValue();
+        let obidEndD = this.byId("bidEndD").getValue();
+        let obidEndT = this.byId("bidEndT").getValue();
+    
+        if (!oCharteringRqNo || !obidStartD || !obidStartT || !obidEndD || !obidEndT) {
+            sap.m.MessageBox.error("Please fill in all fields.");
+            return;
+        }
+    
+        var currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+    
+        var formattedDate = currentDate.toISOString();
+    
+        var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
+            pattern: "yyyy-MM-dd" + "'T00:00:00Z'",
+        });
+    
+        BidStartDateFormat = exchangedatevalidto.format(new Date(obidStartD));
+        BidEndDateFormat = exchangedatevalidto.format(new Date(obidEndD));
+    
+        let oModel3 = this.getOwnerComponent().getModel();
+        let oBindList3 = oModel3.bindList("/CharteringSet");
+    
+        let aFilter = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo);
+    
+        oBindList3.filter(aFilter).requestContexts().then(function (aContexts) {
+            aContexts.forEach(function (context) {
+                context.setProperty("Chrqsdate", BidStartDateFormat);
+                context.setProperty("Chrqstime", obidStartT);
+                context.setProperty("Chrqedate", BidEndDateFormat);
+                context.setProperty("Chrqetime", obidEndT);
+            });
+    
+            sap.m.MessageBox.success("Data Saved Successfully");
+        }).catch(function (error) {
+            console.error("Error updating values:", error);
+            sap.m.MessageBox.error("Failed to save data.");
+        });
+        this.getView().byId("sumbit").setEnabled(true);
+
+    },
+    
+
+
+      onSave1: function () {
 
 
         let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
         let obidStartD = this.byId("bidStartD").getValue();
         console.log("obidStartD", obidStartD)
         let obidStartT = this.byId("bidStartT").getValue();
-        console.log("obidStartT" , obidStartT)
+        console.log("obidStartT", obidStartT)
         let obidEndD = this.byId("bidEndD").getValue();
         let obidEndT = this.byId("bidEndT").getValue();
 
+
+        if (!oCharteringRqNo || !obidStartD || !obidStartT || !obidEndD || !obidEndT) {
+          sap.m.MessageToast.show("Please fill in all fields.");
+          return; 
+        }
+
         var currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
-        
+
         var formattedDate = currentDate.toISOString();
-        
+
         var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
-            pattern: "yyyy-MM-dd" + "'T00:00:00Z'", 
+          pattern: "yyyy-MM-dd" + "'T00:00:00Z'",
         });
-        
+
         BidStartDateFormat = exchangedatevalidto.format(new Date(obidStartD));
         BidEndDateFormat = exchangedatevalidto.format(new Date(obidEndD));
-        
-        console.log(BidStartDateFormat); 
-        console.log(BidEndDateFormat); 
+
+        console.log(BidStartDateFormat);
+        console.log(BidEndDateFormat);
 
         console.log("formattedDate2", BidStartDateFormat, BidEndDateFormat)
 
@@ -113,7 +335,9 @@ sap.ui.define([
             context.setProperty("Chrqedate", BidEndDateFormat);
             context.setProperty("Chrqetime", obidEndT);
           });
-          sap.m.MessageToast.show("Data saved successfully");
+
+
+          sap.m.MessageToast.show("Data Saved Succesfully");
         }).catch(function (error) {
           console.error("Error updating values:", error);
         });
@@ -121,6 +345,32 @@ sap.ui.define([
         console.log("oBindList3", oBindList3);
 
       },
+      onSubmitQuotation: function () {
+        var that = this;
+        var oView = this.getView();
+        if (!that._oDialog1) {
+          that._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.requestForQuotationMail", this);
+          oView.addDependent(this._oDialog1);
+        }
+        that._oDialog1.open();
+        that.loadData();
+      },
+      onEmail: function () {
+
+        sap.m.MessageBox.success("Email sent successfully!", {
+          title: "Success",
+          onClose: function () {
+            this.oncancell();
+          }.bind(this)
+        });
+      },
+
+      oncancell: function () {
+
+        this._oDialog1.close();
+      },
+
+
 
     });
 

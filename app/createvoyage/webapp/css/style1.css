@@ -459,4 +459,17 @@
     scrollbar-width: none !important;
 }
 
+/* voyage approval  css */
+.headerItem{
+    gap :10px;
+    
+}
+.charteringItem{
+    margin-right:65%;
+}
+.createcharteringHeader{
+    gap:6% ;
+    margin-left: 60px;
+}
+
 

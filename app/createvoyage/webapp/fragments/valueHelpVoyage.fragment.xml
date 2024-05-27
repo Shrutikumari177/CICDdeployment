@@ -1,0 +1,26 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="mySelect"
+        noDataText="Loading..."
+        title="Select Purchase Group"
+       
+        confirm="VoyageValueHelpClose"
+        cancel="VoyageValueHelpClose"
+        items="{/xNAUTIxvoyapproval1}"
+            multiSelect="true"
+       
+        >
+        <StandardListItem id="_IDGenStand"
+       
+            title="{Voyno}"
+            description="{Vreqno}"
+         
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

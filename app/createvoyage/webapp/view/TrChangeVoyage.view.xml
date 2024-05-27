@@ -307,25 +307,7 @@
                     </customData>
                 </Button>
 
-                <!-- long text button  -->
-                <Button
-                    id="_IDGenButton8"
-                    text="Long Text"
-                    press="handleNav"
-                >
-                    <layoutData>
-                        <FlexItemData
-                            id="_IDGenFlexItemData4"
-                            growFactor="1"
-                        />
-                    </layoutData>
-                    <customData>
-                        <core:CustomData
-                            key="target"
-                            value="p4"
-                        />
-                    </customData>
-                </Button>
+              
 
                 <!-- document upload button -->
                 <Button
@@ -343,6 +325,26 @@
                         <core:CustomData
                             key="target"
                             value="p5"
+                        />
+                    </customData>
+                </Button>
+
+                  <!-- long text button  -->
+                <Button
+                    id="_IDGenButton8"
+                    text="Long Text"
+                    press="handleNav"
+                >
+                    <layoutData>
+                        <FlexItemData
+                            id="_IDGenFlexItemData4"
+                            growFactor="1"
+                        />
+                    </layoutData>
+                    <customData>
+                        <core:CustomData
+                            key="target"
+                            value="p4"
                         />
                     </customData>
                 </Button>
@@ -481,12 +483,12 @@
                                     text="Port Code"
                                 />
                             </Column>
-                            <Column id="_IDGenComn7">
+                            <!-- <Column id="_IDGenComn7">
                                 <Label
                                     id="_IDGenbel16"
                                     text="Events"
                                 />
-                            </Column>
+                            </Column> -->
 
                             <Column id="_IDGenColn6">
                                 <Label
@@ -602,7 +604,7 @@
                                         valueHelpRequest=".onPortValueHelpRequest"
                                         change=".onPortEnterPress"
                                     />
-                                    <Input value="" />
+                                    <!-- <Input value="" /> -->
                                     <Input
                                         value="{voyItemModel>Portn}"
                                         editable="false"
@@ -1107,7 +1109,7 @@
                 <TextArea
                     id="TextArea1"
                     value=""
-                    height="300px"
+                    height="200px"
                     width="100%"
                 />
             </Panel>

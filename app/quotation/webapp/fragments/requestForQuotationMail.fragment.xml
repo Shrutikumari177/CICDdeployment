@@ -1,0 +1,87 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDGenDialog1"  title="Email Details" class="sapUiSmallMargin" contentHeight="60%" contentWidth="80%">
+
+     
+    
+      <Panel id="ui">
+     
+       <FlexBox id="_IDGenFlexBox17" class="flex" >
+        
+    <VBox id="_IDGenVBoxh" alignItems="End" class="flex">
+    <FlexBox id="_IDGenFlexBox4" class="headerItem" >
+     <Label id="_IDGenLabel3" class="sapUiTinyMarginTop" 
+     text="Vendor Code :"/>
+     <Text id="vendorCode" width="250px" text="{storedDataModel>/vendorString}" class="sapUiTinyMarginTop" />
+    </FlexBox>
+    
+    <FlexBox id="_IDGenFlexBox221"  class="headerItem">
+     <Label id="_IDGenLab" text="Bidding Start Date :" class="sapUiTinyMarginTop" />
+     <Text id="date1" width="250px" text="{storedDataModel>/obidStartD}" class="sapUiTinyMarginTop" />
+     
+    </FlexBox>
+    <FlexBox id="_IDGenFlexBox6" class="headerItem">
+      <Label id="_IDGenLabel5" class="sapUiTinyMarginTop" text="Bidding Start Time :" />
+     <Text id="_IDGenTimePicker1" width="250px" text="{storedDataModel>/obidStartT}" class="sapUiTinyMarginTop" />
+     </FlexBox>
+     <FlexBox id="_IDGenFleBox6" class="headerItem">
+      <Label id="_IDGenLabl5" class="sapUiTinyMarginTop" text="Cargo Unit :" />
+     <Text id="_IDGenTimecker1" width="250px" text="{= ${storedDataModel>/cargoSize} + ' ' + ${storedDataModel>/cargoUnit} }" class="sapUiTinyMarginTop" />
+     </FlexBox>
+     
+     <FlexBox id="_IDGenFxBox7" class="headerItem">
+      <Label id="_IDGenLabe" class="sapUiTinyMarginTop" text="Voyage Type :" />
+     <Text id="_IDGenTimicker1" width="250px" text="{storedDataModel>/voyageType}" class="sapUiTinyMarginTop" />
+     </FlexBox>
+     <FlexBox id="_IDGenFx7" class="headerItem">
+      <Label id="_IDGenLe" class="sapUiTinyMarginTop" text="Vessel Type :" />
+     <Text id="_IDGenTcker1" width="250px" text="{storedDataModel>/vesselType}" class="sapUiTinyMarginTop" />
+     </FlexBox>
+     
+     </VBox>
+
+     <VBox id="_IDGenVBox2" alignItems="End" class="flex">
+     
+     <FlexBox id="_IDGenFlexBox7" class="headerItem">
+     <Label id="_IDGenLabel6" class="sapUiTinyMarginTop" text="Bidding End Time :"  />
+     <Text id="_IDGenTimePicker2" width="150px" text="{storedDataModel>/obidEndT}" class="sapUiTinyMarginTop" />
+     </FlexBox>
+      <FlexBox id="_IDGenFBox3" class="headerItem">
+
+     <Label id="_IDGenLl2" text="Bidding End Date :" class="sapUiTinyMarginTop" />
+     <Text id="dat2" width="150px" text="{storedDataModel>/obidEndD}" class="sapUiTinyMarginTop" />
+     
+    </FlexBox>
+    <FlexBox id="_IDGeBox3" class="headerItem">
+
+     <Label id="_IDGen2" text="Start Port:" class="sapUiTinyMarginTop" />
+     <Text id="d2" width="150px" text="{storedDataModel>/startPort}" class="sapUiTinyMarginTop" />
+     
+    </FlexBox>
+    <FlexBox id="_IeBox3" class="headerItem">
+
+     <Label id="_IDn2" text="End Ports:" class="sapUiTinyMarginTop" />
+     <Text id="text" width="150px" text="{= ${storedDataModel>/midPort} + ' ' + ${storedDataModel>/endPort} }"  class="sapUiTinyMarginTop" />
+     
+    </FlexBox>
+    
+     
+     </VBox>
+     
+     </FlexBox>
+     
+     
+     </Panel>
+
+         <footer>
+        	<OverflowToolbar id="_IDGenOverflowToolbar1" >	
+                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>		
+				<Button id="_IDGenButton1" type="Accept" text="Send Email" press="onEmail">
+				</Button>
+                <Button id="_IDGenButton2" type="Reject" text="Cancel" press="oncancell">
+				</Button>
+			</OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>   

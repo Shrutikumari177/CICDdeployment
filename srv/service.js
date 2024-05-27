@@ -28,7 +28,7 @@ module.exports = async (srv) => {
     ]);
     // Register handlers for NAUTIZVOYAPPROVAL_SRV entities
     registerHandlers(srv, NAUTIZVOYAPPROVAL_SRV, [
-        'voyapprovalSet'
+        'voyapprovalSet','xNAUTIxvoyapproval1'
     ]);
 
     // Register handlers for NAUTINAUTICALCV_SRV entities
