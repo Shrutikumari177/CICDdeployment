@@ -63,20 +63,6 @@ sap.ui.define([
         console.log("myVoydata", getVoyageModelData);
 
 
-        let oModel2 = new sap.ui.model.json.JSONModel();
-        this.getView().setModel(oModel2, "dataModel2");
-        let oModel4 = this.getOwnerComponent().getModel();
-        let oBindList4 = oModel4.bindList("/xNAUTIxBusinessPartner1");
-        oBindList4.requestContexts(0, Infinity).then(function (aContexts) {
-          aContexts.forEach(function (oContext) {
-            getVendorModelData.push(oContext.getObject());
-          });
-          oModel2.setData(getVendorModelData);
-        }.bind(this))
-        console.log("myvendorData", getVendorModelData)
-
-
-
       },
       loadData: function () {
         var ChartNo = this.getView().byId("CharteringRqNo");
@@ -138,9 +124,9 @@ sap.ui.define([
             var CargoUnit = carguByLeg[1]
             var CargoSize = cargsByLeg[1]
 
-            var startPort = portsByLeg[1] 
+            var startPort = portsByLeg[1]
             var midPort = portsByLeg[2]
-            var endPort = portsByLeg[3] 
+            var endPort = portsByLeg[3]
 
             console.log("Cargs for Port1:", CargoUnit);
           }
@@ -154,9 +140,9 @@ sap.ui.define([
           var voyTyp = filter2[0].Voyty;
           var vesselTyp = filter2[0].Carty
           var bidTyp = filter2[0].Bidtype
-          console.log("voytypoe",voyTyp);
+          console.log("voytypoe", voyTyp);
 
-         
+
 
           var dataToStore = {
             "ChartNoValue": ChartNoValue,
@@ -184,7 +170,7 @@ sap.ui.define([
           console.log("No data found for ChartNoValue:", ChartNoValue);
         }
       },
-     
+
 
 
       newDataMethod: function (data) {
@@ -243,40 +229,71 @@ sap.ui.define([
       onSave: function () {
         let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
         let obidStartD = this.byId("bidStartD").getValue();
-        let obidStartT = this.byId("bidStartT").getValue();
+        console.log("hii", obidStartD);
+        let selectedDate = new Date(obidStartD);
+        let bidStartdate = selectedDate.toLocaleDateString();
+        let hours = selectedDate.getHours();
+        let minutes = selectedDate.getMinutes();
+        let seconds = selectedDate.getSeconds();
+        let bidStarttime = `${hours}:${minutes}:${seconds}`;
+
+        console.log("Date:", bidStartdate);
+        console.log("Time:", bidStarttime);
+        
         let obidEndD = this.byId("bidEndD").getValue();
-        let obidEndT = this.byId("bidEndT").getValue();
-    
-        if (!oCharteringRqNo || !obidStartD || !obidStartT || !obidEndD || !obidEndT) {
-            sap.m.MessageBox.error("Please fill in all fields.");
-            return;
-        }
-    
+        let selectedDate2 = new Date(obidEndD);
+        let bidEndtdate = selectedDate2.toLocaleDateString();
+        let hour = selectedDate2.getHours();
+        let minute = selectedDate2.getMinutes();
+        let second = selectedDate2.getSeconds();
+        let bidEndtime = `${hour}:${minute}:${second}`;
+        console.log("Date:", bidEndtdate);
+        console.log("Time:", bidEndtime);
+        if (!oCharteringRqNo ) {
+          sap.m.MessageBox.error("Please fill chartering No.");
+          return;
+      }
+      if (!obidStartD ) {
+        sap.m.MessageBox.error("Please fill Bid Start Date and Time");
+        return;
+    }
+    if (!obidEndD ) {
+      sap.m.MessageBox.error("Please fill Bid End Date and Time");
+      return;
+  }
+
+
+
+
+        
+
+        
+
         var currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
-    
+
         var formattedDate = currentDate.toISOString();
-    
+
         var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
             pattern: "yyyy-MM-dd" + "'T00:00:00Z'",
         });
-    
-        BidStartDateFormat = exchangedatevalidto.format(new Date(obidStartD));
-        BidEndDateFormat = exchangedatevalidto.format(new Date(obidEndD));
-    
+
+        BidStartDateFormat = exchangedatevalidto.format(new Date(bidStartdate));
+        BidEndDateFormat = exchangedatevalidto.format(new Date(bidEndtdate));
+
         let oModel3 = this.getOwnerComponent().getModel();
         let oBindList3 = oModel3.bindList("/CharteringSet");
-    
+
         let aFilter = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo);
-    
+
         oBindList3.filter(aFilter).requestContexts().then(function (aContexts) {
             aContexts.forEach(function (context) {
                 context.setProperty("Chrqsdate", BidStartDateFormat);
-                context.setProperty("Chrqstime", obidStartT);
+                context.setProperty("Chrqstime", bidStarttime);
                 context.setProperty("Chrqedate", BidEndDateFormat);
-                context.setProperty("Chrqetime", obidEndT);
+                context.setProperty("Chrqetime", bidEndtime);
             });
-    
+
             sap.m.MessageBox.success("Data Saved Successfully");
         }).catch(function (error) {
             console.error("Error updating values:", error);
@@ -284,67 +301,8 @@ sap.ui.define([
         });
         this.getView().byId("sumbit").setEnabled(true);
 
-    },
-    
-
-
-      onSave1: function () {
-
-
-        let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
-        let obidStartD = this.byId("bidStartD").getValue();
-        console.log("obidStartD", obidStartD)
-        let obidStartT = this.byId("bidStartT").getValue();
-        console.log("obidStartT", obidStartT)
-        let obidEndD = this.byId("bidEndD").getValue();
-        let obidEndT = this.byId("bidEndT").getValue();
-
-
-        if (!oCharteringRqNo || !obidStartD || !obidStartT || !obidEndD || !obidEndT) {
-          sap.m.MessageToast.show("Please fill in all fields.");
-          return; 
-        }
-
-        var currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-
-        var formattedDate = currentDate.toISOString();
-
-        var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
-          pattern: "yyyy-MM-dd" + "'T00:00:00Z'",
-        });
-
-        BidStartDateFormat = exchangedatevalidto.format(new Date(obidStartD));
-        BidEndDateFormat = exchangedatevalidto.format(new Date(obidEndD));
-
-        console.log(BidStartDateFormat);
-        console.log(BidEndDateFormat);
-
-        console.log("formattedDate2", BidStartDateFormat, BidEndDateFormat)
-
-        let oModel3 = this.getOwnerComponent().getModel();
-        let oBindList3 = oModel3.bindList("/CharteringSet");
-        console.log("oBindList3", oBindList3);
-
-        let aFilter = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo);
-
-        oBindList3.filter(aFilter).requestContexts().then(function (aContexts) {
-          aContexts.forEach(function (context) {
-            context.setProperty("Chrqsdate", BidStartDateFormat);
-            context.setProperty("Chrqstime", obidStartT);
-            context.setProperty("Chrqedate", BidEndDateFormat);
-            context.setProperty("Chrqetime", obidEndT);
-          });
-
-
-          sap.m.MessageToast.show("Data Saved Succesfully");
-        }).catch(function (error) {
-          console.error("Error updating values:", error);
-        });
-
-        console.log("oBindList3", oBindList3);
-
       },
+
       onSubmitQuotation: function () {
         var that = this;
         var oView = this.getView();
@@ -360,7 +318,9 @@ sap.ui.define([
         sap.m.MessageBox.success("Email sent successfully!", {
           title: "Success",
           onClose: function () {
+            this.getView().byId("sumbit").setEnabled(false);
             this.oncancell();
+            this.onRefresh();
           }.bind(this)
         });
       },
@@ -368,6 +328,27 @@ sap.ui.define([
       oncancell: function () {
 
         this._oDialog1.close();
+      },
+      onRefresh: function () {
+        this.getView().byId("sumbit").setEnabled(false);
+        this.byId("CharteringRqNo").setValue("");
+        this.byId("bidStartD").setValue("");
+        
+        this.byId("bidEndD").setValue("");
+       
+
+      },
+      onDateSelect: function (oEvent) {
+        var oDatePicker = oEvent.getSource();
+        var sValue = oDatePicker.getValue();
+        var oSelectedDate = new Date(sValue);
+        var oToday = new Date();
+
+        if (oSelectedDate < oToday) {
+          // oDatePicker.setDateValue(oToday);
+          oDatePicker.setValue("");
+         sap.m.MessageBox.error("Past dates are not allowed. Please select a current or future date.");
+        }
       },
 
 

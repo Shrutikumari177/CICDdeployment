@@ -4,8 +4,23 @@
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
 GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tobiditem
 
-###vhd
+### getting
 
+###hkjh
+
+GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000187',Voyno='1000000156',Zlevel='02',Uname='PANKAJ.J')
+
+### Put for voyage approval
+PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000187',Voyno='1000000156',Zlevel='02',Uname='PANKAJ.J')
+Content-Type: application/json
+
+{
+     
+      "Zcomm": "test appr",
+      "Zaction": "APPR"
+    }
+   
+###vhd
 POST http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet
 Content-Type: application/json
 
@@ -407,7 +422,99 @@ Content-Type: application/json
 # ] 
 # }
 
+### submit quoataion
+POST http://localhost:4004/odata/v4/nauticalservice/xNAUTIxSUBMITQUATATIONPOST
+Content-Type: application/json
 
+{
+  "Biddate": "2024-05-29",
+  "Bidtime": "10:17:51",
+  "Chrnmin": "4000000020",
+  "Lifnr": "2100000002",
+  "Vimono": "imee2",
+  "Vname": "999877",
+  "Voyno": "1000000152",
+  "tovenditem": [
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "COUNTRY OF ORIGIN",
+      "Cunit": "",
+      "Cvalue": "0.000",
+      "Lifnr": "2100000002",
+      "Value": "IN",
+      "Voyno": "1000000152",
+      "Zcode": "COOR",
+      "Zcom": ""
+    },
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "LAST CLEANING DATE",
+      "Cunit": "",
+      "Cvalue": "0.000",
+      "Lifnr": "2100000002",
+      "Value": "2024-05-31",
+      "Voyno": "1000000152",
+      "Zcode": "DAT1",
+      "Zcom": ""
+    },
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "LAST PORT OF CALL",
+      "Cunit": "",
+      "Cvalue": "0.000",
+      "Lifnr": "2100000002",
+      "Value": "INBOM",
+      "Voyno": "1000000152",
+      "Zcode": "PORT",
+      "Zcom": ""
+    },
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "CLASS OF VESSEL",
+      "Cunit": "",
+      "Cvalue": "0.000",
+      "Lifnr": "2100000002",
+      "Value": "A",
+      "Voyno": "1000000152",
+      "Zcode": "CLASS",
+      "Zcom": ""
+    },
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "DEMURRAGE",
+      "Cunit": "INR",
+      "Cvalue": "65656",
+      "Lifnr": "2100000002",
+      "Value": "",
+      "Voyno": "1000000152",
+      "Zcode": "DEMURRAGE",
+      "Zcom": ""
+    },
+    {
+      "Biddate": "2024-05-29",
+      "Bidtime": "10:17:51",
+      "Chrnmin": "4000000020",
+      "CodeDesc": "FREIGHT",
+      "Cunit": "INR",
+      "Cvalue": "2000000",
+      "Lifnr": "2100000002",
+      "Value": "",
+      "Voyno": "1000000152",
+      "Zcode": "FREIG",
+      "Zcom": ""
+    }
+  ]
+}
 ### posting data
 POST  http://localhost:4004/odata/v4/nauticalservice/ZCalculateSet
 Content-Type: application/json

@@ -1,4 +1,4 @@
-/* checksum : 68fc35f884aff09ff97a180304c456e7 */
+/* checksum : 651d6864c9de05fa5febb6dd7cecca57 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -28,26 +28,26 @@ entity NAUTIZVOYAPPROVAL_SRV.voyapprovalSet {
   @sap.filterable : 'false'
   key Voyno : String(20) not null;
   @sap.unicode : 'false'
-  @sap.label : 'E-Mail Address'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Zemail : String(241) not null;
-  @sap.unicode : 'false'
   @sap.label : 'Approver Level'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Zlevel : String(2) not null;
+  key Zlevel : String(2) not null;
   @sap.unicode : 'false'
   @sap.label : 'User Name'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Uname : String(12) not null;
+  key Uname : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'E-Mail Address'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Zemail : String(241) not null;
   @odata.Type : 'Edm.DateTime'
   @odata.Precision : 7
   @sap.unicode : 'false'
@@ -63,7 +63,7 @@ entity NAUTIZVOYAPPROVAL_SRV.voyapprovalSet {
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Ztime : Time not null;
+  Ztime : Time;
   @sap.unicode : 'false'
   @sap.label : 'Comments'
   @sap.creatable : 'false'
@@ -78,6 +78,24 @@ entity NAUTIZVOYAPPROVAL_SRV.voyapprovalSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Zaction : String(4) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'Get Voyage Approval List'
+entity NAUTIZVOYAPPROVAL_SRV.xNAUTIxgetvoyapproval {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage Approval Requ'
+  @sap.quickinfo : 'Voyage Approval Request Number'
+  key Vreqno : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
 };
 
 @cds.external : true

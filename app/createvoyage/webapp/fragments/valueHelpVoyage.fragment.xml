@@ -1,15 +1,14 @@
-
 <core:FragmentDefinition
     xmlns="sap.m"
     xmlns:core="sap.ui.core">  
     <SelectDialog
         id="mySelect"
         noDataText="Loading..."
-        title="Select Purchase Group"
+        title=""
        
         confirm="VoyageValueHelpClose"
         cancel="VoyageValueHelpClose"
-        items="{/xNAUTIxvoyapproval1}"
+        items="{/xNAUTIxgetvoyapproval}"
             multiSelect="true"
        
         >

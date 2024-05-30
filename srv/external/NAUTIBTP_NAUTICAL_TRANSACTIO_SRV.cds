@@ -1,4 +1,4 @@
-/* checksum : b53ded652f676c09624f8a7c0a1d9e8a */
+/* checksum : a035034c02d8b0b8c90ec4a63abcccb0 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -234,6 +234,42 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.CharteringSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Chrqetime : Time;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'Bidding History Report'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDDINGHISTORYREPORT {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Approval'
+  @sap.quickinfo : 'Chartering Approval Request Number'
+  key Creqno : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Approver Level'
+  key Zlevel : String(2) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'User Name'
+  key Uname : String(12) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Comments'
+  Zcomm : String(250);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Action Taken'
+  Zaction : String(4);
+  @sap.label : 'E-Mail Address'
+  Zemail : String(241);
+  @cds.ambiguous : 'missing on condition?'
+  toitem1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
+  @cds.ambiguous : 'missing on condition?'
+  toitem2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true
@@ -576,35 +612,39 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCOSTCHARGES {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
-@sap.label : 'Bidding Master'
-entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxMASBID {
+@sap.label : 'contract live frieght report'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxLIVEFRIEGHTREPORT {
   @sap.display.format : 'UpperCase'
-  @sap.label : 'User'
-  @sap.quickinfo : 'User Name in User Master Record'
-  key Bname : String(12) not null;
+  @sap.label : 'Chartering Approval'
+  @sap.quickinfo : 'Chartering Approval Request Number'
+  key Creqno : String(10) not null;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Code'
-  key Code : String(12) not null;
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Value'
-  Value : String(50);
-  @sap.label : 'Revaluation'
-  @sap.quickinfo : 'Revaluation amount on back-posting to a previous period'
-  Cvalue : Decimal(14, 3);
-  @sap.label : 'Currency'
-  @sap.quickinfo : 'Currency Key'
-  @sap.semantics : 'currency-code'
-  Cunit : String(5);
+  @sap.label : 'Approver Level'
+  key Zlevel : String(2) not null;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Datatype'
-  @sap.quickinfo : 'RSM Data type'
-  Datatype : String(4);
+  @sap.label : 'User Name'
+  key Uname : String(12) not null;
+  @sap.display.format : 'Date'
+  @sap.label : 'Date'
+  Zdate : Date;
+  @sap.label : 'Time'
+  Ztime : Time;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Table Name'
-  Tablename : String(20);
+  @sap.label : 'Comments'
+  Zcomm : String(250);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Multiple Choice'
-  Multi_Choice : Boolean;
+  @sap.label : 'Action Taken'
+  Zaction : String(4);
+  @sap.label : 'E-Mail Address'
+  Zemail : String(241);
+  @cds.ambiguous : 'missing on condition?'
+  toitem1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
+  @cds.ambiguous : 'missing on condition?'
+  toitem2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true
@@ -1010,8 +1050,8 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
-@sap.label : 'SubmitQuotation'
-entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONHEADITEM {
+@sap.label : 'SubmitQuotationPost'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOST {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
@@ -1154,15 +1194,15 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Vendor'
   @sap.quickinfo : 'Account Number of Vendor or Creditor'
-  Lifnr : String(10);
+  key Lifnr : String(10) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Code'
-  Zcode : String(12);
+  key Zcode : String(12) not null;
   @sap.display.format : 'Date'
   @sap.label : 'Bid Date'
-  Biddate : Date;
+  key Biddate : Date not null;
   @sap.label : 'Bid Time'
-  Bidtime : Time;
+  key Bidtime : Time not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'

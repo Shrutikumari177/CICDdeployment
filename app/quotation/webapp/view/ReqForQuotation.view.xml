@@ -1,55 +1,82 @@
-
-<mvc:View xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt"
-xmlns:form="sap.ui.layout.form" xmlns:l="sap.ui.layout" controllerName="com.ingenx.nauti.quotation.controller.ReqForQuotation"
-xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
-
-    <Page class="Page" >
+<mvc:View
+    xmlns:unified="sap.ui.unified"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    controllerName="com.ingenx.nauti.quotation.controller.ReqForQuotation"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+>
+    <Page class="Page">
         <headerContent>
-           <Bar class="customHeader">
-          <contentLeft>
-              
-              <Text
-                  
-                  text="Request For Quotation"
-              />
-          </contentLeft>
-          
-           </Bar>
+            <Bar class="customHeader">
+                <contentLeft>
+                    <Text text="Request For Quotation" />
+                </contentLeft>
+            </Bar>
         </headerContent>
         <Bar id="navbar">
             <contentLeft>
-         <Button id="Button1" text="Save" press="onSave"  type="Emphasized"/>
+                <Button
+                    id="Button1"
+                    text="Save"
+                    press="onSave"
+                    type="Emphasized"
+                />
 
-            <Button id="sumbit" text="Submit Quotation" press="onSubmitQuotation"   type="Emphasized"  enabled="false"/>
+                <Button
+                    id="sumbit"
+                    text="Submit Quotation"
+                    press="onSubmitQuotation"
+                    type="Emphasized"
+                    enabled="false"
+                />
             </contentLeft>
         </Bar>
-            
-       
-        <form:SimpleForm  editable="true" backgroundDesign="Translucent">
-        <core:Title  text="Bidding Details"></core:Title>
-           
-            <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
-            <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest=" requestForQuatation" />
 
-            <Label id="_IDGenLabel2" text="Bidding Start Date"  required="true"  ></Label>
-            <DatePicker id="bidStartD" width="170px" placeholder="MM:DD:YY" />
+        <form:SimpleForm
+            editable="true"
+            backgroundDesign="Translucent"
+        >
+            <core:Title text="Bidding Details" />
 
-            <Label id="_IDGenLabel3" text="Bidding Start Time"  required="true" />
-            <TimePicker id="bidStartT" width="170px" placeholder="00:00:00" displayFormat="HH:mm:ss" valueFormat="hh:mm:ss.s" />
+            <Label
+                id="_IDGenLabel1"
+                required="true"
+                text="Chartering Request No"
+            />
+            <Input
+                id="CharteringRqNo"
+                width="170px"
+                showValueHelp="true"
+                valueHelpRequest=" requestForQuatation"
+            />
 
-            <Label id="_IDGenLabel4" text="Bidding End Date"  required="true"  ></Label>
-            <DatePicker id="bidEndD" width="170px" placeholder="MM:DD:YY"></DatePicker>
+            <Label
+                id="_IDGenLabel2"
+                text="Bidding Start Date and Time"
+                required="true"
+            />
+            <DateTimePicker
+                id="bidStartD"
+                width="300px"
+                placeholder="MM:DD:YY"
+                change="onDateSelect"
+            />
 
-            <Label id="_IDGenLabel5" text="Bidding End Time"   required="true"  ></Label>
-            <TimePicker id="bidEndT" width="170px" placeholder="00:00:00" displayFormat="HH:mm:ss" valueFormat="hh:mm:ss.s"></TimePicker>
-        
+            <Label
+                id="_IDGenLabel4"
+                text="Bidding End Date and Time"
+                required="true"
+            />
+            <DateTimePicker
+                id="bidEndD"
+                width="300px"
+                placeholder="MM:DD:YY"
+                change="onDateSelect"
+            />
         </form:SimpleForm>
-        
-        
-        
-        
- 
     </Page>
-
 </mvc:View>
- 

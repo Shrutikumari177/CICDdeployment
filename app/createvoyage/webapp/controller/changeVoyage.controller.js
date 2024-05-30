@@ -810,6 +810,7 @@ sap.ui.define(
                 that.getView().setModel(tempModel, 'tempModel');
                 let filterData = tempModel.getData()
                 console.log("dynmaic filter bid items", filterData);
+                console.log("group id ", oEvent.getSource().getId());
 
                 // Create a dialog
                 var oDialog = new sap.m.Dialog({

@@ -30,6 +30,8 @@
                 <Key>
                     <PropertyRef Name="Vreqno"/>
                     <PropertyRef Name="Voyno"/>
+                    <PropertyRef Name="Zlevel"/>
+                    <PropertyRef Name="Uname"/>
                 </Key>
                 <Property Name="Vreqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Voyage Approval Requ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zemail" Type="Edm.String" Nullable="false" MaxLength="241" sap:unicode="false" sap:label="E-Mail Address" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
@@ -37,9 +39,17 @@
                 <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Approver Level" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zcomm" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zaction" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Action Taken" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxgetvoyapprovalType" sap:label="Get Voyage Approval List" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Vreqno"/>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Vreqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Voyage Approval Requ" sap:quickinfo="Voyage Approval Request Number"/>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
             </EntityType>
             <EntityType Name="xNAUTIxvoyapproval1Type" sap:label="voy approval1" sap:content-version="1">
                 <Key>
@@ -63,6 +73,7 @@
             </EntityType>
             <EntityContainer Name="NAUTI_VOYAPPROVAL_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="voyapprovalSet" EntityType="NAUTI.VOYAPPROVAL_SRV.voyapproval" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxgetvoyapproval" EntityType="NAUTI.VOYAPPROVAL_SRV.xNAUTIxgetvoyapprovalType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxvoyapproval1" EntityType="NAUTI.VOYAPPROVAL_SRV.xNAUTIxvoyapproval1Type" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
             </EntityContainer>
             <Annotations Target="NAUTI.VOYAPPROVAL_SRV.NAUTI_VOYAPPROVAL_SRV_Entities"

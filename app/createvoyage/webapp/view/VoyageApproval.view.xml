@@ -18,47 +18,51 @@
      <Page
         id="page"
         class="Page"
-        showHeader="false"
     >
-        
-           <Bar
-            id="navbar"
-            class="topBar"
-            design="SubHeader"
-        >
-            <contentLeft>
-                <Text text="Voyage Approval Dashboard" />
-            </contentLeft>
-            <contentRight>
-                <Button
-                    id="Button2"
-                    text="Save"
-                    press=".onSaveVoyage"
-                    type="Emphasized"
-                />
-               
-                <Button
-                    id="Button3"
-                    text="Refresh"
-                    press=".onRefresh"
-                    visible="false"
-                />
+        <headerContent>
+            <Bar id="_IDGenBar1" class="customHeader1">
+                <contentLeft>
+                    <!-- <core:Icon
+                        src="sap-icon://nav-back"
+                        class="size1"
+                        press="onBackPress"
+                    /> -->
+                    <!-- <Image
+                   class="size1"
+                  src="./images/ignxlogo.png"
+                  height="75%"
+              /> -->
+                    <Text id="_IDGenText341"
+                        text="Voyage Approval Dashboard"
+                    />
+                        <!-- class="textBid size1" -->
+                </contentLeft>
               
-              
-            </contentRight>
-        </Bar>
-   
+            </Bar>
+        </headerContent>
+        <subHeader>
+            <Bar id="navbar">
+                <contentLeft>
+                    <!-- <Button
+                        id="_IDGenButton11"
+                        text="Execute"
+                        type="Emphasized"
+                    /> -->
+                    <Button
+                        id="_IDGenButton12"
+                        text="Refresh"
+                        type="Emphasized"
+                        press="onRefresh"
+                    />
+                </contentLeft>
+            </Bar>
+        </subHeader>
 
-        <Panel id="_IDGenPanel1" >
+        <Panel id="_IDGenPanel1">
             <FlexBox
                 id="_IDGenFlexBox1"
                 class="VoyageHeader"
             >
-                <Text
-                    id="EnterDetailsId"
-                    text="Enter Details"
-                    class="vgheading"
-                />
                 <VBox
                     id="_IDGenVBox1"
                     alignItems="End"
@@ -91,7 +95,7 @@
                     >
                         <Label
                             id="_IDGLabel1"
-                            text="Voyage Approval Request No. "
+                            text="Voyage Approval Request No: "
                             class="sapUiTinyMarginTop"
                         />
                         <MultiInput
@@ -102,27 +106,28 @@
                         />
                     </FlexBox>
                 </VBox>
-
-                <Label
-                    id="_IDGenLabel2"
-                    text="Approval Selection"
-                    class="sapUiTinyMarginTop"
-                />
-                <Select
-                    id="_IDGenSelect1"
-                    width="200px"
-                    forceSelection="false"
-                    change="onSelectionChange"
-                >
-                    <core:ListItem
-                        id="_IDGenListItem1"
-                        text="Approve Voyage"
+                <FlexBox class="headerItem" >
+                    <Label
+                        id="_IDGenLabel2"
+                        text="Approval Selection:"
+                        class="sapUiTinyMarginTop"
                     />
-                    <core:ListItem
-                        id="_IDGenListItem2"
-                        text="Voyage Approval Status Report"
-                    />
-                </Select>
+                    <Select
+                        id="_IDGenSelect1"
+                        width="200px"
+                        forceSelection="false"
+                        change="onSelectionChange"
+                    >
+                        <core:ListItem
+                            id="_IDGenListItem1"
+                            text="Voyage Approval"
+                        />
+                        <core:ListItem
+                            id="_IDGenListItem2"
+                            text="Voyage Approval Status Report"
+                        />
+                    </Select>
+                </FlexBox>
             </FlexBox>
         </Panel>
 
@@ -176,16 +181,16 @@
                                             text="Created On"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn5">
+                                    <!-- <Column id="_IDGenColumn5">
                                         <Text
                                             id="_IDGenText6"
                                             text="Created At"
                                         />
-                                    </Column>
+                                    </Column> -->
                                     <Column id="_IDGenColumn6">
                                         <Text
                                             id="_IDGenText7"
-                                            text="Approver1"
+                                            text="Level1"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn7">
@@ -194,16 +199,16 @@
                                             text="Approved On"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn8">
+                                    <!-- <Column id="_IDGenColumn8">
                                         <Text
                                             id="_IDGenText9"
                                             text="Approved At"
                                         />
-                                    </Column>
+                                    </Column> -->
                                     <Column id="_IDGenColumn9">
                                         <Text
                                             id="_IDGenText10"
-                                            text="Approver2"
+                                            text="Level2"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn10">
@@ -212,16 +217,16 @@
                                             text="Approved On"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn11">
+                                    <!-- <Column id="_IDGenColumn11">
                                         <Text
                                             id="_IDGenText12"
                                             text="Approved At"
                                         />
-                                    </Column>
+                                    </Column> -->
                                     <Column id="_IDGenColumn12">
                                         <Text
                                             id="_IDGenText13"
-                                            text="Approver3"
+                                            text="Level3"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn13">
@@ -256,18 +261,18 @@
                                                 id="_IDGenText21"
                                                 text="{chartner>Zdate}"
                                             />
-                                            <Text
+                                            <!-- <Text
                                                 id="_IDGenText22"
                                                 text="{chartner>Ztime}"
-                                            />
+                                            /> -->
                                             <Text
                                                 id="_IDGenText23"
                                                 text="{chartner>/0/Uname}"
                                             />
-                                            <Text
+                                            <!-- <Text
                                                 id="_IDGenText24"
                                                 text="{chartner>sdfgh}"
-                                            />
+                                            /> -->
                                             <Text
                                                 id="_IDGenText25"
                                                 text="{chartner>Pstlz}"
@@ -332,14 +337,16 @@
                                     <Toolbar id="_IDGenToolbar1">
                                         <Button id="approveButton"
                                             text="Approve"
+                                            type="Accept"
                                             press="onApprove"
-                                            enabled="{/approvalEnabled}"
+                                            enabled="false"
                                         />
                                         <Button
                                              id="rejectButton"
                                             text="Reject"
+                                            type="Reject"
                                             press="onReject"
-                                            enabled="{/rejectionEnabled}"
+                                            enabled="false"
                                         />
                                     </Toolbar>
                                 </headerToolbar>
@@ -375,16 +382,16 @@
                                             text="Created On"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn511">
+                                    <!-- <Column id="_IDGenColumn511">
                                         <Text
                                             id="_IDGenText611"
                                             text="Created At"
                                         />
-                                    </Column>
+                                    </Column> -->
                                     <Column id="_IDGenColumn611">
                                         <Text
                                             id="_IDGenText711"
-                                            text="Approver1"
+                                            text="Level1"
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn711">
@@ -393,10 +400,16 @@
                                             text="Approved On"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn811">
+                                    <!-- <Column id="_IDGenColumn811">
                                         <Text
                                             id="_IDGenText911"
                                             text="Approved At"
+                                        />
+                                    </Column> -->
+                                     <Column id="_IDGenColumn81">
+                                        <Text
+                                            id="_IDGenText91"
+                                            text="Status"
                                         />
                                     </Column>
                                 </columns>
@@ -421,14 +434,27 @@
                                                 id="_IDGenText2111"
                                                 text="{chartner>Zdate}"
                                             />
-                                            <Text
+                                            <!-- <Text
                                                 id="_IDGenText221"
                                                 text="{chartner>Ztime}"
-                                            />
+                                            /> -->
                                             <Text
                                                 id="_IDGenText231"
                                                 text="{chartner>/0/Uname}"
                                             />
+                                            <!-- <Text
+                                                id="_IDGenext31"
+                                                text="{}"
+                                            /> -->
+                                            <Text
+                                                id="_IDenext31"
+                                                text="{}"
+                                            />
+                                            <Text
+                                                id="_IDGenet31"
+                                                text="{chartner>Zcomm}"
+                                            />
+                                           
                                         </cells>
                                     </ColumnListItem>
                                 </items>

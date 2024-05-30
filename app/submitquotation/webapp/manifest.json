@@ -23,6 +23,14 @@
           "annotations": [],
           "odataVersion": "4.0"
         }
+      },
+      "mainService2": {
+        "uri": "/v2/odata/v4/nauticalservice/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
       }
     }
   },
@@ -81,7 +89,17 @@
           "autoExpandSelect": true,
           "earlyRequests": true
         }
-      }
+      },
+      "modelV2": {
+        "dataSource": "mainService2",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+    }
     },
     "resources": {
       "css": [

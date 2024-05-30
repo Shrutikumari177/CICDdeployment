@@ -113,7 +113,6 @@ sap.ui.define(
         //   console.log("oEVent after create completed ",oEvent)
         // })
       },
-
       getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
         let oModel = this.getOwnerComponent().getModel();
         console.log("oModel", oModel);

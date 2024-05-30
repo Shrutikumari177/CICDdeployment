@@ -1,0 +1,61 @@
+
+{
+    "VoyageData": [
+        {
+            "Voyno": "1000000003",
+            "Zcode": "CLASS",
+            "Value": "A",
+            "Cvalue": "0",
+            "Cunit": "",
+            "CodeDesc": "CLASS OF VESSEL",
+            "RevBid": true,
+            "Good": "X",
+            "Mand": "",
+            "Must": "",
+            "Zmin": "4",
+            "Zmax": "5"
+        },
+        {
+            "Voyno": "1000000003",
+            "Zcode": "PORT",
+            "Value": "INBOM",
+            "Cvalue": "0.000",
+            "Cunit": "",
+            "CodeDesc": "LAST PORT OF CALL",
+            "RevBid": true,
+            "Good": "X",
+            "Mand": "",
+            "Must": "",
+            "Zmin": "4",
+            "Zmax": "5"
+        },
+        {
+            "Voyno": "1000000003",
+            "Zcode": "COOR",
+            "Value": "IN",
+            "Cvalue": "0.000",
+            "Cunit": "",
+            "CodeDesc": "COUNTRY OF ORIGIN",
+            "RevBid": true,
+            "Good": "",
+            "Mand": "X",
+            "Must": "",
+            "Zmin": "3",
+            "Zmax": "5"
+        },
+        {
+            "Voyno": "1000000003",
+            "Zcode": "DAT1",
+            "Value": "20.09.2023",
+            "Cvalue": "0",
+            "Cunit": "",
+            "CodeDesc": "LAST CLEANING DATE",
+            "RevBid": true,
+            "Good": "X",
+            "Mand": "",
+            "Must": "",
+            "Zmin": "3",
+            "Zmax": "5"
+        }
+    ]
+}

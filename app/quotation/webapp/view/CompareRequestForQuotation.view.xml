@@ -1,3 +1,4 @@
+
 <mvc:View controllerName="com.ingenx.nauti.quotation.controller.CompareRequestForQuotation"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true" 
@@ -190,3 +191,47 @@
     
     
 </mvc:View>
+
+
+<!-- 
+<mvc:View controllerName="com.ingenx.nauti.quotation.controller.CompareRequestForQuotation"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <VBox>
+        <Label text="Chartering Number" />
+        <Input id="charteringNo" />
+        <Label text="Voyage Number" />
+        <Input id="voyageNo" />
+        <Button text="Compare Quotations" press=".onCompareQuotations" />
+
+        
+        <Table id="rankedVendorsTable" items="{rankedVendorsModel>/}">
+            <columns>
+                <Column>
+                    <Text text="Vendor" />
+                </Column>
+                <Column>
+                    <Text text="Score" />
+                </Column>
+                <Column>
+                    <Text text="Eligible" />
+                </Column>
+                <Column>
+                    <Text text="Rank" />
+                </Column>
+        
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{rankedVendorsModel>vendor}" />
+                        <Text text="{rankedVendorsModel>score}" />
+                        <Text text="{rankedVendorsModel>eligible}" />
+                        <Text text="{rankedVendorsModel>rank}" />
+                    
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>
+</mvc:View> -->
+

@@ -13,8 +13,6 @@ sap.ui.define(
         "com/ingenx/nauti/createvoyage/model/formatter",
         "sap/m/MessageBox"
 
-
-
     ],
     function (BaseController, Fragment, Filter, FilterOperator, Export, ExportTypeCSV, ExportTypePDF, JSONModel, formatter,
 
@@ -42,10 +40,7 @@ sap.ui.define(
             formatter: formatter,
             onInit: async function () {      
               
-                this._BusyDialog = new sap.m.BusyDialog({
-                    title: "fetching data  ...",
-                    });
-                    this._BusyDialog.open();  
+               
                 // Set the model to the view
                 // let portDataModel = new JSONModel();
                 bidPayload =[];
@@ -106,6 +101,9 @@ sap.ui.define(
 
             },
             onObjectMatched(oEvent) {
+                let that = this;
+                that._BusyDialog = new sap.m.BusyDialog();
+                that._BusyDialog.open(); 
                
                 tempDataArr = [];
                 myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
@@ -119,7 +117,6 @@ sap.ui.define(
                     $expand: "toitem,tocostcharge,tobiditem"
                 });
 
-                let that = this;
                 let  oCommerModel = new JSONModel({
                     myData: [
                         {
@@ -522,7 +519,7 @@ sap.ui.define(
 
             onDeleteBidDetail: function (oEvent) {
                 var oDialog = oEvent.getSource().getParent(); // Replace "yourDialogId" with the actual ID of your dialog
-                var oTable = oDialog.getContent()[2]; // Assuming the table is the third item in the dialog's content
+                var oTable = oDialog.getContent()[0]; // Assuming the table is the third item in the dialog's content
                 var oModel = oTable.getModel("tempModel");
                 var aSelectedItems = oTable.getItems();
 
@@ -560,7 +557,7 @@ sap.ui.define(
             onAddNewBid: function (oEvent, Code, description) {
                 var oButton = oEvent.getSource();
                 var oDialog = oButton.getParent(); // Assuming the button is nested inside the dialog
-                var oTable = oDialog.getContent()[2]; // Assuming the table is the second item in the dialog's content
+                var oTable = oDialog.getContent()[0]; // Assuming the table is the second item in the dialog's content
                 var oModel = oTable.getModel("tempModel");
 
                 // Generate a unique group name for each row based on current timestamp
@@ -572,7 +569,7 @@ sap.ui.define(
                     CodeDesc: description, // dynamic code description
                     Cunit: "", // Fixed value, can be changed if required
                     Cvalue: "0", // Fixed value, can be changed if required
-                    Good: "X", // Empty initially, can be changed by user
+                    Good: "", // Empty initially, can be changed by user
                     Mand: "", // Empty initially, can be changed by user
                     Must: "", // Empty initially, can be changed by user
                     RevBid: true, // Fixed value, can be changed if required
@@ -776,9 +773,13 @@ sap.ui.define(
                 let tempModel = new JSONModel();
                 let oData = bidItemModel.getData();
                 let filterdata =[];
-                oData.forEach(item =>{ 
+                oData.forEach((item, i) =>{ 
                     if( item.CodeDesc === description ){
                         item.RevBid = true;
+                        // item.Good = item.Good === 'X' ? true : false;
+                        // item.Mand = item.Mand === 'X' ? true : false;
+                        // item.Must = item.Must === 'X' ? true : false;
+                        // item.rGroup = `Group${i}`
                         filterdata.push(item);
                         
                     }
@@ -796,19 +797,7 @@ sap.ui.define(
                     contentWidth: "60%",
                     contentHeight: "60%",
                     content: [
-                        new sap.m.Button({
-                            text: "Add row", 
-                            type: "Emphasized",
-                             press: function (oEvent) {
-                                that.onAddNewBid(oEvent, Code, description)
-                            }
-                        }).addStyleClass("sapUiTinyMargin"),
-                        new sap.m.Button({
-                            text: "delete",                     
-                            press: function (oEvent) {
-                                that.onDeleteBidDetail(oEvent)
-                            }
-                        }).addStyleClass("sapUiTinyMargin"),
+                       
                         new sap.m.Table({
                             mode: sap.m.ListMode.MultiSelect,
                             columns: [
@@ -829,41 +818,56 @@ sap.ui.define(
                                                 path: "tempModel>Good", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
                                             },
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Good To Have
+                                            // selected:"{tempModel>Good}",
+                                            
                                             select: function (oEvent) {
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "X");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[5].setEditable(true);
                                                     oEvent.getSource().getParent().getCells()[4].setEditable(true);
                                                 }
                                             }
                                         }),
                                         new sap.m.RadioButton({
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Mandatory
+            
                                             selected: {
                                                 path: "tempModel>Mand", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
                                             },
+                                            // selected:"{tempModel>Mand}",
                                             select: function (oEvent) {
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "X");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setEditable(true);
                                                 }
                                             }
                                         }),
                                         new sap.m.RadioButton({
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Must Not Have
+                
                                             selected: {
                                                 path: "tempModel>Must", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
                                             },
+                                            // selected:"{tempModel>Must}",
                                             select: function (oEvent) {
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "X");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setValue(0).setEditable(false);
                                                 }
@@ -892,14 +896,26 @@ sap.ui.define(
                                     ]
                                 })
                             }
-                        })],
+                        }), new sap.m.Button({
+                            text: "Add row", 
+                            type: "Emphasized",
+                             press: function (oEvent) {
+                                that.onAddNewBid(oEvent, Code, description)
+                            }
+                        }).addStyleClass("sapUiTinyMargin"),
+                        new sap.m.Button({
+                            text: "delete",                     
+                            press: function (oEvent) {
+                                that.onDeleteBidDetail(oEvent)
+                            }
+                        }).addStyleClass("sapUiTinyMargin")],
                     beginButton: new sap.m.Button({
                         text: "Next",
                         icon: "sap-icon://arrow-right",
                         type: "Accept",
                         press: function () {
                             
-                            var oTable = oDialog.getContent()[2];
+                            var oTable = oDialog.getContent()[0];
                             // let selectedValue;
                             if (oTable.getItems().length) {
 
@@ -910,6 +926,7 @@ sap.ui.define(
                                     }
                                     if (filterdata[i].Good) {
                                         oSource.setValue(filterdata[i].Value);
+                                        
 
                                     }
                                 }
@@ -931,9 +948,29 @@ sap.ui.define(
 
                 oDialog.setModel(tempModel, "tempModel"); // Set the model to the dialog
                 this.getView().addDependent(oDialog); // Bind the dialog to the view
+                this.assignGroupToRadioButton(oDialog);
                 oDialog.open(); // Open the dialog
             },
+            
+            assignGroupToRadioButton: function (oDialog) {
+               let oDialogModel = oDialog.getModel("tempModel");
+               let oDialogModelData = oDialogModel.getData();
+               let oDialogContent = oDialog.getContent();
+               let oTable = oDialogContent[0];
+               let items = oTable.getItems();
 
+               //iteration  table row
+               items.forEach( (item, index) => {
+
+                let cells = item.getCells();
+                //   index from radio button 1 to button 3
+                for( let i = 1 ; i <= 3 ; i++){
+
+                    cells[i].setGroupName('Group_'+ index);
+                }
+               })
+                
+            },
 
             // onPortEnterPress fn
             onPortEnterPress: function (oEvent) {
@@ -1740,7 +1777,7 @@ sap.ui.define(
                 oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
                     success: function (oData) {
                         console.log("result :", oData);
-                        new sap.m.MessageBox.success("Data Succcesfully Updated");
+                        new sap.m.MessageBox.success("Data saved Successfully.");
                         that.getOwnerComponent().getModel().refresh();
 
                     },
@@ -1826,6 +1863,7 @@ sap.ui.define(
                     },
                     error: function (err) {
                         console.log(err);
+                        new sap.m.MessageBox.error( JSON.parse(err.responseText).error.message.value);
 
                     }
                 })

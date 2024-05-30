@@ -213,6 +213,22 @@
             "path": "/sap/opu/odata/nauti/VENDOR_BTP_SRV"
           }
         }
+      },
+      "NAUTICOMP_QUOT_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTICOMP_QUOT_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
+          }
+        }
       }
     }
   }

@@ -21,8 +21,8 @@ sap.ui.define([
           YETTOSTART: "Yet to Start",
           ALL: "All",
       };
-
       return Controller.extend("com.ingenx.nauti.submitquotation.controller.Main", {
+        
           onInit: function () {
             this._oBusyDialog = new BusyDialog({
               text: "Loading"
@@ -57,7 +57,7 @@ sap.ui.define([
                   $expand: "toassociation1,toassociation2"
               });
 
-              this._oBusyDialog.open(); // Show busy dialog
+              this._oBusyDialog.open(); 
 
               oBidListData.requestContexts(0).then(function (aContexts) {
                   aContexts.forEach(function (oContext) {
@@ -86,11 +86,12 @@ sap.ui.define([
               }.bind(this)).catch(function (error) {
                   console.error("Error fetching data", error);
               }).finally(function () {
-                  this._oBusyDialog.close(); // Hide busy dialog
+                  this._oBusyDialog.close();
               }.bind(this));
           },
 
           _getCharterListData: async function () {
+            debugger;
               const oCharterListModel = new JSONModel({ charterList: [] });
               this.getOwnerComponent().setModel(oCharterListModel, "charterlist");
               let charterListModel = this.getOwnerComponent().getModel("charterlist");
@@ -248,6 +249,7 @@ sap.ui.define([
 
               const oEventBus = sap.ui.getCore().getEventBus();
               oEventBus.publish("BiddingChannel", "BiddingDetail", {
+                  vendorNo : this.staticData,
                   CharterReqNo: CharterReqNo,
                   path: voyno,
                   startDate: sdate,
