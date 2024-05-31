@@ -160,7 +160,7 @@ sap.ui.define(
                         tempDataArr.push(entityData);
 
                         new sap.m.MessageToast.show("Data fetched successfully.")
-                        // that._BusyDialog.close();
+                        
 
                         // Set models only once
                         if (!that.voyHeaderModel) {
@@ -196,8 +196,11 @@ sap.ui.define(
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
                 }).finally(function (){
-                    that._BusyDialog.close();
-                    console.log("busy Dilaog closed fn");
+                    if( that._BusyDialog){
+
+                        that._BusyDialog.close();
+                        console.log("busy Dialog closed fn");
+                    }
 
                 });
 
@@ -896,7 +899,8 @@ sap.ui.define(
                                     ]
                                 })
                             }
-                        }), new sap.m.Button({
+                        }).addStyleClass("sapUiTinyMarginTop"),
+                         new sap.m.Button({
                             text: "Add row", 
                             type: "Emphasized",
                              press: function (oEvent) {

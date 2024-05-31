@@ -37,6 +37,7 @@ sap.ui.define(
         let voyageNumModel = [];
         let tempDataArr = [];
         let voyageNoArr = [];
+        let myVOYNO;
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.changeVoyage", {
             formatter: formatter,
@@ -173,14 +174,14 @@ sap.ui.define(
                 }
                 that.byId("_voyageInput1").setValue(oSelectedItem.getTitle());
                 var voyageInputObj = this.getView().byId("_voyageInput1");
-                let voyageNoValue = voyageInputObj.getProperty("value");
+                myVOYNO = voyageInputObj.getProperty("value");
 
-                //  Calling getBidDetails function to get bid Detsils 
+                //  Calling getBidDetails function to get bid Detsils  for selected Voyage
 
-                that.getBidDetails(voyageNoValue);
+                that.getBidDetails(myVOYNO);
 
                 let filteredObj = tempDataArr.filter(function (data) {
-                    return data.Voyno === voyageNoValue;
+                    return data.Voyno === myVOYNO;
                 })
                 voyHeaderModel.setData(filteredObj);
 
@@ -206,6 +207,43 @@ sap.ui.define(
                 console.log("voyage number data :", that.getView().getModel("voyageNumModel").getData());
                 console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
                 console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
+
+                // commercial Model
+                let  oCommerModel = new JSONModel({
+                    myData: [
+                        {
+                            "CodeDesc": "DEMURRAGE",
+                            "Cunit": "",
+                            "Cvalue": 0,
+                            "Good": "",
+                            "Mand": "",
+                            "Must": "",
+                            "RevBid": false,
+                            "Value": "",
+                            "Voyno": myVOYNO,
+                            "Zcode": "DEMURRAGE",
+                            "Zmax": "0",
+                            "Zmin": "0"
+                          }
+                         ,
+                         {
+                            "CodeDesc": "FREIGHT",
+                            "Cunit": "",
+                            "Cvalue": 0,  // Decimal 
+                            "Good": "",
+                            "Mand": "",
+                            "Must": "",
+                            "RevBid": false,
+                            "Value": "",
+                            "Voyno": myVOYNO,
+                            "Zcode": "FREIG",
+                            "Zmax": "0",
+                            "Zmin": "0"
+                          }
+                    ]
+                });
+                // Set thecommercial model to the view
+                that.getView().setModel(oCommerModel, "commercialModel");
 
                 this._VoyageDialog.destroy();
 
@@ -246,7 +284,7 @@ sap.ui.define(
                     //   let open = that.getOwnerComponent().getModel("status").getProperty("/open");
                     let oView = that.getView();
                     let templateData = await that._getBidTemplate(oModel, "technical");
-                    let templateData2 = await that._getBidTemplate(oModel, "commercial");
+                    let templateData2 = await that._getBidTemplate(oModel, "commercial"); // temporary changes
                     let oBidTemplateModel = new JSONModel(templateData);
                     oView.setModel(oBidTemplateModel, "bidtemplate");
 
@@ -263,7 +301,7 @@ sap.ui.define(
                         console.log({ ErrorResponse: templateData });
                     }
 
-                    // future code for frieght table setting templete if necessary
+                    // future code for frieght table setting template if necessary
                     // if (Array.isArray(templateData2, oTable2)) {
                     //     if (open) {
                     //         that._setBidTemplate(templateData);
@@ -361,7 +399,7 @@ sap.ui.define(
                 let sBidHelpTableTitle = sBidHelpTableData.Value;
                 let oHelpTableData = await this._getHelpTableData(sBidHelpTableName);
                 if (Array.isArray(oHelpTableData?.data)) {
-                    console.table(oHelpTableData.data);
+                    // console.table(oHelpTableData.data);
                     this._showHelpTableDialog(oSource, oHelpTableData, sBidHelpTableTitle);
                 } else {
                     console.log({ ErrorResponse: oHelpTableData });
@@ -552,7 +590,7 @@ sap.ui.define(
 
             onDeleteBidDetail: function (oEvent) {
                 var oDialog = oEvent.getSource().getParent(); // Replace "yourDialogId" with the actual ID of your dialog
-                var oTable = oDialog.getContent()[2]; // Assuming the table is the third item in the dialog's content
+                var oTable = oDialog.getContent()[0]; // Assuming the table is the third item in the dialog's content
                 var oModel = oTable.getModel("tempModel");
                 var aSelectedItems = oTable.getItems();
 
@@ -590,7 +628,7 @@ sap.ui.define(
             onAddNewBid: function (oEvent, Code, description) {
                 var oButton = oEvent.getSource();
                 var oDialog = oButton.getParent(); // Assuming the button is nested inside the dialog
-                var oTable = oDialog.getContent()[2]; // Assuming the table is the second item in the dialog's content
+                var oTable = oDialog.getContent()[0]; // Assuming the table is the second item in the dialog's content
                 var oModel = oTable.getModel("tempModel");
 
                 // Generate a unique group name for each row based on current timestamp
@@ -607,7 +645,7 @@ sap.ui.define(
                     Must: "", // Empty initially, can be changed by user
                     RevBid: false, // Fixed value, can be changed if required
                     Value: "", // Empty initially, can be changed by user
-                    Voyno: "1000000034", // Fixed value for particular voyage
+                    Voyno: myVOYNO, // Fixed value for particular voyage
                     Zcode: Code, // dynamic code respective to description
                     Zmax: "0", // Fixed value, can be changed if required
                     Zmin: "0" // Fixed value, can be changed if required
@@ -805,7 +843,19 @@ sap.ui.define(
                 }
                 let tempModel = new JSONModel();
                 let oData = bidItemModel.getData();
-                let filterdata = oData.filter(item => item.CodeDesc === description);
+                let filterdata = [];
+                oData.forEach((item, i) =>{ 
+                    if( item.CodeDesc === description ){
+                        item.RevBid = true;
+                        // item.Good = item.Good === 'X' ? true : false;
+                        // item.Mand = item.Mand === 'X' ? true : false;
+                        // item.Must = item.Must === 'X' ? true : false;
+                        // item.rGroup = `Group${i}`
+                        filterdata.push(item);
+                        
+                    }
+                   
+                });
                 tempModel.setData(filterdata);
                 that.getView().setModel(tempModel, 'tempModel');
                 let filterData = tempModel.getData()
@@ -819,19 +869,7 @@ sap.ui.define(
                     contentWidth: "60%",
                     contentHeight: "60%",
                     content: [
-                        new sap.m.Button({
-                            text: "Add row",
-                            type: "Emphasized",
-                            press: function (oEvent) {
-                                that.onAddNewBid(oEvent, Code, description)
-                            }
-                        }).addStyleClass("sapUiTinyMargin"),
-                        new sap.m.Button({
-                            text: "delete",
-                            press: function (oEvent) {
-                                that.onDeleteBidDetail(oEvent)
-                            }
-                        }).addStyleClass("sapUiTinyMargin"),
+                      
                         new sap.m.Table({
                             mode: sap.m.ListMode.MultiSelect,
                             columns: [
@@ -852,18 +890,22 @@ sap.ui.define(
                                                 path: "tempModel>Good", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
                                             },
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Good To Have
+                                            // groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Good To Have
                                             select: function (oEvent) {
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "X");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[5].setEditable(true);
                                                     oEvent.getSource().getParent().getCells()[4].setEditable(true);
                                                 }
                                             }
                                         }),
                                         new sap.m.RadioButton({
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Mandatory
+                                            // groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Mandatory
                                             selected: {
                                                 path: "tempModel>Mand", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
@@ -872,13 +914,17 @@ sap.ui.define(
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "X");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setEditable(true);
                                                 }
                                             }
                                         }),
                                         new sap.m.RadioButton({
-                                            groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Must Not Have
+                                            // groupName: "Group1_" + oEvent.getSource().getId(), // Unique group name for Must Not Have
                                             selected: {
                                                 path: "tempModel>Must", // Binding path to the Mand property of your model
                                                 formatter: that.formatRadioButtonSelection // Apply the formatter function
@@ -887,6 +933,10 @@ sap.ui.define(
                                                 // Handle radio button selection
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
+                                                    let context = oEvent.getSource().getBindingContext("tempModel");
+                                                    context.getModel().setProperty(context.getPath() + "/Good", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Mand", "");
+                                                    context.getModel().setProperty(context.getPath() + "/Must", "X");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setValue(0).setEditable(false);
                                                 }
@@ -915,16 +965,38 @@ sap.ui.define(
                                     ]
                                 })
                             }
-                        })],
+                        }).addStyleClass("sapUiTinyMarginTop"), 
+                         new sap.m.Button({
+                            text: "Add row",
+                            type: "Emphasized",
+                            press: function (oEvent) {
+                                that.onAddNewBid(oEvent, Code, description)
+                            }
+                        }).addStyleClass("sapUiTinyMargin"),
+                        new sap.m.Button({
+                            text: "delete",
+                            press: function (oEvent) {
+                                that.onDeleteBidDetail(oEvent)
+                            }
+                        }).addStyleClass("sapUiTinyMargin")
+                    ],
                     beginButton: new sap.m.Button({
                         text: "Next",
                         icon: "sap-icon://arrow-right",
                         type: "Accept",
                         press: function () {
-                            var oInput = oSource;
-                            var oTable = oDialog.getContent()[2];
+                            
+                            // var oTable = oDialog.getContent()[0];
                             // let selectedValue;
-                            if (oTable.getItems().length) {
+                            let entries = tempModel.getData();
+                            if (entries.length) {
+                                for (let entry of entries) {
+                                    if (!entry.Value || (entry.Good && entry.Mand && entry.Must)) {
+                                        new sap.m.MessageBox.error("Please fill all details.");
+                                        return; // Exit the press function
+                                    }
+                                }
+                               
 
                                 for (let i = 0; i < filterData.length; i++) {
                                     if (filterData[i].Mand) {
@@ -937,10 +1009,9 @@ sap.ui.define(
                                     }
                                 }
                                 // that.lateInputField(oInput, selectedValue);
+                                bidPayload.push(...entries);
+                                oDialog.close();
                             }
-                            let entries = tempModel.getData();
-                            bidPayload.push(...entries);
-                            oDialog.close();
                         }.bind(this),
                     }),
                     endButton: new sap.m.Button({
@@ -954,8 +1025,28 @@ sap.ui.define(
 
                 oDialog.setModel(tempModel, "tempModel"); // Set the model to the dialog
                 this.getView().addDependent(oDialog); // Bind the dialog to the view
+                this.assignGroupToRadioButton(oDialog);
                 oDialog.open(); // Open the dialog
             },
+            assignGroupToRadioButton: function (oDialog) {
+                let oDialogModel = oDialog.getModel("tempModel");
+                let oDialogModelData = oDialogModel.getData();
+                let oDialogContent = oDialog.getContent();
+                let oTable = oDialogContent[0];
+                let items = oTable.getItems();
+ 
+                //iteration  table row
+                items.forEach( (item, index) => {
+ 
+                 let cells = item.getCells();
+                 //   index from radio button 1 to button 3
+                 for( let i = 1 ; i <= 3 ; i++){
+ 
+                     cells[i].setGroupName('Group_'+ index);
+                 }
+                })
+                 
+             },
 
 
             // onPortEnterPress fn
@@ -1701,7 +1792,10 @@ sap.ui.define(
                 let frUnitPl = this.byId("_idFrunitPlan").getSelectedKey();
                 let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
                 let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
-                let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
+                // let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
+
+                let commerDetailPayload = this.getView().getModel("commercialModel").getData().myData;
+
 
                 let payload = {
                     Bidtype: headerDetail[0].Bidtype,
@@ -1731,7 +1825,7 @@ sap.ui.define(
                     Vstat: "",
                     toitem: itemDetails,
                     tocostcharge: costData,
-                    tobiditem: bidPayload
+                    tobiditem: [...bidPayload, ...commerDetailPayload]
 
                 };
                 //   tobiditem: [
@@ -1772,7 +1866,7 @@ sap.ui.define(
                 oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
                     success: function (oData) {
                         console.log("result :", oData);
-                        new sap.m.MessageBox.success("Succcesfully Updated");
+                        new sap.m.MessageBox.success("Data saved Succcesfully.");
                         that.getOwnerComponent().getModel().refresh();
 
 
@@ -1934,8 +2028,8 @@ sap.ui.define(
             },
             // for dialog open
             showValueHelpDialogCurr: function (oEvent) {
-                let oData = oEvent.getSource();
-                console.log(oData);
+                let oSource = oEvent.getSource();
+    
                 // Create a dialog
                 console.log("clicked Currency type");
                 var oDialog = new sap.m.Dialog({
@@ -1957,7 +2051,7 @@ sap.ui.define(
                         selectionChange: function (oEvent) {
                             var oSelectedItem = oEvent.getParameter("listItem");
                             var oSelectedValue = oSelectedItem.getCells()[0].getText();
-                            var inputVoyageType = this.getView().byId(oData.getId()); // Input field for Voyage Type
+                            var inputVoyageType = oSource
                             this.lateInputField(inputVoyageType, oSelectedValue);
                             oDialog.close();
                         }.bind(this),

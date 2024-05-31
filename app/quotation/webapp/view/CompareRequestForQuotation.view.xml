@@ -1,9 +1,11 @@
-
 <mvc:View controllerName="com.ingenx.nauti.quotation.controller.CompareRequestForQuotation"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true" 
     xmlns="sap.m"  	xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
-    
+    	height="100%"
+	width="100%"
+    xmlns:formatter="com.ingenx.nauti.quotation.util.formatter"
+
     >
 
     <Page id="_IDGenPage1"  
@@ -30,16 +32,14 @@
         <subHeader >
           <Bar id="navar">
             <contentLeft>
-                <Button id="ButtonInvite" text="Invite" visible="false" press="onSubmitInvite" type="Emphasized"/>  
-                <!-- <Button id="ButtonRefresh" text="Refresh" visible="false" press="onRefresh" type="Emphasized"/>             -->
+                <Button id="ButtonInvite" text="Invite" visible="false" enabled="false" press="onSubmitInvite" type="Emphasized"/>  
+                <!-- <Button id="ButtonRefresh" text="Refresh"  press="onFetchRankings" type="Emphasized"/>             -->
 
                              
             </contentLeft>
           </Bar>
         </subHeader>
       
-        
-        <Text id="EnterDetailsId" text="Enter Details" class="vgheading"></Text>
         <VBox id="_IDGenVBoxo" class="Vboxlab">
         <HBox >
         <HBox >
@@ -65,7 +65,7 @@
                         <Input
                        
                             editable="false"
-                            value="{testDataModel>/0/VoyageNumber}"
+                            value="{rankings>/Voyno}"
                             width="200px"
                             
                            
@@ -74,41 +74,67 @@
                         </HBox>
                         </VBox>
                         
-                
+        <!-- <ScrollContainer id="_IDGenScrollContainer1"
+		height="100%"
+		width="100%"
+		vertical="true"
+		focusable="true">         -->
                    
- <VBox class="Vboxtab" id="idVbox" visible="false">
+ <VBox class="Vboxtab" id="idVbox" visible="false" >
  
-                     <Table id="table" items="{ path: 'testDataModel>/' ,  sorter: {
+                     <Table id="table"  items="{ path: '' ,  sorter: {
                 path: 'Score',
                 descending: true
             }}" mode="MultiSelect"  selectionChange="onSelectItem" >
-                <columns >
+                <columns  >
                     
-                    <!-- <Column id="_IDGenColumn1" width="8rem">
-                        <Label id="_IDGenLabel1" text="Chartering No." />
+                    
+                    <Column id="_IDGenColumn3" visible="{= ${rankings>/0/Vendors} !== 'vendorId'}">
+                        <Label id="_IDGenLabel3" text="Vendor"  />
+                        
                     </Column>
-                    
-                    <Column id="_IDGenColumn2" width="8rem" >
-                        <Label id="_IDGenLabel2" text="Voyage No." />
+                     <!-- <Column id="_IDGenColumn8" width="12rem">
+                        <Label id="_IDGenLabel8" text="CLASS OF VESSEL" />
+                    </Column>
+                    <Column id="_IDGenColumn1" width="15rem">
+                        <Label id="_IDGenLabel1" text="Score-CLASS OF VESSEL " />
+                    </Column>
+                    <Column  width="12rem">
+                        <Label text="COUNTRY OF ORIGIN" />
+                    </Column>
+                    <Column  width="15rem">
+                        <Label  text="Score-COUNTRY OF ORIGIN " />
+                    </Column>
+                    <Column  width="12rem">
+                        <Label  text="LAST PORT OF CALL" />
+                    </Column>
+                    <Column  width="15rem">
+                        <Label  text="Score-LAST PORT OF CALL " />
+                    </Column>
+                    <Column  width="12rem">
+                        <Label  text="LAST CLEANING DATE" />
+                    </Column>
+                    <Column  width="15rem">
+                        <Label  text="Score-LAST CLEANING DATE " />
                     </Column> -->
-                    <Column id="_IDGenColumn3" width="8rem">
-                        <Label id="_IDGenLabel3" text="Vendor" />
+                    
+                    <Column id="_IDGenColumn2" visible="{= ${rankings>/0/Vendors} !== 'Crank'}" >
+                        <Label id="_IDGenLabel2" text="Commercial Ranking" />
                     </Column>
-                    <Column id="_IDGenColumn4" width="13rem">
-                        <Label id="_IDGenLabel4" text="Commercial Ranking" />
+                    <Column id="_IDGenColumn4" >
+                        <Label id="_IDGenLabel4" text="Technical Ranking" />
                     </Column>
-                     <Column id="_IDGenColumn5" width="8rem" >
+                     <Column id="_IDGenColumn5"  >
                         <Label id="_IDGenLabel5" text="Score"  />
                     </Column>
+                    
                     <!-- <Column id="_IDGenColumn6" width="13rem">
                         <Label id="_IDGenLabel6" text="Bid Date" />
                     </Column> -->
-                    <Column id="_IDGenColumn7" width="8rem">
+                    <Column id="_IDGenColumn7" >
                         <Label id="_IDGenLabel7" text="Eligibility" />
                     </Column>
-                    <!-- <Column id="_IDGenColumn8" width="8rem">
-                        <Label id="_IDGenLabel8" text="Last Port Of Call" />
-                    </Column> -->
+                   
                     <!-- <Column id="_IDGenColumn9" width="8rem">
                         <Label id="_IDGenLabel9" text="Value" />
                     </Column>
@@ -133,7 +159,7 @@
                 </columns>
 
                     <items>
-                    <ColumnListItem id="_IDGenColumnListItem1" type="Navigation" press="onNavigateDetails"
+                    <ColumnListItem id="_IDGenColumnListItem1" type="Navigation" press="onNavigateDetails"  
                     
                     >
                         <cells>
@@ -145,20 +171,20 @@
                                 text="{testDataModel>VoyageNumber}"
                             /> -->
 
-                            <Text id="_IDGenText4"
-                                text="{testDataModel>Vendor}"
+                            <!-- <Text id="_IDGenText4"
+                                text="{rankedVendorsModel>vendor}"
                             />
 
                             <Text id="_IDGenText5"
-                                text="{testDataModel>CommercialRanking}"
+                                text="{rankedVendorsModel>rank}"
                             />
                             <Text id="_IDGenText6" 
-                                text="{testDataModel>Score}"
+                                text="{rankedVendorsModel>score}"
                             />
 
                             <Text id="_IDGenText7"
-                                text="{testDataModel>Eligible}"
-                            />
+                                text="{rankedVendorsModel>eligible}"
+                            /> -->
 
                             <!-- <Text id="_IDGenText7"
                                 text="{testDataModel>Bidtype}"
@@ -181,6 +207,7 @@
 
 
            </VBox>
+           <!-- </ScrollContainer> -->
     
             
         
@@ -191,47 +218,3 @@
     
     
 </mvc:View>
-
-
-<!-- 
-<mvc:View controllerName="com.ingenx.nauti.quotation.controller.CompareRequestForQuotation"
-    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
-    <VBox>
-        <Label text="Chartering Number" />
-        <Input id="charteringNo" />
-        <Label text="Voyage Number" />
-        <Input id="voyageNo" />
-        <Button text="Compare Quotations" press=".onCompareQuotations" />
-
-        
-        <Table id="rankedVendorsTable" items="{rankedVendorsModel>/}">
-            <columns>
-                <Column>
-                    <Text text="Vendor" />
-                </Column>
-                <Column>
-                    <Text text="Score" />
-                </Column>
-                <Column>
-                    <Text text="Eligible" />
-                </Column>
-                <Column>
-                    <Text text="Rank" />
-                </Column>
-        
-            </columns>
-            <items>
-                <ColumnListItem>
-                    <cells>
-                        <Text text="{rankedVendorsModel>vendor}" />
-                        <Text text="{rankedVendorsModel>score}" />
-                        <Text text="{rankedVendorsModel>eligible}" />
-                        <Text text="{rankedVendorsModel>rank}" />
-                    
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
-    </VBox>
-</mvc:View> -->
-

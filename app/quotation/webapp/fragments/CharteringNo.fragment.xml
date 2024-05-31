@@ -1,6 +1,6 @@
 <core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:core="sap.ui.core">  
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
     <SelectDialog
         id="mySelectDialog11"
         noDataText="Loading..."
@@ -8,9 +8,12 @@
         search="onChartSearch1"
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
-        items="{CharterNumberModel>/}"> 
+        items="{ path: '/CharteringSet' ,  sorter: {
+                path: 'Chrnmin',
+                descending: true
+            }}">
         <StandardListItem id="_IDGenStandardListItem11"
-            title="{CharterNumberModel>CharterNumber}"
+            title="{Chrnmin}"
             iconDensityAware="false"
             iconInset="false"
             type="Active" />

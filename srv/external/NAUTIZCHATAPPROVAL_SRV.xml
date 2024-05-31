@@ -29,8 +29,12 @@
             <EntityType Name="chartappr" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Creqno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Zlevel"/>
+                    <PropertyRef Name="Uname"/>
                 </Key>
                 <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Approval" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zemail" Type="Edm.String" Nullable="false" MaxLength="241" sap:unicode="false" sap:label="E-Mail Address" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Approver Level" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
@@ -43,19 +47,9 @@
                 <Key>
                     <PropertyRef Name="Creqno"/>
                     <PropertyRef Name="Chrnmin"/>
-                    <PropertyRef Name="Zlevel"/>
-                    <PropertyRef Name="Uname"/>
-                    <PropertyRef Name="Zdate"/>
-                    <PropertyRef Name="Ztime"/>
                 </Key>
                 <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
-                <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
-                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
-                <Property Name="Zdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
-                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time"/>
-                <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
-                <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
             </EntityType>
             <EntityContainer Name="NAUTI_CHATAPPROVAL_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="chartapprSet" EntityType="NAUTI.CHATAPPROVAL_SRV.chartappr" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>

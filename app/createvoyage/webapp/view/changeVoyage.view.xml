@@ -70,12 +70,14 @@
                 id="Label1"
                 text="Voyage No"
                 class="sapUiTinyMarginTop"
+                
             />
             <Input
                 id="_voyageInput1"
                 width="200px"
                 editable="true"
                 showValueHelp="true"
+                placeholder="select voyage"
                 valueHelpRequest=".showVoyageValueHelp"
             />
             <Label
@@ -226,6 +228,7 @@
             id="Hide"
             icon="sap-icon://minimize"
             class="sapUiTinyMargin"
+            visible="false"
         />
         <Text
             id="header1"
@@ -626,7 +629,8 @@
                         items="{
                             path: '/CargoUnitSet'
                         }"
-                        selectedKey="{voyHeaderModel>/0/Frtu}"
+                        selectedKey="{voyHeaderModel>/0/Cargu}"
+                        forceSelection="false"
                     >
                         <core:Item
                             key="{Uom}"
@@ -649,6 +653,7 @@
                     <Label text="Total Days" />
                     <Input
                         value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
+                        id='_totalDays'
                     />
                 </FlexBox>
               
@@ -938,8 +943,9 @@
                     id="_IDGnText3"
                     text="Actual Info Details"
                     class="vgheading"
+                    visible="false"
                 />
-                  <FlexBox class="actualInfoFlexHeader">
+                  <FlexBox class="actualInfoFlexHeader" visible="false">
                     <Label
                         text="Plan Speed"
                         required="true"
@@ -991,6 +997,7 @@
                     horizontal="true"
                     vertical="false"
                     class="scrollContainer"
+                    visible="false"
                 >
                     <Table
                         id="_IDGenTable10"
@@ -1158,8 +1165,47 @@
 												width="1"
                                                
 											>
+                                                 <Table
+                                    alternateRowColors="true"
+                                    id="CommercialDetailTable"
+                                    sticky="ColumnHeaders"
+                                    headerText="Commercial Details"
+                                    items="{
+                                        path: 'commercialModel>/myData'    }"
+                                >
+                                    <columns>
+                                        <Column width="42.5%">
+                                            <Text text="Heads" />
+                                        </Column>
+                                        <Column width="15%">
+                                            <Text text="Relevance" />
+                                        </Column>
+                                        <Column width="42.5%">
+                                            <Text text="Possible Value" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text
+                                                    text="{commercialModel>CodeDesc}"
+                                                />
+                                                <CheckBox
+                                                    selected="{commercialModel>RevBid}"
+                                                    select="selectionChanged"
+                                                />
+                                                <Input
+                                                    value="{commercialModel>Cunit}"
+                                                    showValueHelp="true"
+                                                    editable="{path: 'commercialModel>RevBid', formatter:'.showValueHelpBasedOnRevBid'}"
+                                                    valueHelpRequest=".showValueHelpDialogCurr"
+                                                />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
 												
-												<Table
+												<!-- <Table
 													alternateRowColors="true"
 													id="CommercilalDetailTable"
 													sticky="ColumnHeaders"
@@ -1178,7 +1224,7 @@
 														</Column>
 														
 													</columns>
-												</Table>
+												</Table> -->
 												
 											</l:BlockLayoutCell>
 											
@@ -1282,6 +1328,7 @@
         <Button
             id="Hide1"
             icon="sap-icon://minimize"
+            visible="false"
         />
         <Text
             id="header2"
@@ -1388,6 +1435,7 @@
                                 <Select
                                     width="200px"
                                     id="_Select5"
+                                    forceSelection="false"
                                     items="{
                                                 path: '/CargoUnitSet'
                                             }"

@@ -1,4 +1,4 @@
-/* checksum : 081e553e84a3b8964f6ace8c2959a7b9 */
+/* checksum : e0772c362aca030d120094d6117dea19 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -26,21 +26,28 @@ entity NAUTIZCHATAPPROVAL_SRV.chartapprSet {
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Chrnmin : String(10) not null;
+  key Chrnmin : String(10) not null;
   @sap.unicode : 'false'
   @sap.label : 'Approver Level'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Zlevel : String(2) not null;
+  key Zlevel : String(2) not null;
   @sap.unicode : 'false'
   @sap.label : 'User Name'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Uname : String(12) not null;
+  key Uname : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'E-Mail Address'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Zemail : String(241) not null;
   @odata.Type : 'Edm.DateTime'
   @odata.Precision : 7
   @sap.unicode : 'false'
@@ -89,22 +96,5 @@ entity NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1 {
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'
   key Chrnmin : String(10) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Approver Level'
-  key Zlevel : String(2) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'User Name'
-  key Uname : String(12) not null;
-  @sap.display.format : 'Date'
-  @sap.label : 'Date'
-  key Zdate : Date not null;
-  @sap.label : 'Time'
-  key Ztime : Time not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Comments'
-  Zcomm : String(250);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Action Taken'
-  Zaction : String(4);
 };
 

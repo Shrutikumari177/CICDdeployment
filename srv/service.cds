@@ -17,6 +17,9 @@ service nauticalservice {
         actions {
             action getDistanceBetweenPort();
         };
+         entity calculateRankings                 as projection on nauticalschema.calculateRankings
+    
+
 
 
     entity PortmasterUpdateSet         as
@@ -730,34 +733,15 @@ service nauticalservice {
         ;
 
 
-    entity chartapprSet                as
-        projection on NAUTIZCHATAPPROVAL_SRV.chartapprSet
+    
 
-        {
-            key Creqno,
-            key Chrnmin,
-                Zlevel,
-                Uname,
-                Zdate,
-                Ztime,
-                Zcomm,
-                Zaction
-        }
-
-        ;
-
-    entity xNAUTIxchaApp1              as
-        projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1 {
-            key Creqno,
-            key Chrnmin,
-            key Zlevel,
-            key Uname,
-            key Zdate,
-            key Ztime,
-                Zcomm,
-                Zaction
-        };
-
+        entity chartapprSet as projection on NAUTIZCHATAPPROVAL_SRV.chartapprSet
+    {        key Creqno, Zemail, key Chrnmin, key Zlevel, key Uname, Zdate, Ztime, Zcomm, Zaction     }    
+;
+    
+    entity xNAUTIxchaApp1 as projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1
+    {        key Creqno, key Chrnmin     }    
+;
     entity xNAUTIxvoy_valuehelp        as
         projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp
 
