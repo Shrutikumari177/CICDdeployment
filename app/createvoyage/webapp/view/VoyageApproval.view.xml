@@ -75,7 +75,7 @@
                         <Label
                             id="_IDGenLabel1"
                             text="Voyage No: "
-                            class="sapUiTinyMarginTop "
+                            class="sapUiTinyMarginTop labeltxt "
                         />
                         <MultiInput
                             id="VoyageNo"

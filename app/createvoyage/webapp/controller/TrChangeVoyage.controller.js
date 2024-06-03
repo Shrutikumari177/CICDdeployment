@@ -102,8 +102,8 @@ sap.ui.define(
             },
             onObjectMatched(oEvent) {
                 let that = this;
-                that._BusyDialog = new sap.m.BusyDialog();
-                that._BusyDialog.open(); 
+                // that._BusyDialog = new sap.m.BusyDialog();
+                // that._BusyDialog.open(); 
                
                 tempDataArr = [];
                 myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
@@ -196,11 +196,11 @@ sap.ui.define(
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
                 }).finally(function (){
-                    if( that._BusyDialog){
+                    // if( that._BusyDialog){
 
-                        that._BusyDialog.close();
-                        console.log("busy Dialog closed fn");
-                    }
+                    //     that._BusyDialog.close();
+                    //     console.log("busy Dialog closed fn");
+                    // }
 
                 });
 
@@ -1851,7 +1851,7 @@ sap.ui.define(
             sendApproval: function (oEvent) {
                 let payload = {
                     "Vreqno": "",
-                    "Voyno": voyageNum,
+                    "Voyno": c,
                     "Zemail":"sarath.venkateswara@ingenxtec.com"
 
                 }

@@ -1,0 +1,68 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDDialog"  title="Vendor Details" class="sapUiSmallMargin" contentHeight="300px" contentWidth="50%">
+
+        <Panel>
+            <FlexBox class="flex">
+                <VBox class="flex" alignItems="End">
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Vendor Name :" />
+                        
+                        <Text text="{vendorDetail>/Name1}" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Title :" />
+
+                        <Text text="{vendorDetail>/Anred}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Address :" />
+
+                        <Text text="{vendorDetail>/Adrnr}"  />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Postal Code :" />
+
+                        <Text text="{vendorDetail>/Pstlz}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="City :" />
+
+                        <Text text="{vendorDetail>/Ort01}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Country:" />
+
+                        <Text text="{vendorDetail>/Land1}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Telephone1 : " />
+                        <Text text="{vendorDetail>/Telf1}" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Telephone2 :" />
+                        <Text text="{vendorDetail>Telf2}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Fax No : " />
+                        <Text text="{vendorDetail>Telfx}"  />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Language : " />
+                        <Text text="{vendorDetail>Spras}"  />
+                    </FlexBox>
+                </VBox>
+            </FlexBox>
+        </Panel>
+
+        <footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar2">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                <Button id="_IDGenButto" text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

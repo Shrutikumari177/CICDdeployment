@@ -77,6 +77,7 @@
                             id="Lbel1"
                             text="Chartering Request No:"
                             class="sapUiTinyMarginTop"
+                            textAlign="Right"
                         />
                         <Input
                             id="charteringNo"
@@ -109,7 +110,9 @@
                         <Label
                             id="Label1"
                             text="Voyage No:"
-                            class="sapUiTinyMarginTop"
+                            class="sapUiTinyMarginTop voylabeltxt"
+                             
+                            
                         />
                         <Input
                             id="VoyageNo"
@@ -125,7 +128,7 @@
                         <Label
                             id="Label2"
                             text="Vendor No:"
-                            class="sapUiTinyMarginTop"
+                            class="sapUiTinyMarginTop voylabeltxt"
                         />
                         <MultiInput
                             id="VendorNo"
@@ -201,7 +204,7 @@
                                <Label
                                     id="Label"
                                     text="Purchase Org :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd labeltxt"
                                 />
                                 <Input
                                     id="PurchaseOrg"
@@ -219,7 +222,7 @@
                                <Label
                                     id="Labe"
                                     text="Purchase Group :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd"
                                 />
                                 <Input
                                     id="PurchaseGroup"
@@ -236,7 +239,7 @@
                         <Label
                                     id="PaymentLabel"
                                     text="Payment Terms :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiNoMarginBegin paylabeltxt"
                                 />
                                 <Input
                                     id="PaymentTerm"
@@ -280,83 +283,64 @@
 
                         
                            
-                             <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" horizontal="true" class="scrollContainer">
-                                <Table id="myTable" items="{vendorModel1>/}" visible="false"  	inset="false" sticky="ColumnHeaders">
+                            <ScrollContainer id="scrollContainer"  horizontal="true" vertical="false">
+                                <Table id="myTable" items="{vendorModel1>/}" visible="false"  	inset="false" sticky="ColumnHeaders" fixedLayout="false" >
                                         
                         
-                                    <columns >
-                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                    <columns   >
+                                        <Column  >
                                             <Text text="Vendor No"  />
                                         </Column>
-                                        <Column width="80px"  minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Title" />
-                                        </Column>
-                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Address" />
-                                        </Column>
-                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Name1" />
-                                        </Column>
-                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Name2" />
+                                        
+                                        
+                                        <Column  >
+                                            <Text text="Name" />
                                         </Column>
                                         
-                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                        
+                                        <Column  >
                                             <Text text="Street" />
                                         </Column>
-                                        <Column minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Postal" />
+                                        <Column  >
+                                            <Text text="Postal Code" />
                                         </Column>
-                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
+                                        <Column  >
                                             <Text text="City" />
                                         </Column>
-                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+                                        <Column  >
                                             <Text text="Country" />
                                         </Column>
-                                        <Column minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Region" />
-                                        </Column>
-                                        <Column width="100px" minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Telephone1" />
+                                        
+                                        <Column >
+                                            <Text text="Telephone" />
                                         </Column>
                                         
-                                        <Column minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="fax No" />
-                                        </Column>
-                                        <Column width="150px" minScreenWidth="Tablet" demandPopin="true">
+                                       
+                                        <Column  >
                                             <Text text="Creation Date" />
                                         </Column>
-                                        <Column width="80px" minScreenWidth="Tablet" demandPopin="true">
-                                            <Text text="Language" />
-                                        </Column>
+                                       
                         
                             
                                     </columns>
                                     <items>
-                                        <ColumnListItem>
+                                        <ColumnListItem type="Navigation" press="onNavigateDetails">
                                             <cells>
                                                 <Text text="{vendorModel1>Lifnr}"  />
-                                                <Text text="{vendorModel1>Anred}" />
-                                                <Text text="{vendorModel1>Adrnr}" />
                                                 <Text text="{vendorModel1>Name1}" />
-                                                <Text text="{vendorModel1>Name2}" />
-                                               
                                                 <Text text="{vendorModel1>Stras}" />
                                                 <Text text="{vendorModel1>Pstlz}" />
                                                 <Text text="{vendorModel1>Ort01}" />
                                                 <Text text="{vendorModel1>Land1}" />
-                                                <Text text="{vendorModel1>Regio}" />
                                                 <Text text="{vendorModel1>Telf1}" />
-                                            
-                        
-                                                <Text text="{vendorModel1>Telfx}" />
+                                               
                                                 <Text text="{vendorModel1>Erdat}" />
-                                                <Text text="{vendorModel1>Spras}" />
+                                              
                                             </cells>
                                         </ColumnListItem>
                                     </items>
                                 </Table>
-                                </ScrollContainer>
+                            </ScrollContainer>
                                 
                           
                          

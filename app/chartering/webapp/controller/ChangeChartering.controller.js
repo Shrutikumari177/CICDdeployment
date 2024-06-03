@@ -11,7 +11,7 @@ sap.ui.define(
     "use strict";
     let getModelData = [];
     let getVendorModelData = [];
-    let  getChartModelData=[];
+    let getChartModelData = [];
 
     let sloc;
     let ChartNoValue;
@@ -21,7 +21,7 @@ sap.ui.define(
       onInit() {
 
 
-       
+
 
         let oModel2 = new sap.ui.model.json.JSONModel();
         this.getView().setModel(oModel2, "dataModel2");
@@ -35,6 +35,27 @@ sap.ui.define(
         }.bind(this))
         console.log("myvendorData", getVendorModelData)
 
+      },
+      onNavigateDetails: function(oEvent) {
+      
+        const oContext = oEvent.getSource().getBindingContext("vendorModel1");
+        const rowData = oContext.getObject();
+        let oModel = new sap.ui.model.json.JSONModel();
+        oModel.setData(rowData);
+     
+        var oView = this.getView();
+        if (!this._oDialog2) {
+            this._oDialog2 = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.chartering.fragments.vendorDetails", this);
+            oView.addDependent(this._oDialog2);
+        }
+     
+        // Set the model after ensuring _oDialog2 is initialized
+        this._oDialog2.setModel(oModel, "vendorDetail");
+        console.log("fragment model data",this._oDialog2.getModel("vendorDetail").getData())
+        this._oDialog2.open();
+      },
+      oncancell: function () {
+        this._oDialog2.close();
       },
       loadData: function () {
         getModelData = [];
@@ -300,7 +321,7 @@ sap.ui.define(
         let oPurchaseOr = this.byId("PurchaseOrg").getValue();
         let oPaymentTerm = this.byId("PaymentTerm").getValue();
         let oVoynm = this.byId("voyname").getValue();
-     
+
         if (!oChrmin) {
           sap.m.MessageToast.show("Please enter Charting No.");
           return;
@@ -347,57 +368,62 @@ sap.ui.define(
             }
           });
           console.log("created............");
-          sap.m.MessageToast.show("Data saved successfully");
+          sap.m.MessageBox.success("Data Saved Successfully");
           this.loadData();
 
           that.getOwnerComponent().getModel().refresh();
           that.getView().getModel("vendorModel1").refresh();
         } catch (error) {
           console.error("Error while saving data:", error);
-          sap.m.MessageToast.show("Error while saving data");
+          sap.m.MessageBox.error("Failed to save data.");
         }
       },
-     
-    
-    
-      onSendForApproval: function(){
-        let  ApprovalNo =[];
+
+
+
+      onSendForApproval: function () {
+        let ApprovalNo = [];
         let that = this;
         let oChrmin = this.byId("charteringNo").getValue();
+
         if (!oChrmin) {
-          sap.m.MessageToast.show("Please enter Charting No");
+          sap.m.MessageBox.error("Please enter Chartering No");
           return;
         }
+
         var oBindListSP = that.getView().getModel().bindList("/chartapprSet");
+
         try {
           var saveddata = oBindListSP.create({
             "Creqno": "",
-            "Chrnmin": oChrmin
+            "Chrnmin": oChrmin,
+            "Zemail":"sarath.venkateswara@ingenxtec.com"
+
           });
-          console.log("saving data:",saveddata);
-         
+          console.log("saving data:", saveddata);
+
           oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
             aContexts.forEach(function (oContext) {
-              if(oContext.getObject().Chrnmin === oChrmin){
-
+              if (oContext.getObject().Chrnmin === oChrmin) {
                 ApprovalNo.push(oContext.getObject());
               }
             });
+
             let appNo = ApprovalNo[0].Creqno;
             console.log(appNo);
-            sap.m.MessageToast.show(`chartering Approval no. ${appNo}  created successfully`);
-          })
-         
-        
+            sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
+          }).catch(function (error) {
+            console.error("Error while requesting contexts:", error);
+            sap.m.MessageBox.error("Duplicate Entry: Already sent for approval");
+          });
         } catch (error) {
           console.error("Error while saving data:", error);
-          sap.m.MessageToast.show("Error while saving data");
+          sap.m.MessageBox.error("Error while saving data");
         }
-
-
       },
-     
-      
+
+
+
       onCancelChartering: function () {
         const chartNoValue = this.getView().byId("charteringNo").getValue(); // Assuming you have an input field for ChartNo
         if (!chartNoValue) {
@@ -422,24 +448,24 @@ sap.ui.define(
         });
       },
       deleteCharteringSet: function (chartNoValue) {
-       let that = this;
+        let that = this;
         let oModel = this.getOwnerComponent().getModel();
         let oBindList = oModel.bindList("/CharteringSet");
         oBindList.requestContexts(0, Infinity).then(function (aContexts) {
           aContexts.forEach(function (oContext) {
             getChartModelData.push(oContext.getObject());
-            if( oContext.getObject().Chrnmin === chartNoValue){
+            if (oContext.getObject().Chrnmin === chartNoValue) {
 
               oContext.delete();
-             
+
               sap.m.MessageToast.show("Entry with  '" + chartNoValue + "' deleted successfully from CharteringSet");
               that.onRefresh();
 
             }
           });
-         
+
         }.bind(this))
-       
+
       },
 
 
@@ -465,7 +491,7 @@ sap.ui.define(
 
         var oTable = this.byId("myTable");
         oTable.setVisible(false);
-       
+
 
 
       }

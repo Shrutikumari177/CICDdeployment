@@ -558,6 +558,7 @@ sap.ui.define(
           },
           error: function (oResponse) {
             console.log(oResponse);
+            new sap.m.MessageBox.erroe(JSON.parse(oResponse.responseText).error.message.value)
           },
         });
       },

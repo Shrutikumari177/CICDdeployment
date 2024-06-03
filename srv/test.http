@@ -8,15 +8,15 @@ GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/10
 
 ###hkjh
 
-GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000187',Voyno='1000000156',Zlevel='02',Uname='PANKAJ.J')
+GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000191',Voyno='1000000161',Zlevel='02',Uname='PANKAJ.J')
 
 ### Put for voyage approval
-PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000187',Voyno='1000000156',Zlevel='02',Uname='PANKAJ.J')
+PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000191',Voyno='1000000161',Zlevel='02',Uname='PANKAJ.J')
 Content-Type: application/json
 
 {
      
-      "Zcomm": "test appr",
+      "Zcomm": "testING APPROVARED",
       "Zaction": "APPR"
     }
    

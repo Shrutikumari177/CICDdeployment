@@ -27,3 +27,18 @@
     gap:6% ;
     margin-left: 60px;
 }
+
+/* css for label alignment */
+.labeltxt{  
+    margin-right:25px !important;
+    }
+    .paylabeltxt{
+        margin-right:13px !important;
+    }
+    .sapMLabel {
+        text-align: end !important;
+    }
+    .voylabeltxt{
+        margin-right: 75px !important;
+    }
+     

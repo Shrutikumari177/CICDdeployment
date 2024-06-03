@@ -175,6 +175,7 @@ sap.ui.define(
                 that.byId("_voyageInput1").setValue(oSelectedItem.getTitle());
                 var voyageInputObj = this.getView().byId("_voyageInput1");
                 myVOYNO = voyageInputObj.getProperty("value");
+                console.log("Selected Voyage No.", myVOYNO);
 
                 //  Calling getBidDetails function to get bid Detsils  for selected Voyage
 
@@ -1262,7 +1263,7 @@ sap.ui.define(
                         "Vetdd": "",
                         "Vetdt": "",
                         "Vlegn": "0",
-                        "Voyno": voyageNum,
+                        "Voyno": myVOYNO,
                         "Vsdays": "0",
                         "Vspeed": "23",
                         "Vwead": "00"
@@ -1667,7 +1668,7 @@ sap.ui.define(
             onAddRow1: function () {
                 let oTableModel = costdetailsModel;
                 let oTableData = oTableModel.getData();
-                oTableData.push({ Voyno: voyageNum, Vlegn: "", Procost: "", Prcunit: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
+                oTableData.push({ Voyno: myVOYNO, Vlegn: "", Procost: "", Prcunit: "", Costu: "", Costcode: "", Cstcodes: "", Costcurr: "", CostCheck: false });
                 oTableModel.refresh();
 
 
@@ -1951,9 +1952,11 @@ sap.ui.define(
 
             },
             sendApproval: function (oEvent) {
+                // console.log(myVOYNO);
                 let payload = {
                     "Vreqno": "",
-                    "Voyno": voyageNum
+                    "Voyno": myVOYNO,
+                    "Zemail":"sarath.venkateswara@ingenxtec.com"
 
                 }
                 console.log("payload for approval", payload);
@@ -1967,6 +1970,7 @@ sap.ui.define(
                     },
                     error: function (err) {
                         console.log(err);
+                        new sap.m.MessageBox.error( JSON.parse(err.responseText).error.message.value);
 
                     }
                 })

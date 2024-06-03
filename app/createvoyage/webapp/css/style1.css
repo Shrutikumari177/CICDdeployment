@@ -490,4 +490,8 @@
   .aprrejbtn{
     margin-top: 10px !important;
   }
+  /* css for label alignment in voyage approval */
+.labeltxt{  
+    margin-right:112px !important;
+    }
 
