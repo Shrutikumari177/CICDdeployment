@@ -33,12 +33,6 @@ sap.ui.define(
       },
 
 
-
-
-
-
-
-
       ValueHelpVoyage: function () {
         var oView = this.getView();
 
@@ -60,12 +54,12 @@ sap.ui.define(
         var selectedValues = [];
         var selectedValues2 = [];
 
-        var oModel = this.getView().getModel("chartner")
+        var oModel = this.getView().getModel("VoyApprovalModel")
         var aExistingData = oModel ? oModel.getData() : [];
 
         if (!oModel) {
           oModel = new sap.ui.model.json.JSONModel();
-          this.getView().setModel(oModel, "chartner")
+          this.getView().setModel(oModel, "VoyApprovalModel")
 
         }
 
@@ -309,7 +303,7 @@ sap.ui.define(
             var sRemovedValue = oToken.getKey();
             console.log("Removed token value:", sRemovedValue);
 
-            var oTableData = this.getView().getModel("chartner").getData();
+            var oTableData = this.getView().getModel("VoyApprovalModel").getData();
             var foundIndex = null;
             for (var i = 0; i < oTableData.length; i++) {
               if (oTableData[i].Chrnmin === sRemovedValue) {
@@ -323,7 +317,7 @@ sap.ui.define(
 
               oTableData.splice(foundIndex, 1);
 
-              this.getView().getModel("chartner").setData(oTableData);
+              this.getView().getModel("VoyApprovalModel").setData(oTableData);
               console.log("Row removed from table.");
             } else {
               console.log("No matching value found in the table.");
@@ -360,12 +354,12 @@ sap.ui.define(
         var selectedValues = [];
         var selectedValues2 = [];
 
-        var oModel = this.getView().getModel("chartner")
+        var oModel = this.getView().getModel("VoyApprovalModel")
         var aExistingData = oModel ? oModel.getData() : [];
 
         if (!oModel) {
           oModel = new sap.ui.model.json.JSONModel();
-          this.getView().setModel(oModel, "chartner")
+          this.getView().setModel(oModel, "VoyApprovalModel")
 
         }
 
@@ -476,7 +470,7 @@ sap.ui.define(
           oSelect.setSelectedKey(null);
         }
 
-        var oModel = this.getView().getModel("chartner");
+        var oModel = this.getView().getModel("VoyApprovalModel");
         if (oModel) {
           oModel.setData([]);
         }

@@ -472,4 +472,22 @@
     margin-left: 60px;
 }
 
+/*  voyage approval css */
+.headerItem{
+    gap :10px;
+   
+  }
+  .voytext{
+    margin-right: 113px;
+  }
+  .VoyageHeader{
+    gap:8% ;
+    margin-left: 60px;
+  }
+  .voyageHeaderItem{
+    margin-top: 0% !important;
+  }
+  .aprrejbtn{
+    margin-top: 10px !important;
+  }
 

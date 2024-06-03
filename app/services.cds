@@ -9,3 +9,4 @@ using from './quotation/annotations';
 
 using from './submitquotation/annotations';
 
+using from './report/annotations';

@@ -18,19 +18,28 @@
     <Page
         id="page"
         class="page"
-        showHeader="false"
+        
     >
      
-
-        <Bar
+     <headerContent>
+       <Bar
             id="navbar"
-            class="topBar"
-            design="SubHeader"
+           
         >
             <contentLeft>
                 <Text text="Display Voyage Details" />
             </contentLeft>
-            <contentRight>
+            
+        </Bar>
+     
+     </headerContent>
+     <subHeader>
+        <Bar
+        
+           
+        >
+            <contentLeft>
+            
                 <!-- <Button
                     id="Button2"
                     text="Save"
@@ -60,9 +69,12 @@
                     text="Cancel Voyage No."
                     visible="false"
                 />
-            </contentRight>
+            
+            </contentLeft>
+           
         </Bar>
 
+     </subHeader>
       
         <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />

@@ -16,6 +16,9 @@ sap.ui.define(
     return BaseController.extend("com.ingenx.nauti.chartering.controller.CharteringApproval", {
       onInit: function () {
 
+        this.byId("approveButton").setEnabled(false);
+        this.byId("rejectButton").setEnabled(false);
+
         let oModel = new sap.ui.model.json.JSONModel();
         this.getView().setModel(oModel, "dataModel");
 
@@ -43,7 +46,7 @@ sap.ui.define(
           oTable2.setVisible(false);
           oVBox1.setVisible(true);
           oVBox2.setVisible(false);
-        } else if (selectedItem === "Approve Charter") {
+        } else if (selectedItem === "Chartering Approval") {
           oTable1.setVisible(false);
           oTable2.setVisible(true);
           oVBox1.setVisible(false);
@@ -84,18 +87,16 @@ sap.ui.define(
         }
         oDialog.open();
       },
-      onCommentChange: function (oEvent) {
-        var sComment = oEvent.getParameter("value");
-        sap.m.MessageToast.show("Comment: " + sComment);
-      }
-      ,
-      // onCloseDialog: function() {
-      //   this.onRefresh(); 
-      // },
+      // onCommentChange: function(oEvent) {
+      //     var sComment = oEvent.getParameter("value");
+      //     sap.m.MessageToast.show("Comment: " + sComment);
+      // }
+      // ,
+
       onSaveComment: function () {
         var sComment = this.byId("commentTextArea").getValue();
 
-        sap.m.MessageToast.show("Charter " + sComment);
+        sap.m.MessageToast.show("Comment is : " + sComment);
         this.byId("approvalDialog").close();
         var oTable2 = this.byId("myTable2");
         oTable2.removeSelections();
@@ -109,51 +110,121 @@ sap.ui.define(
       ,
 
 
-      onDialogOK: function () {
-        var sComment = this.byId("commentTextArea").getValue();
-        var oDialog = this.byId("approvalDialog");
-        if (oDialog) {
-          oDialog.destroyButtons();
-          oDialog.addButton(new sap.m.Button({
-            text: "OK",
-            press: function () {
-
-              sap.m.MessageToast.show("Comment saved: " + sComment);
-              oDialog.close();
-            }
-          }));
-        }
-      },
-
-      // onDialogCancel: function() {
+      //  onDialogOK: function() {
+      //     var sComment = this.byId("commentTextArea").getValue();
       //     var oDialog = this.byId("approvalDialog");
       //     if (oDialog) {
-      //         oDialog.close();
+      //         oDialog.destroyButtons(); 
+      //         oDialog.addButton(new sap.m.Button({
+      //             text: "OK",
+      //             press: function() {
+
+      //                 sap.m.MessageToast.show("Comment saved: " + sComment);
+      //                 oDialog.close();
+      //             }
+      //         }));
       //     }
       // },
 
-      onReject: function () {
 
+
+      onReject: function () {
+        // var that = this;
+        // sap.m.MessageBox.confirm(
+        //     "Are you sure you want to reject the approval?", {
+        //         title: "Confirmation",
+        //         onClose: function(oAction) {
+        //             if (oAction === sap.m.MessageBox.Action.OK) {
+        //                 that.handleApprovalRejection();
+        //             }
+        //         }
+        //     }
+        // );
+        var oDialog = this.byId("approvalDialog");
+        if (!oDialog) {
+          oDialog = new sap.m.Dialog("approvalDialog", {
+            title: "Add Comment",
+            contentWidth: "300px",
+            content: new sap.m.TextArea("commentTextArea", {
+              rows: 3,
+              width: "100%",
+              placeholder: "Add your comment...",
+              liveChange: this.onCommentChange.bind(this)
+            })
+          });
+          this.getView().addDependent(oDialog);
+        }
+        oDialog.open();
+      },
+
+      handleApprovalRejection: function () {
         sap.m.MessageToast.show("Approval Rejected");
+        var oTable = this.getView().byId("myTable2");
+        oTable.removeSelections();
       },
 
 
-      onCharterNoSelectionChange: function (oEvent) {
-        var oMultiInput = oEvent.getSource();
-        var sSelectedCharterNo = oMultiInput.getTokens()[0].getKey();
+      //  onCharterNoSelectionChange: function(oEvent) {
+      //         var oMultiInput = oEvent.getSource();
+      //         var sSelectedCharterNo = oMultiInput.getTokens()[0].getKey(); 
 
-        var oModel = oMultiInput.getModel();
 
-        if (oModel) {
-          var aData = oModel.getProperty("/chartapprSet");
-          var oSelectedCharter = aData.find(function (oCharter) {
-            return oCharter.CharteringNo === sSelectedCharterNo;
-          });
+      //                  var oModel = this.getView().getModel("dataModel");
+      //                  var aData = oModel.getData();
+      //                  var aFilteredData = aData.filter(function(item) {
+      //                   return item.CharteringNo !== sSelectedCharterNo;
+      //               });
+      //               oModel.setData(aFilteredData);           
+      //               var oTable1 = this.getView().byId("myTable");
+      //               var oTable2 = this.getView().byId("myTable2");
+      //               oTable1.removeSelections();
+      //               oTable2.removeSelections();
+      //         var oModel = oMultiInput.getModel();
 
-          var sCharterApprovalReqNo = oSelectedCharter ? oSelectedCharter.Creqno : "";
+      //         if (oModel) {
+      //         var aData = oModel.getProperty("/chartapprSet");
+      //         var oSelectedCharter = aData.find(function(oCharter) {
+      //         return oCharter.CharteringNo === sSelectedCharterNo;
+      //         });
 
-          var oApprovalReqNoInput = this.getView().byId("searchField3");
-          oApprovalReqNoInput.setValue(sCharterApprovalReqNo);
+      //         var sCharterApprovalReqNo = oSelectedCharter ? oSelectedCharter.Creqno : "";
+
+      //         var oApprovalReqNoInput = this.getView().byId("searchField3");
+      //         oApprovalReqNoInput.setValue(sCharterApprovalReqNo);
+      //         }
+      //         },
+
+      onTokenUpdate: function (oEvent) {
+        var aRemovedTokens = oEvent.getParameter("removedTokens");
+
+        if (aRemovedTokens && aRemovedTokens.length > 0) {
+          aRemovedTokens.forEach(function (oToken) {
+            var sRemovedValue = oToken.getKey();
+            console.log("Removed token value:", sRemovedValue);
+
+
+
+            var oTableData = this.getView().getModel("chartner").getData();
+            var foundIndex = null;
+            for (var i = 0; i < oTableData.length; i++) {
+              if (oTableData[i].Chrnmin === sRemovedValue) {
+                foundIndex = i;
+                break;
+              }
+            }
+
+            if (foundIndex !== null) {
+              console.log("Matching value found in table at index:", foundIndex);
+
+              oTableData.splice(foundIndex, 1);
+
+              this.getView().getModel("chartner").setData(oTableData);
+
+              console.log("Row removed from table.");
+            } else {
+              console.log("No matching value found in the table.");
+            }
+          }.bind(this));
         }
       },
       CharterNo: function () {
@@ -260,19 +331,9 @@ sap.ui.define(
         console.log(selectedValues, "ye bhi ha")
       },
 
-      // onValueHelpSearch: function (oEvent) {
-      //   var sValue = oEvent.getParameter("value");
 
-      //   var oFilter = new Filter(
-      //     "Chrnmin",
-      //     FilterOperator.Contains,
-      //     sValue
-      //   );
 
-      //   oEvent.getSource().getBinding("items").filter([oFilter]);
-      // },
-
-      onValueHelpSearch: function (oEvent) {
+      onValueHelpSearchApprove: function (oEvent) {
         var sValue1 = oEvent.getParameter("value");
 
         var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
@@ -280,15 +341,24 @@ sap.ui.define(
         oEvent.getSource().getBinding("items").filter([oFilter1]);
       },
 
+      onValueHelpSearchvendor: function (oEvent) {
+        var sValue = oEvent.getParameter("value");
+
+        var oFilter = new Filter(
+          "Lifnr",
+          FilterOperator.Contains,
+          sValue
+        );
+
+        oEvent.getSource().getBinding("items").filter([oFilter]);
+      },
+
 
       onRefresh: function () {
-        // Reset multi inputs
         var oMultiInput = this.byId("ChartNo");
         var oDescriptionInput = this.byId("searchField3");
         oMultiInput.removeAllTokens();
         oDescriptionInput.removeAllTokens();
-
-        // Hide tables and other elements
         var oTable1 = this.byId("myTable");
         var oTable2 = this.byId("myTable2");
         var oVBox1 = this.byId("tab");

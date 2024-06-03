@@ -75,7 +75,7 @@
                         <Label
                             id="_IDGenLabel1"
                             text="Voyage No: "
-                            class="sapUiTinyMarginTop"
+                            class="sapUiTinyMarginTop "
                         />
                         <MultiInput
                             id="VoyageNo"
@@ -154,13 +154,14 @@
                         >
                             <Table
                                 id="myTable"
-                                items="{chartner>/}"
+                                items="{VoyApprovalModel>/}"
                             >
                                 <columns>
-                                    <Column id="_IDGenColumn1">
+                                    <Column id="_IDGenColumn1" width="150px">
                                         <Text
                                             id="_IDGenText2"
                                             text="Approval Req No"
+
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn2">
@@ -247,60 +248,60 @@
                                         <cells>
                                             <Text
                                                 id="_IDGenText18"
-                                                text="{chartner>Vreqno}"
+                                                text="{VoyApprovalModel>Vreqno}"
                                             />
                                             <Text
                                                 id="_IDGenText19"
-                                                text="{chartner>Voyno}"
+                                                text="{VoyApprovalModel>Voyno}"
                                             />
                                             <Text
                                                 id="_IDGenText20"
-                                                text="{chartner>Uname}"
+                                                text="{VoyApprovalModel>Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText21"
-                                                text="{chartner>Zdate}"
+                                                text="{VoyApprovalModel>Zdate}"
                                             />
                                             <!-- <Text
                                                 id="_IDGenText22"
-                                                text="{chartner>Ztime}"
+                                                text="{VoyApprovalModel>Ztime}"
                                             /> -->
                                             <Text
                                                 id="_IDGenText23"
-                                                text="{chartner>/0/Uname}"
+                                                text="{VoyApprovalModel>/0/Uname}"
                                             />
                                             <!-- <Text
                                                 id="_IDGenText24"
-                                                text="{chartner>sdfgh}"
+                                                text="{VoyApprovalModel>sdfgh}"
                                             /> -->
                                             <Text
                                                 id="_IDGenText25"
-                                                text="{chartner>Pstlz}"
+                                                text="{VoyApprovalModel>Pstlz}"
                                             />
                                             <Text
                                                 id="_IDGenText26"
-                                                text="{chartner>/1/Uname}"
+                                                text="{VoyApprovalModel>/1/Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText27"
-                                                text="{chartner>Land1}"
+                                                text="{VoyApprovalModel>Land1}"
                                             />
                                             <Text
                                                 id="_IDGenText28"
-                                                text="{chartner>Regio}"
+                                                text="{VoyApprovalModel>Regio}"
                                             />
                                             <Text
                                                 id="_IDGenText29"
-                                                text="{chartner>/2/Uname}"
+                                                text="{VoyApprovalModel>/2/Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText30"
-                                                text="{chartner>Telf2}"
+                                                text="{VoyApprovalModel>Telf2}"
                                             />
 
                                             <Text
                                                 id="_IDGenText31"
-                                                text="{chartner>Telfx}"
+                                                text="{VoyApprovalModel>Telfx}"
                                             />
                                         </cells>
                                     </ColumnListItem>
@@ -353,7 +354,7 @@
 
                             <Table
                                 id="myTable2"
-                                items="{chartner>/}"
+                                items="{VoyApprovalModel>/}"
                                 mode="MultiSelect"
                                 selectionChange="onTableSelectionChange"
                             >
@@ -420,27 +421,27 @@
                                         <cells>
                                             <Text
                                                 id="_IDGenText181"
-                                                text="{chartner>Vreqno}"
+                                                text="{VoyApprovalModel>Vreqno}"
                                             />
                                             <Text
                                                 id="_IDGenText191"
-                                                text="{chartner>Voyno}"
+                                                text="{VoyApprovalModel>Voyno}"
                                             />
                                             <Text
                                                 id="_IDGenText201"
-                                                text="{chartner>Uname}"
+                                                text="{VoyApprovalModel>Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText2111"
-                                                text="{chartner>Zdate}"
+                                                text="{VoyApprovalModel>Zdate}"
                                             />
                                             <!-- <Text
                                                 id="_IDGenText221"
-                                                text="{chartner>Ztime}"
+                                                text="{VoyApprovalModel>Ztime}"
                                             /> -->
                                             <Text
                                                 id="_IDGenText231"
-                                                text="{chartner>/0/Uname}"
+                                                text="{VoyApprovalModel>/0/Uname}"
                                             />
                                             <!-- <Text
                                                 id="_IDGenext31"
@@ -452,7 +453,7 @@
                                             />
                                             <Text
                                                 id="_IDGenet31"
-                                                text="{chartner>Zcomm}"
+                                                text="{VoyApprovalModel>Zcomm}"
                                             />
                                            
                                         </cells>

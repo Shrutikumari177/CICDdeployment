@@ -34,7 +34,8 @@
     "watch-chartering": "cds watch --open chartering/webapp/index.html?sap-ui-xx-viewCache=false",
     "watch-quotation": "cds watch --open quotation/webapp/index.html?sap-ui-xx-viewCache=false",
     "watch-submitquotation": "cds watch --open submitquotation/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-reports": "cds watch --open reports/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-reports": "cds watch --open reports/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-report": "cds watch --open report/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
@@ -231,5 +232,8 @@
         }
       }
     }
-  }
+  },
+  "sapux": [
+    "app/report"
+  ]
 }

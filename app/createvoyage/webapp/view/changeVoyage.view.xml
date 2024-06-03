@@ -18,19 +18,29 @@
     <Page
         id="page"
         class="page"
-        showHeader="false"
+        
     >
+     <headerContent>
      
-
-        <Bar
+      <Bar
             id="navbar"
-            class="topBar"
-            design="SubHeader"
+            
         >
             <contentLeft>
                 <Text text="Change Voyage Details" />
             </contentLeft>
-            <contentRight>
+          
+        </Bar>
+     </headerContent>
+     <subHeader>
+        <Bar
+            design="Auto"
+            titleAlignment="None"
+        >
+         
+         
+            <contentLeft>
+              
                 <Button
                     id="Button2"
                     text="Save"
@@ -60,8 +70,12 @@
                     text="Cancel Voyage No."
                     visible="false"
                 />
-            </contentRight>
+    
+            </contentLeft>
         </Bar>
+     </subHeader>
+
+       
 
       
         <form:SimpleForm layout="ResponsiveLayout">
@@ -620,6 +634,7 @@
                         value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
                         liveChange=".liveFrCostChange"
                         width="200px"
+                        type="Number"
                     />
 
                     <Label text="Unit" />
@@ -645,9 +660,11 @@
                         value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
                     />
 
-                    <Label text="Total Dist" />
+                    <Label text="Total Distance" />
                     <Input
                         value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
+                        editable="false"
+                        
                     />
 
                     <Label text="Total Days" />

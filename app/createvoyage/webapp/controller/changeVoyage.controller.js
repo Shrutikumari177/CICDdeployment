@@ -1507,7 +1507,7 @@ sap.ui.define(
                 const fCost1 = oEvent.getParameter("value") || 0;
                 let FCost = fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
                 let selectedUnit = this.byId("_idFrunitPlan").getSelectedKey();
-                if (FCost === undefined) {
+                if (FCost === undefined || isNaN(FCost)) {
                     FCost = 0;
                 }
                 if (selectedUnit === "L/S" || selectedUnit === "LS") {

@@ -1,0 +1,23 @@
+<mvc:View controllerName="com.ingenx.nauti.report.controller.ReportDashboard"
+    xmlns:core="sap.ui.core" xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true" >
+
+    <Page id="page" title="Report Dashboard">
+
+      <GenericTile id="_IDGenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+         header="Nautical" subheader="Contract Award Status Report" press="onContractAwardStatusReport" >
+            <TileContent id="_IDGenTileContent1">
+                <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" />
+            </TileContent>
+            
+        </GenericTile>
+
+        <GenericTile id="_IDGenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+         header="Nautical" subheader="Bidding History Report" press="onBiddingHistoryReport" >
+            <TileContent id="_IDGenTileContent2">
+                <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" />
+            </TileContent>
+            
+        </GenericTile>
+    </Page>
+</mvc:View>

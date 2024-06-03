@@ -17,7 +17,7 @@
     <Page
         id="page"
         class="page"
-        showHeader="false"
+        
     >
         <!-- <headerContent>
             <Bar id="_IDGenBar2">
@@ -42,7 +42,7 @@
             </Bar>
         </headerContent> -->
 
-        <Bar
+        <!-- <Bar
             id="navbar"
             class="topBar"
             design="SubHeader"
@@ -81,8 +81,61 @@
                     visible="false"
                 />
             </contentRight>
+        </Bar> -->
+  <headerContent>
+     
+      <Bar
+            id="navbar"
+            
+        >
+            <contentLeft>
+                <Text text="Change Voyage Details" />
+            </contentLeft>
+          
         </Bar>
-
+     </headerContent>
+     <subHeader>
+        <Bar
+            design="Auto"
+            titleAlignment="None"
+        >
+         
+         
+            <contentLeft>
+              
+                <Button
+                    id="Button2"
+                    text="Save"
+                    press=".onSaveVoyage"
+                    type="Emphasized"
+                />
+                <Button
+                    id="Button6"
+                    text="Send for Approval"
+                    visible="true"
+                    press=".sendApproval"
+                    type="Emphasized"
+                />
+                <Button
+                    id="Button3"
+                    text="Refresh"
+                    type="Emphasized"
+                    press=".onRefresh"
+                />
+                <Button
+                    id="Button4"
+                    text=""
+                    visible="false"
+                />
+                <Button
+                    id="Button5"
+                    text="Cancel Voyage No."
+                    visible="false"
+                />
+    
+            </contentLeft>
+        </Bar>
+     </subHeader>
         <!-- <Text id="_IDGenText11" class="vgheading" text="Voyage Details" /> -->
         <!-- <Table id="idTable"  items="{voyHeaderModel>/}">    
         
@@ -448,6 +501,7 @@
                     <Label text="Total Distance" />
                     <Input
                         value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
+                        editable="false"
                     />
 
                     <Label text="Total Days" />
@@ -753,6 +807,7 @@
                         value=" {path :'voyItemModel1>/', formatter:'.CalcTotalFrcost'}"
                         liveChange=".liveFrCostChange"
                         width="200px"
+                        type="Number"
                     />
 
                     <Label text="Unit" />

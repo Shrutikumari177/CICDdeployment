@@ -30,7 +30,7 @@
                 <Key>
                     <PropertyRef Name="Chrnmin"/>
                 </Key>
-                <Property Name="Zdelete" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdelete" Type="Edm.Boolean" sap:unicode="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Chrcdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Creation Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding Start Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Chrqedate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding End Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
@@ -61,22 +61,87 @@
                 <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bidding Start Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bidding End Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
-            <EntityType Name="xNAUTIxBIDDINGHISTORYREPORTType" sap:label="Bidding History Report" sap:content-version="1">
+            <EntityType Name="xNAUTIxAPPROVEDCHATType" sap:label="approved chartering" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Creqno"/>
                     <PropertyRef Name="Chrnmin"/>
                     <PropertyRef Name="Zlevel"/>
                     <PropertyRef Name="Uname"/>
+                    <PropertyRef Name="Zdate"/>
+                    <PropertyRef Name="Ztime"/>
+                    <PropertyRef Name="Rels"/>
+                    <PropertyRef Name="Voyty"/>
+                    <PropertyRef Name="Vesty"/>
+                    <PropertyRef Name="Zgroup"/>
                 </Key>
                 <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
                 <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
                 <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="Zdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
+                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time"/>
+                <Property Name="Rels" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Release Strategy"/>
+                <Property Name="Voyty" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Voyage Type"/>
+                <Property Name="Vesty" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Vessel Type"/>
+                <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User ID group"/>
                 <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
                 <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
                 <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
-                <NavigationProperty Name="toitem1" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_688303AE2B5A93FACD114C7FBF30D0E0" FromRole="FromRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0" ToRole="ToRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0"/>
-                <NavigationProperty Name="toitem2" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_15DE2C3564A21ED9D16A8C057125B299" FromRole="FromRole_assoc_15DE2C3564A21ED9D16A8C057125B299" ToRole="ToRole_assoc_15DE2C3564A21ED9D16A8C057125B299"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxBIDHISREPORTType" sap:label="Bidding History Report" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Lifnr"/>
+                    <PropertyRef Name="Zcode"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
+                <Property Name="Zcode" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
+                <Property Name="Biddate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
+                <Property Name="Bidtime" Type="Edm.Time" Precision="0" sap:label="Bid Time"/>
+                <Property Name="Voynm" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
+                <Property Name="Vnomtk" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Nomination no" sap:quickinfo="Nautical being used for Is-OIL"/>
+                <Property Name="Refdoc" Type="Edm.String" MaxLength="10" sap:label="Refrence Doc" sap:quickinfo=" Nautical being used for S4H or other non Oil Modules"/>
+                <Property Name="Docind" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Ref Doc .ind" sap:quickinfo="Reference document indicator (PSX)"/>
+                <Property Name="Vessn" Type="Edm.String" MaxLength="20" sap:label="Vessel name" sap:quickinfo="Vessel Name"/>
+                <Property Name="Vimo" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Vessel IMO no" sap:quickinfo="Vessel IMO Number - Unique"/>
+                <Property Name="Chtyp" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Charter Type" sap:quickinfo="SPOT/Time Charter"/>
+                <Property Name="Chpno" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Charter Party Agree" sap:quickinfo="Freight Contract"/>
+                <Property Name="Currkeys" Type="Edm.String" MaxLength="5" sap:label="Freight charges" sap:quickinfo="Currency key" sap:semantics="currency-code"/>
+                <Property Name="Frtco" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="Currkeys" sap:label="Freight Cost" sap:quickinfo="Freight Cost for the Voyage"/>
+                <Property Name="Vstat" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Voyage Status" sap:quickinfo="Not Started, Ballast, Port, EnRoute, Anchorage, Completed"/>
+                <Property Name="Voyty" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Voyage Type"/>
+                <Property Name="Carty" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Vessel Type"/>
+                <Property Name="Curr" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Currency"/>
+                <Property Name="Freght" Type="Edm.Decimal" Precision="12" Scale="3" sap:unit="Currkeys" sap:label="Freight cost"/>
+                <Property Name="Party" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Charter Party Agreem" sap:quickinfo="Charter Party Agreement"/>
+                <Property Name="Bidtype" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="" sap:quickinfo="Bid Type"/>
+                <Property Name="Frcost" Type="Edm.Decimal" Precision="17" Scale="5" sap:unit="Currkeys" sap:label="Freight Cost"/>
+                <Property Name="Frtu" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Freight Unit"/>
+                <Property Name="FrcostAct" Type="Edm.Decimal" Precision="17" Scale="5" sap:unit="Currkeys" sap:label="Actual Freight Cost"/>
+                <Property Name="FrtuAct" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Actual Freight Unit"/>
+                <Property Name="Zdelete" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Indicator" sap:quickinfo="General Flag"/>
+                <Property Name="RefVoyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Refrence Voyage No."/>
+                <Property Name="CodeDesc" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Code Description"/>
+                <Property Name="Value" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Value"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
+                <Property Name="Cunit" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Done by Vendor ?"/>
+                <Property Name="Uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created by"/>
+                <Property Name="Stat" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Status"/>
+                <Property Name="Zmode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Type (Auto/manual)"/>
+                <Property Name="Zcom" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+                <Property Name="Rank" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="" sap:quickinfo="Undefined range (can be used for patch levels)"/>
+                <Property Name="AwrdCreatedBy" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Created By"/>
+                <Property Name="AwrdCreatedOn" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Date" sap:quickinfo="Field of type DATS"/>
+                <Property Name="AwrdCreatedAt" Type="Edm.Time" Precision="0" sap:label="" sap:quickinfo="Field of type TIMS"/>
+                <Property Name="Award" Type="Edm.String" MaxLength="3"/>
             </EntityType>
             <EntityType Name="xNAUTIxBIDITEMType" sap:label="Bid Item" sap:content-version="1">
                 <Key>
@@ -179,6 +244,47 @@
                 <NavigationProperty Name="topaymentterm" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_C8CA29C68CB5E57DC38995A500381CA3" FromRole="FromRole_assoc_C8CA29C68CB5E57DC38995A500381CA3" ToRole="ToRole_assoc_C8CA29C68CB5E57DC38995A500381CA3"/>
                 <NavigationProperty Name="topurchasegroup" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_B7D3BEF385F9FA6B48FF3207AF99B65D" FromRole="FromRole_assoc_B7D3BEF385F9FA6B48FF3207AF99B65D" ToRole="ToRole_assoc_B7D3BEF385F9FA6B48FF3207AF99B65D"/>
             </EntityType>
+            <EntityType Name="xNAUTIxCHATAPP2Type" sap:label="chartering approval" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Creqno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Zlevel"/>
+                    <PropertyRef Name="Uname"/>
+                    <PropertyRef Name="Zdate"/>
+                    <PropertyRef Name="Ztime"/>
+                </Key>
+                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="Zdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
+                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time"/>
+                <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+                <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
+                <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCHATAPPROType" sap:label="chartering approval fetch" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Creqno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCONTAWARDSTATUSREPORT_MType" sap:label="contract award status main" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <NavigationProperty Name="toitem" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_DBACD242793253DE4F35EDD1AA4CC09D" FromRole="FromRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D" ToRole="ToRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCONTAWARDSTREPORT_ASSOCType" sap:label="contract award status association" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <NavigationProperty Name="toitem" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_2409FED6CCA27129D2664C9D5A69D143" FromRole="FromRole_assoc_2409FED6CCA27129D2664C9D5A69D143" ToRole="ToRole_assoc_2409FED6CCA27129D2664C9D5A69D143"/>
+            </EntityType>
             <EntityType Name="xNAUTIxCOSTCHARGESType" sap:label="Cost Charges" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Voyno"/>
@@ -195,24 +301,12 @@
                 <Property Name="Cstcodes" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Cost.Code.Des" sap:quickinfo="Cost Code Description"/>
                 <Property Name="CostCheck" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Relevant For Bidding"/>
             </EntityType>
-            <EntityType Name="xNAUTIxLIVEFRIEGHTREPORTType" sap:label="contract live frieght report" sap:content-version="1">
+            <EntityType Name="xNAUTIxMAXZLEVELType" sap:label="max level charmin" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="Creqno"/>
-                    <PropertyRef Name="Chrnmin"/>
-                    <PropertyRef Name="Zlevel"/>
-                    <PropertyRef Name="Uname"/>
+                    <PropertyRef Name="chrnmin"/>
                 </Key>
-                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
-                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
-                <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
-                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
-                <Property Name="Zdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Date"/>
-                <Property Name="Ztime" Type="Edm.Time" Precision="0" sap:label="Time"/>
-                <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
-                <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
-                <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
-                <NavigationProperty Name="toitem1" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_CC3E8019F5763880DD8467E4A10F4474" FromRole="FromRole_assoc_CC3E8019F5763880DD8467E4A10F4474" ToRole="ToRole_assoc_CC3E8019F5763880DD8467E4A10F4474"/>
-                <NavigationProperty Name="toitem2" Relationship="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_0651E102B1AEDC10C2D1877D9C24F80E" FromRole="FromRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E" ToRole="ToRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E"/>
+                <Property Name="chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="max_zlevel" Type="Edm.String" MaxLength="2"/>
             </EntityType>
             <EntityType Name="xNAUTIxNAVOYGType" sap:label="cds view for /nauti/navoygh" sap:content-version="1">
                 <Key>
@@ -439,6 +533,34 @@
                 <Property Name="currentdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date"/>
                 <Property Name="currenttime" Type="Edm.Time" Precision="0"/>
             </EntityType>
+            <EntityType Name="xNAUTIxVENFBIDPOSTType" sap:label="awarded post" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Voyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Lifnr" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
+                <Property Name="Zcode" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
+                <Property Name="Biddate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
+                <Property Name="Bidtime" Type="Edm.Time" Precision="0" sap:label="Bid Time"/>
+                <Property Name="CodeDesc" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Code Description"/>
+                <Property Name="Value" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Value"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
+                <Property Name="Cunit" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Done by Vendor ?"/>
+                <Property Name="Uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created by"/>
+                <Property Name="Stat" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Status"/>
+                <Property Name="Zmode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Type (Auto/manual)"/>
+                <Property Name="Zcom" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+                <Property Name="Rank" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="" sap:quickinfo="Undefined range (can be used for patch levels)"/>
+                <Property Name="AwrdCreatedBy" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Created By"/>
+                <Property Name="AwrdCreatedOn" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Date" sap:quickinfo="Field of type DATS"/>
+                <Property Name="AwrdCreatedAt" Type="Edm.Time" Precision="0" sap:label="" sap:quickinfo="Field of type TIMS"/>
+            </EntityType>
             <EntityType Name="xNAUTIxVOYAGEHEADERTOITEMType" sap:label="voyage header to item" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Voyno"/>
@@ -508,25 +630,25 @@
                 <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
                 <Property Name="Voyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
             </EntityType>
-            <Association Name="assoc_15DE2C3564A21ED9D16A8C057125B299" sap:content-version="1">
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDDINGHISTORYREPORTType" Multiplicity="1" Role="FromRole_assoc_15DE2C3564A21ED9D16A8C057125B299"/>
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDType" Multiplicity="*" Role="ToRole_assoc_15DE2C3564A21ED9D16A8C057125B299"/>
-            </Association>
-            <Association Name="assoc_688303AE2B5A93FACD114C7FBF30D0E0" sap:content-version="1">
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDDINGHISTORYREPORTType" Multiplicity="1" Role="FromRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0"/>
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" Multiplicity="*" Role="ToRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0"/>
-            </Association>
             <Association Name="assoc_08D7082528529CAB92486F8F9BD11920" sap:content-version="1">
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOSTType" Multiplicity="1" Role="FromRole_assoc_08D7082528529CAB92486F8F9BD11920"/>
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDType" Multiplicity="*" Role="ToRole_assoc_08D7082528529CAB92486F8F9BD11920"/>
             </Association>
-            <Association Name="assoc_052323BC3B7A6CFE6B68E4F06860948D" sap:content-version="1">
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItemType" Multiplicity="1" Role="FromRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGType" Multiplicity="1" Role="ToRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
+            <Association Name="assoc_DBACD242793253DE4F35EDD1AA4CC09D" sap:content-version="1">
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTATUSREPORT_MType" Multiplicity="1" Role="FromRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D"/>
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" Multiplicity="*" Role="ToRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D"/>
+            </Association>
+            <Association Name="assoc_2409FED6CCA27129D2664C9D5A69D143" sap:content-version="1">
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTREPORT_ASSOCType" Multiplicity="1" Role="FromRole_assoc_2409FED6CCA27129D2664C9D5A69D143"/>
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" Multiplicity="*" Role="ToRole_assoc_2409FED6CCA27129D2664C9D5A69D143"/>
             </Association>
             <Association Name="assoc_6D9BD14E9661496A3CFDD20FD22245DD" sap:content-version="1">
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItemType" Multiplicity="1" Role="FromRole_assoc_6D9BD14E9661496A3CFDD20FD22245DD"/>
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDType" Multiplicity="*" Role="ToRole_assoc_6D9BD14E9661496A3CFDD20FD22245DD"/>
+            </Association>
+            <Association Name="assoc_052323BC3B7A6CFE6B68E4F06860948D" sap:content-version="1">
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItemType" Multiplicity="1" Role="FromRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
+                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGType" Multiplicity="1" Role="ToRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
             </Association>
             <Association Name="assoc_F76F1573FA168CB0F603E2AF0A8488E7" sap:content-version="1">
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVOYAGEHEADERTOITEMType" Multiplicity="1" Role="FromRole_assoc_F76F1573FA168CB0F603E2AF0A8488E7"/>
@@ -572,23 +694,20 @@
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTALType" Multiplicity="1" Role="FromRole_assoc_09B6F1A0F494F7331D1AB03050ED840F"/>
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" Multiplicity="*" Role="ToRole_assoc_09B6F1A0F494F7331D1AB03050ED840F"/>
             </Association>
-            <Association Name="assoc_CC3E8019F5763880DD8467E4A10F4474" sap:content-version="1">
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxLIVEFRIEGHTREPORTType" Multiplicity="1" Role="FromRole_assoc_CC3E8019F5763880DD8467E4A10F4474"/>
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" Multiplicity="*" Role="ToRole_assoc_CC3E8019F5763880DD8467E4A10F4474"/>
-            </Association>
-            <Association Name="assoc_0651E102B1AEDC10C2D1877D9C24F80E" sap:content-version="1">
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxLIVEFRIEGHTREPORTType" Multiplicity="1" Role="FromRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E"/>
-                <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDType" Multiplicity="*" Role="ToRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E"/>
-            </Association>
             <EntityContainer Name="NAUTI_BTP_NAUTICAL_TRANSACTIO_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="CharteringSet" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.Chartering" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="xNAUTIxBIDDINGHISTORYREPORT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDDINGHISTORYREPORTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxAPPROVEDCHAT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHATType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxBIDHISREPORT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxBIDITEM" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDITEMType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHARTERING" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGType" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCharteringHeaderItem" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItemType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHARTPURCHASEITEM" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEMType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCHATAPP2" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHATAPP2Type" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCHATAPPRO" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHATAPPROType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCONTAWARDSTATUSREPORT_M" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTATUSREPORT_MType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCONTAWARDSTREPORT_ASSOC" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTREPORT_ASSOCType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCOSTCHARGES" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCOSTCHARGESType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
-                <EntitySet Name="xNAUTIxLIVEFRIEGHTREPORT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxLIVEFRIEGHTREPORTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxMAXZLEVEL" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxMAXZLEVELType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxNAVOYG" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxNAVOYGCT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxNAVYGIP" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
@@ -601,6 +720,7 @@
                 <EntitySet Name="xNAUTIxVENDBID" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxVENDBIDH" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDHType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxVENFBID" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxVENFBIDPOST" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDPOSTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxVOYAGEHEADERTOITEM" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVOYAGEHEADERTOITEMType" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxVoygItem" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVoygItemType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxZCHATVEN" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVENType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
@@ -616,9 +736,9 @@
                     <End EntitySet="xNAUTIxRFQCHARTERING" Role="FromRole_assoc_44EEF35F0979C441DF710799ED52F854"/>
                     <End EntitySet="xNAUTIxNAVOYGCT" Role="ToRole_assoc_44EEF35F0979C441DF710799ED52F854"/>
                 </AssociationSet>
-                <AssociationSet Name="assoc_15DE2C3564A21ED9D16A8C057125B299" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_15DE2C3564A21ED9D16A8C057125B299" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="xNAUTIxBIDDINGHISTORYREPORT" Role="FromRole_assoc_15DE2C3564A21ED9D16A8C057125B299"/>
-                    <End EntitySet="xNAUTIxVENDBID" Role="ToRole_assoc_15DE2C3564A21ED9D16A8C057125B299"/>
+                <AssociationSet Name="assoc_2409FED6CCA27129D2664C9D5A69D143" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_2409FED6CCA27129D2664C9D5A69D143" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="xNAUTIxCONTAWARDSTREPORT_ASSOC" Role="FromRole_assoc_2409FED6CCA27129D2664C9D5A69D143"/>
+                    <End EntitySet="xNAUTIxVENFBID" Role="ToRole_assoc_2409FED6CCA27129D2664C9D5A69D143"/>
                 </AssociationSet>
                 <AssociationSet Name="assoc_B3695BAF95A9C6143CD9BFE694593760" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_B3695BAF95A9C6143CD9BFE694593760" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxVOYAGEHEADERTOITEM" Role="FromRole_assoc_B3695BAF95A9C6143CD9BFE694593760"/>
@@ -628,13 +748,13 @@
                     <End EntitySet="xNAUTIxCHARTPURCHASEITEM" Role="FromRole_assoc_C8CA29C68CB5E57DC38995A500381CA3"/>
                     <End EntitySet="xNAUTIxpaymTerm" Role="ToRole_assoc_C8CA29C68CB5E57DC38995A500381CA3"/>
                 </AssociationSet>
-                <AssociationSet Name="assoc_0651E102B1AEDC10C2D1877D9C24F80E" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_0651E102B1AEDC10C2D1877D9C24F80E" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="xNAUTIxLIVEFRIEGHTREPORT" Role="FromRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E"/>
-                    <End EntitySet="xNAUTIxVENDBID" Role="ToRole_assoc_0651E102B1AEDC10C2D1877D9C24F80E"/>
-                </AssociationSet>
                 <AssociationSet Name="assoc_F76F1573FA168CB0F603E2AF0A8488E7" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_F76F1573FA168CB0F603E2AF0A8488E7" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxVOYAGEHEADERTOITEM" Role="FromRole_assoc_F76F1573FA168CB0F603E2AF0A8488E7"/>
                     <End EntitySet="xNAUTIxBIDITEM" Role="ToRole_assoc_F76F1573FA168CB0F603E2AF0A8488E7"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_DBACD242793253DE4F35EDD1AA4CC09D" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_DBACD242793253DE4F35EDD1AA4CC09D" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="xNAUTIxCONTAWARDSTATUSREPORT_M" Role="FromRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D"/>
+                    <End EntitySet="xNAUTIxVENFBID" Role="ToRole_assoc_DBACD242793253DE4F35EDD1AA4CC09D"/>
                 </AssociationSet>
                 <AssociationSet Name="assoc_7B2571977F753E239DAB974A66773A51" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_7B2571977F753E239DAB974A66773A51" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxRFQCHARTERING" Role="FromRole_assoc_7B2571977F753E239DAB974A66773A51"/>
@@ -656,10 +776,6 @@
                     <End EntitySet="xNAUTIxRFQCHARTERING" Role="FromRole_assoc_521C3427DEFB72C10A81D0BB257840AD"/>
                     <End EntitySet="xNAUTIxNAVYGIP" Role="ToRole_assoc_521C3427DEFB72C10A81D0BB257840AD"/>
                 </AssociationSet>
-                <AssociationSet Name="assoc_CC3E8019F5763880DD8467E4A10F4474" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_CC3E8019F5763880DD8467E4A10F4474" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="xNAUTIxLIVEFRIEGHTREPORT" Role="FromRole_assoc_CC3E8019F5763880DD8467E4A10F4474"/>
-                    <End EntitySet="xNAUTIxVENFBID" Role="ToRole_assoc_CC3E8019F5763880DD8467E4A10F4474"/>
-                </AssociationSet>
                 <AssociationSet Name="assoc_9DEF41BB5E23FFAC835B53A88C0E36EF" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_9DEF41BB5E23FFAC835B53A88C0E36EF" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxRFQPORTAL" Role="FromRole_assoc_9DEF41BB5E23FFAC835B53A88C0E36EF"/>
                     <End EntitySet="xNAUTIxZCHATVEN" Role="ToRole_assoc_9DEF41BB5E23FFAC835B53A88C0E36EF"/>
@@ -667,10 +783,6 @@
                 <AssociationSet Name="assoc_052323BC3B7A6CFE6B68E4F06860948D" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_052323BC3B7A6CFE6B68E4F06860948D" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxCharteringHeaderItem" Role="FromRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
                     <End EntitySet="xNAUTIxCHARTERING" Role="ToRole_assoc_052323BC3B7A6CFE6B68E4F06860948D"/>
-                </AssociationSet>
-                <AssociationSet Name="assoc_688303AE2B5A93FACD114C7FBF30D0E0" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_688303AE2B5A93FACD114C7FBF30D0E0" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="xNAUTIxBIDDINGHISTORYREPORT" Role="FromRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0"/>
-                    <End EntitySet="xNAUTIxVENFBID" Role="ToRole_assoc_688303AE2B5A93FACD114C7FBF30D0E0"/>
                 </AssociationSet>
                 <AssociationSet Name="assoc_B7D3BEF385F9FA6B48FF3207AF99B65D" Association="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.assoc_B7D3BEF385F9FA6B48FF3207AF99B65D" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="xNAUTIxCHARTPURCHASEITEM" Role="FromRole_assoc_B7D3BEF385F9FA6B48FF3207AF99B65D"/>

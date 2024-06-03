@@ -75,6 +75,10 @@ modules:
       - comingenxnauticreatevoyage.zip
       name: comingenxnauticreatevoyage
       target-path: resources/
+    - artifacts:
+      - comingenxnautireport.zip
+      name: comingenxnautireport
+      target-path: resources/
 - name: comingenxnautimasterdashboard
   type: html5
   path: app/masterdashboard
@@ -88,6 +92,16 @@ modules:
 - name: comingenxnauticreatevoyage
   type: html5
   path: app/createvoyage
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautireport
+  type: html5
+  path: app/report
   build-parameters:
     build-result: dist
     builder: custom

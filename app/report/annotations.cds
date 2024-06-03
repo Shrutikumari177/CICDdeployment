@@ -1,0 +1,1 @@
+using nauticalservice as service from '../../srv/service';
