@@ -351,8 +351,29 @@
                                         />
                                     </Toolbar>
                                 </headerToolbar>
+                                 <Table
+                        id="myTable2"
+                        mode="MultiSelect"
+                        selectionChange="onTableSelectionChange"
+                    >
+                        <columns>
+                            <Column>
+                                <Label text="Voyage No" />
+                            </Column>
+                            <Column>
+                                <Label text="Voyage Req No" />
+                            </Column>
+                            <Column>
+                                <Label text="Created By" />
+                            </Column>
+                            <Column>
+                                <Label text="Created At" />
+                            </Column>
+                            <!-- Dynamic Columns will be inserted here by the controller -->
+                        </columns>
+                    </Table>
 
-                            <Table
+                            <!-- <Table
                                 id="myTable2"
                                 items="{VoyApprovalModel>/}"
                                 mode="MultiSelect"
@@ -383,12 +404,12 @@
                                             text="Created On"
                                         />
                                     </Column>
-                                    <!-- <Column id="_IDGenColumn511">
+                                    <Column id="_IDGenColumn511">
                                         <Text
                                             id="_IDGenText611"
                                             text="Created At"
                                         />
-                                    </Column> -->
+                                    </Column>
                                     <Column id="_IDGenColumn611">
                                         <Text
                                             id="_IDGenText711"
@@ -401,12 +422,12 @@
                                             text="Approved On"
                                         />
                                     </Column>
-                                    <!-- <Column id="_IDGenColumn811">
+                                    <Column id="_IDGenColumn811">
                                         <Text
                                             id="_IDGenText911"
                                             text="Approved At"
                                         />
-                                    </Column> -->
+                                    </Column>
                                      <Column id="_IDGenColumn81">
                                         <Text
                                             id="_IDGenText91"
@@ -435,18 +456,18 @@
                                                 id="_IDGenText2111"
                                                 text="{VoyApprovalModel>Zdate}"
                                             />
-                                            <!-- <Text
+                                            <Text
                                                 id="_IDGenText221"
                                                 text="{VoyApprovalModel>Ztime}"
-                                            /> -->
+                                            />
                                             <Text
                                                 id="_IDGenText231"
                                                 text="{VoyApprovalModel>/0/Uname}"
                                             />
-                                            <!-- <Text
+                                            <Text
                                                 id="_IDGenext31"
                                                 text="{}"
-                                            /> -->
+                                            />
                                             <Text
                                                 id="_IDenext31"
                                                 text="{}"
@@ -459,7 +480,7 @@
                                         </cells>
                                     </ColumnListItem>
                                 </items>
-                            </Table>
+                            </Table> -->
                         </Panel>
                                  <Dialog
                                           id="approvalDialog"

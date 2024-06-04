@@ -81,6 +81,7 @@ service nauticalservice {
                 route
         };
 
+
     entity BidMasterSet                as
         projection on NAUTIMASTER_BTP_SRV.BidMasterSet {
             key Bname,
@@ -256,7 +257,9 @@ service nauticalservice {
     entity ZCalculateSet               as projection on NAUTINAUTICALCV_SRV.ZCalculateSet
     entity ZCreatePlanSet              as projection on NAUTINAUTICALCV_SRV.ZCreatePlanSet;
 
-
+   entity xNAUTIxAPPROVEDCHAT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT
+    {        key Creqno, key Chrnmin, key Zlevel, key Uname, key Zdate, key Ztime, Zcomm, Zaction, Zemail     }    
+;
     entity xNAUTIxVOYAGEHEADERTOITEM   as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVOYAGEHEADERTOITEM {
             key Voyno,

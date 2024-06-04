@@ -7,7 +7,7 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
 ;
     
     entity xNAUTIxAPPROVEDCHAT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT
-    {        key Creqno, key Chrnmin, key Zlevel, key Uname, key Zdate, key Ztime, key Rels, key Voyty, key Vesty, key Zgroup, Zcomm, Zaction, Zemail     }    
+    {        key Creqno, key Chrnmin, key Zlevel, key Uname, key Zdate, key Ztime, Zcomm, Zaction, Zemail     }    
 ;
     
     entity xNAUTIxBIDHISREPORT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORT
@@ -19,6 +19,10 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
 ;
     
     entity xNAUTIxCHARTERING as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERING
+    {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin     }    
+;
+    
+    entity xNAUTIxCHARTERINGVALUEHELP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP
     {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin     }    
 ;
     
@@ -34,11 +38,11 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
     {        key Creqno, key Chrnmin     }    
 ;
     
-    entity xNAUTIxCONTAWARDSTATUSREPORT_M as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTATUSREPORT_M
+    entity xNAUTIxCONTAWARDSTREPORT_ASSOC as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTREPORT_ASSOC
     {        key Chrnmin     }    
 ;
     
-    entity xNAUTIxCONTAWARDSTREPORT_ASSOC as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTREPORT_ASSOC
+    entity xNAUTIxCONTAWARDSTATUSREPORT_M as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTATUSREPORT_M
     {        key Chrnmin     }    
 ;
     
@@ -51,7 +55,7 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
 ;
     
     entity xNAUTIxMAXZLEVEL as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxMAXZLEVEL
-    {        key chrnmin, max_zlevel     }    
+    {        key creqno, max_zlevel     }    
 ;
     
     entity xNAUTIxNAVOYG as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG
@@ -72,6 +76,10 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
     
     entity xNAUTIxRFQPORTAL as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL
     {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo     }    
+;
+    
+    entity xNAUTIxSUBMITQUATATIONFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONFETCH
+    {        key Voyno, Lifnr, Chrnmin, Vimono, Vname, Biddate, Bidtime     }    
 ;
     
     entity xNAUTIxSUBMITQUATATIONPOST as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOST
@@ -110,11 +118,11 @@ service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
     {        key Chrnmin, key Lifnr, Voyno     }    
 ;
     
-    entity xNAUTIxpaymTerm as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpaymTerm
-    {        key Paytrm, Paytrmtxt     }    
-;
-    
     entity xNAUTIxpurchGroup as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpurchGroup
     {        key Ekgrp, Eknam     }    
+;
+    
+    entity xNAUTIxpaymTerm as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpaymTerm
+    {        key Paytrm, Paytrmtxt     }    
 ;
 }

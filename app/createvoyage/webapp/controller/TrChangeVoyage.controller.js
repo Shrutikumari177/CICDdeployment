@@ -102,8 +102,8 @@ sap.ui.define(
             },
             onObjectMatched(oEvent) {
                 let that = this;
-                // that._BusyDialog = new sap.m.BusyDialog();
-                // that._BusyDialog.open(); 
+                that._BusyDialog = new sap.m.BusyDialog();
+                that._BusyDialog.open(); 
                
                 tempDataArr = [];
                 myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
@@ -192,15 +192,16 @@ sap.ui.define(
 
                     } else {
                         console.warn("Entity with VOYAGE_NO:", myVOYNO, "not found.");
+                        new sap.m.MessageBox.error("Error Occured");
                     }
                 }).catch(function (oError) {
                     console.error("Error fetching entity:", oError);
                 }).finally(function (){
-                    // if( that._BusyDialog){
+                    if( that._BusyDialog){
 
-                    //     that._BusyDialog.close();
-                    //     console.log("busy Dialog closed fn");
-                    // }
+                        that._BusyDialog.close();
+                        console.log("busy Dialog closed ");
+                    }
 
                 });
 
@@ -247,7 +248,7 @@ sap.ui.define(
                         console.log({ ErrorResponse: templateData });
                     }
                     clearTimeout(that._BusyTimeout);
-                    // that._BusyDialog.close();
+            
                 });
             },
 
@@ -1851,7 +1852,7 @@ sap.ui.define(
             sendApproval: function (oEvent) {
                 let payload = {
                     "Vreqno": "",
-                    "Voyno": c,
+                    "Voyno": myVOYNO,
                     "Zemail":"sarath.venkateswara@ingenxtec.com"
 
                 }

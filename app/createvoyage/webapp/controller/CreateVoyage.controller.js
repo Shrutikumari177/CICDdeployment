@@ -684,7 +684,7 @@ sap.ui.define(
               onClose: function () {
 
                 console.log("sent voyage no. :", oData.Voyno)
-                sap.ui.core.BusyIndicator.show(0);
+                
                 oRouter.navTo("RouteTrChangeVoyage", {
                   "VOYAGE_NO": oData.Voyno
                 });

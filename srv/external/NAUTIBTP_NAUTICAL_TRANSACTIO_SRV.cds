@@ -1,4 +1,4 @@
-/* checksum : 5de183f02ee17c21b594239c1c7356ea */
+/* checksum : 3de2bf2491bc4c916cacf5eba76fd274 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -263,18 +263,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT {
   key Zdate : Date not null;
   @sap.label : 'Time'
   key Ztime : Time not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Release Strategy'
-  key Rels : String(10) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Voyage Type'
-  key Voyty : String(4) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Vessel Type'
-  key Vesty : String(4) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'User ID group'
-  key Zgroup : String(12) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Comments'
   Zcomm : String(250);
@@ -726,6 +714,118 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
+@sap.label : 'chartering value help'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Ext.No'
+  Chrnmex : String(20);
+  @sap.display.format : 'Date'
+  @sap.label : 'Creation Date'
+  @sap.quickinfo : 'Charter Request Creation Date'
+  Chrcdate : Date;
+  @sap.label : 'Creation Time'
+  @sap.quickinfo : 'Charter Request Creation Time'
+  Chrctime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding Start Date'
+  Chrqsdate : Date;
+  @sap.label : 'Bidding Start Time'
+  Chrqstime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding End Date'
+  Chrqedate : Date;
+  @sap.label : 'Bidding End Time'
+  Chrqetime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Quot.Deadline Date'
+  @sap.quickinfo : 'Charter Quatation Deadline date'
+  Chrqdate : Date;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Purchase Org'
+  @sap.quickinfo : 'Charter Purchase Organization'
+  Chrporg : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pur.Org.Name'
+  @sap.quickinfo : 'Charter Purchase Organization name'
+  Chrporgn : String(40);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Purchase Group'
+  @sap.quickinfo : 'Charter Purchase Group'
+  Chrpgrp : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pur.Grp.Name'
+  @sap.quickinfo : 'Charter Purchase Group Name'
+  Chrpgrpn : String(30);
+  @sap.label : 'Exch.Rate'
+  @sap.quickinfo : 'Exhange Rate'
+  Chrexcr : Decimal(14, 0);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Payment Terms'
+  Chrpayt : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Pay.term.dis'
+  @sap.quickinfo : 'Chartering payterms description'
+  Chrpaytxt : String(30);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Inco Terms'
+  Chrinco : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chate.Incotrm.dis'
+  @sap.quickinfo : 'Chartering inco terms description'
+  Chrincodis : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Inco Location'
+  @sap.quickinfo : 'Incoterms Location'
+  Chrincol : String(70);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Mat.'
+  @sap.quickinfo : 'Material'
+  Cimater : String(18);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Material Short Text'
+  Cimatdes : String(40);
+  @sap.unit : 'Ciuom'
+  @sap.label : 'Quantity'
+  Ciqty : Decimal(17, 0);
+  @sap.label : 'Unit of Measure'
+  @sap.semantics : 'unit-of-measure'
+  Ciuom : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  Voyno : String(20);
+  @sap.label : 'Voyage name'
+  @sap.quickinfo : 'Voyage Name'
+  Voynm : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor Code'
+  Chrven : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor Name'
+  Chrvenn : String(35);
+  @sap.label : 'Freight Currency'
+  @sap.semantics : 'currency-code'
+  Ciprec : String(5);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Indicator'
+  @sap.quickinfo : 'General Flag'
+  Zdelete : Boolean;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Reference Chartering'
+  @sap.quickinfo : 'Reference Chartering No.'
+  RefChrnmin : String(10);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
 @sap.label : 'Chartering Purchase Group'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEM {
   @sap.display.format : 'UpperCase'
@@ -878,9 +978,9 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCOSTCHARGES {
 @sap.label : 'max level charmin'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxMAXZLEVEL {
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Chartering Req. No.'
-  @sap.quickinfo : 'Charter No'
-  key chrnmin : String(10) not null;
+  @sap.label : 'Chartering Approval'
+  @sap.quickinfo : 'Chartering Approval Request Number'
+  key creqno : String(10) not null;
   max_zlevel : String(2);
 };
 
@@ -1279,6 +1379,41 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL {
   toassociation1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {  };
   @cds.ambiguous : 'missing on condition?'
   toassociation2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'SubmitQuotationFetch'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONFETCH {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  Lifnr : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  Chrnmin : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel IMO Number'
+  Vimono : String(40);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel Name'
+  Vname : String(40);
+  @sap.display.format : 'Date'
+  @sap.label : 'Bid Date'
+  Biddate : Date;
+  @sap.label : 'Bid Time'
+  Bidtime : Time;
+  @cds.ambiguous : 'missing on condition?'
+  tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true

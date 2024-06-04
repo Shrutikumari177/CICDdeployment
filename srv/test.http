@@ -2,25 +2,25 @@
 ### getting Header details
 
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tobiditem
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034
 
 ### getting
 
 ###hkjh
 
-GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000191',Voyno='1000000161',Zlevel='02',Uname='PANKAJ.J')
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxgetvoyapproval?$filter=Voyno eq '1000000163'
 
 ### Put for voyage approval
-PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000191',Voyno='1000000161',Zlevel='02',Uname='PANKAJ.J')
+PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000192',Voyno='1000000163',Zlevel='03',Uname='PIYUSH')
 Content-Type: application/json
 
 {
      
-      "Zcomm": "testING APPROVARED",
+      "Zcomm": "APPROVARED3",
       "Zaction": "APPR"
-    }
+}
    
-###vhd
+### voyage approval post
 POST http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet
 Content-Type: application/json
 

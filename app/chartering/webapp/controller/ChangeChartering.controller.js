@@ -364,7 +364,7 @@ sap.ui.define(
               "Voyno": oVoyno,
               "Voynm": oVoynm,
 
-              "Zdelete": true,
+              "Zdelete": false,
             }
           });
           console.log("created............");

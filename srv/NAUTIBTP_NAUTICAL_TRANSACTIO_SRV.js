@@ -9,11 +9,12 @@ module.exports = async (srv) =>
       srv.on('READ', 'xNAUTIxBIDHISREPORT', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxBIDITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCHARTERING', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+      srv.on('READ', 'xNAUTIxCHARTERINGVALUEHELP', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCHARTPURCHASEITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCHATAPP2', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCHATAPPRO', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-      srv.on('READ', 'xNAUTIxCONTAWARDSTATUSREPORT_M', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCONTAWARDSTREPORT_ASSOC', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+      srv.on('READ', 'xNAUTIxCONTAWARDSTATUSREPORT_M', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCOSTCHARGES', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxCharteringHeaderItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxMAXZLEVEL', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
@@ -22,6 +23,7 @@ module.exports = async (srv) =>
       srv.on('READ', 'xNAUTIxNAVYGIP', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxRFQCHARTERING', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxRFQPORTAL', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+      srv.on('READ', 'xNAUTIxSUBMITQUATATIONFETCH', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxSUBMITQUATATIONPOST', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxVEND', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxVENDBID', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
@@ -31,6 +33,6 @@ module.exports = async (srv) =>
       srv.on('READ', 'xNAUTIxVOYAGEHEADERTOITEM', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxVoygItem', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxZCHATVEN', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
-      srv.on('READ', 'xNAUTIxpaymTerm', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
       srv.on('READ', 'xNAUTIxpurchGroup', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
+      srv.on('READ', 'xNAUTIxpaymTerm', req => NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.run(req.query)); 
 }

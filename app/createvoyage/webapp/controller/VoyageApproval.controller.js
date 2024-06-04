@@ -21,18 +21,49 @@ sap.ui.define(
         this.getView().setModel(oModel, "dataModel");
 
         let oModel3 = this.getOwnerComponent().getModel();
-        let oBindList3 = oModel3.bindList("/xNAUTIxvoyapproval1");
+        let oBindList3 = oModel3.bindList("/voyapprovalSet");
         oBindList3.requestContexts(0, Infinity).then(function (aContexts) {
           aContexts.forEach(function (oContext) {
             getModelData.push(oContext.getObject());
           });
           oModel.setData(getModelData);
-          console.log(getModelData, "hello");
+          console.log("Voyage approcal total data", getModelData, getModelData.length);
         }.bind(this))
+        let testData = [ {
+          "Vreqno": "2000000191",
+          "Zemail": "",
+          "Voyno": "1000000161",
+          "Zlevel": "03",
+          "Uname": "PIYUSH",
+          "Zdate": "2024-06-03T00:00:00Z",
+          "Ztime": "10:32:03",
+          "Zcomm": "",
+          "Zaction": "PEND"
+        },
+        {
+          "Vreqno": "2000000191",
+          "Zemail": "",
+          "Voyno": "1000000161",
+          "Zlevel": "01",
+          "Uname": "A.SHARMA",
+          "Zdate": "2024-06-03T00:00:00Z",
+          "Ztime": "08:36:08",
+          "Zcomm": "test appr",
+          "Zaction": "APPR"
+        },
+        {
+          "Vreqno": "2000000191",
+          "Zemail": "",
+          "Voyno": "1000000161",
+          "Zlevel": "02",
+          "Uname": "PANKAJ.J",
+          "Zdate": "2024-06-03T00:00:00Z",
+          "Ztime": "08:37:31",
+          "Zcomm": "testING APPROVARED",
+          "Zaction": "APPR"
+        }]
 
       },
-
-
       ValueHelpVoyage: function () {
         var oView = this.getView();
 
@@ -44,6 +75,84 @@ sap.ui.define(
         this._opurchaseGroup.open();
 
       },
+      createDynamicColumns: function() {
+        var oView = this.getView();
+        var oTable = oView.byId("myTable2");
+        var oModel = oView.getModel("VoyApprovalModel");
+        var aData = oModel.getData();
+        var aColumns = oTable.getColumns();
+
+        // Clear existing dynamic columns (keep the first 4 static columns)
+        for (var i = aColumns.length - 1; i >= 4; i--) {
+            oTable.removeColumn(aColumns[i]);
+        }
+
+        // Extract unique Zlevels for dynamic columns
+        var aUniqueLevels = [...new Set(aData.map(item => item.Zlevel))];
+
+        // Create dynamic columns for each level
+        aUniqueLevels.forEach(function (sLevel) {
+            var oApproverColumn = new sap.m.Column({
+                header: new sap.m.Label({ text: "Approver " + sLevel })
+            });
+            var oStatusColumn = new sap.m.Column({
+                header: new sap.m.Label({ text: "Status " + sLevel })
+            });
+            // var oApprovedOnColumn = new sap.m.Column({
+            //     header: new sap.m.Label({ text: "Approved On " + sLevel })
+            // });
+
+            oTable.addColumn(oApproverColumn);
+            oTable.addColumn(oStatusColumn);
+            // oTable.addColumn(oApprovedOnColumn);
+        });
+
+        // Create a new template for the table rows
+        var oTemplate = new sap.m.ColumnListItem({
+            cells: [
+                new sap.m.Text({ text: "{VoyApprovalModel>Voyno}" }),
+                new sap.m.Text({ text: "{VoyApprovalModel>Vreqno}" }),
+                new sap.m.Text({ text: "{VoyApprovalModel>Uname}" }),
+                // new sap.m.Text({ text: "{VoyApprovalModel>Zdate}" })
+            ]
+        });
+
+        // Add dynamic cells based on Zlevel
+        aUniqueLevels.forEach(function (sLevel) {
+            oTemplate.addCell(new sap.m.Text({
+                text: {
+                    path: 'VoyApprovalModel>',
+                    formatter: function (oContext) {
+                        return oContext.Zlevel === sLevel ? oContext.Uname : "";
+                    }
+                }
+            }));
+            oTemplate.addCell(new sap.m.Text({
+                text: {
+                    path: 'VoyApprovalModel>',
+                    formatter: function (oContext) {
+                        return oContext.Zlevel === sLevel ? oContext.Zaction : "";
+                    }
+                }
+            }));
+            oTemplate.addCell(new sap.m.Text({
+                text: {
+                    path: 'VoyApprovalModel>',
+                    formatter: function (oContext) {
+                        return oContext.Zlevel === sLevel ? oContext.Zdate : "";
+                    }
+                }
+            }));
+        });
+
+        // Bind the items aggregation of the table to the model
+        oTable.bindItems({
+            path: "VoyApprovalModel>/",
+            template: oTemplate
+        });
+    },
+
+    
       VoyageValueHelpClose: function (evt) {
 
         var oMultiInput = this.byId("VoyageNo");
@@ -59,10 +168,11 @@ sap.ui.define(
 
         if (!oModel) {
           oModel = new sap.ui.model.json.JSONModel();
-          this.getView().setModel(oModel, "VoyApprovalModel")
-
+          this.getView().setModel(oModel, "VoyApprovalModel");
+          // this.getView().getModel("VoyApprovalModel").refresh();
+          
         }
-
+        
         var aExistingTokens = oMultiInput.getTokens();
         var aExistingTokens2 = oDescriptionInput.getTokens();
         if (aSelectedContexts && aSelectedContexts.length > 0) {
@@ -76,7 +186,7 @@ sap.ui.define(
           }).filter(function (value) {
             return value !== null;
           });
-
+          
           selectedValues2 = aSelectedContexts.map(function (oContext) {
             var sPath = oContext.getPath();
             var match = /Vreqno='(\d+)'/g.exec(sPath);
@@ -87,7 +197,7 @@ sap.ui.define(
           }).filter(function (value) {
             return value !== null;
           });
-
+          
           console.log("Selected Values2:", selectedValues2);
           console.log("Selected Values:", selectedValues);
           selectedValues = Array.from(new Set(selectedValues));
@@ -111,48 +221,33 @@ sap.ui.define(
               }));
             }
           });
-
+          
           oVBox.setVisible(false)
           var aFilteredData = getModelData.filter(function (data) {
             return selectedValues.includes(data.Voyno);
           });
           console.log("aFilteredData", aFilteredData);
-
-          var aCombinedData = aExistingData.concat(aFilteredData);
-
-          aCombinedData = aCombinedData.filter((entry, index, self) =>
-            index === self.findIndex((t) => (
-              (t.Voyno === entry.Voyno && t.Vreqno === entry.Vreqno)
-            ))
-          );
-          console.log("aCombinedData", aCombinedData);
-          oModel.setData(aCombinedData);
-
-          console.log("Filtered data based on selected vendors:", aFilteredData);
-        } else {
-
-          oVBox.setVisible(false);
-        }
-        var oTable = this.byId("myTable")
-        oTable.setVisible(true);
-        console.log(selectedValues, "ye bhi ha")
+          
+          // var aCombinedData = aExistingData.concat(aFilteredData);
+          
+          // aCombinedData = aCombinedData.filter((entry, index, self) =>
+          // index === self.findIndex((t) => (
+          //   (t.Voyno === entry.Voyno && t.Vreqno === entry.Vreqno)
+          //   ))
+          //   );
+          //   console.log("aCombinedData", aCombinedData);
+            oModel.setData(aFilteredData);
+            
+            // console.log("Filtered data based on selected vendors:", aFilteredData);
+          } else {
+            
+            oVBox.setVisible(false);
+          }
+          var oTable = this.byId("myTable")
+          oTable.setVisible(true);
+          console.log(selectedValues, "ye bhi ha")
+          this.createDynamicColumns();
       },
-
-
-      //    voyno() {
-      //     // alert("fcvg");
-      //     // create dialog lazily
-      //     this.pDialog ??= this.loadFragment({
-      //         name: "com.ingenx.nauti.chartering.view.voyagefrag"
-      //     });
-
-      //     this.pDialog.then((oDialog) => oDialog.open());
-      // },  
-
-
-
-
-
 
       onSelectionChange: function (oEvent) {
         var selectedItem = oEvent.getParameter("selectedItem").getText();
@@ -436,6 +531,16 @@ sap.ui.define(
         var oTable = this.byId("myTable")
         oTable.setVisible(true);
         console.log(selectedValues, "ye bhi ha")
+      },
+
+
+      onVoyageSearch1: function (oEvent) {
+        // debugger;
+        var sValue = oEvent.getParameter("value");
+ 
+        var oFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, sValue);
+ 
+        oEvent.getSource().getBinding("items").filter([oFilter]);
       },
 
 
