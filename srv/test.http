@@ -8,10 +8,10 @@ GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/10
 
 ###hkjh
 
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxgetvoyapproval?$filter=Voyno eq '1000000163'
+GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet
 
 ### Put for voyage approval
-PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000192',Voyno='1000000163',Zlevel='03',Uname='PIYUSH')
+PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000206',Voyno='1000000168',Zlevel='01',Uname='A.SHARMA')
 Content-Type: application/json
 
 {

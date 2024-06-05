@@ -1,0 +1,42 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Popover id="hintPopover" title="Technical Details" showHeader="true">
+        <Table id="_IDGenTable1" fixedLayout="false" alternateRowColors="true" sticky="ColumnHeaders">
+            <columns>
+                <Column id="_IDGenColumn21">
+                    <Text id="_IDGenText21" text="Value" />
+                </Column>
+                <Column id="_IDGenColumn22">
+                    <Text id="_IDGenText22" text="Relevant for Bidding" />
+                </Column>
+                <Column id="_IDGenColumn23">
+                    <Text id="_IDGenText23" text="Good to have" />
+                </Column>
+                <Column id="_IDGenColumn24">
+                    <Text id="_IDGenText24" text="Mandatory" />
+                </Column>
+                <Column id="_IDGenColumn25">
+                    <Text id="_IDGenText25" text="Must not have" />
+                </Column>
+                <Column id="_IDGenColumn26">
+                    <Text id="_IDGenText26" text="Minimum Score" />
+                </Column>
+                <Column id="_IDGenColumn27">
+                    <Text id="_IDGenText27" text="Maximum Score" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem5">
+                    <cells>
+                        <Text id="_IDGenText28" text="{popoverModel>/Cvalue}" />
+                        <CheckBox id="_IDGenCheckBox11" selected="{popoverModel>/RevBid}" editable="false" />
+                        <CheckBox id="_IDGenCheckBox12" selected="{path: 'popoverModel>/Good', formatter: '.booleanFormatter'}" editable="false" />
+                        <CheckBox id="_IDGenCheckBox13" selected="{path: 'popoverModel>/Mand', formatter: '.booleanFormatter'}" editable="false" />
+                        <CheckBox id="_IDGenCheckBox14" selected="{path: 'popoverModel>/Must', formatter: '.booleanFormatter'}" editable="false" />
+                        <Text id="_IDGenText29" text="{popoverModel>/Zmin}" />
+                        <Text id="_IDGenText30" text="{popoverModel>/Zmax}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Popover>
+</core:FragmentDefinition>

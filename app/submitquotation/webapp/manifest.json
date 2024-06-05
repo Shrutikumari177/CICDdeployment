@@ -128,7 +128,7 @@
         },
         {
           "name": "RouteBidding",
-          "pattern": "biddingDetail/{path}",
+          "pattern": "biddingDetail",
           "target":[ "TargetBidDetail"]
         }
       ],

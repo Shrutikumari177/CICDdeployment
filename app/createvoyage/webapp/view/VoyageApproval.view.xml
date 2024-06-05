@@ -351,13 +351,13 @@
                                         />
                                     </Toolbar>
                                 </headerToolbar>
-                                 <Table
+                    <Table
                         id="myTable2"
                         mode="MultiSelect"
                         selectionChange="onTableSelectionChange"
                     >
                         <columns>
-                            <Column>
+                            <!-- <Column>
                                 <Label text="Voyage No" />
                             </Column>
                             <Column>
@@ -368,7 +368,7 @@
                             </Column>
                             <Column>
                                 <Label text="Created At" />
-                            </Column>
+                            </Column> -->
                             <!-- Dynamic Columns will be inserted here by the controller -->
                         </columns>
                     </Table>

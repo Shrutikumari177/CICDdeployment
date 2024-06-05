@@ -482,6 +482,7 @@
                             path: '/CargoUnitSet'
                         }"
                         selectedKey="{voyHeaderModel>/0/Cargu}"
+                        
                         forceSelection="false"
                         
                     >

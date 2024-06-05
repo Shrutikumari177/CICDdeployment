@@ -154,7 +154,8 @@ sap.ui.define(
         setTimeout(() => { that._renderMap(); }, 500);
         window.addEventListener("resize", (e) => {
           setTimeout(() => {
-            if (!map?.getContainer()?.childElementCount) {
+            // if (!map?.getContainer()?.childElementCount) {
+              if  (map && map.getContainer() && map.getContainer().childElementCount === 0) {
               map.remove();
               that._renderMap();
             } else {

@@ -89,7 +89,7 @@
                                     iconSrc="sap-icon://open-folder"
                                     iconVisible="true"
                                     statusText="Active"
-                                    subtitle="Bids: 0 Open"
+                                    subtitle="Bids: {bidtilemodel>/Open}"
                                     title="Open"
                                     titleMaxLines="30"
                                     press="pressOpen"
@@ -108,10 +108,11 @@
                                     iconSrc="sap-icon://folder-full"
                                     iconVisible="true"
                                     statusText="Active"
-                                    subtitle="Bids: 0 Closed"
-                                    title="Close"
+                                    subtitle="Bids: {bidtilemodel>/Closed}"
+                                    title="Closed"
                                     titleMaxLines="30"
                                     press="pressClose"
+									class="closed_filter"
                                 />
                             </f:header>
                 </f:Card>
@@ -127,7 +128,7 @@
                                     iconSrc="sap-icon://browse-folder"
                                     iconVisible="true"
                                     statusText="Active"
-                                    subtitle="Bids: 0 All"
+                                    subtitle="Bids: {bidtilemodel>/All}"
                                     title="All"
                                     titleMaxLines="30"
                                     press="pressAll"
@@ -217,7 +218,7 @@
 												
 													<!-- <Text text="{charterlist>status}"/> -->
 													<ObjectStatus id="_IDGenObjectStatus1"
-														text="{charteringRequestModel>Stat}"
+														text="{path:'charteringRequestModel>Stat',formatter:'.statusFormat'}"
 														
 													/>
 													<!-- <Text text=""/>

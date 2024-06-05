@@ -75,83 +75,8 @@ sap.ui.define(
         this._opurchaseGroup.open();
 
       },
-      createDynamicColumns: function() {
-        var oView = this.getView();
-        var oTable = oView.byId("myTable2");
-        var oModel = oView.getModel("VoyApprovalModel");
-        var aData = oModel.getData();
-        var aColumns = oTable.getColumns();
-
-        // Clear existing dynamic columns (keep the first 4 static columns)
-        for (var i = aColumns.length - 1; i >= 4; i--) {
-            oTable.removeColumn(aColumns[i]);
-        }
-
-        // Extract unique Zlevels for dynamic columns
-        var aUniqueLevels = [...new Set(aData.map(item => item.Zlevel))];
-
-        // Create dynamic columns for each level
-        aUniqueLevels.forEach(function (sLevel) {
-            var oApproverColumn = new sap.m.Column({
-                header: new sap.m.Label({ text: "Approver " + sLevel })
-            });
-            var oStatusColumn = new sap.m.Column({
-                header: new sap.m.Label({ text: "Status " + sLevel })
-            });
-            // var oApprovedOnColumn = new sap.m.Column({
-            //     header: new sap.m.Label({ text: "Approved On " + sLevel })
-            // });
-
-            oTable.addColumn(oApproverColumn);
-            oTable.addColumn(oStatusColumn);
-            // oTable.addColumn(oApprovedOnColumn);
-        });
-
-        // Create a new template for the table rows
-        var oTemplate = new sap.m.ColumnListItem({
-            cells: [
-                new sap.m.Text({ text: "{VoyApprovalModel>Voyno}" }),
-                new sap.m.Text({ text: "{VoyApprovalModel>Vreqno}" }),
-                new sap.m.Text({ text: "{VoyApprovalModel>Uname}" }),
-                // new sap.m.Text({ text: "{VoyApprovalModel>Zdate}" })
-            ]
-        });
-
-        // Add dynamic cells based on Zlevel
-        aUniqueLevels.forEach(function (sLevel) {
-            oTemplate.addCell(new sap.m.Text({
-                text: {
-                    path: 'VoyApprovalModel>',
-                    formatter: function (oContext) {
-                        return oContext.Zlevel === sLevel ? oContext.Uname : "";
-                    }
-                }
-            }));
-            oTemplate.addCell(new sap.m.Text({
-                text: {
-                    path: 'VoyApprovalModel>',
-                    formatter: function (oContext) {
-                        return oContext.Zlevel === sLevel ? oContext.Zaction : "";
-                    }
-                }
-            }));
-            oTemplate.addCell(new sap.m.Text({
-                text: {
-                    path: 'VoyApprovalModel>',
-                    formatter: function (oContext) {
-                        return oContext.Zlevel === sLevel ? oContext.Zdate : "";
-                    }
-                }
-            }));
-        });
-
-        // Bind the items aggregation of the table to the model
-        oTable.bindItems({
-            path: "VoyApprovalModel>/",
-            template: oTemplate
-        });
-    },
-
+      
+      
     
       VoyageValueHelpClose: function (evt) {
 
@@ -176,6 +101,7 @@ sap.ui.define(
         var aExistingTokens = oMultiInput.getTokens();
         var aExistingTokens2 = oDescriptionInput.getTokens();
         if (aSelectedContexts && aSelectedContexts.length > 0) {
+
           selectedValues = aSelectedContexts.map(function (oContext) {
             var sPath = oContext.getPath();
             var match = /Voyno='(\d+)'/g.exec(sPath);
@@ -183,6 +109,7 @@ sap.ui.define(
             var VoynoValue = match ? match[1] : null;
             console.log("VoynoValue", VoynoValue);
             return VoynoValue;
+
           }).filter(function (value) {
             return value !== null;
           });
@@ -236,18 +163,105 @@ sap.ui.define(
           //   ))
           //   );
           //   console.log("aCombinedData", aCombinedData);
-            oModel.setData(aFilteredData);
+            // oModel.setData(aFilteredData);
             
             // console.log("Filtered data based on selected vendors:", aFilteredData);
           } else {
             
             oVBox.setVisible(false);
           }
-          var oTable = this.byId("myTable")
+          var oTable = this.byId("myTable2")
           oTable.setVisible(true);
           console.log(selectedValues, "ye bhi ha")
-          this.createDynamicColumns();
+          
+          let testData = aFilteredData;
+          let transformedData = {
+            voyageNo: testData[0].Voyno,
+            VoyageRequest: testData[0].Vreqno,
+            Approvers: testData.map(item => ({
+              Zlevel: item.Zlevel,
+              Uname: item.Uname,
+                Ztime: item.Ztime,
+                Zcomm: item.Zcomm,
+                Zdate: item.Zdate,
+                Zaction: item.Zaction,
+                Zemail: item.Zemail
+              }))
+            };
+            let that = this;
+            
+            console.log(transformedData);
+            oModel.setData([transformedData]);
+
+            that.createDynamicColumns(transformedData.Approvers);
       },
+      createDynamicColumns: function (approvers) {
+        var oTable = this.getView().byId("myTable2");
+        var oColumnTemplate = new sap.m.Text(); // Column template for text
+
+        // Remove existing columns (except fixed columns)
+        oTable.removeAllColumns();
+
+        // Add fixed columns
+        oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: "Approval Req No" })
+        }));
+        oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: "Voyage No" })
+        }));
+        oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: "Created By" })
+        }));
+        oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: "Created On" })
+        }));
+
+        // Add dynamic columns for approvers
+        approvers.forEach((approver, index) => {
+            if (approver.Zlevel !== "00") {
+                var approverIndex = index ; // Dynamic index for column headers
+                oTable.addColumn(new sap.m.Column({
+                    header: new sap.m.Label({ text: "Approver " + approverIndex })
+                }));
+                oTable.addColumn(new sap.m.Column({
+                    header: new sap.m.Label({ text: "Status " + approverIndex })
+                }));
+            }
+        });
+
+        // Bind items to table
+        let that  = this;
+        oTable.bindItems({
+            path: "VoyApprovalModel>/",
+            template: new sap.m.ColumnListItem({
+                cells: that.createCells(approvers)
+            })
+        });
+    },
+
+      createCells: function (approvers) {
+        var cells = [];
+
+        // Fixed cells
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>VoyageRequest}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>voyageNo}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Approvers/0/Uname}" })); // Assuming first approver is the creator
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Approvers/0/Zdate}" }));
+
+        // Dynamic cells for approvers
+        approvers.forEach((approver, index) => {
+            if (approver.Zlevel !== "00") {
+                cells.push(new sap.m.Text({
+                    text: "{VoyApprovalModel>Approvers/" + index + "/Uname}"
+                }));
+                cells.push(new sap.m.Text({
+                    text: "{VoyApprovalModel>Approvers/" + index + "/Zaction}"
+                }));
+            }
+        });
+
+        return cells;
+    },
 
       onSelectionChange: function (oEvent) {
         var selectedItem = oEvent.getParameter("selectedItem").getText();
@@ -420,14 +434,7 @@ sap.ui.define(
           }.bind(this));
         }
       },
-      // CharterNo: function () {
-      //   var oView = this.getView();
-      //   if (!this.oChartering) {
-      //     this.oChartering = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.chartering.fragments.charter", this);
-      //     oView.addDependent(this.oChartering);
-      //   }
-      //   this.oChartering.open();
-      // },
+     
 
       ValueHelpVoyage: function () {
 

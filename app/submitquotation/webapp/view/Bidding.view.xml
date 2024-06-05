@@ -4,10 +4,12 @@
     controllerName="com.ingenx.nauti.submitquotation.controller.Bidding"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     displayBlock="true"
     height="100%"
     busyIndicatorDelay="0"
+
 >
     <Page
         id="_IDGenPage1"
@@ -25,12 +27,13 @@
                 <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
                     <l:BlockLayoutCell
                         id="_IDGenBlockLayoutCell1"
-                        title="Details for Charter: 2000001"
+                        title="Details for Charter: {headerDetailModel>/charterNo}"
                     >
                         <l:HorizontalLayout
                             id="_IDGenHorizontalLayout1"
                             allowWrapping="false"
                         >
+                        <!-- chartering data detail's header box -->
                             <form:SimpleForm
                                 id="_IDGenSimpleForm1"
                                 editable="false"
@@ -44,7 +47,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                    text="{= ${headerDetailModel>/voyageType} ? ${headerDetailModel>/voyageType} : 'N/A' }"
+                                    text="{headerDetailModel>/voyageType}"
                                     id="voyageType"
                                 />
                                 <Label
@@ -54,7 +57,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                    text="{= ${headerDetailModel>/vesselType} ? ${headerDetailModel>/vesselType} : 'N/A' }"
+                                    text="{headerDetailModel>/vesselType}"
                                     id="vesselType"
                                 />
                             </form:SimpleForm>
@@ -71,7 +74,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                text="{= ${headerDetailModel>/bStartDate} + ' ' + ${headerDetailModel>/bStartTime} ? ${headerDetailModel>/bStartDate}+' '+ ${headerDetailModel>/bStartTime} : 'N/A' }"
+                                text="{parts: [{path: 'headerDetailModel>/bStartDate'}, {path: 'headerDetailModel>/bStartTime'}], formatter: '.formatter.formatDateTime'}"
                                  id="bidStart"
                                 />
                                 <Label
@@ -81,7 +84,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                    text="{= ${headerDetailModel>/bEndDate} + ' ' + ${headerDetailModel>/bEndTime} ? ${headerDetailModel>/bEndDate}+' '+ ${headerDetailModel>/bEndTime} : 'N/A' }"
+                                    text="{parts: [{path: 'headerDetailModel>/bEndDate'}, {path: 'headerDetailModel>/bEndTime'}], formatter: '.formatter.formatDateTime'}"
                                     id="bidEnd"
                                 />
                             </form:SimpleForm>
@@ -98,7 +101,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                    text="{= ${headerDetailModel>/biddingType} ? ${headerDetailModel>/biddingType} : 'N/A' }"
+                                    text="{headerDetailModel>/biddingType}"
                                     id="biddingType"
                                 />
                                 <Label
@@ -108,7 +111,7 @@
                                     design="Bold"
                                 />
                                 <Text
-                                     text="{= ${headerDetailModel>/Currency} ? ${headerDetailModel>/Currency} : 'N/A' }"
+                                     text="{headerDetailModel>/Currency}"
                                     id="currency"
                                 />
                             </form:SimpleForm>
@@ -128,7 +131,9 @@
                                 <IconTabFilter
                                     id="_IDGenIconTabFilter1"
                                     text="Voyage Details"
+                                    key="tab1"
                                 >
+                                <!-- Voyage detail's table code-->
                                     <table:Table
                                         id="idPortTab"
                                         selectionMode="None"
@@ -315,28 +320,7 @@
                                         </table:columns>
                                     </table:Table>
                                 </IconTabFilter>
-                                <!-- <IconTabFilter id="_IDGenIconTabFilter7"
-									text="Vessel Details"
-									visible="true"
-								>
-									<form:SimpleForm id="_IDGenSimpleForm9"
-										editable="false"
-										backgroundDesign="Transparent"
-										width="120%"
-									>
-										<Label id="_IDGenLabel34" text="Vessel Name"/>
-										<Text id="_IDGenText35"
-											width="10rem"
-											text="name"
-										/>
-										<Label id="_IDGenLabel36" text="Vessel IMO No"/>
-										<Text id="_IDGenText37"
-											width="10rem"
-											text="Vimo"
-										/>
-									</form:SimpleForm>
-								</IconTabFilter> -->
-
+                              
                                 <IconTabFilter
                                     id="_IDGenIconTabFilter4"
                                     text="Submit Vessel Details"
@@ -368,9 +352,301 @@
                                         />
                                     </form:SimpleForm>
                                 </IconTabFilter>
+                                <IconTabFilter
+                                    id="icontabFilter3"
+									text="Vessel Details"
+									visible="{status>/closed}"
+								>
+									<form:SimpleForm
+                                        id="vesselDetailsForm"
+										editable="false"
+										backgroundDesign="Transparent"
+										width="100%"
+									>
+										<Label text="Vessel Name" id="vname"/>
+										<Text
+                                            id="vnameText"
+											width="10rem"
+											text="TBN"
+										/>
+										<Label text="Vessel IMO No" id="imono"/>
+										<Text
+                                            id="imotext"
+											width="10rem"
+											text="TBN"
+										/>
+									</form:SimpleForm>
+								</IconTabFilter>
+
+                                 <IconTabFilter
+                                    id="GenIconTabFilter5"
+                                    text="Bid Details"
+                                    visible="true"
+                                >
+                                    <l:BlockLayout
+                                        id="GenBlockLayout3"
+                                        background="Dashboard"
+                                    >
+                                        <l:BlockLayoutRow
+                                            id="GenBlockLayoutRow4"
+                                        >
+                                            <l:BlockLayoutCell
+                                                id="GenBlockLayoutCell5"
+                                                title="Enter Technical Details"
+                                                titleAlignment="Center"
+                                                titleLevel="Auto"
+                                            >
+                                                <Table
+                                                    alternateRowColors="true"
+                                                    id="TechDetailTable"
+                                                    sticky="ColumnHeaders"
+                                                >
+                                                    <columns>
+                                                        <Column
+                                                            id="GenColumn14"
+                                                            width="40%"
+                                                        >
+                                                            <Text
+                                                                id="GenText8"
+                                                                text="Technical Details"
+                                                            />
+                                                        </Column>
+                                                        <Column
+                                                            id="GenColumn15"
+                                                            width="40%"
+                                                        >
+                                                            <Text
+                                                                id="GenText9"
+                                                                text="Value"
+																textAlign="Center"
+                                                            />
+                                                        </Column>
+                                                        <Column
+                                                            id="GenColumn16"
+                                                            width="20%"
+                                                            class="sapUiMediumMarginBegin"
+                                                        >
+                                                            <Text
+                                                                id="GenText10"
+                                                                text="Pref. Req."
+                                                                tooltip="Preferred Requirements"
+                                                            />
+                                                        </Column>
+                                                    </columns>
+
+                                                    <items>
+                                                        <ColumnListItem id="GenColumnListItem1">
+                                                            <cells>
+                                                                <Text id="GenText11"
+                                                                    text="Country of Origin"
+                                                                />
+                                                                <FlexBox id="GenFlexBox2"
+                                                                    direction="Row"
+                                                                    alignItems="Center"
+                                                                >
+                                                                    <Text
+                                                                        id="coorBidDetails"
+                                                                        width="100%"
+                                                                        text="IN"
+                                                                    />
+                                                                </FlexBox>
+                                                                
+                                                                <Button
+                                                                    id="coorBidInfoBtn"
+                                                                    icon="sap-icon://message-information"
+                                                                    class="sapUiTinyMarginBeginEnd"
+                                                                    enabled="true"
+                                                                    tooltip=" "
+                                                                    press="_onHintPress"
+                                                                      >
+                                                                      <customData>
+                                                                          <core:CustomData id="GenCustomData1" key="key" value="COUNTRY OF ORIGIN" />
+                                                                      </customData>
+                                                                   </Button>
+                                                            </cells>
+                                                        </ColumnListItem>
+
+                                                        <ColumnListItem id="GenColumnListItem2">
+                                                            <cells>
+                                                                <Text id="GenText12"
+                                                                    text="Last Cleaning Date"
+                                                                />
+                                                                <FlexBox id="GenFlexBox3"
+                                                                    direction="Row"
+                                                                    alignItems="Center"
+                                                                >
+                                                                    <Text id="dateOfCleaning" text="20.10.2023"/>
+                                                                </FlexBox>
+                                                                <Button
+                                                                    id="dateBidInfoBtn"
+                                                                    icon="sap-icon://message-information"
+                                                                    class="sapUiTinyMarginBeginEnd"
+                                                                    enabled="true"
+                                                                    tooltip=" "
+                                                                    press="_onHintPress"
+                                                                >
+                                                                   <customData>
+                                                                          <core:CustomData id="GenCustomData2" key="key" value="LAST CLEANING DATE" />
+                                                                    </customData>
+                                                                </Button>
+                                                            </cells>
+                                                        </ColumnListItem>
+
+                                                        <ColumnListItem id="GenColumnListItem3">
+                                                            <cells>
+                                                                <Text id="GenText13"
+                                                                    text="Last Port of Call"
+                                                                />
+                                                                <FlexBox id="GenFlexBox4"
+                                                                    direction="Row"
+                                                                    alignItems="Center"
+                                                                >
+                                                                    <Text
+                                                                        id="lastPortBidDetails"
+                                                                        width="100%"
+                                                                        text="INPRT"
+                                                                    />
+                                                                </FlexBox>
+                                                                <Button
+                                                                    id="portBidInfoBtn"
+                                                                    icon="sap-icon://message-information"
+                                                                    class="sapUiTinyMarginBeginEnd"
+                                                                    enabled="true"
+                                                                    tooltip=" "
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="GenCustomData3" key="key" value="LAST PORT OF CALL" />
+                                                                    </customData>
+                                                                </Button>
+                                                            </cells>
+                                                        </ColumnListItem>
+
+                                                        <ColumnListItem id="GenColumnListItem4">
+                                                            <cells>
+                                                                <Text id="GenText14"
+                                                                    text="Demurrage"
+                                                                />
+                                                                <FlexBox id="GenFlexBox5"
+                                                                    direction="Row"
+                                                                    alignItems="Center"
+                                                                >
+                                                                    <Text
+                                                                        id="demurrageInpDetails"
+                                                                         width="100%"
+                                                                         
+                                                                    />
+                                                                </FlexBox>
+                                                                <Button
+                                                                    id="demurrageInputBtn"
+                                                                    icon="sap-icon://message-information"
+                                                                    class="sapUiTinyMarginBeginEnd"
+                                                                    enabled="true"
+                                                                    tooltip=" "
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="GenCustomData4" key="key" value="DEMURRAGE" />
+                                                                    </customData>
+                                                                </Button>
+                                                            </cells>
+                                                        </ColumnListItem>
+
+                                                        <ColumnListItem id="GenColumnListItem7">
+                                                            <cells>
+                                                                <Text id="GenText15"
+                                                                    text="Class of Vessel"
+                                                                />
+                                                                <FlexBox id="GenFlexBox6"
+                                                                    direction="Row"
+                                                                    alignItems="Center"
+                                                                >
+                                                                    <Text
+                                                                        id="classOfVesselDetails"
+                                                                        width="100%"
+                                                                        text="B"
+                                                                    />
+                                                                </FlexBox>
+                                                                <Button
+                                                                    id="classofVesselBtn"
+                                                                    icon="sap-icon://message-information"
+                                                                    class="sapUiTinyMarginBeginEnd"
+                                                                    enabled="true"
+                                                                    tooltip=" "
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="_IDGenCustomData" key="key" value="CLASS OF VESSEL" />
+                                                                    </customData>
+                                                                </Button>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+                                            </l:BlockLayoutCell>
+
+                                            <l:BlockLayoutCell
+                                                id="GenBlockLayoutCell6"
+                                                title="Enter Commercial Details"
+                                                titleAlignment="Center"
+                                                titleLevel="Auto"
+                                            >
+                                                <form:SimpleForm
+                                                    id="GenSimpleForm7"
+                                                    editable="true"
+                                                    backgroundDesign="Transparent"
+                                                    width="50%"
+                                                >
+                                                    <Label
+                                                        id="GenLabel24"
+                                                        text="Freight Cost ({voyageDetailsModel>/0/Cargu})"
+                                                        labelFor="fCost2"
+                                                        
+                                                    />
+                                                    <Input
+                                                        id="fCost"
+                                                        type="Number"
+                                                        editable="false"
+                                                        value="400,000.00"
+                                                    />
+                                                    <Label
+                                                        id="GenLabel25"
+                                                        text="Total Cost"
+                                                        labelFor="totalCost2"
+                                                    />
+                                                    <l:HorizontalLayout
+                                                        id="GenHorizontalLayout3"
+                                                        allowWrapping="false"
+                                                    >
+                                                        <Input
+                                                            id="totalCostDetails"
+                                                            editable="false"
+                                                            width="100%"
+                                                            value="400,000.00"
+                                                        />
+                                                        <Label
+                                                            id="GenLabel26"
+                                                            text="INR"
+                                                            design="Bold"
+                                                            labelFor="totalCost2"
+                                                            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                                                        />
+                                                    </l:HorizontalLayout>
+                                                </form:SimpleForm>
+                                                <FlexBox
+                                                    id="GenFlexBox1"
+                                                    justifyContent="End"
+                                                >
+                                                
+                                                </FlexBox>
+                                            </l:BlockLayoutCell>
+                                        </l:BlockLayoutRow>
+                                    </l:BlockLayout>
+                                </IconTabFilter>
+                                
 
                                 <IconTabFilter
-                                    id="_IDGenIconTabFilter5"
+                                    id="GenIconTabFilter6"
                                     text="Submit Bid"
                                     visible="true"
                                 >
@@ -442,13 +718,19 @@
                                                                         width="90%"
                                                                     />
                                                                 </FlexBox>
+                                                                
                                                                 <Button
                                                                     id="coorBidInfoButton"
                                                                     icon="sap-icon://message-information"
                                                                     class="sapUiTinyMarginBeginEnd"
                                                                     enabled="true"
                                                                     tooltip=" "
-                                                                />
+                                                                    press="_onHintPress"
+                                                                      >
+                                                                      <customData>
+                                                                          <core:CustomData id="_IDGenCustomData1" key="key" value="COUNTRY OF ORIGIN" />
+                                                                      </customData>
+                                                                   </Button>
                                                             </cells>
                                                         </ColumnListItem>
 
@@ -465,6 +747,7 @@
                                                                         id="lastCleanDateBidInput"
                                                                         valueFormat="dd.MM.YYYY"
                                                                         width="90%"
+                                                                        minDate=""
                                                                     />
                                                                 </FlexBox>
                                                                 <Button
@@ -473,7 +756,12 @@
                                                                     class="sapUiTinyMarginBeginEnd"
                                                                     enabled="true"
                                                                     tooltip=" "
-                                                                />
+                                                                    press="_onHintPress"
+                                                                >
+                                                                   <customData>
+                                                                          <core:CustomData id="_IDGenCustomData2" key="key" value="LAST CLEANING DATE" />
+                                                                    </customData>
+                                                                </Button>
                                                             </cells>
                                                         </ColumnListItem>
 
@@ -500,7 +788,12 @@
                                                                     class="sapUiTinyMarginBeginEnd"
                                                                     enabled="true"
                                                                     tooltip=" "
-                                                                />
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="_IDGenCustomData3" key="key" value="LAST PORT OF CALL" />
+                                                                    </customData>
+                                                                </Button>
                                                             </cells>
                                                         </ColumnListItem>
 
@@ -516,6 +809,9 @@
                                                                     <Input
                                                                         id="demurrageInput"
                                                                          width="105%"
+                                                                         liveChange="onFCostChange"
+                                                                         type="Number"
+                                                                         value="{totalCalculateModel>/demurrage}"
                                                                     />
                                                                 </FlexBox>
                                                                 <Button
@@ -524,11 +820,16 @@
                                                                     class="sapUiTinyMarginBeginEnd"
                                                                     enabled="true"
                                                                     tooltip=" "
-                                                                />
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="_IDGenCustomData4" key="key" value="DEMURRAGE" />
+                                                                    </customData>
+                                                                </Button>
                                                             </cells>
                                                         </ColumnListItem>
 
-                                                        <ColumnListItem id="_IDGenColumnListItem5">
+                                                        <ColumnListItem id="_IDGenColumnListItem7">
                                                             <cells>
                                                                 <Text id="_IDGenText15"
                                                                     text="Class of Vessel"
@@ -548,7 +849,12 @@
                                                                     class="sapUiTinyMarginBeginEnd"
                                                                     enabled="true"
                                                                     tooltip=" "
-                                                                />
+                                                                    press="_onHintPress"
+                                                                >
+                                                                 <customData>
+                                                                          <core:CustomData id="_IDGenCustomData5" key="key" value="CLASS OF VESSEL" />
+                                                                    </customData>
+                                                                </Button>
                                                             </cells>
                                                         </ColumnListItem>
                                                     </items>
@@ -571,11 +877,13 @@
                                                         id="_IDGenLabel24"
                                                         text="Freight Cost ({voyageDetailsModel>/0/Cargu})"
                                                         labelFor="fCost2"
+                                                        
                                                     />
                                                     <Input
                                                         id="fCost2"
                                                         liveChange="onFCostChange"
                                                         type="Number"
+                                                        value="{totalCalculateModel>/fCost2}"
                                                     />
                                                     <Label
                                                         id="_IDGenLabel25"
@@ -590,6 +898,7 @@
                                                             id="totalCost"
                                                             editable="false"
                                                             width="100%"
+                                                            value="{totalCalculateModel>/totalCost}"
                                                         />
                                                         <Label
                                                             id="_IDGenLabel26"

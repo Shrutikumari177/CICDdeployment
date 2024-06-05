@@ -18,12 +18,19 @@ sap.ui.define([
           CLOSED: "Closed",
           OPEN: "Open",
           SUBMIT: "Submitted",
-          YETTOSTART: "Yet to Start",
           ALL: "All",
       };
       return Controller.extend("com.ingenx.nauti.submitquotation.controller.Main", {
-        
+
           onInit: function () {
+
+            const bidTileModel = new JSONModel({
+                Open: 0,
+                Closed: 0,
+                All: 0,
+            });
+            this.getView().setModel(bidTileModel, "bidtilemodel");
+
             this._oBusyDialog = new BusyDialog({
               text: "Loading"
           });
@@ -39,13 +46,6 @@ sap.ui.define([
                   },
                   chno: [],
               };
-
-              const charterTileModel = new JSONModel({
-                  Open: 0,
-                  Closed: 0,
-                  All: 0,
-              });
-              this.getView().setModel(charterTileModel, "chartertilemodel");
 
               this.getBidData = [];
               this.staticData = "2100000002";
@@ -65,18 +65,20 @@ sap.ui.define([
                   }.bind(this));
 
                   if (this.getBidData.length > 0) {
+                    // debugger;
                       oVendorInfo.number = this.getBidData[0].Lifnr;
                       oVendorInfo.name = this.getBidData[0].Name1; 
                       oVendorInfo.address = `${this.getBidData[0].Stras} ${this.getBidData[0].Ort01}`;
                       this.charteringData = this.getBidData[0].toassociation2;
-                      
-                      const oVendorModel = new JSONModel();
-                      const charteringModel = new JSONModel();
+
+                    
+                    const oVendorModel = new JSONModel();
+                    const charteringModel = new JSONModel();
                       oVendorModel.setData(oVendorInfo);
                       charteringModel.setData(this.charteringData);
                       this.getView().setModel(oVendorModel, "vendorinfo");
                       this.getView().setModel(charteringModel, "charteringRequestModel");
-
+                      
                       console.log("request model", this.getView().getModel("charteringRequestModel").getData());
                       this._getCharterListData();
                   }
@@ -90,32 +92,65 @@ sap.ui.define([
               }.bind(this));
           },
 
-          _getCharterListData: async function () {
-            debugger;
-              const oCharterListModel = new JSONModel({ charterList: [] });
-              this.getOwnerComponent().setModel(oCharterListModel, "charterlist");
-              let charterListModel = this.getOwnerComponent().getModel("charterlist");
-              let oModel = this.getOwnerComponent().getModel();
-              let charterNos = this.getView().getModel("vendorinfo").getData().chno;
-              let current = `${this.dateFormat(new Date())}T${this.formatTime()}`;
-              this.charteringData.forEach(((element) => {
-                  let start = `${this.dateFormat(element.Chrqsdate)}T${this.formatTime(element.Chrqstime)}`;
-                  let end = `${this.dateFormat(element.Chrqedate)}T${this.formatTime(element.Chrqetime)}`;
-                  
-                  if (current < start) {
-                      element.Stat = statusLevel.YETTOSTART;
-                  } else if (current > end) {
-                      element.Stat = statusLevel.CLOSED;
-                  } else {
-                      element?.ChartReqtoVendBid?.results.length > 0
-                          ? (element.Stat = statusLevel.SUBMIT)
-                          : (element.Stat = statusLevel.OPEN);
-                  }
-                  charterListModel.getData().charterList.push(element);
-                  charterListModel.refresh();
-                  this._initializeTiles(element.status);
-              }));
-          },
+          _getCharterListData: function () {
+            let charteringData = this.getView().getModel("charteringRequestModel").getData();
+            let current = `${this.dateFormat(new Date())}T${this.formatTime()}`;
+        
+            let counts = {
+                Open: 0,
+                Closed: 0,
+                Ongoing: 0,
+                All: charteringData.length
+            };
+        
+            charteringData.forEach((element) => {
+                let start = `${this.dateFormat(element.Chrqsdate)}T${this.formatTime(element.Chrqstime)}`;
+                let end = `${this.dateFormat(element.Chrqedate)}T${this.formatTime(element.Chrqetime)}`;
+        
+                if (current < start) {
+                    element.Stat = statusLevel.YETTOSTART;
+                } else if (current > end) {
+                    element.Stat = statusLevel.CLOSED;
+                    counts.Closed++;
+                } else {
+                    if (element?.ChartReqtoVendBid?.results.length > 0) {
+                        element.Stat = statusLevel.SUBMIT;
+                    } else {
+                        element.Stat = statusLevel.OPEN;
+                        counts.Open++;
+                    }
+                }
+            });
+        
+            this.getView().getModel("charteringRequestModel").refresh();
+        
+            let bidTileModel = this.getView().getModel("bidtilemodel");
+            bidTileModel.setProperty("/Open", counts.Open);
+            bidTileModel.setProperty("/Closed", counts.Closed);
+            bidTileModel.setProperty("/All", counts.All);
+        },        
+
+        //   _getCharterListData: function () {
+        //     let charteringData = this.getView().getModel("charteringRequestModel").getData();
+        //     let current = `${this.dateFormat(new Date())}T${this.formatTime()}`;
+        
+        //     charteringData.forEach((element) => {
+        //         let start = `${this.dateFormat(element.Chrqsdate)}T${this.formatTime(element.Chrqstime)}`;
+        //         let end = `${this.dateFormat(element.Chrqedate)}T${this.formatTime(element.Chrqetime)}`;
+                
+        //         if (current < start) {
+        //             element.Stat = statusLevel.YETTOSTART;
+        //         } else if (current > end) {
+        //             element.Stat = statusLevel.CLOSED;
+        //         } else {
+        //             element?.ChartReqtoVendBid?.results.length > 0
+        //                 ? (element.Stat = statusLevel.SUBMIT)
+        //                 : (element.Stat = statusLevel.OPEN);
+        //         }
+        //     });
+        
+        //     this.getView().getModel("charteringRequestModel").refresh(); 
+        // },
 
           _initializeTiles: function (status) {
               this.getView().getModel("chartertilemodel").getData()[
@@ -147,7 +182,7 @@ sap.ui.define([
               }
           },
 
-          pressClosed: function () {
+          pressClose: function () {
               let aFilter = [];
               const oTable = this.byId("centerDataTable");
               const oFilterClosed = new Filter("Stat", FilterOperator.EQ, statusLevel.CLOSED);
@@ -236,34 +271,49 @@ sap.ui.define([
               return oDateFormat.format(date);
           },
 
-          toBiddingDetail: function (oEvent) {
-              const oContext = oEvent.getSource().getBindingContext("charteringRequestModel");
-              const rowData = oContext.getObject();
+          // Inside the toBiddingDetail function
+// toBiddingDetail: function (oEvent) {
+//     const oContext = oEvent.getSource().getBindingContext("charteringRequestModel");
+//     const rowData = oContext.getObject();
 
-              const CharterReqNo = rowData.Chrnmin;
-              const voyno = rowData.Voyno;
-              const sdate = rowData.Chrqsdate;
-              const sTime = rowData.Chrqstime;
-              const eDate = rowData.Chrqedate;
-              const eTime = rowData.Chrqetime;
+//     const CharterReqNo = rowData.Chrnmin;
+//     const voyno = rowData.Voyno;
+//     const sdate = rowData.Chrqsdate;
+//     const sTime = rowData.Chrqstime;
+//     const eDate = rowData.Chrqedate;
+//     const eTime = rowData.Chrqetime;
 
-              const oEventBus = sap.ui.getCore().getEventBus();
-              oEventBus.publish("BiddingChannel", "BiddingDetail", {
-                  vendorNo : this.staticData,
-                  CharterReqNo: CharterReqNo,
-                  path: voyno,
-                  startDate: sdate,
-                  startTime: sTime,
-                  endDate: eDate,
-                  endTime: eTime
-              });
+//     const oEventBus = sap.ui.getCore().getEventBus();
+//     oEventBus.publish("BiddingChannel", "BiddingDetail", {
+//         vendorNo : this.staticData,
+//         CharterReqNo: CharterReqNo,
+//         path: voyno,
+//         startDate: sdate,
+//         startTime: sTime,
+//         endDate: eDate,
+//         endTime: eTime
+//     });
 
-              const oRouter = this.getOwnerComponent().getRouter();
-              oRouter.navTo("RouteBidding", { path: voyno });
-          },
-          
-          onPress: function () {
-              console.log("inside function", getBidData);
-          }
+//     // Navigate inside the success callback of publishing event
+//     // This ensures that the model is set before navigating
+//     const oRouter = this.getOwnerComponent().getRouter();
+//     oEventBus.subscribeOnce("BiddingChannel", "BiddingDetailSet", function() {
+//         oRouter.navTo("RouteBidding", { path: voyno });
+//     }, this);
+// }
+
+
+
+        toBiddingDetail: function (oEvent) {
+            const oSource = oEvent.getSource();
+            const oBindingContext = oSource.getBindingContext("charteringRequestModel");
+            const rowData = oBindingContext.getObject();
+        
+            sessionStorage.setItem("biddingData", JSON.stringify(rowData));
+        
+            this.getOwnerComponent().getRouter().navTo("RouteBidding");
+        }
+        
+         
       });
   });
