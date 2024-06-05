@@ -12,6 +12,7 @@ sap.ui.define(
     let getModelData = [];
     let getModelData2 = [];
     let sloc;
+    let LoggedInUser;
 
     return BaseController.extend("com.ingenx.nauti.createvoyage.controller.VoyageApproval", {
       onInit: function () {
@@ -29,7 +30,7 @@ sap.ui.define(
           oModel.setData(getModelData);
           console.log("Voyage approcal total data", getModelData, getModelData.length);
         }.bind(this))
-        let testData = [ {
+        let testData = [{
           "Vreqno": "2000000191",
           "Zemail": "",
           "Voyno": "1000000161",
@@ -67,17 +68,14 @@ sap.ui.define(
       ValueHelpVoyage: function () {
         var oView = this.getView();
 
-
-        if (!this._opurchaseGroup) {
-          this._opurchaseGroup = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
-          oView.addDependent(this._opurchaseGroup);
+        if (!this._voyageValueHelpDiaolog) {
+          this._voyageValueHelpDiaolog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
+          oView.addDependent(this._voyageValueHelpDiaolog);
         }
-        this._opurchaseGroup.open();
+        this._voyageValueHelpDiaolog.open();
 
       },
-      
-      
-    
+
       VoyageValueHelpClose: function (evt) {
 
         var oMultiInput = this.byId("VoyageNo");
@@ -95,9 +93,9 @@ sap.ui.define(
           oModel = new sap.ui.model.json.JSONModel();
           this.getView().setModel(oModel, "VoyApprovalModel");
           // this.getView().getModel("VoyApprovalModel").refresh();
-          
+
         }
-        
+
         var aExistingTokens = oMultiInput.getTokens();
         var aExistingTokens2 = oDescriptionInput.getTokens();
         if (aSelectedContexts && aSelectedContexts.length > 0) {
@@ -113,7 +111,7 @@ sap.ui.define(
           }).filter(function (value) {
             return value !== null;
           });
-          
+
           selectedValues2 = aSelectedContexts.map(function (oContext) {
             var sPath = oContext.getPath();
             var match = /Vreqno='(\d+)'/g.exec(sPath);
@@ -124,7 +122,7 @@ sap.ui.define(
           }).filter(function (value) {
             return value !== null;
           });
-          
+
           console.log("Selected Values2:", selectedValues2);
           console.log("Selected Values:", selectedValues);
           selectedValues = Array.from(new Set(selectedValues));
@@ -148,125 +146,173 @@ sap.ui.define(
               }));
             }
           });
-          
+
           oVBox.setVisible(false)
           var aFilteredData = getModelData.filter(function (data) {
             return selectedValues.includes(data.Voyno);
           });
           console.log("aFilteredData", aFilteredData);
-          
-          // var aCombinedData = aExistingData.concat(aFilteredData);
-          
-          // aCombinedData = aCombinedData.filter((entry, index, self) =>
-          // index === self.findIndex((t) => (
-          //   (t.Voyno === entry.Voyno && t.Vreqno === entry.Vreqno)
-          //   ))
-          //   );
-          //   console.log("aCombinedData", aCombinedData);
-            // oModel.setData(aFilteredData);
-            
-            // console.log("Filtered data based on selected vendors:", aFilteredData);
-          } else {
-            
-            oVBox.setVisible(false);
-          }
-          var oTable = this.byId("myTable2")
-          oTable.setVisible(true);
-          console.log(selectedValues, "ye bhi ha")
-          
-          let testData = aFilteredData;
-          let transformedData = {
-            voyageNo: testData[0].Voyno,
-            VoyageRequest: testData[0].Vreqno,
-            Approvers: testData.map(item => ({
-              Zlevel: item.Zlevel,
-              Uname: item.Uname,
-                Ztime: item.Ztime,
-                Zcomm: item.Zcomm,
-                Zdate: item.Zdate,
-                Zaction: item.Zaction,
-                Zemail: item.Zemail
-              }))
-            };
-            let that = this;
-            
-            console.log(transformedData);
-            oModel.setData([transformedData]);
+          // code for multiple selected entry
+          var aCombinedData = aExistingData.concat(aFilteredData);
 
-            that.createDynamicColumns(transformedData.Approvers);
+          aCombinedData = aCombinedData.filter((entry, index, self) =>
+            index === self.findIndex((t) => (
+              (t.Voyno === entry.Voyno && t.Vreqno === entry.Vreqno)
+            ))
+          );
+          console.log("aCombinedData", aCombinedData);
+          // oModel.setData(aFilteredData);
+
+          // console.log("Filtered data based on selected vendors:", aFilteredData);
+        } else {
+
+          oVBox.setVisible(false);
+        }
+        var oTable = this.byId("approvalTable")
+        oTable.setVisible(true);
+        // console.log(selectedValues, "ye bhi ha")
+
+        let testData = aFilteredData;
+        let transformedData = {
+          Voyno: testData[0].Voyno,
+          Vreqno: testData[0].Vreqno,
+          Approvers: testData.map(item => ({
+            Zlevel: item.Zlevel,
+            Uname: item.Uname,
+            Ztime: item.Ztime,
+            Zcomm: item.Zcomm,
+            Zdate: item.Zdate,
+            Zaction: item.Zaction,
+            Zemail: item.Zemail
+          }))
+        };
+        let that = this;
+
+        console.log(transformedData);
+        oModel.setData([transformedData]);
+        LoggedInUser = "A.SHARMA";
+        that.createDynamicColumns(transformedData.Approvers);
       },
+      // dynamic creation of colums
       createDynamicColumns: function (approvers) {
-        var oTable = this.getView().byId("myTable2");
+        var oTable = this.getView().byId("approvalTable");
         var oColumnTemplate = new sap.m.Text(); // Column template for text
 
         // Remove existing columns (except fixed columns)
         oTable.removeAllColumns();
-
+        if (LoggedInUser === approvers[0].Uname) {
+          console.log("Created Matched so hide the table ");;
+          oTable.setVisible(false);
+          return;
+        }
         // Add fixed columns
         oTable.addColumn(new sap.m.Column({
-            header: new sap.m.Label({ text: "Approval Req No" })
+          header: new sap.m.Label({ text: "Approval Req No" })
         }));
         oTable.addColumn(new sap.m.Column({
-            header: new sap.m.Label({ text: "Voyage No" })
+          header: new sap.m.Label({ text: "Voyage No" })
         }));
         oTable.addColumn(new sap.m.Column({
-            header: new sap.m.Label({ text: "Created By" })
+          header: new sap.m.Label({ text: "Created By" })
         }));
         oTable.addColumn(new sap.m.Column({
-            header: new sap.m.Label({ text: "Created On" })
+          header: new sap.m.Label({ text: "Created On" })
         }));
 
         // Add dynamic columns for approvers
+        var stopCreatingColumns = false;
+
+        // Add dynamic columns for approvers
+
         approvers.forEach((approver, index) => {
-            if (approver.Zlevel !== "00") {
-                var approverIndex = index ; // Dynamic index for column headers
-                oTable.addColumn(new sap.m.Column({
-                    header: new sap.m.Label({ text: "Approver " + approverIndex })
-                }));
-                oTable.addColumn(new sap.m.Column({
-                    header: new sap.m.Label({ text: "Status " + approverIndex })
-                }));
+          if (!stopCreatingColumns && approver.Zlevel !== "00") {
+            if (approver.Uname === LoggedInUser) {
+              var approverIndex = index; // Dynamic index for column headers
+              oTable.addColumn(new sap.m.Column({
+                header: new sap.m.Label({ text: "Approver " + approverIndex })
+              }));
+              oTable.addColumn(new sap.m.Column({
+                header: new sap.m.Label({ text: "Status " })
+              }));
+              oTable.addColumn(new sap.m.Column({
+                header: new sap.m.Label({ text: "Approved on " })
+              }));
+              stopCreatingColumns = true; // Stop creating further columns
             }
+          }
         });
 
         // Bind items to table
-        let that  = this;
+
         oTable.bindItems({
-            path: "VoyApprovalModel>/",
-            template: new sap.m.ColumnListItem({
-                cells: that.createCells(approvers)
-            })
+          path: "VoyApprovalModel>/",
+          template: new sap.m.ColumnListItem({
+            cells: this.createCells(approvers)
+          })
         });
-    },
+      },
 
       createCells: function (approvers) {
         var cells = [];
 
         // Fixed cells
-        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>VoyageRequest}" }));
-        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>voyageNo}" }));
-        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Approvers/0/Uname}" })); // Assuming first approver is the creator
-        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Approvers/0/Zdate}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Vreqno}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Voyno}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Approvers/0/Uname}" })); // Creator's name
+        cells.push(new sap.m.Text({
+          text: {
+            path: "VoyApprovalModel>Approvers/0/Zdate",
+            formatter: this.formatDate.bind(this)
+          }
+        })); // Creator's date
 
         // Dynamic cells for approvers
+        var stopCreatingCells = false;
+        let that = this;
         approvers.forEach((approver, index) => {
-            if (approver.Zlevel !== "00") {
-                cells.push(new sap.m.Text({
-                    text: "{VoyApprovalModel>Approvers/" + index + "/Uname}"
-                }));
-                cells.push(new sap.m.Text({
-                    text: "{VoyApprovalModel>Approvers/" + index + "/Zaction}"
-                }));
+
+          if (!stopCreatingCells && approver.Zlevel !== "00") {
+
+            if (approver.Uname === LoggedInUser) {
+              cells.push(new sap.m.Text({
+                text: "{VoyApprovalModel>Approvers/" + index + "/Uname}"
+              }));
+              cells.push(new sap.m.Text({
+                text: "{VoyApprovalModel>Approvers/" + index + "/Zaction}"
+              }));
+              cells.push(new sap.m.Text({
+                text: {
+                  parts: [{ path: "VoyApprovalModel>Approvers/" + index + "/Zdate" }, { path: "VoyApprovalModel>Approvers/" + index + "/Zaction" }],
+                  formatter: this.formatDate.bind(this)
+                }
+              }));
+              stopCreatingCells = true; // Stop creating further cells
             }
+          }
         });
 
         return cells;
-    },
+      },
+
+      formatDate: function (date, status) {
+        if (status == undefined) {
+
+          return date.split('T')[0];
+        } else {
+          if (status === 'PEND') {
+            return "";
+          } else {
+            return date.split('T')[0];
+
+          }
+        }
+
+      },
 
       onSelectionChange: function (oEvent) {
         var selectedItem = oEvent.getParameter("selectedItem").getText();
-        var oTable1 = this.getView().byId("myTable");
-        var oTable2 = this.getView().byId("myTable2");
+        var oTable1 = this.getView().byId("statusTable");
+        var oTable2 = this.getView().byId("approvalTable");
         var oVBox1 = this.getView().byId("tab");
         var oVBox2 = this.getView().byId("tab2");
 
@@ -292,11 +338,19 @@ sap.ui.define(
       onTableSelectionChange: function (oEvent) {
         var oTable = oEvent.getSource();
         var aSelectedItems = oTable.getSelectedItems();
-        var bEnableApprove = aSelectedItems.length > 0;
-        var bEnableReject = aSelectedItems.length > 0;
 
-        this.byId("approveButton").setEnabled(bEnableApprove);
-        this.byId("rejectButton").setEnabled(bEnableReject);
+        aSelectedItems.forEach(selectedItem => {
+          let oText = selectedItem.getCells()[5].getText();
+          if (oText && oText === "PEND") {
+
+            this.byId("approveButton").setEnabled(true);
+            this.byId("rejectButton").setEnabled(true);
+          }
+        }
+        )
+        // var bEnableApprove = aSelectedItems.length > 0;
+        // var bEnableReject = aSelectedItems.length > 0;
+
       },
 
       onApprove: function () {
@@ -325,21 +379,52 @@ sap.ui.define(
         // this.onRefresh();
       },
       onSaveComment: function () {
-        var sComment = this.byId("commentTextArea").getValue();
+        var sComment = this.byId("commentTextArea").getValue().trim();
+        if (sComment === "") {
+          new sap.m.MessageToast.show("This field is mandatory");
+          return;
+        }
 
         sap.m.MessageToast.show("Comment: " + sComment);
         this.byId("approvalDialog").close();
-        var oTable2 = this.byId("myTable2");
+
+        let payload = {
+          Zcomm: sComment,
+          Zaction: "APPR"
+        }
+        //  temperary  for single line item
+        let oTable = this.byId("approvalTable");
+        let selectedItems = oTable.getSelectedItems();
+        let userName = selectedItems[0].getCells()[4].getText();   // currently assuming only single entry
+
+        let data = selectedItems[0].getBindingContext('VoyApprovalModel').getObject();
+        let userData = data.Approvers.filter(  item =>  item.Zlevel !== "00" && item.Uname === userName);
+        // note : usetData is  array  in future  if approver have same data
+        let url = `/voyapprovalSet(Vreqno='${data.Voyno}',Voyno='${data.Vreqno}',Zlevel='${userData[0].Zlevel}',Uname='${userName}')`;
+        console.log("Url", url);
+        // return
+        let oModel = this.getOwnerComponent().getModel("modelV2");
+        oModel.update(url, payload, {
+          success: function (result) {
+            console.log(result);
+           new sap.m.MessageBox.success(`Successdfully Approved by ${userName}`);
+          },
+          error: function (err) {
+            new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value);
+            console.log("error occured while approving ", err);
+          }
+        });
+        var oTable2 = this.byId("approvalTable");
         oTable2.removeSelections();
       },
 
       onCancelComment: function () {
         this.byId("approvalDialog").close();
-        var oTable2 = this.byId("myTable2");
+        var oTable2 = this.byId("approvalTable");
         oTable2.removeSelections();
       }
       ,
-     
+
 
       onDialogOK: function () {
         var sComment = this.byId("commentTextArea").getValue();
@@ -380,7 +465,7 @@ sap.ui.define(
 
       handleApprovalRejection: function () {
         sap.m.MessageToast.show("Approval Rejected");
-        var oTable = this.getView().byId("myTable2");
+        var oTable = this.getView().byId("approvalTable");
         oTable.removeSelections();
       },
 
@@ -434,7 +519,7 @@ sap.ui.define(
           }.bind(this));
         }
       },
-     
+
 
       ValueHelpVoyage: function () {
 
@@ -452,7 +537,7 @@ sap.ui.define(
         var oDescriptionInput = this.byId("searchField3");
         var aSelectedContexts = evt.getParameter("selectedContexts"),
 
-          oVBox = this.byId("tab")
+        oVBox = this.byId("tab")
         var selectedValues = [];
         var selectedValues2 = [];
 
@@ -535,7 +620,7 @@ sap.ui.define(
 
           oVBox.setVisible(false);
         }
-        var oTable = this.byId("myTable")
+        var oTable = this.byId("statusTable");
         oTable.setVisible(true);
         console.log(selectedValues, "ye bhi ha")
       },
@@ -544,9 +629,9 @@ sap.ui.define(
       onVoyageSearch1: function (oEvent) {
         // debugger;
         var sValue = oEvent.getParameter("value");
- 
+
         var oFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, sValue);
- 
+
         oEvent.getSource().getBinding("items").filter([oFilter]);
       },
 
@@ -563,8 +648,8 @@ sap.ui.define(
         oDescriptionInput.removeAllTokens();
 
         // Hide tables and other elements
-        var oTable1 = this.byId("myTable");
-        var oTable2 = this.byId("myTable2");
+        var oTable1 = this.byId("statusTable");
+        var oTable2 = this.byId("approvalTable");
         var oVBox1 = this.byId("tab");
         var oVBox2 = this.byId("tab2");
         oTable1.setVisible(false);

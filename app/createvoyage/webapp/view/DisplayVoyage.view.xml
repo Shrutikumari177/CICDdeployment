@@ -89,6 +89,8 @@
                 editable="true"
                 showValueHelp="true"
                 valueHelpRequest=".showVoyageValueHelp"
+                maxLength="10"
+                type="Number"
             />
             <Label
                 id="Label2"
@@ -628,6 +630,7 @@
                         }"
                         selectedKey="{voyHeaderModel>/0/Frtu}"
                         editable="false"
+                        forceSelection="false"
                     >
                         <core:Item
                             key="{Uom}"

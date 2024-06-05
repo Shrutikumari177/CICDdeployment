@@ -114,7 +114,7 @@
                     />
                     <Select
                         id="_IDGenSelect1"
-                        width="200px"
+                        width="250px"
                         forceSelection="false"
                         change="onSelectionChange"
                     >
@@ -153,7 +153,7 @@
                             width="100%"
                         >
                             <Table
-                                id="myTable"
+                                id="statusTable"
                                 items="{VoyApprovalModel>/}"
                             >
                                 <columns>
@@ -182,66 +182,7 @@
                                             text="Created On"
                                         />
                                     </Column>
-                                    <!-- <Column id="_IDGenColumn5">
-                                        <Text
-                                            id="_IDGenText6"
-                                            text="Created At"
-                                        />
-                                    </Column> -->
-                                    <Column id="_IDGenColumn6">
-                                        <Text
-                                            id="_IDGenText7"
-                                            text="Level1"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn7">
-                                        <Text
-                                            id="_IDGenText8"
-                                            text="Approved On"
-                                        />
-                                    </Column>
-                                    <!-- <Column id="_IDGenColumn8">
-                                        <Text
-                                            id="_IDGenText9"
-                                            text="Approved At"
-                                        />
-                                    </Column> -->
-                                    <Column id="_IDGenColumn9">
-                                        <Text
-                                            id="_IDGenText10"
-                                            text="Level2"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn10">
-                                        <Text
-                                            id="_IDGenText11"
-                                            text="Approved On"
-                                        />
-                                    </Column>
-                                    <!-- <Column id="_IDGenColumn11">
-                                        <Text
-                                            id="_IDGenText12"
-                                            text="Approved At"
-                                        />
-                                    </Column> -->
-                                    <Column id="_IDGenColumn12">
-                                        <Text
-                                            id="_IDGenText13"
-                                            text="Level3"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn13">
-                                        <Text
-                                            id="_IDGenText14"
-                                            text="Approved On "
-                                        />
-                                    </Column>
-                                    <!-- <Column id="_IDGenColumn14">
-                                        <Text
-                                            id="_IDGenText15"
-                                            text="Approved At"
-                                        />
-                                    </Column> -->
+                                   
                                 </columns>
                                 <items>
                                     <ColumnListItem id="_IDGenColumnListItem1">
@@ -256,53 +197,13 @@
                                             />
                                             <Text
                                                 id="_IDGenText20"
-                                                text="{VoyApprovalModel>Uname}"
+                                                text="{VoyApprovalModel>/0/Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText21"
-                                                text="{VoyApprovalModel>Zdate}"
+                                                text="{VoyApprovalModel>/0/Zdate}"
                                             />
-                                            <!-- <Text
-                                                id="_IDGenText22"
-                                                text="{VoyApprovalModel>Ztime}"
-                                            /> -->
-                                            <Text
-                                                id="_IDGenText23"
-                                                text="{VoyApprovalModel>/0/Uname}"
-                                            />
-                                            <!-- <Text
-                                                id="_IDGenText24"
-                                                text="{VoyApprovalModel>sdfgh}"
-                                            /> -->
-                                            <Text
-                                                id="_IDGenText25"
-                                                text="{VoyApprovalModel>Pstlz}"
-                                            />
-                                            <Text
-                                                id="_IDGenText26"
-                                                text="{VoyApprovalModel>/1/Uname}"
-                                            />
-                                            <Text
-                                                id="_IDGenText27"
-                                                text="{VoyApprovalModel>Land1}"
-                                            />
-                                            <Text
-                                                id="_IDGenText28"
-                                                text="{VoyApprovalModel>Regio}"
-                                            />
-                                            <Text
-                                                id="_IDGenText29"
-                                                text="{VoyApprovalModel>/2/Uname}"
-                                            />
-                                            <Text
-                                                id="_IDGenText30"
-                                                text="{VoyApprovalModel>Telf2}"
-                                            />
-
-                                            <Text
-                                                id="_IDGenText31"
-                                                text="{VoyApprovalModel>Telfx}"
-                                            />
+                                         
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -341,6 +242,7 @@
                                             type="Accept"
                                             press="onApprove"
                                             enabled="false"
+                                            class="sapUiTinyMargin"
                                         />
                                         <Button
                                              id="rejectButton"
@@ -348,11 +250,12 @@
                                             type="Reject"
                                             press="onReject"
                                             enabled="false"
+                                             class="sapUiTinyMargin"
                                         />
                                     </Toolbar>
                                 </headerToolbar>
                     <Table
-                        id="myTable2"
+                        id="approvalTable"
                         mode="MultiSelect"
                         selectionChange="onTableSelectionChange"
                     >
@@ -373,114 +276,7 @@
                         </columns>
                     </Table>
 
-                            <!-- <Table
-                                id="myTable2"
-                                items="{VoyApprovalModel>/}"
-                                mode="MultiSelect"
-                                selectionChange="onTableSelectionChange"
-                            >
-                                <columns>
-                                    <Column id="_IDGenColumn111">
-                                        <Text
-                                            id="_IDGenText211"
-                                            text="Approval Req No"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn211">
-                                        <Text
-                                            id="_IDGenText311"
-                                            text="Voyage No"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn311">
-                                        <Text
-                                            id="_IDGenText411"
-                                            text="Created By"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn411">
-                                        <Text
-                                            id="_IDGenText511"
-                                            text="Created On"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn511">
-                                        <Text
-                                            id="_IDGenText611"
-                                            text="Created At"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn611">
-                                        <Text
-                                            id="_IDGenText711"
-                                            text="Level1"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn711">
-                                        <Text
-                                            id="_IDGenText811"
-                                            text="Approved On"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn811">
-                                        <Text
-                                            id="_IDGenText911"
-                                            text="Approved At"
-                                        />
-                                    </Column>
-                                     <Column id="_IDGenColumn81">
-                                        <Text
-                                            id="_IDGenText91"
-                                            text="Status"
-                                        />
-                                    </Column>
-                                </columns>
-                                
-
-                                <items>
-                                    <ColumnListItem id="_IDGenColumnListItem11">
-                                        <cells>
-                                            <Text
-                                                id="_IDGenText181"
-                                                text="{VoyApprovalModel>Vreqno}"
-                                            />
-                                            <Text
-                                                id="_IDGenText191"
-                                                text="{VoyApprovalModel>Voyno}"
-                                            />
-                                            <Text
-                                                id="_IDGenText201"
-                                                text="{VoyApprovalModel>Uname}"
-                                            />
-                                            <Text
-                                                id="_IDGenText2111"
-                                                text="{VoyApprovalModel>Zdate}"
-                                            />
-                                            <Text
-                                                id="_IDGenText221"
-                                                text="{VoyApprovalModel>Ztime}"
-                                            />
-                                            <Text
-                                                id="_IDGenText231"
-                                                text="{VoyApprovalModel>/0/Uname}"
-                                            />
-                                            <Text
-                                                id="_IDGenext31"
-                                                text="{}"
-                                            />
-                                            <Text
-                                                id="_IDenext31"
-                                                text="{}"
-                                            />
-                                            <Text
-                                                id="_IDGenet31"
-                                                text="{VoyApprovalModel>Zcomm}"
-                                            />
-                                           
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
-                            </Table> -->
+                           
                         </Panel>
                                  <Dialog
                                           id="approvalDialog"

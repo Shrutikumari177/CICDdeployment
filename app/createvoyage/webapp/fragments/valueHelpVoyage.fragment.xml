@@ -6,8 +6,8 @@
         noDataText="Loading..."
         title=""
         search="onVoyageSearch1"
-        confirm="VoyageValueHelpClose"
-        cancel="VoyageValueHelpClose"
+        confirm=".VoyageValueHelpClose"
+        cancel=".VoyageValueHelpClose"
         items="{/xNAUTIxgetvoyapproval}"
         multiSelect="true"
        

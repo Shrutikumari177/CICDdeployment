@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
      
-      "Zcomm": "APPROVARED3",
+      "Zcomm": "APPROVED",
       "Zaction": "APPR"
 }
    

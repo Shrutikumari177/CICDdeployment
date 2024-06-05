@@ -73,7 +73,6 @@ sap.ui.define(
                 
                 let that = this;
                
-
                 await that.getDataforvoyage();
                 await that._initBidTemplate();
 
@@ -235,12 +234,15 @@ sap.ui.define(
             },
             
             onRefresh : function (){
-               voyItemModel.setData([]);
-               costdetailsModel.setData([]);
-               bidItemModel.setData([]);
-               this.getView().getModel("voyItemModel").refresh();
-               this.getView().getModel("costdetailsModel").refresh();
-               this.getView().getModel("bidItemModel").refresh();
+                voyHeaderModel.setData([]);
+                voyItemModel.setData([]);
+                costdetailsModel.setData([]);
+                bidItemModel.setData([]);
+
+                voyHeaderModel.refresh();
+                voyItemModel.refresh();
+                costdetailsModel.refresh();
+                bidItemModel.refresh();
                
             },
 
