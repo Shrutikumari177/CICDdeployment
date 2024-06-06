@@ -9,7 +9,7 @@
         search="onValueHelpSearch"
         confirm="onValueHelpCloseChar"
         cancel="onValueHelpCloseChar"
-        items="{/xNAUTIxAPPROVEDCHAT}"
+        items="{/xNAUTIxCHARTERVALUEHELP}"
         multiSelect="true"
         >
             

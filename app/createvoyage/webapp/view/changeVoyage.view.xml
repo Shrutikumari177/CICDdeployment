@@ -247,7 +247,7 @@
         <Text
             id="header1"
             text="Items Details"
-            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
+            class="sapUiMediumMarginBegin"
         />
 
         <Bar id="HBox10">
@@ -1350,7 +1350,7 @@
         <Text
             id="header2"
             text="Cost Details"
-            class="sapUiTinyMarginTop sapUiTinyMarginLeft"
+            class="sapUiMediumMarginBegin"
         />
         <Bar id="HBox20">
             <contentLeft>

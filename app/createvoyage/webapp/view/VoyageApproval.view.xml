@@ -15,12 +15,15 @@
     xmlns:l="sap.ui.layout"
     xmlns="sap.m"
 >
-     <Page
+    <Page
         id="page"
         class="Page"
     >
         <headerContent>
-            <Bar id="_IDGenBar1" class="customHeader1">
+            <Bar
+                id="_IDGenBar1"
+                class="customHeader1"
+            >
                 <contentLeft>
                     <!-- <core:Icon
                         src="sap-icon://nav-back"
@@ -32,12 +35,12 @@
                   src="./images/ignxlogo.png"
                   height="75%"
               /> -->
-                    <Text id="_IDGenText341"
+                    <Text
+                        id="_IDGenText341"
                         text="Voyage Approval Dashboard"
                     />
-                        <!-- class="textBid size1" -->
+                    <!-- class="textBid size1" -->
                 </contentLeft>
-              
             </Bar>
         </headerContent>
         <subHeader>
@@ -66,7 +69,7 @@
                 <VBox
                     id="_IDGenVBox1"
                     alignItems="End"
-                    class="charteringheader"
+                    class="voyageApprovalheader"
                 >
                     <FlexBox
                         id="_IDHBox1"
@@ -81,8 +84,7 @@
                             id="VoyageNo"
                             showValueHelp="true"
                             valueHelpRequest="ValueHelpVoyage"
-                            
-                           liveChange="ValueHelpVoyage"
+                            liveChange="ValueHelpVoyage"
                             valueHelpOnly="true"
                             tokenUpdate="onTokenUpdate"
                             width="200px"
@@ -99,14 +101,14 @@
                             class="sapUiTinyMarginTop"
                         />
                         <MultiInput
-                            id="searchField3"
+                            id="_voyageAppReqField"
                             editable="false"
                             width="200px"
                             tokenUpdate="onTokenUpdate2"
                         />
                     </FlexBox>
                 </VBox>
-                <FlexBox class="headerItem" >
+                <FlexBox class="headerItem">
                     <Label
                         id="_IDGenLabel2"
                         text="Approval Selection:"
@@ -134,7 +136,7 @@
         <VBox
             id="tab"
             visible="false"
-            class=""
+            class="voyageHeaderItem"
         >
             <IconTabBar
                 id="idIconTabBarNoIcons"
@@ -151,17 +153,20 @@
                             id="p1"
                             height="600px"
                             width="100%"
+                             class="voyApprovalStatusPanel"
                         >
                             <Table
                                 id="statusTable"
                                 items="{VoyApprovalModel>/}"
                             >
                                 <columns>
-                                    <Column id="_IDGenColumn1" width="150px">
+                                    <Column
+                                        id="_IDGenColumn1"
+                                        width="150px"
+                                    >
                                         <Text
                                             id="_IDGenText2"
                                             text="Approval Req No"
-
                                         />
                                     </Column>
                                     <Column id="_IDGenColumn2">
@@ -182,7 +187,6 @@
                                             text="Created On"
                                         />
                                     </Column>
-                                   
                                 </columns>
                                 <items>
                                     <ColumnListItem id="_IDGenColumnListItem1">
@@ -203,7 +207,6 @@
                                                 id="_IDGenText21"
                                                 text="{VoyApprovalModel>/0/Zdate}"
                                             />
-                                         
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -234,33 +237,35 @@
                             id="p2"
                             height="300px"
                             width="100%"
+                            class="voyApprovalPanel"
                         >
-                        <headerToolbar>
-                                    <Toolbar id="_IDGenToolbar1">
-                                        <Button id="approveButton"
-                                            text="Approve"
-                                            type="Accept"
-                                            press="onApprove"
-                                            enabled="false"
-                                            class="sapUiTinyMargin"
-                                        />
-                                        <Button
-                                             id="rejectButton"
-                                            text="Reject"
-                                            type="Reject"
-                                            press="onReject"
-                                            enabled="false"
-                                             class="sapUiTinyMargin"
-                                        />
-                                    </Toolbar>
-                                </headerToolbar>
-                    <Table
-                        id="approvalTable"
-                        mode="MultiSelect"
-                        selectionChange="onTableSelectionChange"
-                    >
-                        <columns>
-                            <!-- <Column>
+                            <headerToolbar>
+                                <Toolbar id="_IDGenToolbar1">
+                                    <Button
+                                        id="approveButton"
+                                        text="Approve"
+                                        type="Accept"
+                                        press="onApprove"
+                                        enabled="false"
+                                        class="sapUiTinyMargin"
+                                    />
+                                    <Button
+                                        id="rejectButton"
+                                        text="Reject"
+                                        type="Reject"
+                                        press="onReject"
+                                        enabled="false"
+                                        class="sapUiTinyMargin"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
+                            <Table
+                                id="approvalTable"
+                                mode="MultiSelect"
+                                selectionChange="onTableSelectionChange"
+                            >
+                                <columns>
+                                    <!-- <Column>
                                 <Label text="Voyage No" />
                             </Column>
                             <Column>
@@ -272,29 +277,57 @@
                             <Column>
                                 <Label text="Created At" />
                             </Column> -->
-                            <!-- Dynamic Columns will be inserted here by the controller -->
-                        </columns>
-                    </Table>
-
-                           
+                                    <!-- Dynamic Columns will be inserted here by the controller -->
+                                </columns>
+                            </Table>
                         </Panel>
-                                 <Dialog
-                                          id="approvalDialog"
-                                          title="Add Comment"
-                                          contentWidth="300px"
-                                          afterClose="onCloseDialog"   >
-                                <TextArea
-                                  id="commentTextArea"
-                                  rows="5"
-                                  width="100%"
-                                    placeholder="Add your comment..."
-                                                               />
-    <Button id="_IDGenButton1" text="Save" press="onSaveComment" />
-    <Button id="_IDGenButton2" text="Cancel" press="onCancelComment" />
-</Dialog>
+                        <Dialog
+                            id="approvalDialog"
+                            title="Add Comment"
+                            contentWidth="300px"
+                            afterClose="onCloseDialogApproval"
+                        >
+                            <TextArea
+                                id="commentTextArea"
+                                rows="5"
+                                width="100%"
+                                placeholder="Add your comment..."
+                            />
+                            <Button
+                                id="_IDGenButton1"
+                                text="Save"
+                                press="onSaveCommentApproval"
+                            />
+                            <Button
+                                id="_IDGenButton2"
+                                text="Cancel"
+                                press="onCancelCommentApproval"
+                            />
+                        </Dialog>
 
-
-
+                         <Dialog
+                            id="RejectedDialog"
+                            title="Add Comment"
+                            contentWidth="300px"
+                            afterClose="onCloseDialogRejected"
+                        >
+                            <TextArea
+                                id="commentTextArea2"
+                                rows="5"
+                                width="100%"
+                                placeholder="Add your comment..."
+                            />
+                            <Button
+                                
+                                text="Save"
+                                press="onSaveCommentRejected"
+                            />
+                            <Button
+                            
+                                text="Cancel"
+                                press="onCancelCommentRejected"
+                            />
+                        </Dialog>
                     </IconTabFilter>
                 </items>
             </IconTabBar>

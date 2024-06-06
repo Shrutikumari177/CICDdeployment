@@ -18,6 +18,8 @@
             description="{Vreqno}"
             iconDensityAware="false"
             iconInset="false"
-            type="Active" />
+            type="Active" 
+            
+            />
     </SelectDialog>
 </core:FragmentDefinition>

@@ -678,8 +678,6 @@ sap.ui.define(
           success: function (oData) {
             // console.log(oData);
 
-
-
             MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
               title: "Voyage Created",
               onClose: function () {
@@ -689,16 +687,8 @@ sap.ui.define(
                 oRouter.navTo("RouteTrChangeVoyage", {
                   "VOYAGE_NO": oData.Voyno
                 });
-                // sap.ushell.Container.getService("CrossApplicationNavigation").toExternal({
-                //   target: {
-                //     semanticObject: "Nautical",
-                //     action: "manage",
-                //   },
-                //   params: {
-                //     voyno: `${oData.Voyno}`,
-                //   },
-                // });
-              },
+              
+              }
             });
           },
           error: function (oResponse) {

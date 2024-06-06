@@ -1,4 +1,4 @@
-/* checksum : 3de2bf2491bc4c916cacf5eba76fd274 */
+/* checksum : e4996328f7ff34fee1194a15b1966e90 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -258,11 +258,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT {
   @sap.display.format : 'UpperCase'
   @sap.label : 'User Name'
   key Uname : String(12) not null;
-  @sap.display.format : 'Date'
-  @sap.label : 'Date'
-  key Zdate : Date not null;
-  @sap.label : 'Time'
-  key Ztime : Time not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Comments'
   Zcomm : String(250);
@@ -818,6 +813,24 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP {
   @sap.label : 'Reference Chartering'
   @sap.quickinfo : 'Reference Chartering No.'
   RefChrnmin : String(10);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'chartering value help for charmin and creqno'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERVALUEHELP {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Approval'
+  @sap.quickinfo : 'Chartering Approval Request Number'
+  key Creqno : String(10) not null;
 };
 
 @cds.external : true

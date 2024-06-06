@@ -67,15 +67,11 @@
                     <PropertyRef Name="Chrnmin"/>
                     <PropertyRef Name="Zlevel"/>
                     <PropertyRef Name="Uname"/>
-                    <PropertyRef Name="Zdate"/>
-                    <PropertyRef Name="Ztime"/>
                 </Key>
                 <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
                 <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
                 <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
-                <Property Name="Zdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
-                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time"/>
                 <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
                 <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
                 <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
@@ -261,6 +257,14 @@
                 <Property Name="Ciprec" Type="Edm.String" MaxLength="5" sap:label="Freight Currency" sap:semantics="currency-code"/>
                 <Property Name="Zdelete" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Indicator" sap:quickinfo="General Flag"/>
                 <Property Name="RefChrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Reference Chartering" sap:quickinfo="Reference Chartering No."/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCHARTERVALUEHELPType" sap:label="chartering value help for charmin and creqno" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Creqno"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
             </EntityType>
             <EntityType Name="xNAUTIxCHARTPURCHASEITEMType" sap:label="Chartering Purchase Group" sap:content-version="1">
                 <Key>
@@ -746,6 +750,7 @@
                 <EntitySet Name="xNAUTIxCHARTERING" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGType" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCharteringHeaderItem" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItemType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHARTERINGVALUEHELP" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCHARTERVALUEHELP" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHARTPURCHASEITEM" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEMType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHATAPP2" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHATAPP2Type" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHATAPPRO" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHATAPPROType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>

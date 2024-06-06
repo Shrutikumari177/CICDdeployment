@@ -418,24 +418,6 @@
     width : fit-content
 }
 
-
-.topBar{
-    width: 99% !important;
-    position:sticky;
-    top:0;
-    left : 0;
-    z-index: 100;
-    height: 48px !important;
-    font-size: 24px;
-    border: none;
-    margin-left: 7px;
-    margin-top: 7px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-}
-
 .sapMPage>section.sapMPageEnableScrolling{
     scrollbar-width: none;
 }
@@ -495,3 +477,7 @@
     margin-right:112px !important;
     }
 
+
+.voyApprovalStatusPanel, .voyApprovalPanel {
+    padding:8px !important;
+}

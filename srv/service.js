@@ -209,7 +209,7 @@ module.exports = async (srv) => {
         'xNAUTIxSUBMITQUATATIONPOST',
         'xNAUTIxVENFBIDPOST',
         'xNAUTIxBIDHISREPORT',
-        'xNAUTIxAPPROVEDCHAT'
+        'xNAUTIxCHARTERVALUEHELP'
     ]);
 };
 

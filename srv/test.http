@@ -11,14 +11,14 @@ GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/10
 GET  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet
 
 ### Put for voyage approval
-PUT  http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet(Vreqno='2000000206',Voyno='1000000168',Zlevel='01',Uname='A.SHARMA')
+GET  http://localhost:4004/odata/v4/nauticalservice/(Vreqno='2000000216',Voyno='1000000176',Zlevel='01',Uname='A.SHARMA')
 Content-Type: application/json
-
-{
+voyapprovalSet
+# {
      
-      "Zcomm": "APPROVED",
-      "Zaction": "APPR"
-}
+#       "Zcomm": "APPROVED",
+#       "Zaction": "APPR"
+# }
    
 ### voyage approval post
 POST http://localhost:4004/odata/v4/nauticalservice/voyapprovalSet

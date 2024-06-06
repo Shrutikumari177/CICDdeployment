@@ -230,7 +230,7 @@ sap.ui.define(
       CharterNo: function () {
         var oView = this.getView();
         if (!this.oChartering) {
-          this.oChartering = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.chartering.fragments.charter", this);
+          this.oChartering = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.chartering.fragments.charterApprovalValueHelp", this);
           oView.addDependent(this.oChartering);
         }
         this.oChartering.open();
