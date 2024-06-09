@@ -66,7 +66,7 @@ sap.ui.define(
 
       },
       ValueHelpVoyage: function () {
-        var oView = this.getView();
+        let oView = this.getView();
 
         if (!this._voyageValueHelpDiaolog) {
           this._voyageValueHelpDiaolog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
@@ -78,16 +78,17 @@ sap.ui.define(
 
       VoyageValueHelpClose: function (evt) {
 
-        var oMultiInput = this.byId("VoyageNo");
-        var oDescriptionInput = this.byId("_voyageAppReqField");
-        var aSelectedContexts = evt.getParameter("selectedContexts"),
+        let oMultiInput = this.byId("VoyageNo");
+        let oDescriptionInput = this.byId("_voyageAppReqField");
+        let aSelectedContexts = evt.getParameter("selectedContexts");
+        let aFilteredData = [];
 
-          oVBox = this.byId("tab")
-        var selectedValues = [];
-        var selectedValues2 = [];
+        let oVBox = this.byId("tab")
+        let selectedValues = [];
+        let selectedValues2 = [];
 
-        var oModel = this.getView().getModel("VoyApprovalModel")
-        var aExistingData = oModel ? oModel.getData() : [];
+        let oModel = this.getView().getModel("VoyApprovalModel")
+        let aExistingData = oModel ? oModel.getData() : [];
 
         if (!oModel) {
           oModel = new sap.ui.model.json.JSONModel();
@@ -96,15 +97,15 @@ sap.ui.define(
 
         }
 
-        var aExistingTokens = oMultiInput.getTokens();
-        var aExistingTokens2 = oDescriptionInput.getTokens();
+        let aExistingTokens = oMultiInput.getTokens();
+        let aExistingTokens2 = oDescriptionInput.getTokens();
         if (aSelectedContexts && aSelectedContexts.length > 0) {
 
           selectedValues = aSelectedContexts.map(function (oContext) {
-            var sPath = oContext.getPath();
-            var match = /Voyno='(\d+)'/g.exec(sPath);
+            let sPath = oContext.getPath();
+            let match = /Voyno='(\d+)'/g.exec(sPath);
             console.log("match", match);
-            var VoynoValue = match ? match[1] : null;
+            let VoynoValue = match ? match[1] : null;
             console.log("VoynoValue", VoynoValue);
             return VoynoValue;
 
@@ -113,10 +114,10 @@ sap.ui.define(
           });
 
           selectedValues2 = aSelectedContexts.map(function (oContext) {
-            var sPath = oContext.getPath();
-            var match = /Vreqno='(\d+)'/g.exec(sPath);
+            let sPath = oContext.getPath();
+            let match = /Vreqno='(\d+)'/g.exec(sPath);
             console.log("match2", match);
-            var VreqnoValue = match ? match[1] : null;
+            let VreqnoValue = match ? match[1] : null;
             console.log("Vreqno", VreqnoValue);
             return VreqnoValue;
           }).filter(function (value) {
@@ -126,34 +127,38 @@ sap.ui.define(
           console.log("Selected Values2:", selectedValues2);
           console.log("Selected Values:", selectedValues);
           selectedValues = Array.from(new Set(selectedValues));
-          selectedValues.forEach(function (sVendorID) {
+          selectedValues.forEach(function (voyno) {
             if (!aExistingTokens.some(function (oToken) {
-              return oToken.getKey() === sVendorID;
+              return oToken.getKey() === voyno;
             })) {
               oMultiInput.addToken(new sap.m.Token({
-                key: sVendorID,
-                text: sVendorID
+                key: voyno,
+                text: voyno
               }));
             }
           });
-          selectedValues2.forEach(function (sVendorID) {
+          // array of Vreqno
+          selectedValues2.forEach(function (vreqno) {
             if (!aExistingTokens2.some(function (oToken) {
-              return oToken.getKey() === sVendorID;
+              return oToken.getKey() === vreqno;
             })) {
               oDescriptionInput.addToken(new sap.m.Token({
-                key: sVendorID,
-                text: sVendorID
+                key: vreqno,
+                text: vreqno
               }));
             }
           });
 
           oVBox.setVisible(false)
-          var aFilteredData = getModelData.filter(function (data) {
+          aFilteredData = getModelData.filter(function (data) {
             return selectedValues.includes(data.Voyno);
           });
+          aFilteredData = aFilteredData.sort(function(a, b) {
+            return a.Zlevel.localeCompare(b.Zlevel);
+        });
           console.log("aFilteredData", aFilteredData);
           // code for multiple selected entry
-          var aCombinedData = aExistingData.concat(aFilteredData);
+          let aCombinedData = aExistingData.concat(aFilteredData);
 
           aCombinedData = aCombinedData.filter((entry, index, self) =>
             index === self.findIndex((t) => (
@@ -168,7 +173,7 @@ sap.ui.define(
 
           oVBox.setVisible(false);
         }
-        var oTable = this.byId("approvalTable")
+        let oTable = this.byId("approvalTable")
         oTable.setVisible(true);
         // console.log(selectedValues, "ye bhi ha")
 
@@ -190,12 +195,21 @@ sap.ui.define(
         console.log(transformedData);
         oModel.setData(transformedData);
 
-        LoggedInUser = "PANKAJ.J";
+        LoggedInUser = "SARATH";
         let that = this;
+        this.approverMatched = false;
         transformedData.forEach(data => {
           that.createDynamicColumns(data.Approvers);
         });
+           // IF USER not MATCHED then Hide the VOYAGE APPROVAL TABLE
+          //  if (!this.approverMatched) {
+
+          //   oTable.setVisible(false);
+          //   return;
+          // }
+
       },
+
       transformData: function transformData(aFilteredData) {
         const distinctVoynos = [...new Set(aFilteredData.map(item => item.Voyno))];
 
@@ -220,26 +234,26 @@ sap.ui.define(
       // dynamic creation of colums
       createDynamicColumns: function (approvers) {
 
-        var oTable = this.getView().byId("approvalTable");
-        var oColumnTemplate = new sap.m.Text(); // Column template for text
+        let oTable = this.getView().byId("approvalTable");
+        let oColumnTemplate = new sap.m.Text(); // Column template for text
 
         // Remove existing columns (except fixed columns)
 
         oTable.removeAllColumns();
 
         // CONDITION TO CHECK WHETHER USER IS either creator or Approver
-        let userNotMatched = false;
+        this.approverMatched = false;
         approvers.forEach(approver => {
-          if (LoggedInUser === approver.Uname) {
+          if (LoggedInUser === approver.Uname && approver.Zlevel !== '00'  ) {
 
-            userNotMatched = true;
+            this.approverMatched = true;
             return
           }
 
           console.log(" Matched so hide the table ");;
         })
         // IF USER not MATCHED then Hide the VOYAGE APPROVAL TABLE
-        if (!userNotMatched) {
+        if (!this.approverMatched) {
 
           oTable.setVisible(false);
           return;
@@ -260,14 +274,15 @@ sap.ui.define(
         }));
 
         // Add dynamic columns for approvers
-        var stopCreatingColumns = false;
+        let stopCreatingColumns = false;
 
         // Add dynamic columns for approvers
 
         approvers.forEach((approver, index) => {
           if (!stopCreatingColumns && approver.Zlevel !== "00") {
+
             if (approver.Uname === LoggedInUser) {
-              var approverIndex = index; // Dynamic index for column headers
+              let approverIndex = index; // Dynamic index for column headers
               oTable.addColumn(new sap.m.Column({
                 header: new sap.m.Label({ text: "Approver " + approverIndex })
               }));
@@ -293,7 +308,7 @@ sap.ui.define(
       },
 
       createCells: function (approvers) {
-        var cells = [];
+        let cells = [];
 
         // Fixed cells
         cells.push(new sap.m.Text({ text: "{VoyApprovalModel>Vreqno}" }));
@@ -307,7 +322,7 @@ sap.ui.define(
         })); // Creator's date
 
         // Dynamic cells for approvers
-        var stopCreatingCells = false;
+        let stopCreatingCells = false;
         let that = this;
         approvers.forEach((approver, index) => {
 
@@ -335,11 +350,11 @@ sap.ui.define(
       },
 
       formatDate: function (date, status) {
-        if (status == undefined) {
+        if (status === undefined && date) {
 
           return date.split('T')[0];
         } else {
-          if (status === 'PEND') {
+          if (status === 'PEND' || date === undefined || date === null) {
             return "";
           } else {
             return date.split('T')[0];
@@ -350,11 +365,11 @@ sap.ui.define(
       },
 
       onSelectionChange: function (oEvent) {
-        var selectedItem = oEvent.getParameter("selectedItem").getText();
-        var oTable1 = this.getView().byId("statusTable");
-        var oTable2 = this.getView().byId("approvalTable");
-        var oVBox1 = this.getView().byId("tab");
-        var oVBox2 = this.getView().byId("tab2");
+        let selectedItem = oEvent.getParameter("selectedItem").getText();
+        let oTable1 = this.getView().byId("statusTable");
+        let oTable2 = this.getView().byId("approvalTable");
+        let oVBox1 = this.getView().byId("tab");
+        let oVBox2 = this.getView().byId("tab2");
 
         if (selectedItem === "Voyage Approval Status Report") {
           oTable1.setVisible(true);
@@ -376,8 +391,8 @@ sap.ui.define(
       },
 
       onTableSelectionChange: function (oEvent) {
-        var oTable = oEvent.getSource();
-        var aSelectedItems = oTable.getSelectedItems();
+        let oTable = oEvent.getSource();
+        let aSelectedItems = oTable.getSelectedItems();
 
         aSelectedItems.forEach(selectedItem => {
           let oText = selectedItem.getCells()[5].getText();
@@ -388,8 +403,8 @@ sap.ui.define(
           }
         }
         )
-        // var bEnableApprove = aSelectedItems.length > 0;
-        // var bEnableReject = aSelectedItems.length > 0;
+        // let bEnableApprove = aSelectedItems.length > 0;
+        // let bEnableReject = aSelectedItems.length > 0;
 
       },
 
@@ -402,8 +417,7 @@ sap.ui.define(
             content: new sap.m.TextArea("commentTextArea", {
               rows: 3,
               width: "100%",
-              placeholder: "Add your comment...",
-              liveChange: this.onCommentChange.bind(this)
+              placeholder: "Add your comment..."
             })
           });
           this.getView().addDependent(oDialog);
@@ -424,7 +438,7 @@ sap.ui.define(
         console.log("closed  Dialog rejection");
       },
       onSaveCommentApproval: function () {
-        var sComment = this.byId("commentTextArea").getValue().trim();
+        let sComment = this.byId("commentTextArea").getValue().trim();
         if (sComment === "") {
           new sap.m.MessageToast.show("This field is mandatory");
           return;
@@ -439,7 +453,7 @@ sap.ui.define(
 
       },
       onSaveCommentRejected: function () {
-        var sComment = this.byId("commentTextArea2").getValue().trim();
+        let sComment = this.byId("commentTextArea2").getValue().trim();
         if (sComment === "") {
           new sap.m.MessageToast.show("This field is mandatory");
           return;
@@ -472,8 +486,7 @@ sap.ui.define(
 
 
 
-
-        let oModelVoyalApp = this.getOwnerComponent().getModel(); // Get Table model instance
+        let oModelVoyApproval = this.getOwnerComponent().getModel(); // Get Table model instance
 
         // Create a filter for the entity ID
         let fVreqno = new sap.ui.model.Filter("Vreqno", sap.ui.model.FilterOperator.EQ, data.Vreqno);
@@ -493,15 +506,11 @@ sap.ui.define(
           filterContext[0].setProperty("Zcomm", sComment);
           filterContext[0].setProperty("Zaction", stat);
 
-          oModelVoyalApp.refresh();
+          oModelVoyApproval.refresh();
 
 
         })
         return;
-
-
-
-
 
         let oModel = this.getOwnerComponent().getModel("modelV2");
 
@@ -537,7 +546,7 @@ sap.ui.define(
 
       onCancelCommentApproval: function () {
         this.byId("approvalDialog").close();
-        var oTable2 = this.byId("approvalTable");
+        let oTable2 = this.byId("approvalTable");
         oTable2.removeSelections();
         this.byId("approveButton").setEnabled(false);
         this.byId("rejectButton").setEnabled(false);
@@ -545,7 +554,7 @@ sap.ui.define(
       },
       onCancelCommentRejected: function () {
         this.byId("RejectedDialog").close();
-        var oTable2 = this.byId("approvalTable");
+        let oTable2 = this.byId("approvalTable");
         oTable2.removeSelections();
         this.byId("approveButton").setEnabled(false);
         this.byId("rejectButton").setEnabled(false);
@@ -562,8 +571,8 @@ sap.ui.define(
             content: new sap.m.TextArea("commentTextArea", {
               rows: 3,
               width: "100%",
-              placeholder: "Add your comment...",
-              liveChange: this.onCommentChange.bind(this)
+              placeholder: "Add your comment..."
+          
             })
           });
           this.getView().addDependent(oDialog);
@@ -575,24 +584,28 @@ sap.ui.define(
 
 
       onDialogCancel: function () {
-        var oDialog = this.byId("approvalDialog");
+        let oDialog = this.byId("approvalDialog");
         if (oDialog) {
           oDialog.close();
         }
       },
 
       onTokenUpdate: function (oEvent) {
-        var aRemovedTokens = oEvent.getParameter("removedTokens");
+        let aRemovedTokens = oEvent.getParameter("removedTokens");
         if (aRemovedTokens && aRemovedTokens.length > 0) {
+
+          let aVreqnoToRemove = []
           aRemovedTokens.forEach(function (oToken) {
-            var sRemovedValue = oToken.getKey();
+            let sRemovedValue = oToken.getKey();
             console.log("Removed token value:", sRemovedValue);
 
-            var oTableData = this.getView().getModel("VoyApprovalModel").getData();
-            var foundIndex = null;
-            for (var i = 0; i < oTableData.length; i++) {
-              if (oTableData[i].Chrnmin === sRemovedValue) {
+            let oTableData = this.getView().getModel("VoyApprovalModel").getData();
+            let foundIndex = null;
+            for (let i = 0; i < oTableData.length; i++) {
+              if (oTableData[i].Voyno === sRemovedValue) {
                 foundIndex = i;
+                aVreqnoToRemove.push(oTableData[i].Vreqno);
+
                 break;
               }
             }
@@ -608,13 +621,31 @@ sap.ui.define(
               console.log("No matching value found in the table.");
             }
           }.bind(this));
+
+          // Remove corresponding tokens from _voyageAppReqField
+          let oVoyageAppReqField = this.byId("_voyageAppReqField");
+          let aTokens = oVoyageAppReqField.getTokens();
+          let that = this;
+          aVreqnoToRemove.forEach(function (vreqno) {
+            for (let j = 0; j < aTokens.length; j++) {
+              if (aTokens[j].getKey() === vreqno) {
+                oVoyageAppReqField.removeToken(aTokens[j]);
+                console.log("Removed token for vreqno:", vreqno);
+                if(oVoyageAppReqField.getTokens().length === 0 ) {
+                  oVoyageAppReqField.setTokens([]);
+                  that.onRefresh();
+                }
+                break;
+              }
+            }
+          });
         }
       },
 
 
       ValueHelpVoyage: function () {
 
-        var oView = this.getView();
+        let oView = this.getView();
         if (!this.oVoyageDialog) {
           this.oVoyageDialog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
           oView.addDependent(this.oVoyageDialog);
@@ -625,41 +656,41 @@ sap.ui.define(
 
       onVoyageSearch1: function (oEvent) {
         // debugger;
-        var sValue = oEvent.getParameter("value");
+        let sValue = oEvent.getParameter("value");
 
-        var oFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, sValue);
+        let oFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, sValue);
 
         oEvent.getSource().getBinding("items").filter([oFilter]);
       },
 
       onRefresh: function () {
         // Reset multi inputs
-        var oMultiInput = this.byId("VoyageNo");
-        var oDescriptionInput = this.byId("_voyageAppReqField");
+        let oMultiInput = this.byId("VoyageNo");
+        let oDescriptionInput = this.byId("_voyageAppReqField");
         oMultiInput.removeAllTokens();
         oDescriptionInput.removeAllTokens();
 
         // Hide tables and other elements
-        var oTable1 = this.byId("statusTable");
-        var oTable2 = this.byId("approvalTable");
-        var oVBox1 = this.byId("tab");
-        var oVBox2 = this.byId("tab2");
+        let oTable1 = this.byId("statusTable");
+        let oTable2 = this.byId("approvalTable");
+        let oVBox1 = this.byId("tab");
+        let oVBox2 = this.byId("tab2");
         oTable1.setVisible(false);
         oTable2.setVisible(false);
         oVBox1.setVisible(false);
         oVBox2.setVisible(false);
 
         // Reset button states if needed
-        // var oApproveButton = this.byId("approveButton");
-        // var oRejectButton = this.byId("rejectButton");
+        // let oApproveButton = this.byId("approveButton");
+        // let oRejectButton = this.byId("rejectButton");
         // oApproveButton.setEnabled(false);
         // oRejectButton.setEnabled(false);
-        var oSelect = this.byId("_IDGenSelect1"); // Replace "yourSelectControlId" with the actual ID of your select control
+        let oSelect = this.byId("_IDGenSelect1"); // Replace "yourSelectControlId" with the actual ID of your select control
         if (oSelect) {
           oSelect.setSelectedKey(null);
         }
 
-        var oModel = this.getView().getModel("VoyApprovalModel");
+        let oModel = this.getView().getModel("VoyApprovalModel");
         if (oModel) {
           oModel.setData([]);
         }

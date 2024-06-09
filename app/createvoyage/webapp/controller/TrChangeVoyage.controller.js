@@ -110,13 +110,6 @@ sap.ui.define(
                 voyageNum = myVOYNO;
                 console.log("myVoyno  received:", myVOYNO);
 
-                let oModel = this.getOwnerComponent().getModel();
-                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
-
-                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
-                    $expand: "toitem,tocostcharge,tobiditem"
-                });
-
                 let  oCommerModel = new JSONModel({
                     myData: [
                         {
@@ -154,9 +147,16 @@ sap.ui.define(
                 that.getView().setModel(oCommerModel, "commercialModel");
                 that.getBidDetails(myVOYNO);
 
+                let oModel = this.getOwnerComponent().getModel();
+                let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
+
+                let oBindList = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, [aFilter], {
+                    $expand: "toitem,tocostcharge,tobiditem"
+                });
+
                 oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                    if (aContexts.length === 1) {
-                        const entityData = aContexts[0].getObject();
+                    if (aContexts.length === 1 ) {
+                        const entityData = aContexts[0].getObject();   // NEED TO Discuss
                         tempDataArr.push(entityData);
 
                         new sap.m.MessageToast.show("Data fetched successfully.")
@@ -191,11 +191,12 @@ sap.ui.define(
 
 
                     } else {
-                        console.warn("Entity with VOYAGE_NO:", myVOYNO, "not found.");
-                        new sap.m.MessageBox.error("Error Occured");
+                        console.warn("Entity with VOYAGE No." +myVOYNO + "has duplicate resource");
+                        new sap.m.MessageBox.error(`Entity with VOYAGE No ${myVOYNO} has duplicate resource`);
                     }
                 }).catch(function (oError) {
-                    console.error("Error fetching entity:", oError);
+                    console.error("Error while fetching entity:", oError);
+                    new sap.m.MessageBox.error( "Error while fetching entity");
                 }).finally(function (){
                     if( that._BusyDialog){
 
@@ -1850,6 +1851,8 @@ sap.ui.define(
 
             */
             sendApproval: function (oEvent) {
+
+                
                 let payload = {
                     "Vreqno": "",
                     "Voyno": myVOYNO,

@@ -2,7 +2,7 @@
 ### getting Header details
 
 # GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
-GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000165
 
 ### getting
 

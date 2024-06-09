@@ -96,7 +96,8 @@ sap.ui.define(
 
                     },
                     error: function (err) {
-                        console.log("my error :  ", err);
+                        console.log(JSON.parse(err.responseText).error.message.value);
+                        new sap.m.message.err(`Error in fetching Bid Details :`, err.message)
 
                     }
                 })

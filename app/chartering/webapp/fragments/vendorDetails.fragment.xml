@@ -1,50 +1,73 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
-    xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
-    <Dialog id="_IDDialog" title="Vendor Details" class="sapUiSmallMargin" contentHeight="400px" contentWidth="50%">
-        <content>
-            <VBox class="flexbox-container">
-                <FlexBox class="flexbox">
-                    <!-- Vendor Details Section -->
-                    <Panel headerText="Vendor Detail" class="sapUiResponsiveMargin">
-                        <form:SimpleForm columnsL="1" columnsM="1" editable="false" layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3">
-                            <Label text="Vendor Name " />
-                            <Text text="{vendorDetail>/Name1}" />
-                            <Label text="Title " />
-                            <Text text="{vendorDetail>/Anred}" />
-                            <Label text="Language " />
-                            <Text text="{vendorDetail>Spras}" />
-                            <Label text="Telephone1 " />
-                            <Text text="{vendorDetail>/Telf1}" />
-                            <Label text="Telephone2 " />
-                            <Text text="{vendorDetail>/Telf2}" />
-                            <Label text="Fax No " />
-                            <Text text="{vendorDetail>/Telfx}" />
-                        </form:SimpleForm>
-                    </Panel>
-                </FlexBox>
-                <FlexBox class="flexbox">
-                    <!-- Vendor Address Details Section -->
-                    <Panel headerText="Vendor Address Details" class="sapUiResponsiveMargin">
-                        <form:SimpleForm columnsL="1" columnsM="1" editable="false" layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3">
-                            <Label text="Address " />
-                            <Text text="{vendorDetail>/Adrnr}" />
-                            <Label text="Street" />
-                            <Text text="{vendorDetail>/Stras}" />
-                            <Label text="Postal Code " />
-                            <Text text="{vendorDetail>/Pstlz}" />
-                            <Label text="City " />
-                            <Text text="{vendorDetail>/Ort01}" />
-                            <Label text="Country" />
-                            <Text text="{vendorDetail>/Land1}" />
-                        </form:SimpleForm>
-                    </Panel>
-                </FlexBox>
-            </VBox>
-        </content>
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+    <Dialog title=" Vendor Details" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%">
+        <Panel>
+            <FlexBox class="flex">
+                <VBox class="flex" alignItems="End">
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Vendor No :" />
+                        <Input value="{vendorDetail>/Lifnr}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Title : " />
+                        <Input value="{vendorDetail>/Anred}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Name1 : " />
+                        <Input value="{vendorDetail>/Name1}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Name2 : " />
+                        <Input value="{vendorDetail>/Name2}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Telephone : " />
+                        <Input value="{vendorDetail>/Telf1}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Fax No. : " />
+                        <Input value="{vendorDetail>/Telfx}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Language : " />
+                        <Input value="{vendorDetail>/Spras}" editable="false" />
+                    </FlexBox>
+                    <!-- Add other FlexBoxes and Inputs here -->
+                </VBox>
+
+                <VBox class="flex" alignItems="End">
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Address :" />
+                        <Input value="{vendorDetail>/Adrnr}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Street :" />
+                        <Input value="{vendorDetail>/Stras}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="City :" />
+                        <Input value="{vendorDetail>/Ort01}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Country :" />
+                        <Input value="{vendorDetail>/Land1}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Postal Code  :" />
+                        <Input value="{vendorDetail>/Pstlz}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem">
+                        <Label class="sapUiTinyMarginTop" text="Region :" />
+                        <Input value="{vendorDetail>/Regio}" editable="false" />
+                    </FlexBox>
+                    <!-- Add other FlexBoxes and Inputs here -->
+                </VBox>
+            </FlexBox>
+        </Panel>
+
         <footer>
-            <OverflowToolbar id="_IDGenOverflowToolbar2">
-                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
-                <Button id="_IDGenButto" text="Close" press="oncancell" />
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button text="Close" press="oncancell" />
             </OverflowToolbar>
         </footer>
     </Dialog>

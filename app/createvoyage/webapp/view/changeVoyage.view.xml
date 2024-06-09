@@ -82,8 +82,9 @@
             <core:Title text="Header details" />
             <Label
                 id="Label1"
-                text="Voyage No"
+                text="Voyage Number"
                 class="sapUiTinyMarginTop"
+                textDirection="LTR"
                 
             />
             <Input
@@ -91,13 +92,14 @@
                 width="200px"
                 editable="true"
                 showValueHelp="true"
-                placeholder="select voyage"
+                placeholder="Select Voyage"
                 valueHelpRequest=".showVoyageValueHelp"
             />
             <Label
                 id="Label2"
                 text="Voyage Name"
                 class="sapUiTinyMarginTop"
+                  textDirection="LTR"
             />
             <Input
                 id="Input2"
@@ -146,27 +148,7 @@
             </Select>
             <core:Title />
 
-            <Label
-                id="Label7"
-                text="Bid Type"
-                class="sapUiTinyMarginTop"
-            />
-            <Input
-                id="Input5"
-                width="50%"
-                value="{voyHeaderModel>/0/Bidtype}"
-            />
-
-            <Label
-                id="Label8"
-                text="Status"
-                class="sapUiTinyMarginTop"
-            />
-            <Input
-                id="Input6"
-                width="50%"
-                value="{voyHeaderModel>/0/GV_CSTATUS}"
-            />
+          
             <Label
                 id="Label6"
                 text="Historical Frieght Cost"
@@ -174,10 +156,22 @@
             />
             <Input
                 id="Input4"
-                width="150px"
+                width="200px"
                 value="{voyHeaderModel>/0/Freght}"
                 editable="false"
                 
+            />
+
+         
+              <Label
+                id="Label7"
+                text="Bid Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input5"
+                width="200px"
+                value="{voyHeaderModel>/0/Bidtype}"
             />
 
             <Label
@@ -187,10 +181,20 @@
             />
             <Input
                 id="Input3"
-                width="100px"
+                width="200px"
                 value="{voyHeaderModel>/0/Curr}"
                 showValueHelp="true"
                 valueHelpRequest=".showValueHelpDialogCurr"
+            />
+               <Label
+                id="Label8"
+                text="Status"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input6"
+                width="200px"
+                value="{voyHeaderModel>/0/GV_CSTATUS}"
             />
         </form:SimpleForm>
         <!-- <HBox id="_IDGenHBox1" class="vdHeaderLayout" >

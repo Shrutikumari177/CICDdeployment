@@ -166,7 +166,124 @@
         
         </Table> -->
         <!-- For Header Section -->
-        <form:SimpleForm layout="ResponsiveLayout">
+          <form:SimpleForm layout="ResponsiveLayout">
+            <core:Title text="Header details" />
+            <Label
+                id="Label1"
+                text="Voyage Number"
+                class="sapUiTinyMarginTop"
+                textDirection="LTR"
+                
+            />
+             <Input
+                id="Input1"
+                width="200px"
+                value="{voyHeaderModel>/0/Voyno}"
+                editable="false"
+            />
+            <Label
+                id="Label2"
+                text="Voyage Name"
+                class="sapUiTinyMarginTop"
+                  textDirection="LTR"
+            />
+            <Input
+                id="Input2"
+                width="200px"
+                value="{voyHeaderModel>/0/Voynm}"
+            />
+            <Label
+                id="Label3"
+                text="Voyage Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Select
+                id="Select2"
+                width="200px"
+                forceSelection="false"
+                items="{
+                            path: '/VoyTypeSet'
+                        }"
+                selectedKey="{voyHeaderModel>/0/Voyty}"
+            >
+                <core:Item
+                    id="_Item2"
+                    key="{Voycd}"
+                    text="{Voydes}"
+                />
+            </Select>
+            <Label
+                id="_Label4"
+                text="Vessel Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Select
+                id="Select3"
+                width="200px"
+                forceSelection="false"
+                items="{
+                        path: '/CarTypeSet'
+                    }"
+                selectedKey="{voyHeaderModel>/0/Carty}"
+            >
+                <core:Item
+                    id="_Item3"
+                    key="{Carcd}"
+                    text="{Cardes}"
+                />
+            </Select>
+            <core:Title />
+
+          
+            <Label
+                id="Label6"
+                text="Historical Frieght Cost"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input4"
+                width="200px"
+                value="{voyHeaderModel>/0/Freght}"
+                editable="false"
+                
+            />
+
+         
+              <Label
+                id="Label7"
+                text="Bid Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input5"
+                width="200px"
+                value="{voyHeaderModel>/0/Bidtype}"
+            />
+
+            <Label
+                id="Label5"
+                text="Currency"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input3"
+                width="200px"
+                value="{voyHeaderModel>/0/Curr}"
+                showValueHelp="true"
+                valueHelpRequest=".showValueHelpDialogCurr"
+            />
+               <Label
+                id="Label8"
+                text="Status"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input6"
+                width="200px"
+                value="{voyHeaderModel>/0/GV_CSTATUS}"
+            />
+        </form:SimpleForm>
+        <!-- <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />
             <Label
                 id="Label1"
@@ -276,7 +393,7 @@
                 showValueHelp="true"
                 valueHelpRequest=".showValueHelpDialogCurr"
             />
-        </form:SimpleForm>
+        </form:SimpleForm> -->
 
         <!-- for nav container buttons  -->
         <Panel />

@@ -162,30 +162,58 @@
                                 <columns>
                                     <Column
                                         id="_IDGenColumn1"
-                                        width="150px"
+                                        width="128px"
+                                        hAlign="Center"
                                     >
                                         <Text
                                             id="_IDGenText2"
-                                            text="Approval Req No"
+                                            text="Approval Req No."
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn2">
+                                    <Column id="_IDGenColumn2"  hAlign="Center">
                                         <Text
                                             id="_IDGenText3"
                                             text="Voyage No"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn3">
+                                    <Column id="_IDGenColumn3"  hAlign="Center">
                                         <Text
                                             id="_IDGenText4"
                                             text="Created By"
                                         />
                                     </Column>
-                                    <Column id="_IDGenColumn4">
+                                    <Column id="_IDGenColumn4"  hAlign="Center">
                                         <Text
                                             id="_IDGenText5"
                                             text="Created On"
                                         />
+                                    </Column>
+                                    <Column   hAlign="Center">
+                                       <Text text="Approver 1"/>
+                                    </Column>
+                                     <Column hAlign="Center" >
+                                       <Text text="Status"/>
+                                    </Column>
+                                      <Column   hAlign="Center">
+                                       <Text text="Date"/>
+                                    </Column>
+                                     <Column   hAlign="Center">
+                                       <Text text="Approver 2"/>
+                                    </Column>
+                                    <Column   hAlign="Center">
+                                       <Text text="Status"/>
+                                    </Column>
+                                     <Column  hAlign="Center" >
+                                       <Text text="Date"/>
+                                    </Column>
+                                     <Column   hAlign="Center">
+                                       <Text text="Approver 3"/>
+                                    </Column>
+                                    <Column  hAlign="Center">
+                                       <Text text="Status"/>
+                                    </Column>
+                                     <Column  hAlign="Center">
+                                       <Text text="Date"/>
                                     </Column>
                                 </columns>
                                 <items>
@@ -201,12 +229,53 @@
                                             />
                                             <Text
                                                 id="_IDGenText20"
-                                                text="{VoyApprovalModel>/0/Uname}"
+                                                text="{VoyApprovalModel>Approvers/0/Uname}"
                                             />
                                             <Text
                                                 id="_IDGenText21"
-                                                text="{VoyApprovalModel>/0/Zdate}"
+                                                text="{path :'VoyApprovalModel>Approvers/0/Zdate',formatter:'.formatDate'}"
                                             />
+                                             <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/1/Uname}"
+                                            />
+                                            <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/1/Zaction}"
+                                            />
+                                           
+                                            <Text
+                                                
+                                                text="{path :'VoyApprovalModel>Approvers/1/Zdate',formatter:'.formatDate'}"
+                                            />
+                                               <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/2/Uname}"
+                                            />
+
+                                               <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/2/Zaction}"
+                                            />
+                                              <Text
+                                                
+                                               text="{path :'VoyApprovalModel>Approvers/2/Zdate',formatter:'.formatDate'}"
+                                            />
+                                                    <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/3/Uname}"
+                                            />
+
+                                               <Text
+                                                
+                                                text="{VoyApprovalModel>Approvers/3/Zaction}"
+                                            />
+                                              <Text
+                                                
+                                                text="{path :'VoyApprovalModel>Approvers/3/Zdate',formatter:'.formatDate'}"
+                                            />
+
+
                                         </cells>
                                     </ColumnListItem>
                                 </items>
