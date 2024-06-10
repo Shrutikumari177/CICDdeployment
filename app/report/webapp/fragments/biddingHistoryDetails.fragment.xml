@@ -1,0 +1,151 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="Bidding History Report"
+        class="sapUiSmallMargin"
+        contentHeight="35%"
+        contentWidth="50%"
+    >
+        <Panel >
+            <FlexBox  class="flex" >
+                <VBox  class="flex" alignItems="End" >
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Done By Ve:"
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/DoneBy}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Created By : "
+                        />
+                        <Input
+                            
+                            value="{biddingHisReport1>/0/AwrdCreatedBy}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" >
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Status : "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Stat}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Type(Auto):"
+                        />
+                        <Input
+                    
+                            value="{biddingHisReport1>/0/Zmode}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" >
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Comments: "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Zcom}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    
+                </VBox>
+
+                <VBox class="flex" alignItems="End">
+                    <FlexBox class="headerItem" >
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="AwardInfo: "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Award}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Voyage Type : "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Voyty}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" >
+                        <Label
+    
+                            class="sapUiTinyMarginTop"
+                            text=" Cargo Type: "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Carty}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text=" Voyage Name: "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Voynm}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                            class="sapUiTinyMarginTop"
+                            text="Vessel Name : "
+                        />
+                        <Input
+                            value="{biddingHisReport1>/0/Vessn}"
+                            editable="false"
+                        />
+                    </FlexBox>
+ 
+                </VBox>
+            </FlexBox>
+        </Panel>
+
+        
+
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer  />
+                <Button
+                    
+                    text="Close"
+                    press="oncancell"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

@@ -87,34 +87,11 @@
                         <Column width="130px">
                             <Text text="Currency" />
                         </Column>
-                        <Column width="130px">
-                            <Text text="Done By" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Created By" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Status" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Type(Auto)" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Comments" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Award Created By" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Award Created At" />
-                        </Column>
-                        <Column width="130px">
-                            <Text text="Award Created On" />
-                        </Column>
+                       
                     </columns>
 
                     <items>
-                        <ColumnListItem>
+                        <ColumnListItem type="Navigation" press="onNavigateDetails">
                             <cells>
                                 <Text text="{contractAwardModel>Chrnmin}" />
                                 <Text text="{contractAwardModel>Voyno}" />
@@ -126,14 +103,7 @@
                                 <Text text="{contractAwardModel>CodeDesc}" />
                                 <Text text="{contractAwardModel>Cvalue}" />
                                 <Text text="{contractAwardModel>Cunit}" />
-                                <Text text="{contractAwardModel>DoneBy}" />
-                                <Text text="{contractAwardModel>Lifnr}" />
-                                <Text text="{contractAwardModel>Stat}" />
-                                <Text text="{contractAwardModel>Zmode}" />
-                                <Text text="{contractAwardModel>Zcom}" />
-                                <Text text="{contractAwardModel>AwrdCreatedBy}" />
-                                <Text text="{contractAwardModel>AwrdCreatedAt}" /> 
-                                <Text text="{contractAwardModel>AwrdCreatedOn}" /> 
+                               
                             
                             </cells>
                         </ColumnListItem>

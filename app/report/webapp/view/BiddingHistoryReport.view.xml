@@ -84,7 +84,7 @@
                         <Column width="130px">
                             <Text text="Currency Key" />
                         </Column>
-                        <Column width="130px">
+                        <!-- <Column width="130px">
                             <Text text="Done By Ve" />
                         </Column>
                         <Column width="130px">
@@ -113,11 +113,11 @@
                         </Column>
                         <Column width="130px">
                             <Text text="Vessel Name" />
-                        </Column>
+                        </Column> -->
                     </columns>
 
                     <items>
-                        <ColumnListItem>
+                        <ColumnListItem type="Navigation" press="onNavigateDetails">
                             <cells>
                                 <Text text="{biddingHistoryAwardModel>Voyno}" />
                                 <Text text="{biddingHistoryAwardModel>Lifnr}" />
@@ -128,16 +128,7 @@
                                 <Text text="{biddingHistoryAwardModel>CodeDesc}" />
                                 <Text text="{biddingHistoryAwardModel>Cvalue}" />
                                 <Text text="{biddingHistoryAwardModel>Curr}" />
-                                <Text text="{biddingHistoryAwardModel>DoneBy}" />
-                                <Text text="{biddingHistoryAwardModel>AwrdCreatedBy}" />
-                                <Text text="{biddingHistoryAwardModel>Stat}" />
-                                <Text text="{biddingHistoryAwardModel>Zmode}" />
-                                <Text text="{biddingHistoryAwardModel>Zcom}" />
-                                <Text text="{biddingHistoryAwardModel>Award}" />
-                                <Text text="{biddingHistoryAwardModel>Voyty}" /> 
-                                <Text text="{biddingHistoryAwardModel>Carty}" /> 
-                                <Text text="{biddingHistoryAwardModel>Voynm}" /> 
-                                <Text text="{biddingHistoryAwardModel>Vessn}" /> 
+                               
                             
                             </cells>
                         </ColumnListItem>

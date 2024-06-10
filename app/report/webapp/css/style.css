@@ -1,1 +1,7 @@
 /* Enter your custom styles here */
+.flex{
+    margin-left: 29px;
+}
+.headerItem{
+    gap :10px;
+}

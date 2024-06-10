@@ -5,9 +5,10 @@ sap.ui.define(
       "sap/m/MessageBox",
       "sap/ui/model/json/JSONModel",
       "sap/ui/model/Filter",
-      "sap/ui/model/FilterOperator"
+      "sap/ui/model/FilterOperator",
+      "sap/ui/core/Fragment"
     ],
-    function (BaseController, MessageBox, JSONModel, Filter, FilterOperator) {
+    function (BaseController, MessageBox, JSONModel, Filter, FilterOperator,Fragment) {
       "use strict";
       let getModelData = [];
       let jsonModel1 = [];
@@ -85,6 +86,27 @@ sap.ui.define(
   
           oEvent.getSource().getBinding("items").filter([oFilter1]);
         },
+        onNavigateDetails: function(oEvent) {
+          
+          let oSource = oEvent.getSource();
+          let data = oSource.getBindingContext("contractAwardModel").getObject();
+          let tempModel = new sap.ui.model.json.JSONModel();
+          tempModel.setData([data]);
+          var oView = this.getView();
+          if (!this._oDialog1) {
+              this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.report.fragments.contractAwardDetails", this);
+              oView.addDependent(this._oDialog1);
+     
+       
+          }
+          this._oDialog1.setModel(tempModel,"contractAwardReport1")
+          this._oDialog1.open();
+        },
+      
+      
+      oncancell: function () {
+        this._oDialog1.close();
+      },
   
   
       });

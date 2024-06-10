@@ -5,7 +5,7 @@
     <Page id="page" title="Report Dashboard">
 
       <GenericTile id="_IDGenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
-         header="Nautical" subheader="Contract Award Status Report" press="onContractAwardStatusReport" >
+         header="Nautical" subheader="Contract Award Status Report" press="onContractAwardStatusReport">
             <TileContent id="_IDGenTileContent1">
                 <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" />
             </TileContent>
