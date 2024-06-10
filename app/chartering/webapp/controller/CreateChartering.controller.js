@@ -112,7 +112,7 @@ sap.ui.define(
       },
 
       onNavigateDetails: function (oEvent) {
-        debugger;
+       
         const oContext = oEvent.getSource().getBindingContext("vendorModel");
         const rowData = oContext.getObject();
         let oModel = new sap.ui.model.json.JSONModel();
@@ -146,7 +146,7 @@ sap.ui.define(
 
       },
       onValueHelpClose: function (evt) {
-        debugger;
+       
         var oMultiInput = this.byId("VendNo");
         var aSelectedItems = evt.getParameter("selectedItems"),
           oVBox = this.byId("tab"),
@@ -400,7 +400,9 @@ sap.ui.define(
 
 
       onSaveCh: async function () {
-        debugger;
+        
+    
+        
         let oDate = this.byId("Input3").getValue();
         let oTime = this.byId("Input5").getValue();
         let oVoynm = this.byId("voyname").getValue();
@@ -411,127 +413,140 @@ sap.ui.define(
         let oPurchaseOr = this.byId("PurchaseOrg").getValue();
         let oPaymentTerm = this.byId("PaymentTerm").getValue();
         let formatedDate = this.convertToDateTimeOffset(oDate);
+    
         let isExistFlag = false;
         let that = this;
-
-        console.log("get model data is:", getModelData2);
-        var extractData = getModelData2.filter(function (item) {
-          return item.Ekgrp === oPurchaseGr;
-        }).map(function (item) {
-          return item.Eknam;
-        }).join(', ');
-
-        var extractData2 = getModelData3.filter(function (item) {
-          return item.Ekorg === oPurchaseOr;
-        }).map(function (item) {
-          return item.Ekotx;
-        }).join(', ');
-
-        var extractData3 = getModelData4.filter(function (item) {
-          return item.Paytrm === oPaymentTerm;
-        }).map(function (item) {
-          return item.Paytrmtxt;
-        }).join(', ');
-
+    
+       
+        let extractData = getModelData2.filter(item => item.Ekgrp === oPurchaseGr).map(item => item.Eknam).join(', ');
+        let extractData2 = getModelData3.filter(item => item.Ekorg === oPurchaseOr).map(item => item.Ekotx).join(', ');
+        let extractData3 = getModelData4.filter(item => item.Paytrm === oPaymentTerm).map(item => item.Paytrmtxt).join(', ');
+    
         console.log(oDate, oVoynm, oVoyno, oVendorString, oPurchaseGr, oPurchaseOr, ochatExt, oTime);
-
+    
+       
         let oVendorArray = [];
         if (oVendorString) {
-          let vendors = oVendorString.split(",");
-          vendors.forEach(function (vendor) {
-            oVendorArray.push({ "Lifnr": vendor.trim(), "Voyno": oVoyno });
-          });
+            let vendors = oVendorString.split(",");
+            vendors.forEach(vendor => oVendorArray.push({ "Lifnr": vendor.trim(), "Voyno": oVoyno }));
         }
         console.log("array of vendors", oVendorArray);
-
+    
+       
         if (!oVoyno) {
-          sap.m.MessageToast.show("Please enter a Voyage Number");
-          return;
+            sap.m.MessageToast.show("Please enter a Voyage Number");
+            return;
         }
-
+    
         if (!ochatExt) {
-          sap.m.MessageToast.show("Please enter an External chartering number");
-          return;
+            sap.m.MessageToast.show("Please enter an External chartering number");
+            return;
         }
-
+    
         if (!(/^\d+$/.test(ochatExt))) {
-          sap.m.MessageToast.show("Please enter only numeric values in the External chartering number field");
-          return;
+            sap.m.MessageToast.show("Please enter only numeric values in the External chartering number field");
+            return;
         }
-
+    
         if (oVendorArray.length === 0) {
-          sap.m.MessageToast.show("Please select at least one Vendor");
-          return;
+            sap.m.MessageToast.show("Please select at least one Vendor");
+            return;
         }
-
+    
         if (!oPurchaseOr) {
-          sap.m.MessageToast.show("Please enter a Purchase Organization");
-          return;
+            sap.m.MessageToast.show("Please enter a Purchase Organization");
+            return;
         }
-
+    
         if (!oPaymentTerm) {
-          sap.m.MessageToast.show("Please enter a Payment Term");
+            sap.m.MessageToast.show("Please enter a Payment Term");
+            return;
+        }
+    
+       
+        let payload = {
+            "Chrnmin": "",
+            "tovendor": oVendorArray,
+            "tocharteringasso": {
+                "Chrnmin": "",
+                "Chrnmex": ochatExt,
+                "Chrcdate": oDate,
+                "Chrctime": oTime,
+                "Chrqsdate": null,
+                "Chrqstime": null,
+                "Chrqedate": null,
+                "Chrqetime": null,
+                "Chrqdate": null,
+                "Chrporg": oPurchaseOr,
+                "Chrporgn": extractData2,
+                "Chrpgrp": oPurchaseGr,
+                "Chrpgrpn": extractData,
+                "Chrexcr": null,
+                "Chrpayt": oPaymentTerm,
+                "Chrpaytxt": extractData3,
+                "Chrinco": null,
+                "Chrincodis": null,
+                "Chrincol": null,
+                "Cimater": null,
+                "Cimatdes": null,
+                "Ciqty": null,
+                "Ciuom": null,
+                "Voyno": oVoyno,
+                "Voynm": oVoynm,
+                "Chrven": null,
+                "Chrvenn": null,              
+                "Ciprec": null,
+                "Zdelete": false,
+                "RefChrnmin": null
+            }
+        };
+    
+        // Create a busy dialog to indicate progress
+        let oBusyDialog = new sap.m.BusyDialog();
+        oBusyDialog.open();
+        let checkforExistingCharteringRes = await this.checkforExistingChartering(oVoyno);
+        if(checkforExistingCharteringRes.length > 0 ){
+          sap.m.MessageBox.information (`Chartering already created for the Voyage No.: ${oVoyno}`);
+          oBusyDialog.close();
           return;
         }
-        // let checkforExistingCharteringRes = await this.checkforExistingChartering(oVoyno);
-        // if(checkforExistingCharteringRes.length > 0 ){
-        //   sap.m.MessageBox.show(`Chartering already created for the Voyage No ${oVoyno}`);
-        //   return;
-        // }
-
-        let payload = {
-          "Chrnmin": "",
-          "tovendor": oVendorArray,
-          "tocharteringasso": {
-            "Chrnmin": "",
-            "Chrnmex": ochatExt,
-            "Chrcdate": oDate,
-            "Chrctime": oTime,
-            "Chrqsdate": null,
-            "Chrqstime": null,
-            "Chrqedate": null,
-            "Chrqetime": null,
-            "Chrqdate": null,
-            "Chrporg": oPurchaseOr,
-            "Chrporgn": extractData2,
-            "Chrpgrp": oPurchaseGr,
-            "Chrpgrpn": extractData,
-            "Chrexcr": null,
-            "Chrpayt": oPaymentTerm,
-            "Chrpaytxt": extractData3,
-            "Chrinco": null,
-            "Chrincodis": null,
-            "Chrincol": null,
-            "Cimater": null,
-            "Cimatdes": null,
-            "Ciqty": null,
-            "Ciuom": null,
-            "Voyno": oVoyno,
-            "Voynm": oVoynm,
-            "Chrven": null,
-            "Chrvenn": null,              
-            "Ciprec": null,
-            "Zdelete": false,
-            "RefChrnmin": null
-          }
-        };
-        let oBusyDialog = sap.m.BusyDialog();
-        this.createChartering(payload)
-        .then(function(createResponse, response) {
-            console.log("createResponse", createResponse);
-            console.log("createResponse", response);
-            if (createResponse) {
-              console.log("createResponse...path ", createResponse.oSyncCreatePromise.sPath);
-              sap.m.MessageBox.show(`Chartering created successfully for the Voyage No ${oVoyno}`);
-            }
-            // Handle create response here
-        })
-        .catch(function(error) {
-            console.error("Error creating chartering:", error);
-            // Handle error here
-        });
-
-      },
+        
+    
+        try {
+            let oModel = this.getView().getModel();
+            let oListBinding = oModel.bindList("/xNAUTIxCharteringHeaderItem");
+    
+            // Attach the createCompleted event handler
+            oListBinding.attachEvent("createCompleted", this.onCreateCompleted, this);
+    
+            // Create the entity
+            let oContext = oListBinding.create(payload, false, false, false);
+    
+            // Handle the created promise
+            await oContext.created();
+    
+        } catch (oError) {
+            sap.m.MessageToast.show("Entity creation failed: " + oError.message);
+        } finally {
+            oBusyDialog.close();
+        }
+    },
+    
+    onCreateCompleted: function (oEvent) {
+        let oParameters = oEvent.getParameters();
+        let oContext = oParameters.context;
+        let charminNum = oContext.sPath.replace(/\D+/g, '');
+        let bSuccess = oParameters.success;
+    
+        if (bSuccess) {
+          console.log("oParameters", oParameters);
+          console.log("oContext", oContext.sPath);
+          console.log("bSuccess", bSuccess);
+        	MessageBox.success(`Chartering created successfully with Charmin No.: ${charminNum}`);
+        } else {
+          MessageBox.error(`Failed to create chartering`);
+        }
+    },
 
       checkforExistingChartering: async function (oVoyno) {
         let rModel = this.getOwnerComponent().getModel();
@@ -550,25 +565,7 @@ sap.ui.define(
         console.log("oBindListResp ", oBindListResp);
         console.log("getChartModelData ", getChartModelData);
         return getChartModelData;
-      },
-
-      createChartering: async function (payload) {
-        try {
-          let oModel = this.getOwnerComponent().getModel();
-          console.log("Creating Entering.... ", payload);
-          console.log("Creating oModel.... ", oModel);
-          let oBindList = oModel.bindList("/xNAUTIxCharteringHeaderItem");
-          let res = await oBindList.create(payload);
-          console.log("Create Response  from create Chartering", res);
-          oModel.refresh()
-          return res;
-        } catch (error) {
-          console.log("Error Occured ", error);
-          throw error;
-        }
-
       }
-
 
     });
   })

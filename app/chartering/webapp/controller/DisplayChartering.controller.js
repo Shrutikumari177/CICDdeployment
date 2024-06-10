@@ -52,6 +52,28 @@ sap.ui.define(
           }.bind(this));
           console.log("mydata", getModelData);
         },
+
+        
+        onNavigateDetails: function(oEvent) {
+          let oSource = oEvent.getSource();
+          let data = oSource.getBindingContext("vendorModel1").getObject();
+          let tempModel = new sap.ui.model.json.JSONModel();
+          tempModel.setData([data]);
+          console.log(oSource);
+          var oView = this.getView();
+          if (!this._oDialog1) {
+              this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.chartering.fragments.displayCharterings", this);
+              oView.addDependent(this._oDialog1);
+      
+        
+          }
+          this._oDialog1.setModel(tempModel,"myModel")
+          this._oDialog1.open();
+      },
+
+      oncancell: function () {
+        this._oDialog1.close();
+    },
   
   
         

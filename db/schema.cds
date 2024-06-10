@@ -24,7 +24,7 @@ type BidDetail {
 type Vendors {
     vendorId : String;
     score : Integer;
-    eligible : Boolean;
+    eligible : String;
     Trank : String;
     Crank : String;
     bidDetails: array of BidDetail;

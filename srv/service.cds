@@ -9,6 +9,7 @@ using NAUTIZCHATAPPROVAL_SRV from './external/NAUTIZCHATAPPROVAL_SRV.cds';
 using NAUTIZVOY_VALUEHELP_CDS from './external/NAUTIZVOY_VALUEHELP_CDS.cds';
 using NAUTIVENDOR_BTP_SRV from './external/NAUTIVENDOR_BTP_SRV.cds';
 using NAUTICOMP_QUOT_SRV from './external/NAUTICOMP_QUOT_SRV';
+using NAUTICHASTATUS_SRV from './external/NAUTICHASTATUS_SRV.cds';
 
 
 service nauticalservice {
@@ -256,6 +257,14 @@ service nauticalservice {
 
     entity ZCalculateSet               as projection on NAUTINAUTICALCV_SRV.ZCalculateSet
     entity ZCreatePlanSet              as projection on NAUTINAUTICALCV_SRV.ZCreatePlanSet;
+       
+    entity cha_statusSet as projection on NAUTICHASTATUS_SRV.cha_statusSet
+    {        key Chrnmin, Creqno, Zlevel, Zaction     }    
+;
+
+    entity xNAUTIxCHARTERINGVALUEHELP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP
+    {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin     }    
+;
 
 
     entity xNAUTIxVOYAGEHEADERTOITEM   as

@@ -230,6 +230,16 @@
             "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
           }
         }
+      },
+      "NAUTICHASTATUS_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTICHASTATUS_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/CHASTATUS_SRV"
+          }
+        }
       }
     }
   },

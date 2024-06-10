@@ -572,7 +572,7 @@ sap.ui.define(
         // oRouter.navTo("RouteTrChangeVoyage", {
         //   "VOYAGE_NO": "1000000112"
         // });
-        // return;
+        // return;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 
         const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();

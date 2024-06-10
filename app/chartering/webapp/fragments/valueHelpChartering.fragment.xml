@@ -9,7 +9,7 @@
         search="onChartSearch"
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
-        items="{/xNAUTIxCharteringHeaderItem}"
+        items="{/xNAUTIxCHARTERINGVALUEHELP}"
         
     >
         

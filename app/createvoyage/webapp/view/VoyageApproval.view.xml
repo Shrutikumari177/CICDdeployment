@@ -157,8 +157,8 @@
                         >
                             <Table
                                 id="statusTable"
-                                items="{VoyApprovalModel>/}"
                             >
+                                <!-- items="{VoyApprovalModel>/}" -->
                                 <columns>
                                     <Column
                                         id="_IDGenColumn1"
@@ -216,69 +216,7 @@
                                        <Text text="Date"/>
                                     </Column>
                                 </columns>
-                                <items>
-                                    <ColumnListItem id="_IDGenColumnListItem1">
-                                        <cells>
-                                            <Text
-                                                id="_IDGenText18"
-                                                text="{VoyApprovalModel>Vreqno}"
-                                            />
-                                            <Text
-                                                id="_IDGenText19"
-                                                text="{VoyApprovalModel>Voyno}"
-                                            />
-                                            <Text
-                                                id="_IDGenText20"
-                                                text="{VoyApprovalModel>Approvers/0/Uname}"
-                                            />
-                                            <Text
-                                                id="_IDGenText21"
-                                                text="{path :'VoyApprovalModel>Approvers/0/Zdate',formatter:'.formatDate'}"
-                                            />
-                                             <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/1/Uname}"
-                                            />
-                                            <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/1/Zaction}"
-                                            />
-                                           
-                                            <Text
-                                                
-                                                text="{path :'VoyApprovalModel>Approvers/1/Zdate',formatter:'.formatDate'}"
-                                            />
-                                               <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/2/Uname}"
-                                            />
-
-                                               <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/2/Zaction}"
-                                            />
-                                              <Text
-                                                
-                                               text="{path :'VoyApprovalModel>Approvers/2/Zdate',formatter:'.formatDate'}"
-                                            />
-                                                    <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/3/Uname}"
-                                            />
-
-                                               <Text
-                                                
-                                                text="{VoyApprovalModel>Approvers/3/Zaction}"
-                                            />
-                                              <Text
-                                                
-                                                text="{path :'VoyApprovalModel>Approvers/3/Zdate',formatter:'.formatDate'}"
-                                            />
-
-
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
+                             
                             </Table>
                         </Panel>
                     </IconTabFilter>

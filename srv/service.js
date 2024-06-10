@@ -11,13 +11,16 @@ module.exports = async (srv) => {
     const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV");
     const NAUTIZVOY_VALUEHELP_CDS = await cds.connect.to("NAUTIZVOY_VALUEHELP_CDS");
     const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV");
+    const NAUTICHASTATUS_SRV = await cds.connect.to("NAUTICHASTATUS_SRV");
 
     const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
     const NAUTICOMP_QUOT_SRV = await cds.connect.to("NAUTICOMP_QUOT_SRV");
     // srv.on('READ', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     // srv.on('CREATE', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
+
     srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query)); 
     srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query)); 
+    
     srv.on('READ', 'calculateRankings', async (req) => {
         console.log("values", req._queryOptions.$filter);
         
@@ -25,10 +28,25 @@ module.exports = async (srv) => {
         Chrnmin = Chrnmin.replace(/'/g, '');
 
         const charminData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxvenBid').where({ Chrnmin }));
-        console.log("filtered chrnmin data", charminData );
+        
+        if (!charminData || charminData.length === 0) {
+            console.error(`No data found for Chrnmin: ${Chrnmin}`);
+            return [];
+        }
+
         let Voyno = charminData[0].Voyno;
+        
+        if (!Voyno) {
+            console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
+            return [];
+        }
 
         const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({ Voyno }));
+
+        if (!voyageData || voyageData.length === 0) {
+            console.error(`No voyage data found for Voyno: ${Voyno}`);
+            return [];
+        }
 
         const rankedVendors = calculateAndRank(voyageData, charminData);
         console.log("rankedVendors", rankedVendors);
@@ -55,7 +73,7 @@ module.exports = async (srv) => {
                     Voyno: vendor.Voyno,
                     Chrnmin: vendor.Chrnmin,
                     score: 0,
-                    eligible: true,
+                    eligible: "Yes",
                     Cvalue: vendor.Cvalue,
                     bidDetails: []
                 };
@@ -65,7 +83,7 @@ module.exports = async (srv) => {
             if (expected) {
                 let fScore;
                 if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== vendor.Value) {
-                    vendorScores[vendor.Lifnr].eligible = false;
+                    vendorScores[vendor.Lifnr].eligible = "No";
                     fScore = 0;
                 } else {
                     const score = expected.Value === vendor.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
@@ -154,7 +172,8 @@ module.exports = async (srv) => {
         return Object.values(grouped);
     }
 
-
+    registerHandlers( srv, NAUTICHASTATUS_SRV, [
+        'cha_statusSet' ])
     registerHandlers( srv, NAUTICOMP_QUOT_SRV, [
         'xNAUTIxcomp_quot','xNAUTIxfinalbid','xNAUTIxitemBid','xNAUTIxvenBid' ])
 
@@ -209,7 +228,8 @@ module.exports = async (srv) => {
         'xNAUTIxSUBMITQUATATIONPOST',
         'xNAUTIxVENFBIDPOST',
         'xNAUTIxBIDHISREPORT',
-        'xNAUTIxCHARTERVALUEHELP'
+        'xNAUTIxCHARTERVALUEHELP',
+        'xNAUTIxCHARTERINGVALUEHELP'
     ]);
 };
 

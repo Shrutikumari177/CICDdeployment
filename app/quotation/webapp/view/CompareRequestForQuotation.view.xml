@@ -4,7 +4,6 @@
     xmlns="sap.m"  	xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
     	height="100%"
 	width="100%"
-    xmlns:formatter="com.ingenx.nauti.quotation.util.formatter"
 
     >
 
@@ -33,7 +32,7 @@
           <Bar id="navar">
             <contentLeft>
                 <Button id="ButtonInvite" text="Invite" visible="false" enabled="false" press="onSubmitInvite" type="Emphasized"/>  
-                <!-- <Button id="ButtonRefresh" text="Refresh"  press="onFetchRankings" type="Emphasized"/>             -->
+                <Button id="ButtonRefresh" text="Refresh"  press="onRefresh" type="Emphasized" visible="false"   />        
 
                              
             </contentLeft>
@@ -54,6 +53,7 @@
                             width="200px"
                             valueHelpRequest="charteringValueHelp"
                             showValueHelp="true"
+                            valueHelpOnly="true"
                         />
                         </HBox>
                         <HBox class="hboxv"  id="idVoyge" visible="false">
@@ -63,7 +63,7 @@
                             class="sapUiTinyMarginTop"
                         />
                         <Input
-                       
+                       id="Voyageno"
                             editable="false"
                             value="{rankings>/Voyno}"
                             width="200px"
@@ -85,77 +85,38 @@
                      <Table id="table"  items="{ path: '' ,  sorter: {
                 path: 'Score',
                 descending: true
-            }}" mode="MultiSelect"  selectionChange="onSelectItem" >
+            }}"  selectionChange="onSelectItem"  mode="MultiSelect" visible="false">
+            
+
                 <columns  >
-                    
+            
+    
                     
                     <Column id="_IDGenColumn3" visible="{= ${rankings>/0/Vendors} !== 'vendorId'}">
                         <Label id="_IDGenLabel3" text="Vendor"  />
                         
                     </Column>
-                     <!-- <Column id="_IDGenColumn8" width="12rem">
-                        <Label id="_IDGenLabel8" text="CLASS OF VESSEL" />
-                    </Column>
-                    <Column id="_IDGenColumn1" width="15rem">
-                        <Label id="_IDGenLabel1" text="Score-CLASS OF VESSEL " />
-                    </Column>
-                    <Column  width="12rem">
-                        <Label text="COUNTRY OF ORIGIN" />
-                    </Column>
-                    <Column  width="15rem">
-                        <Label  text="Score-COUNTRY OF ORIGIN " />
-                    </Column>
-                    <Column  width="12rem">
-                        <Label  text="LAST PORT OF CALL" />
-                    </Column>
-                    <Column  width="15rem">
-                        <Label  text="Score-LAST PORT OF CALL " />
-                    </Column>
-                    <Column  width="12rem">
-                        <Label  text="LAST CLEANING DATE" />
-                    </Column>
-                    <Column  width="15rem">
-                        <Label  text="Score-LAST CLEANING DATE " />
-                    </Column> -->
+                  
                     
                     <Column id="_IDGenColumn2" visible="{= ${rankings>/0/Vendors} !== 'Crank'}" >
                         <Label id="_IDGenLabel2" text="Commercial Ranking" />
                     </Column>
-                    <Column id="_IDGenColumn4" >
+                    <Column id="_IDGenColumn4" visible="{= ${rankings>/0/Vendors} !== 'Trank'}" >
                         <Label id="_IDGenLabel4" text="Technical Ranking" />
                     </Column>
-                     <Column id="_IDGenColumn5"  >
+                     <Column id="_IDGenColumn5" visible="{= ${rankings>/0/Vendors} !== 'score'}" >
                         <Label id="_IDGenLabel5" text="Score"  />
                     </Column>
                     
                     <!-- <Column id="_IDGenColumn6" width="13rem">
                         <Label id="_IDGenLabel6" text="Bid Date" />
                     </Column> -->
-                    <Column id="_IDGenColumn7" >
+                    <Column id="_IDGenColumn7" visible="{= ${rankings>/0/Vendors} !== 'eligible'}" >
                         <Label id="_IDGenLabel7" text="Eligibility" />
                     </Column>
                    
-                    <!-- <Column id="_IDGenColumn9" width="8rem">
-                        <Label id="_IDGenLabel9" text="Value" />
-                    </Column>
-                     <Column id="_IDGenColumn10" width="8rem">
-                        <Label id="_IDGenLabel10" text="Currency" />
-                    </Column>
-                     <Column id="_IDGenColumn11" width="8rem">
-                        <Label id="_IDGenLabel11" text="" />
-                    </Column>
-                     <Column id="_IDGenColumn12" width="8rem">
-                        <Label id="_IDGenLabel12" text="Total Score" />
-                    </Column> -->
-                     <!-- <Column id="_IDGenColumn13" width="13rem">
-                        <Label id="_IDGenLabel13" text="Eligibility for Reverse Bidding" />
-                    </Column>
-                     <Column id="_IDGenColumn14" width="11rem">
-                        <Label id="_IDGenLabel14" text="Commercial Ranking" />
-                    </Column>
-                     <Column id="_IDGenColumn15" width="11rem">
-                        <Label id="_IDGenLabel15" text="Technical Ranking" />
-                    </Column>  -->
+                  
+                    
                 </columns>
 
                     <items>

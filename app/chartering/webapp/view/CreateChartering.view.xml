@@ -83,22 +83,7 @@
                             editable="false"
                         /> -->
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenHBox4"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="Label3"
-                            text="Ext.Chartering Req. No:"
-                            required="true"
-                            class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd"
-                        />
-                        <Input
-                            id="chatExt"
-                            value=""
-                            width="200px"
-                        />
-                    </FlexBox>
+                    
 
                     <FlexBox
                         id="_IDGenHBox2"
@@ -137,6 +122,22 @@
                             width="200px"
                             valueHelpOnly="true"
                             tokenUpdate="onTokenUpdate"
+                        />
+                    </FlexBox>
+                    <FlexBox
+                        id="_IDGenHBox4"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="Label3"
+                            text="Ext.Chartering Req. No:"
+                            required="true"
+                            class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd"
+                        />
+                        <Input
+                            id="chatExt"
+                            value=""
+                            width="200px"
                         />
                     </FlexBox>
                 </VBox>
