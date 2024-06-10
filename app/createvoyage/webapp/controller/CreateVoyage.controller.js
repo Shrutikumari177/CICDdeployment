@@ -33,27 +33,18 @@ sap.ui.define(
     var oVoyageDetailModel;
     var pathFetchedFromDb;
     let boolPortsLoaded = false;
+    let pathToExclude =[];
 
-    return Controller.extend("com.ingenx.nauti.createvoyage.controller.View1", {
+    return Controller.extend("com.ingenx.nauti.createvoyage.controller.CreateVoyage", {
       formatter: formatter,
       onInit: function () {
 
-        // let x  = new JSONModel({});
-
-        // x.loadData("/odata/v4/nauticalcv-srv").then(function(){
-        //   console.log(x.getData().value);
-        // })
-        // x.loadData("/odata/v4/nauticalcv-srv/BidTypeSet").then(function(){
-        //   console.log(x.getData().value);
-        // });
-
-       
         let that = this;
         this._BusyDialog = new sap.m.BusyDialog({
           title: "Loading...",
         });
         this._BusyTimeout = setTimeout(() => {
-          if (this._BusyDialog) this._BusyDialog.setText("This is taking forever, please wait...");
+          if (this._BusyDialog) this._BusyDialog.setText("This is taking time, please wait...");
         }, 5000);
 
         this._BusyTimeout = setTimeout(() => {
@@ -122,7 +113,6 @@ sap.ui.define(
         //   console.log("oEVent after create completed ",oEvent)
         // })
       },
-
       getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
         let oModel = this.getOwnerComponent().getModel();
         console.log("oModel", oModel);
@@ -164,7 +154,8 @@ sap.ui.define(
         setTimeout(() => { that._renderMap(); }, 500);
         window.addEventListener("resize", (e) => {
           setTimeout(() => {
-            if (!map?.getContainer()?.childElementCount) {
+            // if (!map?.getContainer()?.childElementCount) {
+              if  (map && map.getContainer() && map.getContainer().childElementCount === 0) {
               map.remove();
               that._renderMap();
             } else {
@@ -267,6 +258,7 @@ sap.ui.define(
       },
 
       onMarkerClick: async function (oEvent) {
+        
         // debugger;
         // var that = window.that;
         // const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
@@ -288,7 +280,7 @@ sap.ui.define(
            if( existFlag !== -1){
             var that = window.that;
             sap.ui.core.BusyIndicator.hide();
-            MessageBox.error("Port can not be repeated, Please select diffrent port.");
+            MessageBox.error("Port can not be repeated,select a diffrent port.");
             return;
            }
         let legId = oJsonModel.getData().portData.length + 1;
@@ -318,13 +310,15 @@ sap.ui.define(
         // console.log("json model port data", oJsonModel.getData().portData);
         oJsonModel.refresh();
         var portLng = oJsonModel.getData().portData.length;
+        var that = window.that;
+        //  that.byId("blockRow2").setVisible(true);
+        //   that.byId("blockRow3").setVisible(true);
         if (portLng < 2) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
           that.byId("speedInput").setEditable(true);
           return;
         } else {
-          var that = window.that;
           that.byId("createVoyageButton").setEnabled(true);
           that.byId("freighSimButton").setEnabled(true);
           that.byId("calculateVoyageButton").setEnabled(true);
@@ -333,6 +327,8 @@ sap.ui.define(
           let ToPortName = oJsonModel.getData().portData[portLng - 1].PortName;
           var IvFromPort = oJsonModel.getData().portData[portLng - 2].PortId;
           let FromPortName = oJsonModel.getData().portData[portLng - 2].PortName;
+
+         
          
           var IvOptimized;
           // if (that.getView().byId("idRoutes").getState()) {
@@ -444,7 +440,23 @@ sap.ui.define(
 
         })
       },
+      //  for canal selection
+      onCheckBoxSelect :  function (oEvent){
+        let oSource = oEvent.getSource();
+        let textType = oSource.getText();
+        let isSelected = oEvent.getParameter("selected");
+        console.log( textType, isSelected);
+        if( !pathToExclude.includes(textType) && isSelected){
+                pathToExclude.push(textType);
+        }else {
+          let index = pathToExclude.indexOf(textType);
+          pathToExclude.splice(index, 1);
+        }
+        console.log(pathToExclude);
+        
+        // that.onMarkerClick();
 
+      },
       onClear: function (oEvent) {
         latLngArr.length = 0;
         oJsonModel.getData().portData.length = 0;
@@ -459,6 +471,8 @@ sap.ui.define(
         this.byId("headerCarty").setValue("");
         this.byId("headerCurr").setValue("");
         this.byId("headerBidty").setValue("");
+        this.byId("blockRow2").setVisible(false);
+        this.byId("blockRow3").setVisible(false);
       },
 
       onCalc: function (oEvent) {
@@ -545,12 +559,20 @@ sap.ui.define(
           },
           error: function (oResponse) {
             console.log(oResponse);
+            new sap.m.MessageBox.erroe(JSON.parse(oResponse.responseText).error.message.value)
           },
         });
       },
 
       onVoyageCreate: function (oEvent) {
         that = window.that;
+
+        let oRouter = this.getOwnerComponent().getRouter();
+
+        // oRouter.navTo("RouteTrChangeVoyage", {
+        //   "VOYAGE_NO": "1000000112"
+        // });
+        // return;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 
         const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();
@@ -646,7 +668,7 @@ sap.ui.define(
           return;
         }
         console.log("payload for create:", oPayload);
-        let oRouter = this.getOwnerComponent().getRouter();
+        // let oRouter = this.getOwnerComponent().getRouter();
 
         // oRouter.navTo("RouteTrChangeVoyage", {
         //   "VOYAGE_NO": "1000000034"
@@ -656,30 +678,23 @@ sap.ui.define(
           success: function (oData) {
             // console.log(oData);
 
-
-
             MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
               title: "Voyage Created",
               onClose: function () {
 
                 console.log("sent voyage no. :", oData.Voyno)
+                
                 oRouter.navTo("RouteTrChangeVoyage", {
                   "VOYAGE_NO": oData.Voyno
                 });
-                // sap.ushell.Container.getService("CrossApplicationNavigation").toExternal({
-                //   target: {
-                //     semanticObject: "Nautical",
-                //     action: "manage",
-                //   },
-                //   params: {
-                //     voyno: `${oData.Voyno}`,
-                //   },
-                // });
-              },
+              
+              }
             });
           },
           error: function (oResponse) {
-            // console.log(oResponse);
+            let errObject = JSON.parse(oResponse.responseText);
+            console.log(errObject);
+            new sap.m.MessageBox.error(errObject.error.message.value);
           },
         });
       },

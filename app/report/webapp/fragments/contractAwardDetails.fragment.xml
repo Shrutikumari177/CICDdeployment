@@ -1,0 +1,133 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDDialog"  title="Contract Award Detail" class="sapUiSmallMargin" contentHeight="35%" contentWidth="50%" >
+
+         <Panel >
+            <FlexBox  class="flex" >
+                <VBox  class="flex" alignItems="End" >
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                         
+                            class="sapUiTinyMarginTop"
+                            text="Done By Ve:"
+                        />
+                        <Input
+                            
+                            value="{contractAwardReport1>/0/DoneBy}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem">
+                        <Label
+                            
+                            class="sapUiTinyMarginTop"
+                            text="Created By : "
+                        />
+                        <Input
+                            
+                            value="{contractAwardReport1>/0/Lifnr}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" >
+                        <Label
+                            
+                            class="sapUiTinyMarginTop"
+                            text="Status : "
+                        />
+                        <Input
+                            
+                            value="{contractAwardReport1>/0/Stat}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem">
+                        <Label
+                            
+                            class="sapUiTinyMarginTop"
+                            text="Type(Auto):"
+                        />
+                        <Input
+                            
+                            value="{contractAwardReport1>/0/Zmode}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                   
+                    
+                </VBox>
+
+                <VBox id="_IDGenVBox2" class="flex" alignItems="End">
+                 <FlexBox id="_IDGenFlexBox6" class="headerItem" >
+                        <Label
+                            id="_IDGenLabel5"
+                            class="sapUiTinyMarginTop"
+                            text="Comments: "
+                        />
+                        <Input
+                            id="_IDGenInput5"
+                            value="{contractAwardReport1>/0/Zcom}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    <FlexBox id="_IDGenFlexBox9" class="headerItem" >
+                        <Label
+                            id="_IDGenLabel8"
+                            class="sapUiTinyMarginTop"
+                            text="Award Created By: "
+                        />
+                        <Input
+                            id="_IDGenInput8"
+                            value="{contractAwardReport1>/0/AwrdCreatedBy}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox id="_IDGenFlexBox10" class="headerItem">
+                        <Label
+                            id="_IDGenLabel9"
+                            class="sapUiTinyMarginTop"
+                            text="Award Created At: "
+                        />
+                        <Input
+                            id="_IDGenInput9"
+                            value="{contractAwardReport1>/0/AwrdCreatedAt}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox id="_IDGenFlexBox11" class="headerItem" >
+                        <Label
+                            id="_IDGenLabel10"
+                            class="sapUiTinyMarginTop"
+                            text="Award Created On: "
+                        />
+                        <Input
+                            id="_IDGenInput10"
+                            value="{contractAwardReport1>/0/AwrdCreatedOn}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                   
+ 
+                </VBox>
+            </FlexBox>
+        </Panel>
+       
+
+        <footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar2">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                <Button id="_IDGenButto" text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

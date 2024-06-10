@@ -1,0 +1,181 @@
+<mvc:View controllerName="com.ingenx.nauti.quotation.controller.CompareRequestForQuotation"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true" 
+    xmlns="sap.m"  	xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+    	height="100%"
+	width="100%"
+
+    >
+
+    <Page id="_IDGenPage1"  
+        >
+        
+        <headerContent>
+            <Bar id="_IDGenBar2">
+                <contentLeft>
+                    
+                   
+                    <Text id="_IdCompare"
+                        class="text1"
+                        text="Compare Request For Quotation" visible="true"
+                    />
+                    <Text id="_IdInvite"
+                        class="text1"
+                        text="Invite For Live Freight Negotiation" visible="false"
+                    />
+                </contentLeft>
+                
+            </Bar>
+        </headerContent>
+    
+        <subHeader >
+          <Bar id="navar">
+            <contentLeft>
+                <Button id="ButtonInvite" text="Invite" visible="false" enabled="false" press="onSubmitInvite" type="Emphasized"/>  
+                <Button id="ButtonRefresh" text="Refresh"  press="onRefresh" type="Emphasized" visible="false"   />        
+
+                             
+            </contentLeft>
+          </Bar>
+        </subHeader>
+      
+        <VBox id="_IDGenVBoxo" class="Vboxlab">
+        <HBox >
+        <HBox >
+                        <Label
+                            id="Lbel1"
+                            text="Chartering Request No  : "
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                            id="charteringNo"
+                            value=""
+                            width="200px"
+                            valueHelpRequest="charteringValueHelp"
+                            showValueHelp="true"
+                            valueHelpOnly="true"
+                        />
+                        </HBox>
+                        <HBox class="hboxv"  id="idVoyge" visible="false">
+
+<Label
+                            text="  Voyage No. : "
+                            class="sapUiTinyMarginTop"
+                        />
+                        <Input
+                       id="Voyageno"
+                            editable="false"
+                            value="{rankings>/Voyno}"
+                            width="200px"
+                            
+                           
+                        />
+                        </HBox>
+                        </HBox>
+                        </VBox>
+                        
+        <!-- <ScrollContainer id="_IDGenScrollContainer1"
+		height="100%"
+		width="100%"
+		vertical="true"
+		focusable="true">         -->
+                   
+ <VBox class="Vboxtab" id="idVbox" visible="false" >
+ 
+                     <Table id="table"  items="{ path: '' ,  sorter: {
+                path: 'Score',
+                descending: true
+            }}"  selectionChange="onSelectItem"  mode="MultiSelect" visible="false">
+            
+
+                <columns  >
+            
+    
+                    
+                    <Column id="_IDGenColumn3" visible="{= ${rankings>/0/Vendors} !== 'vendorId'}">
+                        <Label id="_IDGenLabel3" text="Vendor"  />
+                        
+                    </Column>
+                  
+                    
+                    <Column id="_IDGenColumn2" visible="{= ${rankings>/0/Vendors} !== 'Crank'}" >
+                        <Label id="_IDGenLabel2" text="Commercial Ranking" />
+                    </Column>
+                    <Column id="_IDGenColumn4" visible="{= ${rankings>/0/Vendors} !== 'Trank'}" >
+                        <Label id="_IDGenLabel4" text="Technical Ranking" />
+                    </Column>
+                     <Column id="_IDGenColumn5" visible="{= ${rankings>/0/Vendors} !== 'score'}" >
+                        <Label id="_IDGenLabel5" text="Score"  />
+                    </Column>
+                    
+                    <!-- <Column id="_IDGenColumn6" width="13rem">
+                        <Label id="_IDGenLabel6" text="Bid Date" />
+                    </Column> -->
+                    <Column id="_IDGenColumn7" visible="{= ${rankings>/0/Vendors} !== 'eligible'}" >
+                        <Label id="_IDGenLabel7" text="Eligibility" />
+                    </Column>
+                   
+                  
+                    
+                </columns>
+
+                    <items>
+                    <ColumnListItem id="_IDGenColumnListItem1" type="Navigation" press="onNavigateDetails"  
+                    
+                    >
+                        <cells>
+                            <!-- <Text id="_IDGenText2"
+                                text="{testDataModel>CharterNumber}"
+                            />
+
+                            <Text id="_IDGenText3"
+                                text="{testDataModel>VoyageNumber}"
+                            /> -->
+
+                            <!-- <Text id="_IDGenText4"
+                                text="{rankedVendorsModel>vendor}"
+                            />
+
+                            <Text id="_IDGenText5"
+                                text="{rankedVendorsModel>rank}"
+                            />
+                            <Text id="_IDGenText6" 
+                                text="{rankedVendorsModel>score}"
+                            />
+
+                            <Text id="_IDGenText7"
+                                text="{rankedVendorsModel>eligible}"
+                            /> -->
+
+                            <!-- <Text id="_IDGenText7"
+                                text="{testDataModel>Bidtype}"
+                            />
+
+                            <Text id="_IDGenText8"
+                                text="{testDataModel>Frcost}"
+                            /> -->
+
+                           
+                        </cells>
+                    </ColumnListItem>
+                </items>
+                  
+ 
+ 
+            </Table>
+
+
+
+
+           </VBox>
+           <!-- </ScrollContainer> -->
+    
+            
+        
+    </Page>
+
+   
+
+    
+    
+</mvc:View>

@@ -1,0 +1,182 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "com.ingenx.nauti.chartering",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.13.4",
+      "toolsId": "517f3b75-4d5f-40ba-aafb-d02bcfaa6ff6"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/nauticalservice/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.124.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.ingenx.nauti.chartering.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "com.ingenx.nauti.chartering.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteCharteringDashboard",
+          "pattern": ":?query:",
+          "target": [
+            "TargetCharteringDashboard"
+          ]
+        },
+        {
+          "name": "RouteCreateChartering",
+          "pattern": "createChartering",
+          "target": [
+            "TargetCreateChartering"
+          ]
+        },
+        {
+          "name": "RouteChangeChartering",
+          "pattern": "changeChartering",
+          "target": [
+            "TargetChangeChartering"
+          ]
+        },
+        {
+          "name": "RouteDisplayChartering",
+          "pattern": "displayChartering",
+          "target": [
+            "TargetDisplayChartering"
+          ]
+        },
+        {
+          "name": "RouteCharteringApproval",
+          "pattern": "charteringApproval",
+          "target": [
+            "TargetCharteringApproval"
+          ]
+        }
+        
+      ],
+      "targets": {
+        "TargetCharteringDashboard": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "charteringDashboard",
+          "viewName": "charteringDashboard"
+        },
+        "TargetCreateChartering": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CreateChartering",
+          "viewName": "CreateChartering"
+        },
+        "TargetChangeChartering": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ChangeChartering",
+          "viewName": "ChangeChartering"
+        },
+        "TargetDisplayChartering": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DisplayChartering",
+          "viewName": "DisplayChartering"
+        },
+        "TargetCharteringApproval": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CharteringApproval",
+          "viewName": "CharteringApproval"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.ingenx.nauti.chartering.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

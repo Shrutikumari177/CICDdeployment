@@ -1,0 +1,144 @@
+    <mvc:View
+        xmlns:controls="sap.viz.ui5.controls"
+        controllerName="com.ingenx.nauti.report.controller.BiddingHistoryReport"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:semantic="sap.m.semantic"
+        xmlns:core="sap.ui.core"
+        xmlns:tnt="sap.tnt"
+        xmlns:cards="sap.f.cards"
+        xmlns:form="sap.ui.layout.form"
+        xmlns:ui="sap.ui.table"
+        xmlns:u="sap.ui.unified"
+        xmlns:c="sap.ui.core"
+        xmlns:mvc="sap.ui.core.mvc"
+        displayBlock="true"
+        xmlns:l="sap.ui.layout"
+        xmlns="sap.m"
+    >
+        <Page id="detail"  
+        showFooter="false" >
+        <headerContent>
+            <Bar class="customHeader">
+            <contentLeft>
+                
+                <Text
+                    
+                    text="Bidding History Report"
+                />
+            </contentLeft>
+            
+            </Bar>
+            </headerContent>
+            <Panel height="120px" >
+            
+            
+                    <form:SimpleForm editable="true">
+                        
+                    <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
+                    <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest="onCharteringNumber" />
+
+                    </form:SimpleForm>
+            </Panel>  
+            <IconTabBar
+                id="IconTabBar"
+                tabDensityMode="Compact"
+            
+                class="icontabfilter"
+            
+            
+            >
+                <items>
+                    <IconTabFilter
+                        text="History Report"
+                        key="info"
+                        
+                    >
+
+                <Panel height="370px" class="myPanel" >
+                <Table id="myTableId"  width="auto" visible="true" items="{biddingHistoryAwardModel>/}" >
+                    <columns>
+                        <Column width="130px">
+                            <Text text="Voyage Number"  />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Vendor" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Charter No" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Code" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Bid Date" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Bid Time" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Code Description" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Value" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Currency Key" />
+                        </Column>
+                        <!-- <Column width="130px">
+                            <Text text="Done By Ve" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Created By" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Status" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Type(Auto)" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Comments" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Award Info" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Voyage Type" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Cargo Type" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Voyage Name" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Vessel Name" />
+                        </Column> -->
+                    </columns>
+
+                    <items>
+                        <ColumnListItem type="Navigation" press="onNavigateDetails">
+                            <cells>
+                                <Text text="{biddingHistoryAwardModel>Voyno}" />
+                                <Text text="{biddingHistoryAwardModel>Lifnr}" />
+                                <Text text="{biddingHistoryAwardModel>Chrnmin}" />
+                                <Text text="{biddingHistoryAwardModel>Zcode}" />
+                                <Text text="{biddingHistoryAwardModel>Biddate}" />
+                                <Text text="{biddingHistoryAwardModel>Bidtime}" />
+                                <Text text="{biddingHistoryAwardModel>CodeDesc}" />
+                                <Text text="{biddingHistoryAwardModel>Cvalue}" />
+                                <Text text="{biddingHistoryAwardModel>Curr}" />
+                               
+                            
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            
+            </Panel>
+            </IconTabFilter>
+                </items>
+            </IconTabBar>
+
+        </Page>
+    </mvc:View>

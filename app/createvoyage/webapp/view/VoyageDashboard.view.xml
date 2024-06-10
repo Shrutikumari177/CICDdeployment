@@ -1,0 +1,39 @@
+<mvc:View
+	controllerName="com.ingenx.nauti.createvoyage.controller.VoyageDashboard"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+>
+
+
+<FlexBox id="_IDGenFlexBox3"  class="transactionFlexBox">
+                <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Create Voyage" press="onCreateChartering" >
+                    <TileContent id="_IDGenTileContent7" >
+                    <ImageContent  src="sap-icon://create-form"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Change Voyage" press="onChangeVoyage">
+                    <TileContent id="_IDGenTileContent8" >
+                    <ImageContent  src="sap-icon://request"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Display Voyage" press="onDisplayVoyage">
+                    <TileContent id="_IDGenTileContent9" >
+                    <ImageContent  src="sap-icon://accelerated"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+                 <GenericTile id="GenGenericTile4" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Voyage Approval" press=".onVoyageApproval">
+                    <TileContent id="_IDGenTileContent92" >
+                    <ImageContent id="_IDGenImageContent4"  src="sap-icon://accelerated"></ImageContent>                
+                    </TileContent>
+                </GenericTile>
+             
+        </FlexBox>
+</mvc:View>

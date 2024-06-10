@@ -3,15 +3,15 @@
     background-color: rgb(193, 230, 252) !important;
 }
 
-.sapMLIBShowSeparator>td{
+/* .sapMLIBShowSeparator>td{
     border: 1px solid rgb(214, 211, 211);
- }
-.mastertables th {
+ }  */
+ /* .mastertables th {
     border: 1px solid rgb(214, 211, 211);
-}
-.entrytables th {
-    border: 1px solid rgb(214, 211, 211);
-}
+}  */
+/* .entrytables th {
+     border: 1px solid rgb(214, 211, 211);
+}  */
 .mastertables{
     height: 450px;
 }
@@ -20,11 +20,15 @@
 }
 
  .vesselDetailsTable{
-    margin-top: 2%;
+    margin-top: 1%;
+    border-radius: 2%;
  }
- .vesselDetailsTable th{
+ .sapMListTbl{
+    border: 1px solid #ddd !important;
+ }
+ /* .vesselDetailsTable th{
     border: 1px solid rgb(214, 211, 211);
- }
+ } */
 
  .stickyBar{
    margin-top: 1%;
@@ -46,9 +50,9 @@
     padding :1% 2% 1% 2%;
     
 }
-.scrollContainer {
+/* .scrollContainer {
     border-bottom: 1px solid #ccc; /* Add a border to the bottom of the scroll container */
-}
+*/
 
  
  .stickyBar{
@@ -248,7 +252,7 @@
 }
 .voyagePanel{
     background-color: white;
-    margin: 1%;
+    margin: 1% 0.5% ;
 }
  
 /* Voyage vessel Plan section  */
@@ -397,8 +401,13 @@
 .cellNoPadding {
     position: relative;
 }
+.cellNoPadding1 {
+    position: relative;
+    margin: 4px 2px !important;
+    padding:0px !important;
+}
 
-.planInfo{
+.planInfoFlexHeader, .actualInfoFlexHeader{
 
     align-items: center;
     
@@ -409,4 +418,66 @@
     width : fit-content
 }
 
+.sapMPage>section.sapMPageEnableScrolling{
+    scrollbar-width: none;
+}
+.scrollContainer{
+    scrollbar-width: none;
+}
+.page{
+    background-color: white;
+}
+/* block layout space reduced */
+.sapUiBlockLayoutBackgroundDashboard .sapUiBlockLayoutCell{
+    margin:-2.0rem;
+}
+.sapUiBlockLayoutSizeL:not(.sapUiBlockLayoutKeepFontSize) .sapUiBlockCellContent{
+    padding: 0 !important;
+}
 
+/*  for all panel scroll truw and scroll width none */
+.sapMPanelContent {
+    overflow:scroll !important;
+    scrollbar-width: none !important;
+}
+
+/* voyage approval  css */
+.headerItem{
+    gap :10px;
+    
+}
+.charteringItem{
+    margin-right:65%;
+}
+.createcharteringHeader{
+    gap:6% ;
+    margin-left: 60px;
+}
+
+/*  voyage approval css */
+.headerItem{
+    gap :10px;
+   
+  }
+  .voytext{
+    margin-right: 113px;
+  }
+  .VoyageHeader{
+    gap:8% ;
+    margin-left: 60px;
+  }
+  .voyageHeaderItem{
+    margin-top: 0% !important;
+  }
+  .aprrejbtn{
+    margin-top: 10px !important;
+  }
+  /* css for label alignment in voyage approval */
+.labeltxt{  
+    margin-right:112px !important;
+    }
+
+
+.voyApprovalStatusPanel, .voyApprovalPanel {
+    padding:8px !important;
+}

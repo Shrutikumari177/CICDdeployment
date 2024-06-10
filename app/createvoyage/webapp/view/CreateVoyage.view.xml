@@ -2,7 +2,7 @@
     xmlns:table="sap.ui.mdc.table"
     xmlns:filterbar="sap.ui.comp.filterbar"
     xmlns:layout="sap.ui.layout"
-    controllerName="com.ingenx.nauti.createvoyage.controller.View1"
+    controllerName="com.ingenx.nauti.createvoyage.controller.CreateVoyage"
     xmlns:ui="sap.ui.table"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
@@ -139,7 +139,36 @@
                                     </layout:BlockLayoutCell>
                                 </layout:content>
                             </layout:BlockLayoutRow>
-                            <layout:BlockLayoutRow>
+                            <layout:BlockLayoutRow >
+                                 <layout:BlockLayoutCell
+                                    class="cellNoPadding1"
+                                    width="1"
+
+                                >
+                                                   <FlexBox >
+                                                    <Label text="Select to exclude path :" class="sapUiTinyMargin"></Label>                                                    <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
+                                                    <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="NW PASSAGE" select=".onCheckBoxSelect"/>
+                                                    <CheckBox text="NE PASSAGE" select=".onCheckBoxSelect" />
+                                                    
+                                                    <CheckBox text="TORRES" select=".onCheckBoxSelect"/>
+                                                    
+                                                    <CheckBox text="CORINTH" select=".onCheckBoxSelect" />
+                                                
+
+                                                   </FlexBox>
+                                                 
+
+                        
+                                
+                                
+                                </layout:BlockLayoutCell>
+
+                            </layout:BlockLayoutRow>
+
+                            <layout:BlockLayoutRow >
+  
                                 <layout:BlockLayoutCell
                                     class="cellNoPadding cellFixedHeight"
                                 >
@@ -153,30 +182,11 @@
                                         >
                                             <ui:extension>
                                                 <OverflowToolbar>
-                                                    <!-- <Text text="All Routes"/> -->
-                                                    <!-- <Switch
-															id="idRoutes"
-															state="false"
-															customTextOn="Yes"
-															customTextOff="No"
-														/> -->
-                                                    <CheckBox text="SUEZ" />
-                                                    <CheckBox text="PANAMA" />
-                                                    <CheckBox text="KIEL" />
+                                                
+                                                    
+                                       
                                                     <ToolbarSpacer />
-                                                    <!--<Button text="Calculate" />-->
-                                                    <!-- <Button
-														text="Create VC Request"
-														press="onPress"
-														type="Default"
-														width="9rem"
-													/> -->
-                                                    <!-- <Button
-														text="Compare Quot."
-														press="onPress"
-														type="Default"
-														width="8rem"
-													/> -->
+                                                
                                                     <Label
                                                         design="Bold"
                                                         text="Speed:"
@@ -258,7 +268,7 @@
                                                         <Input
                                                             value="{
 																path: 'oJsonModel>Distance',
-																formatter: '.formatnumberFormatter.'
+																formatter: '.formatter.numberFormat'
 															}"
                                                             editable="false"
                                                         />

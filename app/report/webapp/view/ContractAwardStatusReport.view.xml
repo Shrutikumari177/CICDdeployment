@@ -1,0 +1,119 @@
+    <mvc:View
+        xmlns:controls="sap.viz.ui5.controls"
+        controllerName="com.ingenx.nauti.report.controller.ContractAwardStatusReport"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:semantic="sap.m.semantic"
+        xmlns:core="sap.ui.core"
+        xmlns:tnt="sap.tnt"
+        xmlns:cards="sap.f.cards"
+        xmlns:form="sap.ui.layout.form"
+        xmlns:ui="sap.ui.table"
+        xmlns:u="sap.ui.unified"
+        xmlns:c="sap.ui.core"
+        xmlns:mvc="sap.ui.core.mvc"
+        displayBlock="true"
+        xmlns:l="sap.ui.layout"
+        xmlns="sap.m"
+    >
+        <Page id="detail"  
+        showFooter="false" >
+        <headerContent>
+            <Bar class="customHeader">
+            <contentLeft>
+                
+                <Text
+                    
+                    text="Contract Live Freight Report"
+                />
+            </contentLeft>
+            
+            </Bar>
+            </headerContent>
+            <Panel height="120px" >
+            
+            
+                    <form:SimpleForm editable="true">
+                        
+                    <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
+                    <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest="onCharteringNumber" />
+
+                    </form:SimpleForm>
+            </Panel>  
+            <IconTabBar
+                id="IconTabBar"
+                tabDensityMode="Compact"
+            
+                class="icontabfilter"
+            
+            
+            >
+                <items>
+                    <IconTabFilter
+                        text="Award Report"
+                        key="info"
+                        
+                    >
+
+                <Panel height="370px" class="myPanel" >
+                <Table id="myTableId"  width="auto" visible="true" items="{contractAwardModel>/}" >
+                    <columns>
+                        <Column width="130px">
+                            <Text text="Charter No."  />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Voyage Number" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Vendor" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Awarded" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Code" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Bid Date" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Bid Time" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Code Description" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Value" />
+                        </Column>
+                        <Column width="130px">
+                            <Text text="Currency" />
+                        </Column>
+                       
+                    </columns>
+
+                    <items>
+                        <ColumnListItem type="Navigation" press="onNavigateDetails">
+                            <cells>
+                                <Text text="{contractAwardModel>Chrnmin}" />
+                                <Text text="{contractAwardModel>Voyno}" />
+                                <Text text="{contractAwardModel>Lifnr}" />
+                                <Text text="{contractAwardModel>Rank}" />
+                                <Text text="{contractAwardModel>Zcode}" />
+                                <Text text="{contractAwardModel>Biddate}" />
+                                <Text text="{contractAwardModel>Bidtime}" />
+                                <Text text="{contractAwardModel>CodeDesc}" />
+                                <Text text="{contractAwardModel>Cvalue}" />
+                                <Text text="{contractAwardModel>Cunit}" />
+                               
+                            
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            
+            </Panel>
+            </IconTabFilter>
+                </items>
+            </IconTabBar>
+
+        </Page>
+    </mvc:View>

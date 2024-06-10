@@ -1,0 +1,50 @@
+.Page{
+    background-color: white;
+}
+.scrollContainer{
+    scrollbar-width: none;
+}
+.planInfo{
+    gap:10px ;
+}
+.charteringHeader{
+    gap:8% ;
+    margin-left: 60px;
+}
+.icontab{
+  margin-top: 5px;
+ 
+
+}
+.headerItem{
+    gap :10px;
+    
+}
+.charteringItem{
+    margin-right:65%;
+}
+.createcharteringHeader{
+    gap:6% ;
+    margin-left: 60px;
+}
+
+/* css for label alignment */
+.labeltxt{  
+    margin-right:25px !important;
+    }
+    .paylabeltxt{
+        margin-right:13px !important;
+    }
+    .sapMLabel {
+        text-align: end !important;
+    }
+    .voylabeltxt{
+        margin-right: 75px !important;
+    }
+
+    .voytext{
+        margin-right: 94px !important;
+    }    
+
+    
+     

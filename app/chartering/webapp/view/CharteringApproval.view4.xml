@@ -1,0 +1,485 @@
+<mvc:View
+    controllerName="com.ingenx.nauti.chartering.controller.CharteringApproval"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:semantic="sap.m.semantic"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt"
+    xmlns:cards="sap.f.cards"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:ui="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        class="Page"
+    >
+        <headerContent>
+            <Bar id="_IDGenBar1" class="customHeader">
+                <contentLeft>
+                    <!-- <core:Icon
+                        src="sap-icon://nav-back"
+                        class="size1"
+                        press="onBackPress"
+                    /> -->
+                    <!-- <Image
+                   class="size1"
+                  src="./images/ignxlogo.png"
+                  height="75%"
+              /> -->
+                    <Text id="_IDGenText31"
+                        class="textBid size1"
+                        text="Chartering Approval Dashboard"
+                    />
+                </contentLeft>
+                <contentRight>
+                    <core:Icon id="_IDGenIcon1"
+                        src="sap-icon://search"
+                        class="size1"
+                        color="#FFFFFF"
+                    >
+                        <core:layoutData>
+                            <FlexItemData id="_IDGenFlexItemData1" growFactor="1" />
+                        </core:layoutData>
+                    </core:Icon>
+                    <core:Icon id="_IDGenIcon2"
+                        src="sap-icon://SAP-icons-TNT/user"
+                        class="size1"
+                        color="#FFFFFF"
+                    >
+                        <core:layoutData>
+                            <FlexItemData id="_IDGenFlexItemData2" growFactor="1" />
+                        </core:layoutData>
+                    </core:Icon>
+                </contentRight>
+            </Bar>
+        </headerContent>
+        <subHeader>
+            <Bar id="navbar">
+                <contentLeft>
+                    <Button
+                        id="_IDGenButton11"
+                        text="Execute"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="_IDGenButton12"
+                        text="refresh"
+                        type="Emphasized"
+                        press="onRefresh"
+                    />
+                </contentLeft>
+            </Bar>
+        </subHeader>
+
+        <Panel id="_IDGenPanel1">
+            <FlexBox
+                id="_IDGenFlexBox1"
+                class="charteringHeader"
+            >
+                <Text
+                    id="EnterDetailsId"
+                    text="Enter Details"
+                    class="vgheading"
+                />
+                <VBox
+                    id="_IDGenVBox1"
+                    alignItems="End"
+                    class="charteringheader"
+                >
+                    <FlexBox
+                        id="_IDHBox1"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="_IDGenLabel1"
+                            text="Chartering No: "
+                            class="sapUiTinyMarginTop"
+                        />
+                        <MultiInput
+                            id="ChartNo"
+                            showValueHelp="true"
+                            valueHelpRequest="CharterNo"
+                            liveChange="CharterNo"
+                          
+                            tokenUpdate="onTokenUpdate"
+                            width="200px"
+                        />
+                    </FlexBox>
+
+                    <FlexBox
+                        id="_IDHBox2"
+                        class="headerItem"
+                    >
+                        <Label
+                            id="_IDGLabel1"
+                            text="Charter Approval Request No. "
+                            class="sapUiTinyMarginTop"
+                        />
+                        <MultiInput
+                            id="searchField3"
+                            editable="false"
+                            width="200px"
+                           
+                        />
+                    </FlexBox>
+                </VBox>
+
+                <Label
+                    id="_IDGenLabel2"
+                    text="Approval Selection"
+                    class="sapUiTinyMarginTop"
+                />
+                <Select
+                    id="_IDGenSelect1"
+                    width="200px"
+                    forceSelection="false"
+                    change="onSelectionChange"
+                >
+                    <core:ListItem
+                        id="_IDGenListItem1"
+                        text="Approve Charter"
+                    />
+                    <core:ListItem
+                        id="_IDGenListItem2"
+                        text="Charter Approval Status Report"
+                    />
+                </Select>
+            </FlexBox>
+        </Panel>
+
+        <VBox
+            id="tab"
+            visible="false"
+            class=""
+        >
+            <IconTabBar
+                id="idIconTabBarNoIcons"
+                tabDensityMode="Compact"
+                class="icontab"
+            >
+                <items>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter1"
+                        text="Charter Approval Status Report "
+                        key="info"
+                    >
+                        <Panel
+                            id="p1"
+                            height="600px"
+                            width="100%"
+                        >
+                            <Table
+                                id="myTable"
+                                items="{chartner>/}"
+                            >
+                                <columns>
+                                    <Column id="_IDGenColumn1">
+                                        <Text
+                                            id="_IDGenText2"
+                                            text="Approval Req No"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn2">
+                                        <Text
+                                            id="_IDGenText3"
+                                            text="Chartering No"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn3">
+                                        <Text
+                                            id="_IDGenText4"
+                                            text="Created By"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn4">
+                                        <Text
+                                            id="_IDGenText5"
+                                            text="Created On"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn5">
+                                        <Text
+                                            id="_IDGenText6"
+                                            text="Created At"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn6">
+                                        <Text
+                                            id="_IDGenText7"
+                                            text="Approver1"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn7">
+                                        <Text
+                                            id="_IDGenText8"
+                                            text="Approved On"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn8">
+                                        <Text
+                                            id="_IDGenText9"
+                                            text="Approved At"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn9">
+                                        <Text
+                                            id="_IDGenText10"
+                                            text="Approver2"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn10">
+                                        <Text
+                                            id="_IDGenText11"
+                                            text="Approved On"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn11">
+                                        <Text
+                                            id="_IDGenText12"
+                                            text="Approved At"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn12">
+                                        <Text
+                                            id="_IDGenText13"
+                                            text="Approver3"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn13">
+                                        <Text
+                                            id="_IDGenText14"
+                                            text="Approved On "
+                                        />
+                                    </Column>
+                                    <!-- <Column id="_IDGenColumn14">
+                                        <Text
+                                            id="_IDGenText15"
+                                            text="Approved At"
+                                        />
+                                    </Column> -->
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem1">
+                                        <cells>
+                                            <Text
+                                                id="_IDGenText18"
+                                                text="{chartner>Creqno}"
+                                            />
+                                            <Text
+                                                id="_IDGenText19"
+                                                text="{chartner>Chrnmin}"
+                                            />
+                                            <Text
+                                                id="_IDGenText20"
+                                                text="{chartner>Uname}"
+                                            />
+                                            <Text
+                                                id="_IDGenText21"
+                                                text="{chartner>Zdate}"
+                                            />
+                                            <Text
+                                                id="_IDGenText22"
+                                                text="{chartner>Ztime}"
+                                            />
+                                            <Text
+                                                id="_IDGenText23"
+                                                text="{chartner>/0/Uname}"
+                                            />
+                                            <Text
+                                                id="_IDGenText24"
+                                                text="{chartner>sdfgh}"
+                                            />
+                                            <Text
+                                                id="_IDGenText25"
+                                                text="{chartner>Pstlz}"
+                                            />
+                                            <Text
+                                                id="_IDGenText26"
+                                                text="{chartner>/1/Uname}"
+                                            />
+                                            <Text
+                                                id="_IDGenText27"
+                                                text="{chartner>Land1}"
+                                            />
+                                            <Text
+                                                id="_IDGenText28"
+                                                text="{chartner>Regio}"
+                                            />
+                                            <Text
+                                                id="_IDGenText29"
+                                                text="{chartner>/2/Uname}"
+                                            />
+                                            <Text
+                                                id="_IDGenText30"
+                                                text="{chartner>Telf2}"
+                                            />
+
+                                            <Text
+                                                id="_IDGenText311234"
+                                                text="{chartner>Telfx}"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </Panel>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </VBox>
+
+        <VBox
+            id="tab2"
+            visible="false"
+            class=""
+        >
+            <IconTabBar
+                id="idIconTabBarNoIcons1"
+                tabDensityMode="Compact"
+                class="icontab"
+            >
+                <items>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter11"
+                        text="Charter Approval"
+                        key="info"
+                    >
+                        <Panel
+                            id="p2"
+                            height="300px"
+                            width="100%"
+                        >
+                        <headerToolbar>
+                                    <Toolbar id="_IDGenToolbar1">
+                                        <Button id="approveButton"
+                                            text="Approve"
+                                            press="onApprove"
+                                            enabled="{/approvalEnabled}"
+                                        />
+                                        <Button
+                                             id="rejectButton"
+                                            text="Reject"
+                                            press="onReject"
+                                            enabled="{/rejectionEnabled}"
+                                        />
+                                    </Toolbar>
+                                </headerToolbar>
+
+                            <Table
+                                id="myTable2"
+                                items="{chartner>/}"
+                                mode="MultiSelect"
+                                selectionChange="onTableSelectionChange"
+                            >
+                                <columns>
+                                    <Column id="_IDGenColumn111">
+                                        <Text
+                                            id="_IDGenText211"
+                                            text="Approval Req No"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn211">
+                                        <Text
+                                            id="_IDGenText311"
+                                            text="Chartering No"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn311">
+                                        <Text
+                                            id="_IDGenText411"
+                                            text="Created By"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn411">
+                                        <Text
+                                            id="_IDGenText511"
+                                            text="Created On"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn511">
+                                        <Text
+                                            id="_IDGenText611"
+                                            text="Created At"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn611">
+                                        <Text
+                                            id="_IDGenText711"
+                                            text="Approver1"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn711">
+                                        <Text
+                                            id="_IDGenText811"
+                                            text="Approved On"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenColumn811">
+                                        <Text
+                                            id="_IDGenText911"
+                                            text="Approved At"
+                                        />
+                                    </Column>
+                                </columns>
+                                
+
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem11">
+                                        <cells>
+                                            <Text
+                                                id="_IDGenText181"
+                                                text="{chartner>Creqno}"
+                                            />
+                                            <Text
+                                                id="_IDGenText191"
+                                                text="{chartner>Chrnmin}"
+                                            />
+                                            <Text
+                                                id="_IDGenText201"
+                                                text="{chartner>Uname}"
+                                            />
+                                            <Text
+                                                id="_IDGenText2111"
+                                                text="{chartner>Zdate}"
+                                            />
+                                            <Text
+                                                id="_IDGenText221"
+                                                text="{chartner>Ztime}"
+                                            />
+                                            <Text
+                                                id="_IDGenText231"
+                                                text="{chartner>/0/Uname}"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </Panel>
+                                 <Dialog
+                                          id="approvalDialog"
+                                          title="Add Comment"
+                                          contentWidth="300px"
+                                          afterClose="onCloseDialog"   >
+                                <TextArea
+                                  id="commentTextArea"
+                                  rows="5"
+                                  width="100%"
+                                    placeholder="Add your comment..."
+                                                               />
+    <Button id="_IDGenButton1" text="Save" press="onSaveComment" />
+    <Button id="_IDGenButton2" text="Cancel" press="onCancelComment" />
+</Dialog>
+
+
+
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </VBox>
+    </Page>
+</mvc:View>

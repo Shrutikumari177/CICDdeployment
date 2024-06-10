@@ -1,0 +1,46 @@
+
+{
+    "jsonData" : [{
+    "reqNo" : "1000",
+    "rfq" : "",
+    "startDate" : "15-05-2024",
+    "startTime" : "16-05-2024",
+    "endDate" : "19:30:00",
+    "endTime" : "20:00:00"
+ },{
+     "reqNo" : "1001",
+     "rfq" : "",
+     "startDate" : "15-05-2024",
+     "startTime" : "16-05-2024",
+     "endDate" : "20:00:00",
+     "endTime" : "20:30:00"
+ }
+],
+  "biddingData":[{
+    "legId":"1",
+    "portCode":"INBOM",
+    "portName":"MUMBAI",
+    "cargoSize":"100",
+    "unit":"TO",
+    "distance":"0.000",
+    "aDate":"20-05-2024",
+    "aTime":"12:20:23",
+    "dDate":"20-05-2024",
+    "dTime":"12:50:23"
+  },
+  {
+    "legId":"2",
+    "portCode":"INVTZ",
+    "portName":"DELHI",
+    "cargoSize":"100",
+    "unit":"TO",
+    "distance":"1768.000",
+    "aDate":"22-05-2024",
+    "aTime":"10:20:23",
+    "dDate":"22-05-2024",
+    "dTime":"10:50:23"
+  }
+ 
+]
+}
+ 
