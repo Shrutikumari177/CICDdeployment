@@ -7,7 +7,6 @@ using NAUTIZVOYAPPROVAL_SRV from './external/NAUTIZVOYAPPROVAL_SRV.cds';
 using NAUTIVENDOR_SRV from './external/NAUTIVENDOR_SRV.cds';
 using NAUTIZCHATAPPROVAL_SRV from './external/NAUTIZCHATAPPROVAL_SRV.cds';
 using NAUTIZVOY_VALUEHELP_CDS from './external/NAUTIZVOY_VALUEHELP_CDS.cds';
-using NAUTIVENDOR_BTP_SRV from './external/NAUTIVENDOR_BTP_SRV.cds';
 using NAUTICOMP_QUOT_SRV from './external/NAUTICOMP_QUOT_SRV';
 using NAUTICHASTATUS_SRV from './external/NAUTICHASTATUS_SRV.cds';
 
@@ -760,16 +759,9 @@ service nauticalservice {
     entity xNAUTIxchaApp1 as projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1
     {        key Creqno, key Chrnmin     }    
 ;
-    entity xNAUTIxvoy_valuehelp        as
-        projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp
-
-        {
-            key Voyno,
-                Voynm,
-                Zaction
-        }
-
-        ;
+     entity xNAUTIxvoy_valuehelp as projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp
+    {        key Voyno, voynm, Zaction     }    
+;
 
     entity xNAUTIxitemBid              as
         projection on NAUTICOMP_QUOT_SRV.xNAUTIxitemBid {
