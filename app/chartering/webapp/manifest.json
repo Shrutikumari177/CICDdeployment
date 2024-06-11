@@ -24,6 +24,19 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "createCharteringObj-createChart": {
+          "semanticObject": "createCharteringObj",
+          "action": "createChart",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -132,7 +145,6 @@
             "TargetCharteringApproval"
           ]
         }
-        
       ],
       "targets": {
         "TargetCharteringDashboard": {
@@ -178,5 +190,9 @@
       "async": true,
       "id": "App"
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "nauticalMasterSrv"
   }
 }

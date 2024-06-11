@@ -5,7 +5,7 @@
     {
       "source": "^/odata/(.*)$",
       "target": "/odata/$1",
-      "destination": "nautical-srv-api",
+      "destination": "nautical-srv-api-dest",
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },

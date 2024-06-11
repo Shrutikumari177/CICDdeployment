@@ -6,6 +6,17 @@
     {
       "name": "uaa.user",
       "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.mtcallback",
+      "description": "Subscription via SaaS Registry",
+      "grant-as-authority-to-apps": [
+        "$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"
+      ]
+    },
+    {
+      "name": "$XSAPPNAME.mtdeployment",
+      "description": "Scope to trigger a re-deployment of the database artifacts"
     }
   ],
   "role-templates": [
@@ -17,5 +28,11 @@
       ]
     }
   ],
-  "attributes": []
+  "attributes": [],
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://ingenx-technology-llc-training-ingenx-dev-nautical-approuter.cfapps.eu10-004.hana.ondemand.com/login/callback",
+      "https://*.cfapps.eu10-004.hana.ondemand.com/**"
+    ]
+  }
 }

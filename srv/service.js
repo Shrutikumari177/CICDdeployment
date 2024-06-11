@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const axios = require('axios');
+const xsenv = require("@sap/xsenv");
 
 module.exports = async (srv) => {
     // Connect to services
@@ -18,24 +19,24 @@ module.exports = async (srv) => {
     // srv.on('READ', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     // srv.on('CREATE', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
 
-    srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query)); 
-    srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query)); 
-    
+    srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
+    srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
+
     srv.on('READ', 'calculateRankings', async (req) => {
         console.log("values", req._queryOptions.$filter);
-        
+
         let Chrnmin = req._queryOptions.$filter.split(' ')[2];
         Chrnmin = Chrnmin.replace(/'/g, '');
 
         const charminData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxvenBid').where({ Chrnmin }));
-        
+
         if (!charminData || charminData.length === 0) {
             console.error(`No data found for Chrnmin: ${Chrnmin}`);
             return [];
         }
 
         let Voyno = charminData[0].Voyno;
-        
+
         if (!Voyno) {
             console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
             return [];
@@ -52,6 +53,24 @@ module.exports = async (srv) => {
         console.log("rankedVendors", rankedVendors);
 
         return rankedVendors;
+    });
+
+    const { 'cds.xt.DeploymentService': ds } = cds.services
+    const { 'cds.xt.SaasProvisioningService': sp } = cds.services
+
+    sp.before('dependencies', async (_, Req) => {
+
+        const services = xsenv.getServices({
+            // html5Runtime: { tag: 'html5-apps-repo-rt' },
+            destination: { tag: 'destination' },
+            connectivity: { tag: "connectivity" }
+        });
+
+        cds.env.requires["cds.xt.SaasProvisioningService"].dependencies = [];
+        // cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.html5Runtime.uaa.xsappname);
+        cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.destination.xsappname);
+        cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.connectivity.xsappname);
+
     });
 
     function calculateAndRank(voyageData, charminData) {
@@ -172,21 +191,21 @@ module.exports = async (srv) => {
         return Object.values(grouped);
     }
 
-    registerHandlers( srv, NAUTICHASTATUS_SRV, [
-        'cha_statusSet' ])
-    registerHandlers( srv, NAUTICOMP_QUOT_SRV, [
-        'xNAUTIxcomp_quot','xNAUTIxfinalbid','xNAUTIxitemBid','xNAUTIxvenBid' ])
+    registerHandlers(srv, NAUTICHASTATUS_SRV, [
+        'cha_statusSet'])
+    registerHandlers(srv, NAUTICOMP_QUOT_SRV, [
+        'xNAUTIxcomp_quot', 'xNAUTIxfinalbid', 'xNAUTIxitemBid', 'xNAUTIxvenBid'])
 
-    registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, [    'xNAUTIxchaApp1', 'chartapprSet']);
+    registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, ['xNAUTIxchaApp1', 'chartapprSet']);
 
-    registerHandlers(srv, NAUTIZVOY_VALUEHELP_CDS, [     'xNAUTIxvoy_valuehelp' ]);
+    registerHandlers(srv, NAUTIZVOY_VALUEHELP_CDS, ['xNAUTIxvoy_valuehelp']);
 
     registerHandlers(srv, NAUTIVENDOR_SRV, [
         'MasBidTemplateSet', 'DynamicTableSet', 'ITEM_BIDSet', 'PortsSet'
     ]);
     // Register handlers for NAUTIZVOYAPPROVAL_SRV entities
     registerHandlers(srv, NAUTIZVOYAPPROVAL_SRV, [
-        'voyapprovalSet','xNAUTIxvoyapproval1','xNAUTIxgetvoyapproval'
+        'voyapprovalSet', 'xNAUTIxvoyapproval1', 'xNAUTIxgetvoyapproval'
     ]);
 
     // Register handlers for NAUTINAUTICALCV_SRV entities
@@ -200,7 +219,7 @@ module.exports = async (srv) => {
         'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet',
         'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet',
-        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','CountrySet'
+        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'CountrySet'
     ]);
 
     // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
@@ -240,9 +259,9 @@ function registerHandlers(srv, service, entities) {
         srv.on('UPDATE', entity, req => service.run(req.query));
         srv.on('DELETE', entity, req => service.run(req.query));
     });
-    
 
-  
+
+
 
     // Handle 'getRoute' entity
     srv.on('READ', 'getRoute', async (req) => {
