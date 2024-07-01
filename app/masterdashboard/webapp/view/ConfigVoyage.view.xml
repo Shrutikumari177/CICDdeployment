@@ -8,53 +8,60 @@
     displayBlock="true"
     xmlns:core="sap.ui.core"
 >
-    <Page id="_IDGenPage1">
-       <headerContent>
+    <Page id="_IDGenPage1" >
+        <headerContent>
+           
             <Bar id="_IDGenBar2">
                 <contentLeft>
-                    <core:Icon id="_IDGenIcon1"
-                        src="sap-icon://nav-back"
+                    <Button id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
                         press="onBackPress"
                     />
-                    <core:Icon id="_IDGenIcon2"
-                        src="sap-icon://home"
+
+                    <Button id="_IDGenIcon2"
+                        icon="sap-icon://home"
                         press="onPressHome"
                     />
                    
                     <Text id="_IDGenText1"
                         class="text1"
-                        text="Config Voyage Details"
+                        text="Voyage Release Strategy"
                     />
                 </contentLeft>
                 
             </Bar>
         </headerContent>
-        <Panel id="_IDGenPanel1" class="tablepanel">
-       <Bar
+
+       
+    <Panel class="tablepanel">
+         <Bar
             id="_IDGenBar1"
-            class="headerBar2"
+            class="_IDGenBar1"
          >
             <contentLeft>
-                <Button text="New Entries" press="newEntries" />
-                <Button text="Copy As" press="pressCopy"/>
-                <Button text="Edit"  press="pressEdit"/>
-                <Button text="Delete" press="onDeletePress"/>
+                <Button id="entryBtn"  text="New Entries" type="Emphasized" press="newEntries"/>
+                <!-- <Button id="editBtn" text="Edit"  press="pressEdit"/> -->
+                <Button  id ="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+               
+                
             </contentLeft>
             
-        </Bar>
+         </Bar>
+        
         <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
 
         <Table
             id="createTypeTable"
             mode="MultiSelect"
-            items="{/VoyageReleaseSet}"
+            items="{/VoyageRealeaseSet}"
             updateFinished="onTableUpdateFinished"
             selectionChange="selectedItems"
             width="100%"
             class="mastertables"
-            sticky="ColumnHeaders"
+             noDataText="Loading ..."
+             
            
-        >
+         >
             <columns>
                 <Column id="_IDGenColumn1">
                     <Text
@@ -65,26 +72,43 @@
                 <Column id="_IDGenColumn2">
                     <Text
                         id="_IDGenText2"
-                        text="Voyage Type"
+                        text=" Voyage Type"
                     />
                 </Column>
                 <Column id="_IDGenColumn3">
                     <Text
                         id="_IDGenText3"
-                        text="Vessel Type"
+                        text=" Vessel Type"
                     />
+
                 </Column>
                 <Column id="_IDGenColumn4">
                     <Text
                         id="_IDGenText4"
-                        text="User ID Group"
+                        text="User Id Group"
                     />
+                    
                 </Column>
                 <Column id="_IDGenColumn5">
                     <Text
                         id="_IDGenText5"
-                        text="Username"
+                        text="Approver 1"
                     />
+                    
+                </Column>
+                <Column id="_IDGenColumn6">
+                    <Text
+                        id="_IDGenText6"
+                        text="Approver 2"
+                    />
+                    
+                </Column>
+                <Column id="_IDGenColumn7">
+                    <Text
+                        id="_IDGenText7"
+                        text="Approver 3"
+                    />
+                    
                 </Column>
             </columns>
             <items>
@@ -94,121 +118,117 @@
                         <Text
                             id="_IDGenInput1"
                             text="{Rels}"
+                            
                         />
-                        <Text
-                            id="_IDGenInput2"
-                            text="{Voyty}"
-                        />
-                        <Text
-                            id="_IDGenInput3"
-                            text="{Vesty}"
-                        />
-                        <Text
-                            id="_IDGenInput4"
-                            text="{Zgroup}"
-                        />
-                        <Text
-                            id="_IDGenInput5"
-                            text="{App1}"
-                        />
+                        
+                        <Text id="_IDGenInput2"  text="{Voyty}" />
+                        <Text id="_IDGenInput3"  text="{Vesty}" />
+                        <Text id="_IDGenInput4"  text="{Zgroup}" />
+                        <Text id="_IDGenInput5"  text="{App1}" />
+                        <Text id="_IDGenInput6"  text="{App2}" />
+                        <Text id="_IDGenInput7"  text="{App3}" />
+                        
+                       
                        
                     </cells>
                 </ColumnListItem>
             </items>
         </Table>
         </ScrollContainer>
-        </Panel>
-
+    </Panel>
         <Table
             id="entryTypeTable"
+             mode="MultiSelect"
             updateFinished="onTableUpdateFinished"
             selectionChange="selectedItems"
             width="100%"
             class="tablepanel entrytables"
             visible="false"
-            mode="MultiSelect"
-        >
-            <columns>
-                <Column>
-                    <Text text="Release Strategy" />
-                </Column>
-                <Column>
-                    <Text text="Voyage Type" />
-                </Column>
-                 <Column>
-                    <Text text="Vessel Type" />
-                </Column>
-                 <Column>
-                    <Text text="User ID group" />
-                </Column>
-                 <Column>
-                    <Text text="User Name" />
-                </Column>
-            </columns>
-            <items>
-                <ColumnListItem>
-                    <cells>
-                        <Input id="releasestrategy"  maxLength="4"/>
-                        <Input id="voyagetype" />
-                        <Input id="vesseltype" />
-                        <Input id="userid" />
-                        <Input id="username" />
-                       
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
-       
-        <Table
-            id="updateTypeTable"
-            updateFinished="onTableUpdateFinished"
-            selectionChange="selectedItems"
-            width="100%"
-            class="mastertables"
-            visible="false"
            
-        >
+         >
             <columns>
                 <Column>
                     <Text text="Release Strategy" />
                 </Column>
                 <Column>
-                    <Text text="Voyage Type" />
+                    <Text text=" Voyage Type" />
                 </Column>
-                 <Column>
-                    <Text text="Vessel Type" />
+                <Column>
+                    <Text text=" Vessel Type" />
                 </Column>
-                 <Column>
-                    <Text text="User ID group" />
+                <Column>
+                    <Text text="User Id Group" />
                 </Column>
-                 <Column>
-                    <Text text="User Name" />
+                <Column id="approver1Column" >
+                    <Text text="Approver 1" />
+                </Column >
+                <Column id="approver2Column" >
+                    <Text text="Approver 2" />
+                </Column>
+                <Column id="approver3Column" >
+                    <Text text="Approver 3" />
+                </Column>
+                
+
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input id="Rels" liveChange="onCodeLiveChange"  />
+                         <ComboBox id="Voyty" items="{/VoyTypeSet}">
+                            <core:Item key="{Voydes}" text="{Voycd}" />
+                        </ComboBox>
+                        <ComboBox id="Carty" items="{/CarTypeSet}">
+                            <core:Item key="{Cardes}" text="{Carcd}" />
+                        </ComboBox>
+                        
+                        <Input id="Zgroup"  showValueHelp="true" valueHelpRequest="onZgroup" liveChange="onZgroupLiveChange" />
+                        <Input id="App1" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
+                        <Input id="App2" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
+                        <Input id="App3" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
+
+                        
+
+
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+      
+        <Table
+         id="updateTypeTable"
+         updateFinished="onTableUpdateFinished"
+         selectionChange="selectedItems"
+         width="100%"
+         class="mastertables"
+         visible="false" >
+
+            <columns>
+                <Column>
+                    <Text text="Voyage Code" />
+                </Column>
+                <Column>
+                    <Text text="Description" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Text id="Relst" text="" />
-                        <Input id="voytyp"  editable="true"/>
-                        <Input id="vesseltyp"  editable="true"/>
-                        <Input id="uig"  editable="true"/>
-                        <Input id="usrn"  editable="true"/>
-                       
+                        <Text id="Code1" text="" />
+                        <Input id="Desc1"  editable="true"  liveChange="onLiveChange"/>
                     </cells>
                 </ColumnListItem>
             </items>
         </Table>
-       
+        
             <OverflowToolbar
                 id="mainPageFooter"
                 design="Auto"
                 visible="false"
             >
-            
                 <ToolbarSpacer id="_IDGenToolbarSpacer3" />
-                <Button id="add" icon="sap-icon://sys-add" press=".onAddRow1" text="Add Row" type="Success"></Button>
-                <Button id="minus" icon="sap-icon://sys-minus" press=".onDeleteRow1" text="Delete Row" type="Reject"></Button>
-
+                <!-- <Button id="add" text="Add Row" icon="sap-icon://sys-add" press=".onAddRow1" type="Success"></Button>
+                <Button id="minus" text="Delete Row" icon="sap-icon://sys-minus" press=".onDeleteRow1" type="Reject"></Button> -->
                 <Button
                     id="mainPageSave"
                     text="Save"
@@ -220,12 +240,13 @@
                     press="onCancel"
                 />
             </OverflowToolbar>
- 
+
             <OverflowToolbar
                 id="mainPageFooter2"
                 design="Auto"
                 visible="false"
-            >
+                 class="updateTableFooter"
+             >
                 <ToolbarSpacer id="_IDGenToolbarSpacer4" />
                 <Button
                     id="mainPageSave12"
@@ -237,10 +258,9 @@
                     text="Cancel"
                     press="onCancel"
                 />
-            </OverflowToolbar>
- 
-            <!--new entries footer -->
-           
-       
+            </OverflowToolbar> 
     </Page>
+ 
+    
+    
 </mvc:View>

@@ -1,0 +1,25 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="mySelect"
+        noDataText="Loading..."
+        title="Select User Group"
+       search="onMaintainUserSearch"
+        confirm="onZgroupClose"
+        cancel="onZgroupClose"
+        items="{/xNAUTIxuseridassociation}"
+       
+        >
+        <StandardListItem id="_IDGenStand"
+       
+            title="{Zgroup}"
+           
+         
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

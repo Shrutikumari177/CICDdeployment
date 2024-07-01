@@ -100,6 +100,7 @@
                             id="chartExt"
                             value=""
                             width="200px"
+                           
                         />
                     </FlexBox>
 
@@ -136,6 +137,7 @@
                             showValueHelp="true"
                             width="200px"
                               liveChange="vendorNo"   valueHelpOnly="true" tokenUpdate="onTokenUpdate"
+                              enabled="false"
                         />
                     </FlexBox>
                 </VBox>
@@ -332,7 +334,7 @@
                                                 <Text text="{vendorModel1>Pstlz}" />
                                                 <Text text="{vendorModel1>Ort01}" />
                                                 <Text text="{vendorModel1>Land1}" />
-                                                <Text text="{vendorModel1>Telf1}" />
+                                                <Text text="{vendorModel1>Telf2}" />
                                                
                                                 <Text text="{vendorModel1>Erdat}" />
                                               

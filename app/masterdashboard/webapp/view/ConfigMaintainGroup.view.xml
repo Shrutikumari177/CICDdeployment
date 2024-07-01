@@ -14,12 +14,12 @@
      <headerContent>
             <Bar id="_IDGenBar2">
                 <contentLeft>
-                    <core:Icon id="_IDGenIcon1"
-                        src="sap-icon://nav-back"
+                    <Button
+                        icon="sap-icon://nav-back"
                         press="onBackPress"
                     />
-                    <core:Icon id="_IDGenIcon2"
-                        src="sap-icon://home"
+                    <Button
+                        icon="sap-icon://home"
                         press="onPressHome"
                     />
                    
@@ -40,7 +40,7 @@
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries"
+                    text="New Entries" type="Emphasized"
                     press="newEntries"
                 />
                 <!-- <Button
@@ -50,13 +50,13 @@
                 /> -->
                 <Button
                     id="editBtn"
-                    text="Edit"
+                    text="Edit" type="Emphasized"
                     press="pressEdit"
                 />
 
                 <Button
                     id="deleteBtn"
-                    text="Delete"
+                    text="Delete" type="Emphasized"
                     press="onDeletePress"
                 />
                 
@@ -136,7 +136,7 @@
             <items>
                 <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
-                        <Input id="maintaingrpCode"  maxLength="15" liveChange="onCodeLiveChange"/>
+                        <Input id="maintaingrpCode"  maxLength="15" liveChange="onCodeLiveChange" showValueHelp="true" valueHelpRequest="onMaintaingroup"  />
                         <Input id="maintaingrpCodeDesc" maxLength="4" liveChange="onLiveChange" />
                     </cells>
                 </ColumnListItem>    
@@ -203,13 +203,13 @@
                 <ToolbarSpacer id="_IDGenToolbarSpacer4" />
                 <Button
                     id="mainPageSave12"
-                    type="Reject"
+                  
                     text="Update"
                     press="onUpdate"
                 />
                 <Button
                     id="_IDGenButton23"
-                    type="Reject"
+                   
                     text="Cancel"
                     press="onCancel"
                 />
@@ -227,4 +227,3 @@
         <!--this is first page-->
     </ScrollContainer>
 </mvc:View>
-

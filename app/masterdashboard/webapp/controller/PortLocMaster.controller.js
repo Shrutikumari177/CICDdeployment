@@ -5,9 +5,9 @@ sap.ui.define(
     "sap/ui/core/Fragment",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
-    //"nauticalfe/utils/bufferedEventHandler"
+    "sap/ui/model/odata/ODataMetaModel"
   ],
-  function (BaseController,History,MessageToast,JSONModel,MessageBox,bufferedEventHandler) {
+  function (BaseController,History,MessageToast,JSONModel,MessageBox,ODataMetaModel) {
     "use strict";
     
     let aSelectedIds = [];
@@ -17,16 +17,35 @@ sap.ui.define(
     var duplicateKeyEntries = undefined;
     let onEditInput = undefined;
     let onCopyInput = undefined;
+    let myModel = undefined;
+    let getModelData = [];
+   
 
     let oView;
 
 
-    let inputFieldObj = {};
-    let saveObj = {};
-    let cancelObj = {}
+    // let inputFieldObj = {};
+    // let saveObj = {};
+    // let cancelObj = {}
  
     return BaseController.extend("com.ingenx.nauti.masterdashboard.controller.PortLocMaster", {
       onInit() {
+
+        let oModel = new sap.ui.model.json.JSONModel();
+        this.getView().setModel(oModel, "dataModel");
+        let oModel3 = this.getOwnerComponent().getModel();
+        let oBindList3 = oModel3.bindList("/PortmasterSet");
+        oBindList3.requestContexts(0, Infinity).then(function (aContexts) {
+          aContexts.forEach(function (oContext) {
+            getModelData.push(oContext.getObject());
+          });
+          oModel.setData(getModelData);
+          this.getView().getModel("dataModel").refresh();
+          // this.getView().setModel(oModel,"Model");
+        }.bind(this))
+        console.log("mydata", getModelData.length,getModelData)
+
+        
         oView = this.getView();
         oView.byId("createTypeTable").setVisible(true);
         oView.byId("entryTypeTable").setVisible(false);
@@ -34,82 +53,38 @@ sap.ui.define(
         oView.byId("updateTypeTable").setVisible(false);
         
       },
-      // initSearchField: function () {
-      //   var searchField = this.byId('Country');
-      //   bufferedEventHandler.bufferEvents(
-      //     // event provider
-      //     searchField,
-      //     // timeInterval
-      //     1000,
-      //     // eventId
-      //     'liveChange',
-      //     // data
-      //     null,
-      //     // handler
-      //     this.onCodeLiveChange,
-      //     // listener
-      //     this,
-      //     // progressHandler
-      //     null,
-      //     // progressUpdateInterval
-      //     null
-      //   );
-      // }, 
+
       onCodeLiveChange: function (oEvent) {
         // Get the input control
         var oInput = oEvent.getSource();
-        
+
         // Get the current value of the input
         var sValue = oInput.getValue();
-        
-        // Remove any characters that are not alphanumeric or dots
-        var sNewValue = sValue.replace(/[^a-zA-Z0-9.]/g, ''); 
-        
-        // Check if the value has changed after removing non-alphanumeric characters
+
+        // Remove any non-alphabetic characters
+        var sNewValue = sValue.replace(/[^0-9A-Za-z. ]/g, '');
+
+        // Check if the input value has changed after removing non-alphabetic characters
         if (sNewValue !== sValue) {
-            // Update the value of the input
-            oInput.setValue(sNewValue);
-        
-            // Show a message to the user
-            sap.m.MessageToast.show("Only alphanumeric characters and dots are allowed.");
+          // Update the value of the input to only contain alphabetic characters
+          oInput.setValue(sNewValue);
+
+          // Show a message to the user
+          sap.m.MessageToast.show("Only Alphanumeric values are allowed.");
         }
-        
-        // Check if the length of the value exceeds 15
-        if (sNewValue.length > 15) {
-            // Truncate the value to keep only the first 15 characters
-            sNewValue = sNewValue.substring(0, 15);
-        
-            // Update the value of the input
-            oInput.setValue(sNewValue);
-        
-            // Show a message to the user
-            sap.m.MessageToast.show("Maximum length is 15 characters.");
+
+        // Check if the length of the value exceeds 10
+        if (sNewValue.length > 10) {
+          // Truncate the value to keep only the first 10 characters
+          sNewValue = sNewValue.substring(0, 10);
+
+          // Update the value of the input
+          oInput.setValue(sNewValue);
+
+          // Show a message to the user
+          sap.m.MessageToast.show("Maximum length is 10 Characters.");
         }
-    
-        // Check if the first character is a dot
-        if (sNewValue.charAt(0) === '.') {
-            // Remove the first character
-            sNewValue = sNewValue.substring(1);
-            
-            // Update the value of the input
-            oInput.setValue(sNewValue);
-            
-            // Show a message to the user
-            sap.m.MessageToast.show("Dot is not allowed as the first character.");
-        }
-    
-        // Check for consecutive dots
-        if (sNewValue.includes('..')) {
-            // Replace consecutive dots with a single dot
-            sNewValue = sNewValue.replace(/\.+/g, '.');
-            
-            // Update the value of the input
-            oInput.setValue(sNewValue);
-            
-            // Show a message to the user
-            sap.m.MessageToast.show("Consecutive dots are not allowed.");
-        }
-    },
+      },
     onLiveChange: function (oEvent) {
        
       // Get the input control
@@ -120,23 +95,23 @@ sap.ui.define(
      
     
      if (/[^0-9]/.test(sValue)) {
-  // Remove any non-numeric characters
-  sValue = sValue.replace(/[^0-9]/g, '');
- 
-  oInput.setValue(sValue);
- 
+      // Remove any non-numeric characters
+      sValue = sValue.replace(/[^0-9]/g, '');
+    
+      oInput.setValue(sValue);
+    
 
-  sap.m.MessageToast.show("Only numeric characters are allowed.");
-}
+      sap.m.MessageToast.show("Only numeric characters are allowed.");
+    }
      
-      if (sValue.length > 4) {
-          
-          sValue = sValue.substring(0, 4);
-     
-          oInput.setValue(sValue);
-     
-          sap.m.MessageToast.show("Maximum length is 4 characters.");
-      }
+    if (sValue.length > 4) {
+        
+        sValue = sValue.substring(0, 4);
+    
+        oInput.setValue(sValue);
+    
+        sap.m.MessageToast.show("Maximum length is 4 characters.");
+    }
   },
   
        
@@ -168,7 +143,7 @@ sap.ui.define(
         var sValue = this.removeExtraSpaces(oInput.getValue());
 
         console.log(onCopyInput[i] + ":" + sValue + ":");
-        if (onCopyInput[i] !== sValue.trim()) {
+        if (onCopyInput[i] !== sValue) {
           flag = true;
           break;
         }
@@ -193,15 +168,15 @@ sap.ui.define(
 
 
     else if (newEntryFlag) {
-      let Country = this.getView().byId("COUNTRY").getValue().trim();
-      let Portc = this.getView().byId("PORTC").getValue().trim();
-      let Portn = this.getView().byId("PORTN").getValue().trim();
-      let Reancho = this.getView().byId("REANCHO").getValue().trim();
-      let Latitude = this.getView().byId("LATITUDE").getValue().trim();
-      let Longitude = this.getView().byId("LONGITUDE").getValue().trim();
-      let Countryn = this.getView().byId("COUNTRYN").getValue().trim();
-      let Locid = this.getView().byId("LOCID").getValue().trim();
-      let Ind = this.getView().byId("IND").getValue().trim();
+      let Country = this.getView().byId("COUNTRY").getValue();
+      let Portc = this.getView().byId("PORTC").getValue();
+      let Portn = this.getView().byId("PORTN").getValue();
+      let Reancho = this.getView().byId("REANCHO").getValue();
+      let Latitude = this.getView().byId("LATITUDE").getValue();
+      let Longitude = this.getView().byId("LONGITUDE").getValue();
+      let Countryn = this.getView().byId("COUNTRYN").getValue();
+      let Locid = this.getView().byId("LOCID").getValue();
+      let Ind = this.getView().byId("IND").getValue();
      
       if (Country == "" && Portc == ""&&Portn == "" && Reancho == ""&&Latitude == "" && Longitude == ""&&Country == "" && Countryn == ""&&Locid == "" && Ind == "") {
         oEntryTable.setVisible(false);
@@ -266,18 +241,7 @@ sap.ui.define(
 
     else if (editFlag) {
 
-      var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
-      var aItems = oTable.getItems();
-      let flag = false;
-      for (let i = 0; i < aItems.length; i++) {
-        var oCells = aItems[i].getCells();
-        var oInput = oCells[1]; // Index 1 corresponds to the Input field
-        var sValue = oInput.getValue();
-        if (onEditInput[i] !== sValue) {
-          flag = true;
-          break;
-        }
-      }
+      this.onCancelEdit();
 
       if (flag) {
         sap.m.MessageBox.confirm("Do you want to discard the changes?", {
@@ -319,7 +283,7 @@ sap.ui.define(
         var sValue = this.removeExtraSpaces(oInput.getValue());
 
         console.log(onCopyInput[i] + ":" + sValue + ":");
-        if (onCopyInput[i] !== sValue.trim()) {
+        if (onCopyInput[i] !== sValue) {
           flag = true;
           break;
         }
@@ -355,17 +319,17 @@ sap.ui.define(
       this.byId("createTypeTable").removeSelections();
     }
     else if (newEntryFlag) {
-      // let voyCode = this.getView().byId("Code").getValue().trim();
-      // let voyCodeDesc = this.getView().byId("Desc").getValue().trim();
-      let Country = this.getView().byId("COUNTRY").getValue().trim();
-      let Portc = this.getView().byId("PORTC").getValue().trim();
-      let Portn = this.getView().byId("PORTN").getValue().trim();
-      let Reancho = this.getView().byId("REANCHO").getValue().trim();
-      let Latitude = this.getView().byId("LATITUDE").getValue().trim();
-      let Longitude = this.getView().byId("LONGITUDE").getValue().trim();
-      let Countryn = this.getView().byId("COUNTRYN").getValue().trim();
-      let Locid = this.getView().byId("LOCID").getValue().trim();
-      let Ind = this.getView().byId("IND").getValue().trim();
+      // let voyCode = this.getView().byId("Code").getValue();
+      // let voyCodeDesc = this.getView().byId("Desc").getValue();
+      let Country = this.getView().byId("COUNTRY").getValue();
+      let Portc = this.getView().byId("PORTC").getValue();
+      let Portn = this.getView().byId("PORTN").getValue();
+      let Reancho = this.getView().byId("REANCHO").getValue();
+      let Latitude = this.getView().byId("LATITUDE").getValue();
+      let Longitude = this.getView().byId("LONGITUDE").getValue();
+      let Countryn = this.getView().byId("COUNTRYN").getValue();
+      let Locid = this.getView().byId("LOCID").getValue();
+      let Ind = this.getView().byId("IND").getValue();
 
       if (Country == "" && Portc == ""&&Portn == "" && Reancho == ""&&Latitude == "" && Longitude == ""&&Country == "" && Countryn == ""&&Locid == "" && Ind == "") {
 
@@ -438,18 +402,7 @@ sap.ui.define(
 
     else if (editFlag) {
 
-      var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
-      var aItems = oTable.getItems();
-      let flag = false;
-      for (let i = 0; i < aItems.length; i++) {
-        var oCells = aItems[i].getCells();
-        var oInput = oCells[1]; // Index 1 corresponds to the Input field
-        var sValue = oInput.getValue();
-        if (onEditInput[i] !== sValue) {
-          flag = true;
-          break;
-        }
-      }
+      this.onCancelEdit();
 
       if (flag) {
         sap.m.MessageBox.confirm("Do you want to discard the changes?", {
@@ -481,16 +434,6 @@ sap.ui.define(
 
 
 
-
-
-
-
-
-
-
-
-
-
       selectedItems: function (oEvent) {
         // console.log("hello");
         let oTable = oEvent.getSource();
@@ -501,7 +444,7 @@ sap.ui.define(
           if (oSelectedItem.getBindingContext()) {
             let cells = oSelectedItem.getCells();
             console.log(cells);
- 
+
             return [
               oSelectedItem.getBindingContext().getProperty("Country"),
               oSelectedItem.getBindingContext().getProperty("Portc"),
@@ -524,7 +467,7 @@ sap.ui.define(
       newEntries: function () {
         newEntryFlag = true;
 
-        copyFlag = false;
+        // copyFlag = false;
         editFlag = false;
 
         this.byId("createTypeTable").removeSelections();
@@ -553,39 +496,38 @@ sap.ui.define(
         this.getView().byId("mainPageFooter").setVisible(true);
         this.getView().byId("editBtn").setEnabled(false);
         this.getView().byId("deleteBtn").setEnabled(false);
-        this.getView().byId("copyBtn").setEnabled(false);
+        // this.getView().byId("copyBtn").setEnabled(false);
       },
 
       pressEdit: function () {
-        var that = this
+        let that = this;
         let oView = this.getView();
 
-        let oCreateTable = oView.byId("createTypeTable");
         var oTable = this.byId("createTypeTable");
         var aSelectedItems = oTable.getSelectedItems();
-        onEditInput = [];
-        aSelectedItems.forEach(function (oItem) {
-          var oBindingContext = oItem.getBindingContext();
-          var sCountry = oBindingContext.getProperty("country");
-          var sPortc = oBindingContext.getProperty("portc");
-          var sPortn = oBindingContext.getProperty("portn");
-          var sReancho = oBindingContext.getProperty("reancho");
-          var sLatitude = oBindingContext.getProperty("latitude");
-          var sLongitude = oBindingContext.getProperty("longitude");
-          var sCountryn = oBindingContext.getProperty("countryn");
-          var sLocid = oBindingContext.getProperty("locid");
-          var sInd = oBindingContext.getProperty("ind");
-        
-          console.log(sCountry,sPortc,sPortn,sReancho,sLatitude,sLongitude,sCountryn,sLocid,sInd);
-
-          onEditInput.push(sPortc,sPortn,sReancho,sLatitude,sLongitude,sCountryn,sLocid,sInd);
-        });
-
-       
         if (aSelectedItems.length === 0) {
           sap.m.MessageToast.show("Please select at least one row");
           return;
         }
+        onEditInput = [];
+
+        aSelectedItems.forEach(function (oItem) {
+          var oBindingContext = oItem.getBindingContext();
+          var sCountry = oBindingContext.getProperty("Country");
+          var sPortc = oBindingContext.getProperty("Portc");
+          var sPortn = oBindingContext.getProperty("Portn");
+          var sReancho = oBindingContext.getProperty("Reancho");
+          var sLatitude = oBindingContext.getProperty("Latitude");
+          var sLongitude = oBindingContext.getProperty("Longitude");
+          var sCountryn = oBindingContext.getProperty("Countryn");
+          var sLocid = oBindingContext.getProperty("Locid");
+          var sInd = oBindingContext.getProperty("Ind");
+        
+          console.log(sCountry,sPortc,sPortn,sReancho,sLatitude,sLongitude,sCountryn,sLocid,sInd);
+
+          onEditInput.push([sCountry,sPortc,sPortn,sReancho,sLatitude,sLongitude,sCountryn,sLocid,sInd]);
+        });
+
 
         editFlag = true;
 
@@ -598,47 +540,38 @@ sap.ui.define(
 
           let sCountry = oContext.getProperty("Country");
           let sPortc = oContext.getProperty("Portc");
-          
           let sPortn = oContext.getProperty("Portn");
           let sReancho = oContext.getProperty("Reancho");
-
           let sLatitude = oContext.getProperty("Latitude");
           let sLongitude = oContext.getProperty("Longitude");
-
           let sCountryn = oContext.getProperty("Countryn");
           let sLocid = oContext.getProperty("Locid");
-
           let sInd = oContext.getProperty("Ind");
         
-
-          
-
-         
           let oColumnListItem = new sap.m.ColumnListItem({
             cells: [
               new sap.m.Text({ text: sCountry }),
-              new sap.m.Input({ value: sPortc, editable: true}),
-              new sap.m.Input({ value: sPortn, editable: true}),
-              new sap.m.Input({ value: sReancho, editable: true}),
-              new sap.m.Input({ value: sLatitude, editable: true}),
-              new sap.m.Input({ value: sLongitude, editable: true}),
-              new sap.m.Input({ value: sCountryn, editable: true}),
-              new sap.m.Input({ value: sLocid, editable: true}),
+              new sap.m.Text({ text: sPortc }),
+              new sap.m.Text({ text: sPortn}),
+              new sap.m.Text({ text: sReancho}),
+              new sap.m.Text({ text: sLatitude}),
+              new sap.m.Text({ text: sLongitude}),
+              new sap.m.Text({ text: sCountryn}),
+              new sap.m.Text({ text: sLocid}),
               new sap.m.Input({ value: sInd, editable: true})
             ]
           });
           oUpdateTable.addItem(oColumnListItem);
         });
-
-        oUpdateTable.setVisible(true);
-
-        oCreateTable.setVisible(false);
+        oTable.setVisible(false);        
+        oUpdateTable.setVisible(true);      
 
         oView.byId("mainPageFooter2").setVisible(true);
 
         oView.byId("deleteBtn").setEnabled(false);
         oView.byId("entryBtn").setEnabled(false);
       },
+
       onPatchSent: function (ev) {
 
         sap.m.MessageToast.show("Updating..")
@@ -657,14 +590,278 @@ sap.ui.define(
             oView.getModel().refresh();
           }, 1000);
 
-          saveObj.setVisible(false);
-          cancelObj.setVisible(false);
-          inputFieldObj.setEditable(false);
+          // saveObj.setVisible(false);
+          // cancelObj.setVisible(false);
+          // inputFieldObj.setEditable(false);
 
         } else {
           sap.m.MessageToast.show("Fail to Update.")
         }
       },
+     
+     
+
+      onUpdate123: function () {
+        let oView = this.getView();
+        let oCreateTable = oView.byId("createTypeTable");
+        let oUpdateTable = oView.byId("updateTypeTable");
+    
+        let aItems = oUpdateTable.getItems();
+    
+        let flagNothingtoUpdate = true;
+        let invalidIndValue = false; 
+        for (let i = 0; i < aItems.length; i++) {
+            var oCells = aItems[i].getCells();
+            var sCountry = oCells[0].getText();
+            var sPortc = oCells[1].getText();
+            var sPortn = oCells[2].getText();
+            var sReancho = oCells[3].getText();
+            var sLatitude = oCells[4].getText();
+            var sLongitude = oCells[5].getText();
+            var sCountryn = oCells[6].getText();
+            var sLocid = oCells[7].getText();
+            var sInd = oCells[8].getValue();
+    
+            // Check if "ind" value is not 'X'
+            if (sInd.toUpperCase() !== 'X') {
+                invalidIndValue = true;
+                break;
+            }
+    
+            let fieldsArr = onEditInput[i];
+            if (fieldsArr[2] !== sPortn || fieldsArr[3] !== sReancho || fieldsArr[4] !== sLatitude || fieldsArr[5] !== sLongitude || fieldsArr[6] !== sCountryn || fieldsArr[7] !== sLocid || fieldsArr[8] !== sInd) {
+                flagNothingtoUpdate = false;
+                break;
+            }
+        }
+        if (invalidIndValue) {
+          sap.m.MessageToast.show("Error: 'ind' value must be 'X' for true and empty for false");
+          return;
+        }
+    
+        if (flagNothingtoUpdate) {
+            sap.m.MessageToast.show("nothing to update ");
+            return;
+        }
+    
+        aItems.forEach(function (oItem) {
+            let sCountry = oItem.getCells()[0].getText();
+            let sPortc = oItem.getCells()[1].getText();
+            let sPortn = oItem.getCells()[2].getText();
+            let sReancho = oItem.getCells()[3].getText();
+            let sLatitude = oItem.getCells()[4].getText();
+            let sLongitude = oItem.getCells()[5].getText();
+            let sCountryn = oItem.getCells()[6].getText();
+            let sLocid = oItem.getCells()[7].getText();
+            let sInd = oItem.getCells()[8].getValue();
+    
+    
+            let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
+                // Filter based on both "Country" and "Portc" keys
+                return oCreateItem.getCells()[0].getText() === sCountry && oCreateItem.getCells()[1].getText() === sPortc;
+            });
+    
+            if (oCreateItem) {
+                // Update the corresponding entry
+                oCreateItem.getCells()[0].setText(sCountry); 
+                oCreateItem.getCells()[1].setText(sPortc); 
+                oCreateItem.getCells()[2].setText(sPortn); 
+                oCreateItem.getCells()[3].setText(sReancho); 
+                oCreateItem.getCells()[4].setText(sLatitude); 
+                oCreateItem.getCells()[5].setText(sLongitude); 
+                oCreateItem.getCells()[6].setText(sCountryn); 
+                oCreateItem.getCells()[7].setText(sLocid); 
+                oCreateItem.getCells()[8].setText(sInd); 
+            }
+        });
+    
+    
+        oCreateTable.setVisible(true).removeSelections();
+    
+        oUpdateTable.setVisible(false);
+    
+        this.onPatchSent();
+        setTimeout(() => {
+            this.resetView();
+            oUpdateTable.removeAllItems();
+            this.onPatchCompleted({ getParameter: () => ({ success: true }) });
+    
+    
+        }, 1500);
+    }, 
+    onUpdate67: function () {
+      let oView = this.getView();
+      let oCreateTable = oView.byId("createTypeTable");
+      let oUpdateTable = oView.byId("updateTypeTable");
+  
+      let aItems = oUpdateTable.getItems();
+  
+      let flagNothingtoUpdate = true;
+      let invalidIndValue = false; 
+      for (let i = 0; i < aItems.length; i++) {
+          var oCells = aItems[i].getCells();
+          var sCountry = oCells[0].getText();
+          var sPortc = oCells[1].getText();
+          var sPortn = oCells[2].getText();
+          var sReancho = oCells[3].getText();
+          var sLatitude = oCells[4].getText();
+          var sLongitude = oCells[5].getText();
+          var sCountryn = oCells[6].getText();
+          var sLocid = oCells[7].getText();
+          var sInd = oCells[8].getValue().trim(); // Trim whitespace for accurate checking
+  
+          // Check if "ind" value is not empty or 'X'
+          if (sInd !== '' && sInd.toUpperCase() !== 'X') {
+              invalidIndValue = true;
+              break;
+          }
+  
+          let fieldsArr = onEditInput[i];
+          if (fieldsArr[2] !== sPortn || fieldsArr[3] !== sReancho || fieldsArr[4] !== sLatitude || fieldsArr[5] !== sLongitude || fieldsArr[6] !== sCountryn || fieldsArr[7] !== sLocid || fieldsArr[8] !== sInd) {
+              flagNothingtoUpdate = false;
+              break;
+          }
+      }
+  
+      if (invalidIndValue) {
+          sap.m.MessageToast.show("Error: 'ind' value must be 'X' or empty");
+          return;
+      }
+  
+      if (flagNothingtoUpdate) {
+          sap.m.MessageToast.show("Nothing to update");
+          return;
+      }
+  
+      aItems.forEach(function (oItem) {
+          let sCountry = oItem.getCells()[0].getText();
+          let sPortc = oItem.getCells()[1].getText();
+          let sPortn = oItem.getCells()[2].getText();
+          let sReancho = oItem.getCells()[3].getText();
+          let sLatitude = oItem.getCells()[4].getText();
+          let sLongitude = oItem.getCells()[5].getText();
+          let sCountryn = oItem.getCells()[6].getText();
+          let sLocid = oItem.getCells()[7].getText();
+          let sInd = oItem.getCells()[8].getValue().trim(); // Trim whitespace for accurate checking
+  
+          let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
+              // Filter based on both "Country" and "Portc" keys
+              return oCreateItem.getCells()[0].getText() === sCountry && oCreateItem.getCells()[1].getText() === sPortc;
+          });
+  
+          if (oCreateItem) {
+              // Update the corresponding entry
+              oCreateItem.getCells()[0].setText(sCountry); 
+              oCreateItem.getCells()[1].setText(sPortc); 
+              oCreateItem.getCells()[2].setText(sPortn); 
+              oCreateItem.getCells()[3].setText(sReancho); 
+              oCreateItem.getCells()[4].setText(sLatitude); 
+              oCreateItem.getCells()[5].setText(sLongitude); 
+              oCreateItem.getCells()[6].setText(sCountryn); 
+              oCreateItem.getCells()[7].setText(sLocid); 
+              oCreateItem.getCells()[8].setText(sInd); 
+          }
+      });
+  
+      oCreateTable.setVisible(true).removeSelections();
+  
+      oUpdateTable.setVisible(false);
+  
+      this.onPatchSent();
+      setTimeout(() => {
+          this.resetView();
+          oUpdateTable.removeAllItems();
+          this.onPatchCompleted({ getParameter: () => ({ success: true }) });
+      }, 1500);
+  },
+  onUpdate: function () {
+    let oView = this.getView();
+    let oCreateTable = oView.byId("createTypeTable");
+    let oUpdateTable = oView.byId("updateTypeTable");
+
+    let aItems = oUpdateTable.getItems();
+
+    let flagNothingtoUpdate = true;
+    let invalidIndValue = false;
+    for (let i = 0; i < aItems.length; i++) {
+        var oCells = aItems[i].getCells();
+        var sCountry = oCells[0].getText();
+        var sPortc = oCells[1].getText();
+        var sPortn = oCells[2].getText();
+        var sReancho = oCells[3].getText();
+        var sLatitude = oCells[4].getText();
+        var sLongitude = oCells[5].getText();
+        var sCountryn = oCells[6].getText();
+        var sLocid = oCells[7].getText();
+        var sInd = oCells[8].getValue().trim(); // Trim whitespace for accurate checking
+
+        // Check if "ind" value is not empty or 'X'
+        if (sInd !== '' && sInd !== 'X') {
+            invalidIndValue = true;
+            break;
+        }
+
+        let fieldsArr = onEditInput[i];
+        if (fieldsArr[2] !== sPortn || fieldsArr[3] !== sReancho || fieldsArr[4] !== sLatitude || fieldsArr[5] !== sLongitude || fieldsArr[6] !== sCountryn || fieldsArr[7] !== sLocid || fieldsArr[8] !== sInd) {
+            flagNothingtoUpdate = false;
+            break;
+        }
+    }
+
+    if (invalidIndValue) {
+        sap.m.MessageToast.show("Error: 'ind' value must be 'X' or empty");
+        return;
+    }
+
+    if (flagNothingtoUpdate) {
+        sap.m.MessageToast.show("Nothing to update");
+        return;
+    }
+
+    aItems.forEach(function (oItem) {
+        let sCountry = oItem.getCells()[0].getText();
+        let sPortc = oItem.getCells()[1].getText();
+        let sPortn = oItem.getCells()[2].getText();
+        let sReancho = oItem.getCells()[3].getText();
+        let sLatitude = oItem.getCells()[4].getText();
+        let sLongitude = oItem.getCells()[5].getText();
+        let sCountryn = oItem.getCells()[6].getText();
+        let sLocid = oItem.getCells()[7].getText();
+        let sInd = oItem.getCells()[8].getValue().trim(); // Trim whitespace for accurate checking
+
+        let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
+            // Filter based on both "Country" and "Portc" keys
+            return oCreateItem.getCells()[0].getText() === sCountry && oCreateItem.getCells()[1].getText() === sPortc;
+        });
+
+        if (oCreateItem) {
+            // Update the corresponding entry
+            oCreateItem.getCells()[0].setText(sCountry); 
+            oCreateItem.getCells()[1].setText(sPortc); 
+            oCreateItem.getCells()[2].setText(sPortn); 
+            oCreateItem.getCells()[3].setText(sReancho); 
+            oCreateItem.getCells()[4].setText(sLatitude); 
+            oCreateItem.getCells()[5].setText(sLongitude); 
+            oCreateItem.getCells()[6].setText(sCountryn); 
+            oCreateItem.getCells()[7].setText(sLocid); 
+            oCreateItem.getCells()[8].setText(sInd); 
+        }
+    });
+
+    oCreateTable.setVisible(true).removeSelections();
+
+    oUpdateTable.setVisible(false);
+
+    this.onPatchSent();
+    setTimeout(() => {
+        this.resetView();
+        oUpdateTable.removeAllItems();
+        this.onPatchCompleted({ getParameter: () => ({ success: true }) });
+    }, 1500);
+},
+
+  
+    
       onAddRow1: function () {
         
         var oTable = this.byId("entryTypeTable");
@@ -710,7 +907,7 @@ sap.ui.define(
         sap.m.MessageToast.show("Creating entries...");
     
         oTable.getItems().forEach(function (row) {
-            var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
+            var value1 = row.getCells()[0].getValue();
             var value2 = row.getCells()[1].getValue();
             var value3 = row.getCells()[2].getValue();
             var value4 = row.getCells()[3].getValue();
@@ -719,36 +916,35 @@ sap.ui.define(
             var value7 = row.getCells()[6].getValue();
             var value8 = row.getCells()[7].getValue();
             var value9 = row.getCells()[8].getValue();
-            
     
-            if (!value1 || !value2 || !value2 || !value3 ||!value4 || !value5 || !value6 ||!value7 || !value8 || !value9) {
-                errors.push("Please enter all fields for all rows.");
-                entriesProcessed++;
-                checkCompletion();
-                return;
-            }
+            // if (!value1 || !value2 || !value3 || !value4 || !value5 || !value6 || !value7 || !value8 || !value9) {
+            //     if (!errors.includes("Please enter all required fields for all rows.")) {
+            //         errors.push("Please enter all fields for all rows.");
+            //     }
+            //     entriesProcessed++;
+            //     checkCompletion();
+            //     return;
+            // }
     
-            var oBindListSP = that.getView().getModel().bindList("/PortmasterSetSet");
+            var oBindListSP = that.getView().getModel().bindList("/PortmasterSet");
             oBindListSP.attachEventOnce("dataReceived", function () {
                 var existingEntries = oBindListSP.getContexts().map(function (context) {
-                    return context.getProperty("Country","Portc","Portn","Reancho","Latitude","Longitude","Countryn","Locid","Ind").toUpperCase(); // Convert to lowercase
+                    return [context.getProperty("Country"),
+                     context.getProperty("Portc"),
+                      context.getProperty("Portn"),
+                       context.getProperty("Reancho"),
+                        context.getProperty("Latitude"),
+                         context.getProperty("Longitude"),
+                          context.getProperty("Countryn"),
+                           context.getProperty("Locid"),
+                            context.getProperty("Ind")];
                 });
     
-                
-                if (existingEntries.includes(value1),(value2),(value3),(value4),(value5),(value6),(value7),(value8),(value9)) {
-                    // Store duplicate entry code in the array
-                    // duplicateEntries.push(value1);
-                    // duplicateEntries.push(value2);
-                    // duplicateEntries.push(value3);
-                    // duplicateEntries.push(value4);
-                    // duplicateEntries.push(value5);
-                    // duplicateEntries.push(value6);
-                    // duplicateEntries.push(value7);
-                    // duplicateEntries.push(value8);
-                    // duplicateEntries.push(value9);
-                    console.log(value1,value2,value3,value4,value5,value6,value7,value8,value9);
-
-                }
+                existingEntries.forEach((entry) => {
+                    if (entry.includes(value1) && entry.includes(value2)) {
+                        duplicateEntries.push(value1);
+                    }
+                });
     
                 entriesProcessed++;
                 checkCompletion();
@@ -775,6 +971,8 @@ sap.ui.define(
         }
     
         function createEntries() {
+            var successStatus = true; // Initialize success status
+    
             oTable.getItems().forEach(function (row) {
                 var value1 = row.getCells()[0].getValue();
                 var value2 = row.getCells()[1].getValue();
@@ -785,47 +983,43 @@ sap.ui.define(
                 var value7 = row.getCells()[6].getValue();
                 var value8 = row.getCells()[7].getValue();
                 var value9 = row.getCells()[8].getValue();
-            
-          
     
-                // Format Uomdes value
-                var formattedUomdes = that.formatUomdes(value2);
-                var formattedUomdes = that.formatUomdes(value3);
-                var formattedUomdes = that.formatUomdes(value4);
-                var formattedUomdes = that.formatUomdes(value5);
-                var formattedUomdes = that.formatUomdes(value6);
-                var formattedUomdes = that.formatUomdes(value7);
-                var formattedUomdes = that.formatUomdes(value8);
-                var formattedUomdes = that.formatUomdes(value9);
-    
-                var oBindListSP = that.getView().getModel().bindList("/PortmasterSetSet");
+                var oBindListSP = that.getView().getModel().bindList("/PortmasterSet");
+                let payload = {
+                    Country: value1,
+                    Portc: value2,
+                    Portn: value3,
+                    Reancho: value4,
+                    Latitude: value5,
+                    Longitude: value6,
+                    Countryn: value7,
+                    Locid: value8,
+                    Ind: value9 // Fixed typo: changed value8 to value9
+                };
     
                 try {
-                    oBindListSP.create({
-                      Country: value1,
-                      Portc: formattedUomdes,
-
-                      Portn: formattedUomdes,
-                      Reancho: formattedUomdes,
-                      Latitude: formattedUomdes,
-                      Longitude: formattedUomdes,
-                      Countryn: formattedUomdes,
-                      Locid: formattedUomdes,
-                      Ind: formattedUomdes
-                      
-                    });
+                    oBindListSP.create(payload);
+                    oBindListSP.attachCreateCompleted(function (oEvent) {
+                        oEvent.getParameter("context").getModel().getMessagesByPath("").forEach(x => {
+                            console.log(x.message);
+                            sap.m.MessageToast.show(x.message);
+                        });
+                    }, this);
                     that.getView().getModel().refresh();
                     that.resetView();
                 } catch (error) {
+                    successStatus = false; // Update success status in case of error
                     sap.m.MessageToast.show("Error while saving data");
                 }
             });
     
-            sap.m.MessageToast.show("All entries saved successfully.");
+            if (successStatus) {
+                sap.m.MessageToast.show("All entries saved successfully.");
+            }
         }
     },
-    formatUomdes: function (Country) {
-      return Country.toLowerCase().replace(/\b\w/g, function (char) {
+    formatUomdes: function (uomdes) {
+      return uomdes.toLowerCase().replace(/\b\w/g, function (char) {
         return char.toUpperCase();
       });
     },
@@ -848,12 +1042,18 @@ sap.ui.define(
       let flag = false;
       for (let i = 0; i < aItems.length; i++) {
         var oCells = aItems[i].getCells();
-        let code = oCells[0].getValue().trim();
-        var oInput = oCells[1]; // Index 1 corresponds to the Input field
-        var sValue = oInput.getValue().trim();
-
-        if (sValue !== "" || code !== "") {
-          flag = true;  
+        let sCountry = oCells[0].getValue();
+        var sPortc = oCells[1].getValue();
+        var sPortn = oCells[2].getValue();
+        var sReancho = oCells[3].getValue();
+        var sLatitude = oCells[4].getValue();
+        var sLongitude = oCells[5].getValue();
+        var sCountryn = oCells[6].getValue();
+        var sLocid = oCells[7].getValue();
+        var sInd= oCells[8].getValue();
+      
+        if (sCountry !== "" || sPortc !== "" || sPortn !== "" || sReancho !== "" || sLatitude !== "" || sLongitude !== "" || sCountryn !== "" || sLocid !== ""|| sInd !== "" ) {
+          flag = true;
           break;
         }
       }
@@ -884,7 +1084,7 @@ sap.ui.define(
         var sValue = this.removeExtraSpaces(oInput.getValue());
 
         console.log(onCopyInput[i] + ":" + sValue + ":");
-        if (onCopyInput[i] !== sValue.trim()) {
+        if (onCopyInput[i] !== sValue) {
           flag = true;
           break;
         }
@@ -923,72 +1123,12 @@ sap.ui.define(
 
       return false; // Data has not changed
     },
-    onUpdate: function () {
-      let oView = this.getView();
-      let oCreateTable = oView.byId("createTypeTable");
-      let oUpdateTable = oView.byId("updateTypeTable");
-
-      let aItems = oUpdateTable.getItems();
-      
-
-      let i = 0;
-      let flagNothingtoUpdate = true;
-      for (let i = 0; i < aItems.length; i++) {
-        let oItem = aItems[i];
-        let sDesc = oItem.getCells()[[1],[2],[3],[4],[5],[6],[7],[8]].getValue();
-        sDesc = this.removeExtraSpaces(sDesc);
-        if (onEditInput[i].trim() !== sDesc.trim()) {
-          flagNothingtoUpdate = false;
-          break; // Break the loop when condition is met
-        }
-      }
-     
-
-      if (flagNothingtoUpdate) {
-        sap.m.MessageToast.show("nothing to update ");
-        return;
-      }
-
-      aItems.forEach(function (oItem) {
-        let sValue = oItem.getCells()[0].getText(); // Assuming Value is in the first cell
-        let sDesc = oItem.getCells()[[1],[2],[3],[4],[5],[6],[7],[8]].getValue(); // Assuming Field Description is in the second cell
-        console.log(aItems);
-
-
-        let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
-          return oCreateItem.getCells()[0].getText() === sValue; // Assuming Value is in the first cell
-        });
-
-        if (oCreateItem) {
-          oCreateItem.getCells()[1].setText(sDesc.replace(/\s+/g, " ").trim()); // Assuming Field Description is in the second cell
-        }
-      });
-
-
-      oCreateTable.setVisible(true).removeSelections();
-
     
-    
-      oUpdateTable.setVisible(false);
-
-      
-      this.onPatchSent();
-      setTimeout(() => {
-        this.resetView();
-        oUpdateTable.removeAllItems();
-        this.onPatchCompleted({ getParameter: () => ({ success: true }) });
-
-
-      }, 1500);
-
-
-
-
-    },
     removeExtraSpaces: function (sentence) {
-   
+      // Split the sentence into words
       let words = sentence.split(/\s+/);
 
+      // Join the words back together with single space between them
       let cleanedSentence = words.join(' ');
 
       return cleanedSentence;
@@ -1000,11 +1140,20 @@ sap.ui.define(
       let flag = false;
       for (let i = 0; i < aItems.length; i++) {
         var oCells = aItems[i].getCells();
-        var oInput = oCells[[1],[2],[3],[4],[5],[6],[7],[8]]; // Index 1 corresponds to the Input field
-        var sValue = this.removeExtraSpaces(oInput.getValue());
+        var sCountry = oCells[0].getText(); // Index 1 corresponds to the Input field
+        var sPortc = oCells[1].getText();
+        var sPortn = oCells[2].getText();
+        var sReancho = oCells[3].getText();
+        var sLatitude = oCells[4].getText();
+        var sLongitude = oCells[5].getText();
+        var sCountryn = oCells[6].getText();
+        var sLocid = oCells[7].getText();
+        var sInd = oCells[8].getValue();
+        // var sValue = this.removeExtraSpaces(oInput.getValue());
 
-        console.log(onEditInput[i] + ":" + sValue + ":");
-        if (onEditInput[i] !== sValue.trim()) {
+
+        let fieldsArr = onEditInput[i];
+        if (fieldsArr[0] !== sCountry || fieldsArr[1] !== sPortc || fieldsArr[2] !== sPortn || fieldsArr[3] !== sReancho || fieldsArr[4] !== sLatitude || fieldsArr[5] !== sLongitude || fieldsArr[6] !== sCountryn || fieldsArr[7] !== sLocid || fieldsArr[8] !== sInd) {
           flag = true;
           break;
         }
@@ -1024,78 +1173,7 @@ sap.ui.define(
 
       }
     },
-    // onCancelCopyOrEntry: function () {
-    //   var oEntryTable = this.getView().byId("entryTypeTable");
-    //   const that = this;
 
-    //   let COUNTRY = this.getView().byId("COUNTRY").getValue().trim();
-    //   let PORTC = this.getView().byId("PORTC").getValue().trim();
-    //   let PORTN = this.getView().byId("PORTN").getValue().trim();
-    //   let REANCHO = this.getView().byId("REANCHO").getValue().trim();
-    //   let LATITUDE = this.getView().byId("LATITUDE").getValue().trim();
-    //   let LONGITUDE = this.getView().byId("LONGITUDE").getValue().trim();
-    //   let COUNTRYN = this.getView().byId("COUNTRYN").getValue().trim();
-    //   let LOCID = this.getView().byId("LOCID").getValue().trim();
-    //   let IND = this.getView().byId("IND").getValue().trim();
-      
-    //   // Check if there are any changes made
-    //   if (COUNTRY !== "" || PORTC !== "" ||PORTN !=="" ||REANCHO!==""||LATITUDE!==""||LONGITUDE!==""||COUNTRYN!==""||LOCID!==""||IND!=="") {
-
-    //     sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
-    //       MessageBox.confirm(
-    //         "Changes were made , do you want to Discard ?", {
-    //         title: "Confirm ",
-    //         onClose: function (oAction) {
-
-    //           if (oAction === MessageBox.Action.OK) {
-    //             oEntryTable.setVisible(false);
-    //             oEntryTable.getItems()[0].getCells()[0].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[1].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[2].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[3].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[4].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[5].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[6].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[7].setValue("");
-    //             oEntryTable.getItems()[0].getCells()[8].setValue("");
-                
-
-    //             var items = oEntryTable.getItems();
-    //             for (var i = items.length - 1; i > 0; i--) {
-    //               oEntryTable.removeItem(items[i]);
-    //             }
-    //             that.resetView();
-
-    //           } else {
-    //             console.log("continue ..");
-
-    //           }
-    //         }
-    //       }
-    //       );
-    //     });
-
-    //   } else {
-    //     oEntryTable.setVisible(false);
-    //     oEntryTable.getItems()[0].getCells()[0].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[1].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[2].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[3].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[4].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[5].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[6].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[7].setValue("");
-    //     oEntryTable.getItems()[0].getCells()[8].setValue("");
-      
-
-    //     var items = oEntryTable.getItems();
-    //     for (var i = items.length - 1; i > 0; i--) {
-    //       oEntryTable.removeItem(items[i]);
-    //     }
-
-    //     that.resetView();
-    //   } 
-    // },
     resetView: function () {
       this.getView().byId("updateTypeTable").setVisible(false);
       this.getView().byId("entryTypeTable").setVisible(false);
@@ -1107,16 +1185,6 @@ sap.ui.define(
       newEntryFlag = false;
       this.getView().byId("createTypeTable").setVisible(true).removeSelections();
       
-      this.getView().byId("COUNTRY").setValue("");
-      this.getView().byId("PORTC").setValue("");
-      this.getView().byId("PORTN").setValue("");
-      this.getView().byId("REANCHO").setValue("");
-      this.getView().byId("LATITUDE").setValue("");
-      this.getView().byId("LONGITUDE").setValue("");
-      this.getView().byId("COUNTRYN").setValue("");
-      this.getView().byId("LOCID").setValue("");
-      this.getView().byId("IND").setValue("");
-
       this.getView().byId("country").setValue("");
       this.getView().byId("portc").setValue("");
       this.getView().byId("portn").setValue("");
@@ -1126,6 +1194,16 @@ sap.ui.define(
       this.getView().byId("countryn").setValue("");
       this.getView().byId("locid").setValue("");
       this.getView().byId("ind").setValue("");
+
+      this.getView().byId("country1").setValue("");
+      this.getView().byId("portc1").setValue("");
+      this.getView().byId("portn1").setValue("");
+      this.getView().byId("reancho1").setValue("");
+      this.getView().byId("latitude1").setValue("");
+      this.getView().byId("longitude1").setValue("");
+      this.getView().byId("countryn1").setValue("");
+      this.getView().byId("locid1").setValue("");
+      this.getView().byId("ind1").setValue("");
 
       this.getView().byId("editBtn").setEnabled(true);
       this.getView().byId("deleteBtn").setEnabled(true);
@@ -1182,6 +1260,8 @@ sap.ui.define(
         });
       });
     },
+
+
   });
 
 });

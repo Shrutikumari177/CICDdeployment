@@ -6,10 +6,11 @@
         id="mySel"
         noDataText="Loading..."
         title="Select Payment Term"
-       
+       search="onPaymentTermSearch"
         confirm="onPaymentTermValueHelpClose"
         cancel="onPaymentTermValueHelpClose"
         items="{/xNAUTIxpaymTerm}"
+        initialFocus="SearchField"
        
         >
         <StandardListItem id="ardLi"

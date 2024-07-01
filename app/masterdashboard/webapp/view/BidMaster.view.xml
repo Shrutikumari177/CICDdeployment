@@ -36,25 +36,26 @@
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries"
+                    text="New Entries" type="Emphasized"
                     press="newEntries"
                 />
                 <Button
                     id="copyBtn"
-                    text="Copy As"
+                    text="Copy As" type="Emphasized"
                     press="pressCopy"
-                    visible="true"
-                />
-                <Button
-                    id= "deleteBtn"
-                    text="Delete"
-                    press="onDeletePress"
+                   
                 />
                 <Button
                     id= "editBtn"
-                    text="Edit"
+                    text="Edit" type="Emphasized"
                     press="pressEdit"
                 />
+                <Button
+                    id= "deleteBtn"
+                    text="Delete" type="Emphasized"
+                    press="onDeletePress"
+                />
+                
                
              
             </contentLeft>
@@ -161,7 +162,7 @@
                     <Input id="Bname" liveChange="onLiveChangeUser"/>
                     <Input id="Value" liveChange="onLiveChangeValue"/>
                     <Input id="Cvalue" liveChange="onLiveChangeCvalue" type="Number"/>
-                    <Input id="Cunit" showValueHelp="true" valueHelpRequest=".showValueHelpCurrency"/>
+                    <Input id="Cunit"  showValueHelp="true" valueHelpRequest="onCurrencyPress"/>
                     <Input id="Datatype"  liveChange="onLiveChangeDatatype"/>
                     <Input id="Tablename" liveChange="onLiveChangeTablename"/>
                     <CheckBox id="Multi_Choice"  select="onSelectChange"/>

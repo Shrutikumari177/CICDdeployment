@@ -154,7 +154,7 @@ sap.ui.define(
         setTimeout(() => { that._renderMap(); }, 500);
         window.addEventListener("resize", (e) => {
           setTimeout(() => {
-            
+            // if (!map?.getContainer()?.childElementCount) {
               if  (map && map.getContainer() && map.getContainer().childElementCount === 0) {
               map.remove();
               that._renderMap();
@@ -259,11 +259,7 @@ sap.ui.define(
 
       onMarkerClick: async function (oEvent) {
         
-        // debugger;
-        // var that = window.that;
-        // const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
-
-        // 
+       
         let lastPortData = structuredClone(oJsonModel.getData());
 
         sap.ui.core.BusyIndicator.show();
@@ -538,7 +534,6 @@ sap.ui.define(
           ZCalcNav: ZCalcNav,
         };
         console.log(oPayload);
-
         const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
         oDataModelV2.create("/ZCalculateSet", oPayload, {
           success: function (oData) {
@@ -559,7 +554,7 @@ sap.ui.define(
           },
           error: function (oResponse) {
             console.log(oResponse);
-            new sap.m.MessageBox.erroe(JSON.parse(oResponse.responseText).error.message.value)
+            new sap.m.MessageBox.error(JSON.parse(oResponse.responseText).error.message.value)
           },
         });
       },
@@ -572,7 +567,7 @@ sap.ui.define(
         // oRouter.navTo("RouteTrChangeVoyage", {
         //   "VOYAGE_NO": "1000000112"
         // });
-        // return;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        // return;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
         const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();

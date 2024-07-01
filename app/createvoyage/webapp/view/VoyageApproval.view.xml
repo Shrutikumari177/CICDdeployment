@@ -78,9 +78,9 @@
                         <Label
                             id="_IDGenLabel1"
                             text="Voyage No: "
-                            class="sapUiTinyMarginTop labeltxt "
+                            class="sapUiTinyMarginTop"
                         />
-                        <MultiInput
+                        <!-- <MultiInput
                             id="VoyageNo"
                             showValueHelp="true"
                             valueHelpRequest="ValueHelpVoyage"
@@ -88,6 +88,17 @@
                             valueHelpOnly="true"
                             tokenUpdate="onTokenUpdate"
                             width="200px"
+                            
+                        /> -->
+                          <Input
+                            id="VoyageNo"
+                            showValueHelp="true"
+                            valueHelpRequest="ValueHelpVoyage"
+                            liveChange="ValueHelpVoyage"
+                            valueHelpOnly="true"
+                        
+                            width="200px"
+                            
                         />
                     </FlexBox>
 
@@ -99,12 +110,20 @@
                             id="_IDGLabel1"
                             text="Voyage Approval Request No: "
                             class="sapUiTinyMarginTop"
+                            visible="false"
                         />
-                        <MultiInput
+                        <!-- <MultiInput
                             id="_voyageAppReqField"
                             editable="false"
                             width="200px"
                             tokenUpdate="onTokenUpdate2"
+                        /> -->
+                         <Input
+                            id="_voyageAppReqField"
+                            editable="false"
+                            width="200px"
+                            visible="false"
+                    
                         />
                     </FlexBox>
                 </VBox>
@@ -159,63 +178,8 @@
                                 id="statusTable"
                             >
                                 <!-- items="{VoyApprovalModel>/}" -->
-                                <columns>
-                                    <Column
-                                        id="_IDGenColumn1"
-                                        width="128px"
-                                        hAlign="Center"
-                                    >
-                                        <Text
-                                            id="_IDGenText2"
-                                            text="Approval Req No."
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn2"  hAlign="Center">
-                                        <Text
-                                            id="_IDGenText3"
-                                            text="Voyage No"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn3"  hAlign="Center">
-                                        <Text
-                                            id="_IDGenText4"
-                                            text="Created By"
-                                        />
-                                    </Column>
-                                    <Column id="_IDGenColumn4"  hAlign="Center">
-                                        <Text
-                                            id="_IDGenText5"
-                                            text="Created On"
-                                        />
-                                    </Column>
-                                    <Column   hAlign="Center">
-                                       <Text text="Approver 1"/>
-                                    </Column>
-                                     <Column hAlign="Center" >
-                                       <Text text="Status"/>
-                                    </Column>
-                                      <Column   hAlign="Center">
-                                       <Text text="Date"/>
-                                    </Column>
-                                     <Column   hAlign="Center">
-                                       <Text text="Approver 2"/>
-                                    </Column>
-                                    <Column   hAlign="Center">
-                                       <Text text="Status"/>
-                                    </Column>
-                                     <Column  hAlign="Center" >
-                                       <Text text="Date"/>
-                                    </Column>
-                                     <Column   hAlign="Center">
-                                       <Text text="Approver 3"/>
-                                    </Column>
-                                    <Column  hAlign="Center">
-                                       <Text text="Status"/>
-                                    </Column>
-                                     <Column  hAlign="Center">
-                                       <Text text="Date"/>
-                                    </Column>
-                                </columns>
+                        
+                                 
                              
                             </Table>
                         </Panel>
@@ -270,6 +234,7 @@
                                 id="approvalTable"
                                 mode="MultiSelect"
                                 selectionChange="onTableSelectionChange"
+                                visible="false"
                             >
                                 <columns>
                                     <!-- <Column>

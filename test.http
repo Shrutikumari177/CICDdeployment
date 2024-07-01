@@ -1,0 +1,9 @@
+POST http://localhost:4004/odata/v4/nauticalservice/ControllerLiveBidDetails
+Content-Type: application/json
+
+{
+    "createdBy" : "user123",
+    "charmin": "400000008",
+    "voyno": "100000057",
+    "quotationPrice": "1000.00"
+}

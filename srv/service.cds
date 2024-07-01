@@ -9,25 +9,113 @@ using NAUTIZCHATAPPROVAL_SRV from './external/NAUTIZCHATAPPROVAL_SRV.cds';
 using NAUTIZVOY_VALUEHELP_CDS from './external/NAUTIZVOY_VALUEHELP_CDS.cds';
 using NAUTICOMP_QUOT_SRV from './external/NAUTICOMP_QUOT_SRV';
 using NAUTICHASTATUS_SRV from './external/NAUTICHASTATUS_SRV.cds';
+using NAUTIVENDOR_BTP_SRV from './external/NAUTIVENDOR_BTP_SRV.cds';
+using INGXTCONTROLLER_SRV from './external/INGXTCONTROLLER_SRV.cds';
+using NAUTIINVITECOMPARE_SRV from './external/NAUTIINVITECOMPARE_SRV.cds';
+using NAUTIVOYSTATUS_SRV from './external/NAUTIVOYSTATUS_SRV.cds';
 
 
 service nauticalservice {
+    entity xNAUTIxAPPROVEDCHAT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT
+    {        key Creqno, key Chrnmin, key Zlevel, key Uname, Zcomm, Zaction, Zemail     }    
+;
+     entity voyappstatusSet as projection on NAUTIVOYSTATUS_SRV.voyappstatusSet
+    {        Vreqno, key Voyno, Zlevel, Zcomm, Zaction     }    
+;
 
-    entity getRoute                    as projection on nauticalschema.getRoute
+    entity ControllerLiveBidDetails     as projection on nauticalschema.ControllerLiveBidDetails;
+
+    entity getRoute                     as projection on nauticalschema.getRoute
         actions {
             action getDistanceBetweenPort();
         };
-         entity calculateRankings                 as projection on nauticalschema.calculateRankings
-    
+
+    entity calculateRankings            as projection on nauticalschema.calculateRankings;
+
+        entity MasBidTemplateSet as projection on NAUTIVENDOR_SRV.MasBidTemplateSet
+    {        key Code, Value, Cvalue, Cunit, Datatype, Tablename, MultiChoice     }    
+;
 
 
-       entity xNAUTIxVENFBIDPOST as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDPOST
-    {        key Chrnmin, Voyno, Lifnr, Zcode, Biddate, Bidtime, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, Rank, AwrdCreatedBy, AwrdCreatedOn, AwrdCreatedAt     }    
-;
-    entity xNAUTIxBIDHISREPORT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORT
-    {        key Voyno, key Chrnmin, key Lifnr, key Zcode, Biddate, Bidtime, Voynm, Vnomtk, Refdoc, Docind, Vessn, Vimo, Chtyp, Chpno, Currkeys, Frtco, Vstat, Voyty, Carty, Curr, Freght, Party, Bidtype, Frcost, Frtu, FrcostAct, FrtuAct, Zdelete, RefVoyno, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, Rank, AwrdCreatedBy, AwrdCreatedOn, AwrdCreatedAt, Award     }    
-;
-    entity PortmasterUpdateSet         as
+    entity xNAUTIxVENFBIDPOST           as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDPOST {
+            key Chrnmin,
+                Voyno,
+                Lifnr,
+                Zcode,
+                Biddate,
+                Bidtime,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom,
+                Rank,
+                AwrdCreatedBy,
+                AwrdCreatedOn,
+                AwrdCreatedAt
+        };
+
+    entity xNAUTIxBIDHISREPORT          as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORT {
+            key Voyno,
+            key Chrnmin,
+            key Lifnr,
+            key Zcode,
+                Biddate,
+                Bidtime,
+                Voynm,
+                Vnomtk,
+                Refdoc,
+                Docind,
+                Vessn,
+                Vimo,
+                Chtyp,
+                Chpno,
+                Currkeys,
+                Frtco,
+                Vstat,
+                Voyty,
+                Carty,
+                Curr,
+                Freght,
+                Party,
+                Bidtype,
+                Frcost,
+                Frtu,
+                FrcostAct,
+                FrtuAct,
+                Zdelete,
+                RefVoyno,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom,
+                Rank,
+                AwrdCreatedBy,
+                AwrdCreatedOn,
+                AwrdCreatedAt,
+                Award
+        };
+
+    entity PortmasterUpdateSet          as
         projection on NAUTIMASTER_BTP_SRV.PortmasterUpdateSet {
             key Country,
             key Portc,
@@ -40,14 +128,14 @@ service nauticalservice {
                 Ind
         };
 
-    entity EsPathCollection            as
+    entity EsPathCollection             as
         projection on NAUTIMARINE_TRAFFIC_API_SRV.EsPathCollection {
                 PathId,
             key Latitude,
                 Longitude
         };
 
-    entity PortMasterSet               as
+    entity PortMasterSet                as
         projection on NAUTIMARINE_TRAFFIC_API_SRV.PortMasterSet {
                 Country,
                 Portc,
@@ -59,7 +147,7 @@ service nauticalservice {
             key Locid
         };
 
-    entity es_port_master              as
+    entity es_port_master               as
         projection on NAUTIMARINE_TRAFFIC_API_SRV.es_port_master {
                 Country,
             key Portc,
@@ -72,7 +160,7 @@ service nauticalservice {
                 Ind
         };
 
-    entity es_route_map                as
+    entity es_route_map                 as
         projection on NAUTIMARINE_TRAFFIC_API_SRV.es_route_map {
                 marineApiRoute,
             key IvFromPort,
@@ -82,7 +170,7 @@ service nauticalservice {
         };
 
 
-    entity BidMasterSet                as
+    entity BidMasterSet                 as
         projection on NAUTIMASTER_BTP_SRV.BidMasterSet {
             key Bname,
             key Code,
@@ -94,7 +182,7 @@ service nauticalservice {
                 MultiChoice
         };
 
-    entity CountrySet                  as
+    entity CountrySet                   as
         projection on NAUTIMASTER_BTP_SRV.CountrySet {
                 Spras,
             key Land1,
@@ -102,43 +190,43 @@ service nauticalservice {
         };
 
 
-    entity ClassMasterSet              as
+    entity ClassMasterSet               as
         projection on NAUTIMASTER_BTP_SRV.ClassMasterSet {
             key ZfValue,
                 ZfDesc
         };
 
-    entity CostMasterSet               as
+    entity CostMasterSet                as
         projection on NAUTIMASTER_BTP_SRV.CostMasterSet {
             key Costcode,
                 Cstcodes
         };
 
-    entity CountryMasterSet            as
+    entity CountryMasterSet             as
         projection on NAUTIMASTER_BTP_SRV.CountryMasterSet {
             key ZfValue,
                 ZfDesc
         };
 
-    entity EventMasterSet              as
+    entity EventMasterSet               as
         projection on NAUTIMASTER_BTP_SRV.EventMasterSet {
             key Evtty,
                 Text
         };
 
-    entity MaintainGroupSet            as
+    entity MaintainGroupSet             as
         projection on NAUTIMASTER_BTP_SRV.MaintainGroupSet {
             key Zuser,
                 Zgroup
         };
 
-    entity UOMSet                      as
+    entity UOMSet                       as
         projection on NAUTIMASTER_BTP_SRV.UOMSet {
             key Uom,
                 Uomdes
         };
 
-    entity StandardCurrencySet         as
+    entity StandardCurrencySet          as
         projection on NAUTIMASTER_BTP_SRV.StandardCurrencySet {
                 Spras,
             key Waers,
@@ -146,7 +234,7 @@ service nauticalservice {
         };
 
 
-    entity VoyageRealeaseSet           as
+    entity VoyageRealeaseSet            as
         projection on NAUTIMASTER_BTP_SRV.VoyageRealeaseSet {
             key Rels,
             key Voyty,
@@ -157,13 +245,68 @@ service nauticalservice {
                 App3
         };
 
-    entity RefrenceDocumentSet         as
+    entity sendEmail as projection on nauticalschema.sendEmail;
+
+    entity RefrenceDocumentSet          as
         projection on NAUTIMASTER_BTP_SRV.RefrenceDocumentSet {
             key Docind,
                 Docdesc
         };
 
-    entity PortmasterSet               as
+    entity xNAUTIxCharteringHeaderItem  as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem {
+            key Chrnmin,
+                Chrnmex,
+                Chrcdate,
+                Chrctime,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                Chrqdate,
+                Chrporg,
+                Chrporgn,
+                Chrpgrp,
+                Chrpgrpn,
+                Chrexcr,
+                Chrpayt,
+                Chrpaytxt,
+                Chrinco,
+                Chrincodis,
+                Chrincol,
+                Cimater,
+                Cimatdes,
+                Ciqty,
+                Ciuom,
+                Voyno,
+                Voynm,
+                Chrven,
+                Chrvenn,
+                Ciprec,
+                Zdelete,
+                RefChrnmin,
+                tovendor,
+                tocharteringasso
+        };
+
+    entity xNAUTIxUIIDUSRGROUP          as
+        projection on NAUTIMASTER_BTP_SRV.xNAUTIxUIIDUSRGROUP {
+            key Zuser,
+                Zgroup
+        };
+
+    entity RelStrategySet               as
+        projection on NAUTIMASTER_BTP_SRV.RelStrategySet {
+            key Rels,
+            key Voyty,
+            key Vesty,
+            key Zgroup,
+                App1,
+                App2,
+                App3
+        };
+
+    entity PortmasterSet                as
         projection on NAUTIMASTER_BTP_SRV.PortmasterSet {
             key Country,
             key Portc,
@@ -176,7 +319,7 @@ service nauticalservice {
                 Ind
         };
 
-    entity xNAUTIxMASBID               as
+    entity xNAUTIxMASBID                as
         projection on NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
             key Bname,
             key Code,
@@ -188,7 +331,7 @@ service nauticalservice {
                 Multi_Choice
         };
 
-    entity xNAUTIxBusinessPartner1     as
+    entity xNAUTIxBusinessPartner1      as
         projection on NAUTIMASTER_BTP_SRV.xNAUTIxBusinessPartner1 {
             key Lifnr,
                 PartnerRole,
@@ -214,59 +357,93 @@ service nauticalservice {
                 DateTo
         };
 
-    entity BidTypeSet                  as
+    entity BidTypeSet                   as
         projection on NAUTINAUTICALCV_SRV.BidTypeSet {
                 Ddtext,
             key DomvalueL
         };
 
-    entity CarTypeSet                  as
+    entity CarTypeSet                   as
         projection on NAUTINAUTICALCV_SRV.CarTypeSet {
             key Carcd,
                 Cardes
         };
 
-    entity CargoUnitSet                as
+    entity CargoUnitSet                 as
         projection on NAUTINAUTICALCV_SRV.CargoUnitSet {
             key Uom,
                 Uomdes
         };
 
-    entity CurTypeSet                  as
+    entity CurTypeSet                   as
         projection on NAUTINAUTICALCV_SRV.CurTypeSet {
             key Navoycur,
                 Navoygcurdes
         };
 
-    entity GtTabSet                    as
+    entity GtTabSet                     as
         projection on NAUTINAUTICALCV_SRV.GtTabSet
 
         ;
 
-    entity GtPlanSet                   as
+    entity GtPlanSet                    as
         projection on NAUTINAUTICALCV_SRV.GtPlanSet
 
         ;
 
-    entity VoyTypeSet                  as
+    entity VoyTypeSet                   as
         projection on NAUTINAUTICALCV_SRV.VoyTypeSet {
             key Voycd,
                 Voydes
         };
 
-    entity ZCalculateSet               as projection on NAUTINAUTICALCV_SRV.ZCalculateSet
-    entity ZCreatePlanSet              as projection on NAUTINAUTICALCV_SRV.ZCreatePlanSet;
-       
-    entity cha_statusSet as projection on NAUTICHASTATUS_SRV.cha_statusSet
-    {        key Chrnmin, Creqno, Zlevel, Zaction     }    
-;
+    entity ZCalculateSet                as projection on NAUTINAUTICALCV_SRV.ZCalculateSet
+    entity ZCreatePlanSet               as projection on NAUTINAUTICALCV_SRV.ZCreatePlanSet;
 
-    entity xNAUTIxCHARTERINGVALUEHELP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP
-    {        key Chrnmin, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, Chrporg, Chrporgn, Chrpgrp, Chrpgrpn, Chrexcr, Chrpayt, Chrpaytxt, Chrinco, Chrincodis, Chrincol, Cimater, Cimatdes, Ciqty, Ciuom, Voyno, Voynm, Chrven, Chrvenn, Ciprec, Zdelete, RefChrnmin     }    
-;
+    entity cha_statusSet                as
+        projection on NAUTICHASTATUS_SRV.cha_statusSet {
+            key Chrnmin,
+                Creqno,
+                Zlevel,
+                Zaction
+        };
+
+    entity xNAUTIxCHARTERINGVALUEHELP   as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERINGVALUEHELP {
+            key Chrnmin,
+                Chrnmex,
+                Chrcdate,
+                Chrctime,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                Chrqdate,
+                Chrporg,
+                Chrporgn,
+                Chrpgrp,
+                Chrpgrpn,
+                Chrexcr,
+                Chrpayt,
+                Chrpaytxt,
+                Chrinco,
+                Chrincodis,
+                Chrincol,
+                Cimater,
+                Cimatdes,
+                Ciqty,
+                Ciuom,
+                Voyno,
+                Voynm,
+                Chrven,
+                Chrvenn,
+                Ciprec,
+                Zdelete,
+                RefChrnmin
+        };
 
 
-    entity xNAUTIxVOYAGEHEADERTOITEM   as
+    entity xNAUTIxVOYAGEHEADERTOITEM    as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVOYAGEHEADERTOITEM {
             key Voyno,
                 Voynm,
@@ -297,7 +474,7 @@ service nauticalservice {
                 tobiditem
         };
 
-    entity xNAUTIxCOSTCHARGES          as
+    entity xNAUTIxCOSTCHARGES           as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCOSTCHARGES {
             key Voyno,
             key Vlegn,
@@ -310,7 +487,7 @@ service nauticalservice {
                 CostCheck
         };
 
-    entity xNAUTIxVoygItem             as
+    entity xNAUTIxVoygItem              as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVoygItem {
             key Voyno,
             key Vlegn,
@@ -336,7 +513,7 @@ service nauticalservice {
                 Totco
         };
 
-    entity xNAUTIxBIDITEM              as
+    entity xNAUTIxBIDITEM               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDITEM {
             key Voyno,
             key Zcode,
@@ -352,7 +529,7 @@ service nauticalservice {
                 Zmax
         };
 
-    entity CharteringSet               as
+    entity CharteringSet                as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.CharteringSet {
                 Zdelete,
                 Chrcdate,
@@ -387,7 +564,7 @@ service nauticalservice {
         };
 
 
-    entity xNAUTIxCHARTERING           as
+    entity xNAUTIxCHARTERING            as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERING {
             key Chrnmin,
                 Chrnmex,
@@ -421,13 +598,13 @@ service nauticalservice {
                 RefChrnmin
         };
 
-    entity xNAUTIxCHARTPURCHASEITEM    as
+    entity xNAUTIxCHARTPURCHASEITEM     as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEM {
             key Ekorg,
                 Ekotx
         };
 
-    entity xNAUTIxNAVOYGCT             as
+    entity xNAUTIxNAVOYGCT              as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCT {
             key Voyno,
             key Vlegn,
@@ -440,7 +617,7 @@ service nauticalservice {
                 CostCheck
         };
 
-    entity xNAUTIxNAVYGIP              as
+    entity xNAUTIxNAVYGIP               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP {
             key Voyno,
             key Vlegn,
@@ -466,7 +643,7 @@ service nauticalservice {
                 Totco
         };
 
-    entity xNAUTIxNAVOYG               as
+    entity xNAUTIxNAVOYG                as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG {
             key Voyno,
                 Voynm,
@@ -495,7 +672,7 @@ service nauticalservice {
         };
 
 
-    entity xNAUTIxRFQCHARTERING        as
+    entity xNAUTIxRFQCHARTERING         as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQCHARTERING {
             key Voyno,
                 Lifnr,
@@ -524,7 +701,7 @@ service nauticalservice {
                 toassociation4
         };
 
-    entity xNAUTIxRFQPORTAL            as
+    entity xNAUTIxRFQPORTAL             as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL {
             key Lifnr,
                 PartnerRole,
@@ -551,12 +728,15 @@ service nauticalservice {
                 toassociation1,
                 toassociation2
         };
-           entity xNAUTIxCHARTERVALUEHELP as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERVALUEHELP
-    {        key Chrnmin, key Creqno     }    
-;
+
+    entity xNAUTIxCHARTERVALUEHELP      as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERVALUEHELP {
+            key Chrnmin,
+            key Creqno
+        };
 
 
-    entity xNAUTIxVENDBID              as
+    entity xNAUTIxVENDBID               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {
             key Voyno,
                 Lifnr,
@@ -571,7 +751,7 @@ service nauticalservice {
                 Zcom
         };
 
-    entity xNAUTIxVENDBIDH             as
+    entity xNAUTIxVENDBIDH              as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBIDH {
             key Voyno,
             key Lifnr,
@@ -582,7 +762,7 @@ service nauticalservice {
                 Bidtime
         };
 
-    entity xNAUTIxVENFBID              as
+    entity xNAUTIxVENFBID               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {
             key Voyno,
                 Lifnr,
@@ -608,23 +788,21 @@ service nauticalservice {
         };
 
 
-    entity xNAUTIxZCHATVEN             as
+    entity xNAUTIxZCHATVEN              as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {
             key Chrnmin,
             key Lifnr,
                 Voyno
         };
 
-    entity xNAUTIxpaymTerm             as
+    entity xNAUTIxpaymTerm              as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpaymTerm {
             key Paytrm,
                 Paytrmtxt
         }
 
 
- 
-
-    entity xNAUTIxSUBMITQUATATIONPOST  as
+    entity xNAUTIxSUBMITQUATATIONPOST   as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOST {
             key Voyno,
                 Lifnr,
@@ -636,35 +814,44 @@ service nauticalservice {
                 tovenditem
         };
 
-     entity voyapprovalSet as projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet
-    {        key Vreqno, Zemail, key Voyno, key Zlevel, key Uname, Zdate, Ztime, Zcomm, Zaction     }    
-;
-    
-    entity xNAUTIxgetvoyapproval as projection on NAUTIZVOYAPPROVAL_SRV.xNAUTIxgetvoyapproval
-    {        key Vreqno, key Voyno     }    
-;
-    
-    entity xNAUTIxvoyapproval1 as projection on NAUTIZVOYAPPROVAL_SRV.xNAUTIxvoyapproval1
-    {        key Vreqno, key Voyno, key Zlevel, key Uname, key Zdate, key Ztime, key Zemail, Zcomm, Zaction     }    
-;
-
-    entity MasBidTemplateSet           as
-        projection on NAUTIVENDOR_SRV.MasBidTemplateSet {
-            key Code,
-                Value,
-                Cvalue,
-                Cunit,
-                Datatype,
-                Tablename,
-                MultiChoice
+    entity voyapprovalSet               as
+        projection on NAUTIZVOYAPPROVAL_SRV.voyapprovalSet {
+            key Vreqno,
+                Zemail,
+            key Voyno,
+            key Zlevel,
+            key Uname,
+                Zdate,
+                Ztime,
+                Zcomm,
+                Zaction
         };
 
-    entity DynamicTableSet             as
+    entity xNAUTIxgetvoyapproval        as
+        projection on NAUTIZVOYAPPROVAL_SRV.xNAUTIxgetvoyapproval {
+            key Vreqno,
+            key Voyno
+        };
+
+    entity xNAUTIxvoyapproval1          as
+        projection on NAUTIZVOYAPPROVAL_SRV.xNAUTIxvoyapproval1 {
+            key Vreqno,
+            key Voyno,
+            key Zlevel,
+            key Uname,
+            key Zdate,
+            key Ztime,
+            key Zemail,
+                Zcomm,
+                Zaction
+        };
+
+    entity DynamicTableSet              as
         projection on NAUTIVENDOR_SRV.DynamicTableSet
 
         ;
 
-    entity ITEM_BIDSet                 as
+    entity ITEM_BIDSet                  as
         projection on NAUTIVENDOR_SRV.ITEM_BIDSet {
             key Voyno,
                 Zcode,
@@ -678,7 +865,7 @@ service nauticalservice {
                 Zmax
         };
 
-    entity PortsSet                    as
+    entity PortsSet                     as
         projection on NAUTIVENDOR_SRV.PortsSet {
             key ZfValue,
                 ZfDesc,
@@ -688,47 +875,8 @@ service nauticalservice {
 
     // for chArtering
 
-    entity xNAUTIxCharteringHeaderItem as
-        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem
 
-        {
-            key Chrnmin,
-                Chrnmex,
-                Chrcdate,
-                Chrctime,
-                Chrqsdate,
-                Chrqstime,
-                Chrqedate,
-                Chrqetime,
-                Chrqdate,
-                Chrporg,
-                Chrporgn,
-                Chrpgrp,
-                Chrpgrpn,
-                Chrexcr,
-                Chrpayt,
-                Chrpaytxt,
-                Chrinco,
-                Chrincodis,
-                Chrincol,
-                Cimater,
-                Cimatdes,
-                Ciqty,
-                Ciuom,
-                Voyno,
-                Voynm,
-                Chrven,
-                Chrvenn,
-                Ciprec,
-                Zdelete,
-                RefChrnmin,
-                tovendor,
-                tocharteringasso
-        }
-
-        ;
-
-    entity xNAUTIxVEND                 as
+    entity xNAUTIxVEND                  as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVEND
 
         {
@@ -739,7 +887,7 @@ service nauticalservice {
 
         ;
 
-    entity xNAUTIxpurchGroup           as
+    entity xNAUTIxpurchGroup            as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpurchGroup
 
         {
@@ -750,20 +898,33 @@ service nauticalservice {
         ;
 
 
-    
+    entity chartapprSet                 as
+        projection on NAUTIZCHATAPPROVAL_SRV.chartapprSet {
+            key Creqno,
+                Zemail,
+            key Chrnmin,
+            key Zlevel,
+            key Uname,
+                Zdate,
+                Ztime,
+                Zcomm,
+                Zaction
+        };
 
-        entity chartapprSet as projection on NAUTIZCHATAPPROVAL_SRV.chartapprSet
-    {        key Creqno, Zemail, key Chrnmin, key Zlevel, key Uname, Zdate, Ztime, Zcomm, Zaction     }    
-;
-    
-    entity xNAUTIxchaApp1 as projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1
-    {        key Creqno, key Chrnmin     }    
-;
-     entity xNAUTIxvoy_valuehelp as projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp
-    {        key Voyno, voynm, Zaction     }    
-;
+    entity xNAUTIxchaApp1               as
+        projection on NAUTIZCHATAPPROVAL_SRV.xNAUTIxchaApp1 {
+            key Creqno,
+            key Chrnmin
+        };
 
-    entity xNAUTIxitemBid              as
+    entity xNAUTIxvoy_valuehelp         as
+        projection on NAUTIZVOY_VALUEHELP_CDS.xNAUTIxvoy_valuehelp {
+            key Voyno,
+                voynm,
+                Zaction
+        };
+
+    entity xNAUTIxitemBid               as
         projection on NAUTICOMP_QUOT_SRV.xNAUTIxitemBid {
             key Voyno,
             key Zcode,
@@ -779,9 +940,138 @@ service nauticalservice {
                 Zmax
         };
 
-    entity xNAUTIxvenBid               as
+    entity xNAUTIxvenBid                as
         projection on NAUTICOMP_QUOT_SRV.xNAUTIxvenBid {
 
 
-        }
+        };
+
+    entity xNAUTIxStandardCurrencyFetch as
+        projection on NAUTIMASTER_BTP_SRV.xNAUTIxStandardCurrencyFetch {
+            key waers,
+                spras,
+                ltext
+        };
+
+    entity BidsSet                      as
+        projection on INGXTCONTROLLER_SRV.BidsSet {
+                Biddate,
+                Bidtime,
+            key Chrnmin,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                Stat,
+                Zmode
+        };
+
+    entity xNAUTIxvend_btp              as
+        projection on NAUTIVENDOR_BTP_SRV.xNAUTIxvend_btp {
+            key Supplier,
+            key CompanyCode,
+            key BusinessPartner,
+            key PurchasingOrganization,
+            key BankCountry,
+            key Bank,
+            key BankAccount,
+            key Country,
+                SupplierName,
+                OrganizationBPName1,
+                OrganizationBPName2,
+                SupplierCountryName,
+                PostalCode,
+                CityName,
+                StreetName,
+                PhoneNumber1,
+                FaxNumber,
+                CreationDate,
+                CreatedByUser,
+                PhoneNumber2,
+                IsNaturalPerson,
+                TaxNumber1,
+                TaxNumber2,
+                TaxNumber3,
+                TaxNumber4,
+                TaxNumber5,
+                VATRegistration,
+                ResponsibleType,
+                TaxNumberType,
+                TaxNumberResponsible,
+                AddressID,
+                DeletionIndicator,
+                SupplierAccountGroup,
+                AccountGroupName,
+                AuthorizationGroup,
+                AccountIsBlockedForPosting,
+                PaymentIsBlockedForSupplier,
+                AlternativePayeeAccountNumber,
+                SearchString,
+                LayoutSortingRule,
+                ReconciliationAccount,
+                PaymentMethodsList,
+                AccountingClerk,
+                AccountingClerkFaxNumber,
+                SupplierClerkURL,
+                AccountingClerkPhoneNumber,
+                SuplrCoCodePaymentTerms,
+                PaymentBlockingReason,
+                SuplrIsDeltdCoCode,
+                CashPlanningGroup,
+                IsToBeCheckedForDuplicates,
+                SupplierIsBlockedForPosting,
+                PurOrdAutoGenerationIsAllowed,
+                PurchasingGroup,
+                SupplierPurgOrgPaymentTerms,
+                PurchasingIsBlockedForSupplier,
+                SuplrIsDeltdPurgOrg,
+                InvoiceIsGoodsReceiptBased,
+                PurchaseOrderCurrency,
+                EmailAddress,
+                BankName,
+                BankInternalID,
+                SWIFTCode,
+                IBAN,
+                BankControlKey,
+                BankAccountHolderName,
+                CountryName,
+                BusPartPOBoxDvtgCityName,
+                VATLiability,
+                WithholdingTaxCountry,
+                FullName,
+                SearchTerm1,
+                SearchTerm2,
+                BranchCode,
+                TH_BranchCodeDescription,
+                IsDefaultValue,
+                PreviousAccountNumber
+        };
+
+    entity headerinvSet                 as
+        projection on NAUTIINVITECOMPARE_SRV.headerinvSet {
+            key Chrnmin
+        };
+
+    entity iteminvSet                   as
+        projection on NAUTIINVITECOMPARE_SRV.iteminvSet {
+                Biddate,
+                Bidtime,
+            key Chrnmin,
+                Chrqedate,
+                Chrqetime,
+                Chrqsdate,
+                Chrqstime,
+                CodeDesc,
+                Cunit,
+                Cvalue,
+                DoneBy,
+                Lifnr,
+                Stat,
+                Uname,
+                Value,
+                Voyno,
+                Zcode,
+                Zcom,
+                Zmode
+        };
 }

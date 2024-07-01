@@ -39,10 +39,10 @@
             class="_IDGenBar1"
          >
             <contentLeft>
-                <Button id="entryBtn"  text="New Entries" press="newEntries"/>
+                <Button id="entryBtn"  text="New Entries" type="Emphasized" press="newEntries"/>
                 <!-- <Button id="copyBtn" text="Copy As" press="pressCopy"/> -->
-                <Button id="editBtn" text="Edit"  press="pressEdit"/>
-                <Button  id ="deleteBtn" text="Delete" press="onDeletePress"/>
+                <Button id="editBtn" text="Edit" type="Emphasized"  press="pressEdit"/>
+                <Button  id ="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
                
                 
             </contentLeft>

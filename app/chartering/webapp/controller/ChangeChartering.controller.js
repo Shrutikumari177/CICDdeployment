@@ -201,9 +201,12 @@ sap.ui.define(
           );
           this.getView().addDependent(this._CharteringDialog);
         }
-        this.loadData(); // Call the function to load data
+        this.loadData();
+        this.byId("VendorNo").setEnabled(true)
+
         this._CharteringDialog.open();
       },
+
 
       onCharteringValueHelpClose: function (oEvent) {
 
@@ -323,7 +326,7 @@ sap.ui.define(
         let oVoynm = this.byId("voyname").getValue();
 
         if (!oChrmin) {
-          sap.m.MessageToast.show("Please enter Charting No.");
+          sap.m.MessageBox.error("Please enter Chartering No");
           return;
         }
 
@@ -379,130 +382,84 @@ sap.ui.define(
         }
       },
 
-      
-        
-      onSendForApproval1: function () {
-        let ApprovalNo = [];
-        let that = this;
+
+
+
+      onSendForApproval: function () {
         let oChrmin = this.byId("charteringNo").getValue();
-    
+
         if (!oChrmin) {
-            sap.m.MessageBox.error("Please enter Chartering No");
-            return;
-        }
-    
-        let oModel = this.getOwnerComponent().getModel();
-        console.log("Chatering Model ", oModel);
-    
-        let oFilter = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oChrmin);
-        let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${oChrmin}')`);
-    
-        oBinding.requestObject().then((oContext) => {
-            console.log(oContext);
-    
-            if (oContext) {
-                let Zaction = oContext.Zaction;
-                console.log(oContext.Chrnmin);
-                console.log(Zaction, "hiii");
-                console.log(oContext.Zlevel);
-    
-                if (Zaction === "Rej" || Zaction === "Reje") {
-                    this.onSendForApprovalCreate();
-                } else if (Zaction === "Appr" ) {
-                    sap.m.MessageBox.error("Already sent for approval");
-                } else {
-                    sap.m.MessageBox.error("Already sent for approval Status: " + Zaction);
-                }
-            } else {
-                this.onSendForApprovalCreate();
-            }
-        }).catch(error => {
-            console.error("Error while fetching contexts: ", error);
-            
-            this.onSendForApprovalCreate();
-        });
-    },
-    onSendForApproval: function () {
-      let ApprovalNo = [];
-      let that = this;
-      let oChrmin = this.byId("charteringNo").getValue();
-  
-      if (!oChrmin) {
           sap.m.MessageBox.error("Please enter Chartering No");
           return;
-      }
-  
-      let oModel = this.getOwnerComponent().getModel();
-      console.log("Chartering Model ", oModel);
-  
-      let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${oChrmin}')`);
-  
-      oBinding.requestObject().then((oContext) => {
+        }
+
+        let oModel = this.getOwnerComponent().getModel();
+        let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${oChrmin}')`);
+
+        oBinding.requestObject().then((oContext) => {
           console.log(oContext);
-  
+
           if (oContext) {
-              let Zaction = oContext.Zaction;
-              console.log(oContext.Chrnmin);
-              console.log(Zaction, "hiii");
-              console.log(oContext.Zlevel);
-  
-              if (Zaction === "Rej" || Zaction === "Reje") {
-                  this.onSendForApprovalCreate();
-              } else if (Zaction === "Appr" ) {
-                  sap.m.MessageBox.error("Already sent for approval");
-              } else {
-                  sap.m.MessageBox.error("Already sent for approval Status: " + Zaction);
-              }
-          } else {
+            let Zaction = oContext.Zaction;
+            console.log(oContext.Chrnmin);
+            console.log(Zaction);
+
+            if (Zaction === "REJ") {
+              // Allow creation despite REJ status
               this.onSendForApprovalCreate();
+            } else if (Zaction === "Appr") {
+              sap.m.MessageBox.error("Already sent for approval");
+            } else {
+              sap.m.MessageBox.error("Already sent for approval Status: " + Zaction);
+            }
+          } else {
+            // No existing approval found, proceed with creation
+            this.onSendForApprovalCreate();
           }
-      }).catch(error => {
+        }).catch(error => {
           console.error("Error while fetching contexts: ", error);
-          this.onSendForApprovalCreate();
-      });
-  },
-  
-    
-    onSendForApprovalCreate: function () {
-        let ApprovalNo = [];
-        let that = this;
+          this.onSendForApprovalCreate(); // Proceed with creation on error
+        });
+      },
+
+      onSendForApprovalCreate: function () {
         let oChrmin = this.byId("charteringNo").getValue();
-    
+
         if (!oChrmin) {
-            sap.m.MessageBox.error("Please enter Chartering No");
-            return;
+          sap.m.MessageBox.error("Please enter Chartering No");
+          return;
         }
-    
-        var oBindListSP = that.getView().getModel().bindList("/chartapprSet");
-    
+
+        let oBindListSP = this.getView().getModel().bindList("/chartapprSet");
+
         try {
-            var saveddata = oBindListSP.create({
-                "Creqno": "",
-                "Chrnmin": oChrmin,
-                "Zemail": "sarath.venkateswara@ingenxtec.com"
-            });
-            console.log("saving data:", saveddata);
-    
-            oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
-                aContexts.forEach(function (oContext) {
-                    if (oContext.getObject().Chrnmin === oChrmin) {
-                        ApprovalNo.push(oContext.getObject());
-                    }
-                });
-    
-                let appNo = ApprovalNo[0].Creqno;
-                console.log(appNo);
-                sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
-            }).catch(function (error) {
-                console.error("Error while requesting contexts:", error);
-                sap.m.MessageBox.error("Duplicate Entry: Already sent for approval");
-            });
+          let saveddata = oBindListSP.create({
+            "Creqno": "",
+            "Chrnmin": oChrmin,
+            "Zemail": "sarath.venkateswara@ingenxtec.com"
+          });
+          console.log("saving data:", saveddata);
+
+          oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
+            let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Chrnmin === oChrmin);
+            if (ApprovalNo.length > 0) {
+              let appNo = ApprovalNo[0].getObject().Creqno;
+              console.log(appNo);
+              sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
+            } else {
+              sap.m.MessageBox.error("Error: Approval not found after creation");
+            }
+          }).catch(function (error) {
+            console.error("Error while requesting contexts:", error);
+            sap.m.MessageBox.error("Error while requesting contexts");
+          });
         } catch (error) {
-            console.error("Error while saving data:", error);
-            sap.m.MessageBox.error("Error while saving data");
+          console.error("Error while saving data:", error);
+          sap.m.MessageBox.error("Error while saving data");
         }
-    },
-    
+      },
+
+
 
 
 
@@ -511,7 +468,7 @@ sap.ui.define(
       onCancelChartering: function () {
         const chartNoValue = this.getView().byId("charteringNo").getValue(); // Assuming you have an input field for ChartNo
         if (!chartNoValue) {
-          sap.m.MessageToast.show("Please enter ChartingNo");
+          sap.m.MessageBox.error("Please enter Chartering No");
           return;
         }
 
@@ -572,6 +529,7 @@ sap.ui.define(
         this.byId("PurchaseOrg").setValue("");
         this.byId("PurchaseGroup").setValue("");
         this.byId("PaymentTerm").setValue("");
+        this.byId("VendorNo").setEnabled(false)
 
         var oTable = this.byId("myTable");
         oTable.setVisible(false);

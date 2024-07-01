@@ -6,11 +6,11 @@
         id="mySeleclog1"
         noDataText="Loading..."
         title="Select Purchase Org"
-       
+       search="onPurchaseOrgSearch"
         confirm="onPurchaseOrgValueHelpClose"
         cancel="onPurchaseOrgValueHelpClose"
         items="{/xNAUTIxCHARTPURCHASEITEM}"
-       
+       initialFocus="SearchField"
         >
         <StandardListItem id="ardListItem2"
        

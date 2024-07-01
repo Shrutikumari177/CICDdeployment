@@ -1,3 +1,4 @@
+
 <mvc:View
     xmlns:tnt="sap.tnt"
     xmlns:form="sap.ui.layout.form"
@@ -27,26 +28,26 @@
                         text="Maintain Country Master"
                     />
                 </contentLeft>
-                
+               
             </Bar>
         </headerContent>
-        
+       
         <Panel class="tablepanel">
-
+ 
         <Bar
             id="_IDGenBar12"
             class="headerBar2" >
             <contentLeft>
-                <Button id="entryBtn" text="New Entries" press="newEntries" />
-                
-        
-                <Button  id="deleteBtn" text="Delete" press="onDeletePress"/>
+                <Button id="entryBtn" text="New Entries" type="Emphasized" press="newEntries" />
+               
+       
+                <Button  id="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
             </contentLeft>
         </Bar>
         <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
-
  
-        
+ 
+       
         <Table
             id="createTypeTable"
             mode="MultiSelect"
@@ -81,7 +82,7 @@
                         <Text
                             id="code"
                             text="{ZfValue}"
-                        
+                       
                         />
                         <HBox >
                         <Input
@@ -91,13 +92,13 @@
                              maxLength="30"
                              width="400px"
                              
-                            
+                           
                         />
-                        
+                       
                         <Button id="update" class="sapUiTinyMarginBegin" text="Update" icon="sap-icon://save" type="Accept" visible="false"  press="onUpdatePressBtn"></Button>
                         <Button id="delete" class="sapUiTinyMarginBegin" text="Cancel" icon="sap-icon://delete" type="Reject" visible="false" press="onCancelPressBtn"></Button>
-
-
+ 
+ 
                         </HBox>
                        
                     </cells>
@@ -126,7 +127,7 @@
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Input id="ZfValue2" maxLength="3" showValueHelp="true" valueHelpRequest="showValueHelpCurrency" valueHelpOnly="true"/>
+                        <Input id="ZfValue2" maxLength="3" showValueHelp="true" valueHelpRequest="countryValueHelp" valueHelpOnly="true"/>
                         <Input id="ZfDesc2" />
                     </cells>
                 </ColumnListItem>
@@ -194,3 +195,4 @@
         </OverflowToolbar>
     </Page>
 </mvc:View>
+ 

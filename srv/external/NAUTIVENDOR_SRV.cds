@@ -1,4 +1,4 @@
-/* checksum : b54cb104828bd1576d6c0a142fd2ccc5 */
+/* checksum : 80b4b76abb2ba73ebed762d8bf2e7be3 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.supported.formats : 'atom json xlsx'
@@ -317,15 +317,15 @@ entity NAUTIVENDOR_SRV.DynamicTableSet {
   @sap.filterable : 'false'
   key ![key] : String(32) not null;
   @sap.unicode : 'false'
+  @sap.label : 'Value'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key value : LargeString not null;
+  @sap.unicode : 'false'
   @sap.label : 'Name'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   name : LargeString not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Value'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  value : LargeString not null;
 };
 
 @cds.external : true

@@ -9,11 +9,14 @@
         search="onValueHelpSearch"
         confirm="onValueHelpClosevoy"
         cancel="onValueHelpClosevoy"
-        items="{/xNAUTIxvoy_valuehelp}">
+        items="{/xNAUTIxvoy_valuehelp}"
+        initialFocus="SearchField"
+  
+         >
         <StandardListItem id="_IDGenStandardListItem1"
             title="{Voyno}"
        
-            description="{Voynm}"
+            description="{voynm}"
        
             iconDensityAware="false"
             iconInset="false"

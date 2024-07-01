@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="NAUTI.INVITECOMPARE_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="headerinv" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="HEADERTOITEM" Relationship="NAUTI.INVITECOMPARE_SRV.INVITETOVEND" FromRole="FromRole_INVITETOVEND" ToRole="ToRole_INVITETOVEND"/>
+            </EntityType>
+            <EntityType Name="iteminv" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Biddate" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Bid Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bidtime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bid Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding End Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding End Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding Start Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding Start Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CodeDesc" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Code Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Done by Vendor ?" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Vendor" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stat" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Created by" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcode" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcom" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Type (Auto/manual)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="INVITETOVEND" sap:content-version="1">
+                <End Type="NAUTI.INVITECOMPARE_SRV.headerinv" Multiplicity="1" Role="FromRole_INVITETOVEND"/>
+                <End Type="NAUTI.INVITECOMPARE_SRV.iteminv" Multiplicity="*" Role="ToRole_INVITETOVEND"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_INVITETOVEND">
+                        <PropertyRef Name="Chrnmin"/>
+                    </Principal>
+                    <Dependent Role="ToRole_INVITETOVEND">
+                        <PropertyRef Name="Chrnmin"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="NAUTI_INVITECOMPARE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="headerinvSet" EntityType="NAUTI.INVITECOMPARE_SRV.headerinv" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="iteminvSet" EntityType="NAUTI.INVITECOMPARE_SRV.iteminv" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="INVITETOVENDSet" Association="NAUTI.INVITECOMPARE_SRV.INVITETOVEND" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="headerinvSet" Role="FromRole_INVITETOVEND"/>
+                    <End EntitySet="iteminvSet" Role="ToRole_INVITETOVEND"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/INVITECOMPARE_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/INVITECOMPARE_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

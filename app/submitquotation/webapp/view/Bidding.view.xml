@@ -324,7 +324,7 @@
                                 <IconTabFilter
                                     id="_IDGenIconTabFilter4"
                                     text="Submit Vessel Details"
-                                    visible="true"
+                                    visible="{= ${vData>/status} === 'Open' }"
                                 >
                                     <form:SimpleForm
                                         id="_IDGenSimpleForm6"
@@ -355,7 +355,7 @@
                                 <IconTabFilter
                                     id="icontabFilter3"
 									text="Vessel Details"
-									visible="{status>/closed}"
+									visible="{= ${vData>/status} === 'Closed' }"
 								>
 									<form:SimpleForm
                                         id="vesselDetailsForm"
@@ -367,13 +367,13 @@
 										<Text
                                             id="vnameText"
 											width="10rem"
-											text="TBN"
+											text="{charteringRequestModel>/0/Vname}"
 										/>
 										<Label text="Vessel IMO No" id="imono"/>
 										<Text
                                             id="imotext"
 											width="10rem"
-											text="TBN"
+											text="{charteringRequestModel>/0/Vimono}"
 										/>
 									</form:SimpleForm>
 								</IconTabFilter>
@@ -381,7 +381,7 @@
                                  <IconTabFilter
                                     id="GenIconTabFilter5"
                                     text="Bid Details"
-                                    visible="true"
+                                    visible="{= ${vData>/status} === 'Closed' }"
                                 >
                                     <l:BlockLayout
                                         id="GenBlockLayout3"
@@ -438,7 +438,7 @@
                                                         <ColumnListItem id="GenColumnListItem1">
                                                             <cells>
                                                                 <Text id="GenText11"
-                                                                    text="Country of Origin"
+                                                                    text="{charteringRequestModel>/0/filteredTovenditem/1/CodeDesc}"
                                                                 />
                                                                 <FlexBox id="GenFlexBox2"
                                                                     direction="Row"
@@ -447,7 +447,7 @@
                                                                     <Text
                                                                         id="coorBidDetails"
                                                                         width="100%"
-                                                                        text="IN"
+                                                                        text="{charteringRequestModel>/0/filteredTovenditem/1/Value}"
                                                                     />
                                                                 </FlexBox>
                                                                 
@@ -469,13 +469,13 @@
                                                         <ColumnListItem id="GenColumnListItem2">
                                                             <cells>
                                                                 <Text id="GenText12"
-                                                                    text="Last Cleaning Date"
+                                                                    text="{charteringRequestModel>/0/filteredTovenditem/4/CodeDesc}"
                                                                 />
                                                                 <FlexBox id="GenFlexBox3"
                                                                     direction="Row"
                                                                     alignItems="Center"
                                                                 >
-                                                                    <Text id="dateOfCleaning" text="20.10.2023"/>
+                                                                    <Text id="dateOfCleaning" text="{charteringRequestModel>/0/filteredTovenditem/4/Value}"/>
                                                                 </FlexBox>
                                                                 <Button
                                                                     id="dateBidInfoBtn"
@@ -495,7 +495,7 @@
                                                         <ColumnListItem id="GenColumnListItem3">
                                                             <cells>
                                                                 <Text id="GenText13"
-                                                                    text="Last Port of Call"
+                                                                    text="{charteringRequestModel>/0/filteredTovenditem/2/CodeDesc}"
                                                                 />
                                                                 <FlexBox id="GenFlexBox4"
                                                                     direction="Row"
@@ -504,7 +504,7 @@
                                                                     <Text
                                                                         id="lastPortBidDetails"
                                                                         width="100%"
-                                                                        text="INPRT"
+                                                                        text="{charteringRequestModel>/0/filteredTovenditem/2/Value}"
                                                                     />
                                                                 </FlexBox>
                                                                 <Button
@@ -525,7 +525,7 @@
                                                         <ColumnListItem id="GenColumnListItem4">
                                                             <cells>
                                                                 <Text id="GenText14"
-                                                                    text="Demurrage"
+                                                                    text="{charteringRequestModel>/0/filteredTovenditem/3/CodeDesc}"
                                                                 />
                                                                 <FlexBox id="GenFlexBox5"
                                                                     direction="Row"
@@ -534,7 +534,7 @@
                                                                     <Text
                                                                         id="demurrageInpDetails"
                                                                          width="100%"
-                                                                         
+                                                                         text="{charteringRequestModel>/0/filteredTovenditem/3/Value}"
                                                                     />
                                                                 </FlexBox>
                                                                 <Button
@@ -555,7 +555,7 @@
                                                         <ColumnListItem id="GenColumnListItem7">
                                                             <cells>
                                                                 <Text id="GenText15"
-                                                                    text="Class of Vessel"
+                                                                    text="{charteringRequestModel>/0/filteredTovenditem/0/CodeDesc}"
                                                                 />
                                                                 <FlexBox id="GenFlexBox6"
                                                                     direction="Row"
@@ -564,7 +564,7 @@
                                                                     <Text
                                                                         id="classOfVesselDetails"
                                                                         width="100%"
-                                                                        text="B"
+                                                                        text="{charteringRequestModel>/0/filteredTovenditem/0/Value}"
                                                                     />
                                                                 </FlexBox>
                                                                 <Button
@@ -603,17 +603,17 @@
                                                         labelFor="fCost2"
                                                         
                                                     />
-                                                    <Input
+                                                    <!-- <Input
                                                         id="fCost"
                                                         type="Number"
                                                         editable="false"
-                                                        value="400,000.00"
+                                                        value="{charteringRequestModel>/0/filteredTovenditem/5/Cvalue}"
                                                     />
                                                     <Label
                                                         id="GenLabel25"
                                                         text="Total Cost"
                                                         labelFor="totalCost2"
-                                                    />
+                                                    /> -->
                                                     <l:HorizontalLayout
                                                         id="GenHorizontalLayout3"
                                                         allowWrapping="false"
@@ -622,7 +622,7 @@
                                                             id="totalCostDetails"
                                                             editable="false"
                                                             width="100%"
-                                                            value="400,000.00"
+                                                            value="{charteringRequestModel>/0/filteredTovenditem/5/Cvalue}"
                                                         />
                                                         <Label
                                                             id="GenLabel26"
@@ -648,7 +648,7 @@
                                 <IconTabFilter
                                     id="GenIconTabFilter6"
                                     text="Submit Bid"
-                                    visible="true"
+                                    visible="{= ${vData>/status} === 'Open' }"
                                 >
                                     <l:BlockLayout
                                         id="_IDGenBlockLayout3"
@@ -897,7 +897,7 @@
                                                         <Input
                                                             id="totalCost"
                                                             editable="false"
-                                                            width="100%"
+                                                            width="97%"
                                                             value="{totalCalculateModel>/totalCost}"
                                                         />
                                                         <Label
@@ -905,7 +905,7 @@
                                                             text="INR"
                                                             design="Bold"
                                                             labelFor="totalCost2"
-                                                            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                                                            class="sapUiTinyMarginTop"
                                                         />
                                                     </l:HorizontalLayout>
                                                 </form:SimpleForm>

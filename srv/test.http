@@ -864,3 +864,40 @@ Content-Type: application/json
 #   ]
 
 GET http://localhost:4004/odata/v4/nauticalservice/getRoute?startLatitude=18.941&startLongitude=72.855&endLatitude=20.27769&endLongitude=86.69277
+
+
+
+### Invite For Quotation
+POST http://localhost:4004/odata/v4/nauticalservice/headerinvSet
+Content-Type: application/json
+
+{"Chrnmin" : "4000000552",
+ "HEADERTOITEM":[
+ {
+ "Voyno" : "1000000108",
+        "Lifnr" : "2100000001",
+        "Zcode" : "FREIG",
+        "Chrnmin" : "4000000552",
+        "CodeDesc" : "FRIEGHT COST",
+        "Cvalue" : "600000.000",
+        "Chrqsdate" : "\/Date(1714953600000)\/",
+        "Chrqstime" : "PT17H37M44S",
+        "Chrqedate" : "\/Date(1714953600000)\/",
+        "Chrqetime" : "PT18H18M21S",
+        "Zmode" : "AUTO"
+      },
+      {
+ "Voyno" : "1000000108",
+        "Lifnr" : "2100000002",
+        "Zcode" : "FREIG",
+        "Chrnmin" : "4000000552",
+        "CodeDesc" : "FRIEGHT COST",
+        "Cvalue" : "600000.000",
+        "Chrqsdate" : "\/Date(1714953600000)\/",
+        "Chrqstime" : "PT17H37M44S",
+        "Chrqedate" : "\/Date(1714953600000)\/",
+        "Chrqetime" : "PT18H18M21S",
+        "Zmode" : "AUTO"
+      }
+      ]
+ }

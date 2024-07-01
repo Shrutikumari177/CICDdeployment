@@ -6,10 +6,11 @@
         id="mySelect"
         noDataText="Loading..."
         title="Select Purchase Group"
-       
+       search="onPurchaseGroupSearch"
         confirm="onPurchaseGroupValueHelpClose"
         cancel="onPurchaseGroupValueHelpClose"
         items="{/xNAUTIxpurchGroup}"
+        initialFocus="SearchField"
        
         >
         <StandardListItem id="_IDGenStand"

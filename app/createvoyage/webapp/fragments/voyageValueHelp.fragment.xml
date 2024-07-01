@@ -1,0 +1,28 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="_voyageDialog"
+        noDataText="Loading..."
+        title="Select Voyage"
+        liveChange=".onVoyageFilterSearch"
+        search=".onVoyageFilterSearch"
+        confirm="onVoyageValueHelpClose"
+        cancel="onVoyageValueHelpClose"
+        
+        items="{voyageNumModel>/voyageNumbers}"
+        initialFocus="SearchField"
+        multiSelect="false"
+        
+    >
+        
+        <StandardListItem 
+            
+            title="{voyageNumModel>}"
+
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

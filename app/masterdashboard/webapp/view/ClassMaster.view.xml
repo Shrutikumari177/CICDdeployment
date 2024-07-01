@@ -41,7 +41,7 @@
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries"
+                    text="New Entries" type="Emphasized"
                     press="newEntries"
                 />
                 <!-- <Button
@@ -51,13 +51,13 @@
                 /> -->
                 <Button
                     id="editBtn"
-                    text="Edit"
+                    text="Edit" type="Emphasized"
                     press="pressEdit"
                 />
 
                 <Button
                     id="deleteBtn"
-                    text="Delete"
+                    text="Delete" type="Emphasized"
                     press="onDeletePress"
                 />
                 

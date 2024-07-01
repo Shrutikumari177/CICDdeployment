@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script>
+        window['sap-ushell-config'] = {
+            defaultRenderer: 'fiori2',
+            applications: {
+                "masterdashboard-app": {
+                    title: 'Master Dashboard',
+                    description: 'Master Dashboard',
+                    Image:"",
+                    additionalInformation: 'SAPUI5.Component=com.ingenx.nauti.masterdashboard',
+                    applicationType: 'URL',
+                    url: "./masterdashboard/webapp",
+                    navigationMode: 'embedded'
+                },
+                "createvoyage-app": {
+                    title: "Voyage",
+                    description: "Voyage",
+                    additionalInformation: "SAPUI5.Component=com.ingenx.nauti.createvoyage",
+                    applicationType: "URL",
+                    url: "./chartering/webapp",
+                    navigationMode: "embedded"
+                },
+                "chartering-app": {
+                    title: "Chartering",
+                    description: "Chartering",
+                    additionalInformation: "SAPUI5.Component=com.ingenx.nauti.chartering",
+                    applicationType: "URL",
+                    url: "./chartering/webapp",
+                    navigationMode: "embedded"
+                },
+                "quotation-app": {
+                    title: "Quotation",
+                    description: "Quotation",
+                    additionalInformation: "SAPUI5.Component=com.ingenx.nauti.quotation",
+                    applicationType: "URL",
+                    url: "./quotation/webapp",
+                    navigationMode: "embedded"
+                },
+                "report-app": {
+                    title: "Report",
+                    description: "Report",
+                    additionalInformation: "SAPUI5.Component=com.ingenx.nauti.report",
+                    applicationType: "URL",
+                    url: "./report/webapp",
+                    navigationMode: "embedded"
+                },
+                "submitquotation-app": {
+                    title: "Submit Quotation",
+                    description: "Submit Quotation",
+                    additionalInformation: "SAPUI5.Component=com.ingenx.nauti.submitquotation",
+                    applicationType: "URL",
+                    url: "./submitquotation/webapp",
+                    navigationMode: "embedded"
+                }
+            }
+        };
+    </script>
+
+    <script src="https://ui5.sap.com/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+    <script src="https://ui5.sap.com/resources/sap-ui-core.js" 
+            data-sap-ui-libs="sap.m, sap.ushell, sap.fe.templates"
+            data-sap-ui-compatVersion="edge" 
+            data-sap-ui-theme="sap_fiori_3" 
+            data-sap-ui-frameOptions="allow" 
+            data-sap-ui-bindingSyntax="complex">
+    </script>
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ushell.Container.createRenderer().placeAt('content');
+        });
+    </script>
+</head>
+
+<body class="sapUiBody" id="content"></body>
+
+</html>

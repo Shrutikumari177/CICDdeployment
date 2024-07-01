@@ -1,3 +1,4 @@
+using { managed } from '@sap/cds/common';
 namespace nauticalschema;
 
 type Coordinates : array of {
@@ -36,3 +37,27 @@ entity calculateRankings {
     Vendors : array of Vendors;
 }
 
+entity ControllerLiveBidDetails : managed {
+    key ID : UUID@Core.Computed;
+    key createdBy :String;
+    key charmin : String;
+    voyno : String;
+    quotationPrice : String;
+}
+
+entity sendEmail{
+    message : String;
+    receiversEmails : array of emails;
+    vendorsName : array of vendorsName;
+    routes:array of routes;
+    bidStart : Date;
+    bidEnd : Date;
+    cargoSize : Decimal(10, 3);
+    status : Integer;
+    bidstartTime :Time;
+    bidEndTime:Time;
+}
+
+type emails : String;
+type vendorsName : String;
+type routes : String;

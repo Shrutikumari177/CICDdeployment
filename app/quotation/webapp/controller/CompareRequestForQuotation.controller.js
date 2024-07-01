@@ -22,8 +22,8 @@ sap.ui.define([
 
         },
 
-        
-        
+
+
 
         calculateAndBindRankings: function (Chrnmin) {
             // debugger;
@@ -116,17 +116,17 @@ sap.ui.define([
                         oModel.setData({ Vendors: [] });
                     }
                     oTable.setNoData("No data available");
-                    
+
                     // Hide the VBox containing the table
                     var oVBox = this.byId("idVbox");
                     if (oVBox) {
                         oVBox.setVisible(false);
                     }
                     console.error("No data fetched");
-            
+
 
                     MessageBox.information(`No vendor data found for chartering no. : ${Chrnmin}`);
-           
+
                 }
             }.bind(this)).catch(function (oError) {
                 // Handle error response
@@ -138,27 +138,27 @@ sap.ui.define([
             return sEligibility === "Yes";
         },
 
-        formatBooleanToText:function(status){
+        formatBooleanToText: function (status) {
             console.log("formatBooleanToText called with status:", status);
-            if(status===true){
+            if (status === true) {
                 return "Yes"
             }
-            else{
+            else {
                 return "No"
             }
         },
 
-        charteringValueHelp: function (oEvent) { 
+        charteringValueHelp: function (oEvent) {
             var oView = this.getView();
-        
+
             if (!this._oDialog2) {
                 this._oDialog2 = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.quotation.fragments.CharteringNo", this);
                 oView.addDependent(this._oDialog2);
             }
-        
+
             // Clear any previous selections
             this._oDialog2.clearSelection();
-        
+
             // Refresh the binding to ensure data is reloaded
             var oBinding = this._oDialog2.getBinding("items");
             if (oBinding) {
@@ -177,13 +177,13 @@ sap.ui.define([
                     })
                 });
             }
-        
+
             this._oDialog2.open();
         },
-        
-        
-        
-        
+
+
+
+
 
         // charteringValueHelp: function (oEvent) { 
         //     var oView = this.getView();
@@ -200,7 +200,7 @@ sap.ui.define([
         //     this._oDialog2.open();
         // },
 
-       
+
 
         // onValueHelpClose1: function (oEvent) {
 
@@ -217,7 +217,7 @@ sap.ui.define([
         //     console.log("Chrnminnn", Chrnmin);
 
         //     this.calculateAndBindRankings(Chrnmin);
-            
+
         //     var btn = this.byId("ButtonInvite");
         //     btn.setVisible(true);
         //     var refresh = this.byId("ButtonRefresh");
@@ -231,30 +231,30 @@ sap.ui.define([
         //     var oTable = this.byId("table")
         //     oTable.setVisible(true
         //         );
-            
+
         //     if (Chrnmin) {
         //         var oVBox = this.byId("idVbox");
         //         if (oVBox) {
         //             oVBox.setVisible(true);
         //         }
         //     }
-            
-        
+
+
         // },
         onValueHelpClose1: function (oEvent) {
             var oSelectedItem = oEvent.getParameter("selectedItem");
             oEvent.getSource().getBinding("items").filter([]);
-        
+
             if (!oSelectedItem) {
                 return;
             }
-        
+
             var Chrnmin = oSelectedItem.getTitle();
             this.byId("charteringNo").setValue(Chrnmin);
             console.log("Chrnminnn", Chrnmin);
-        
+
             this.calculateAndBindRankings(Chrnmin);
-        
+
             var btn = this.byId("ButtonInvite");
             btn.setVisible(true);
             var refresh = this.byId("ButtonRefresh");
@@ -267,7 +267,7 @@ sap.ui.define([
             invite.setVisible(true);
             var oTable = this.byId("table")
             oTable.setVisible(true);
-        
+
             if (Chrnmin) {
                 var oVBox = this.byId("idVbox");
                 if (oVBox) {
@@ -275,8 +275,8 @@ sap.ui.define([
                 }
             }
         },
-        
-        
+
+
         onChartSearch1: function (oEvent) {
             // debugger;
             var sValue = oEvent.getParameter("value");
@@ -307,7 +307,7 @@ sap.ui.define([
             }, []);
 
             if (aIneligibleVendors.length > 0) {
-                 sVendors = aIneligibleVendors.join(", ");
+                sVendors = aIneligibleVendors.join(", ");
                 MessageBox.error(`You have selected ineligible vendor(s): ${sVendors}.`);
             } else {
                 if (!this._oDialog) {
@@ -329,7 +329,7 @@ sap.ui.define([
             }
         },
 
-        onSave: function () {
+        onSave: async function () {
             var oModel = this._oDialog.getModel("addBiddingModel");
             var oData = oModel.getData();
 
@@ -342,12 +342,12 @@ sap.ui.define([
             var Unit = oData.Unit;
             var Mode = oData.Mode;
 
-            if (!BiddingStartDate || !BiddingEndDate || !BiddingStartTime || !BiddingEndTime || !ControllerQuotedValue || !Unit || !Mode) {
-                MessageBox.error("Please fill all fields");
-                return;
-            }
+            // if (!BiddingStartDate || !BiddingEndDate || !BiddingStartTime || !BiddingEndTime || !ControllerQuotedValue || !Unit || !Mode) {
+            //     MessageBox.error("Please fill all fields");
+            //     return;
+            // }
 
-            this._oDialog.close();
+            // this._oDialog.close();
 
             console.log("Bidding Start Date:", BiddingStartDate);
             console.log("Bidding End Date:", BiddingEndDate);
@@ -367,6 +367,46 @@ sap.ui.define([
                 Unit: "TO",
                 Mode: "Mode1"
             });
+
+            let payload = {
+                "Chrnmin": "4000000552",
+                "HEADERTOITEM": [
+                    {
+                        "Voyno": "1000000108",
+                        "Lifnr": "2100000001",
+                        "Zcode": "FREIG",
+                        "Chrnmin": "4000000552",
+                        "CodeDesc": "FRIEGHT COST",
+                        "Cvalue": "600000.000",
+                        "Chrqsdate": "\/Date(1714953600000)\/",
+                        "Chrqstime": "PT17H37M44S",
+                        "Chrqedate": "\/Date(1714953600000)\/",
+                        "Chrqetime": "PT18H18M21S",
+                        "Zmode": "AUTO"
+                    },
+                    {
+                        "Voyno": "1000000108",
+                        "Lifnr": "2100000002",
+                        "Zcode": "FREIG",
+                        "Chrnmin": "4000000552",
+                        "CodeDesc": "FRIEGHT COST",
+                        "Cvalue": "600000.000",
+                        "Chrqsdate": "\/Date(1714953600000)\/",
+                        "Chrqstime": "PT17H37M44S",
+                        "Chrqedate": "\/Date(1714953600000)\/",
+                        "Chrqetime": "PT18H18M21S",
+                        "Zmode": "AUTO"
+                    }
+                ]
+            }
+            console.log("payload ",payload);
+
+            let inviteModel = this.getOwnerComponent().getModel();
+            let oBindList = inviteModel.bindList("/headerinvSet");
+            let res = await oBindList.create(payload);
+            inviteModel.refresh()
+            return res;
+            console.log("inviteMode ", inviteModel);
         },
 
         // onCancel: function () {
@@ -436,19 +476,19 @@ sap.ui.define([
             this._oDialog1.close();
         },
 
-       
 
-        onSelectItem: function(oEvent) {
+
+        onSelectItem: function (oEvent) {
             var oTable = this.byId("table");
             var aSelectedItems = oTable.getSelectedItems();
             var bEnableButton = false;
-        
-            aSelectedItems.forEach(function(oItem) {
+
+            aSelectedItems.forEach(function (oItem) {
                 var oContext = oItem.getBindingContext("rankings");
                 console.log("oContext", oContext);
                 if (oContext) {
                     var oRow = oContext.getObject();
-                    var sVendors = oRow.vendorId; 
+                    var sVendors = oRow.vendorId;
                     if (oRow && oRow.eligible === "No") {
                         oItem.setSelected(false);
                         sap.m.MessageToast.show(`Selected vendor "${sVendors}" is not eligible for bidding. `);
@@ -457,18 +497,18 @@ sap.ui.define([
                     }
                 }
             });
-        
+
             this.getView().byId("ButtonInvite").setEnabled(bEnableButton);
         },
-                
 
 
-       
+
+
         // onSelectItem: function(oEvent) {
         //     // debugger;
         //     var oTable = this.byId("table");
         //     var aSelectedItems = oTable.getSelectedItems();
- 
+
         //     aSelectedItems.forEach(function(oItem) {
         //         var oContext = oItem.getBindingContext("rankings");
         //         console.log("oContext",oContext);
@@ -478,12 +518,12 @@ sap.ui.define([
         //                 oItem.setSelected(false);
         //                 sap.m.MessageToast.show("Cannot select row with eligibility   'No'.");
         //             }
-                    
+
         //         }
         //     });
         //     this.getView().byId("ButtonInvite").setEnabled(true);
         // },
-        
+
 
 
         onRefresh: function () {
@@ -502,7 +542,7 @@ sap.ui.define([
             if (oModel) {
                 oModel.setData({ Vendors: [] });
             }
-            
+
             // Hide the VBox containing the table
             var oVBox = this.byId("idVbox");
             if (oVBox) {

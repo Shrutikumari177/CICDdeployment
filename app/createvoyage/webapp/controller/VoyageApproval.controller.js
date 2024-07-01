@@ -9,215 +9,182 @@ sap.ui.define(
   ],
   function (BaseController, Token, IconPool, MessageBox, MessageToast, Filter, FilterOperator) {
     "use strict";
-    let getModelData = [];
-    let getModelData2 = [];
+    let oApprovalStatusModel;
+    let oApprovalModel;
+
     let sloc;
     let LoggedInUser;
 
     return BaseController.extend("com.ingenx.nauti.createvoyage.controller.VoyageApproval", {
       onInit: function () {
 
-
-        let oModel = new sap.ui.model.json.JSONModel();
-        this.getView().setModel(oModel, "dataModel");
-
-        let oModel3 = this.getOwnerComponent().getModel();
-        let oBindList3 = oModel3.bindList("/voyapprovalSet");
-        oBindList3.requestContexts(0, Infinity).then(function (aContexts) {
-          aContexts.forEach(function (oContext) {
-            getModelData.push(oContext.getObject());
-          });
-          oModel.setData(getModelData);
-          console.log("Voyage approcal total data", getModelData, getModelData.length);
-        }.bind(this))
-        let testData = [{
-          "Vreqno": "2000000191",
-          "Zemail": "",
-          "Voyno": "1000000161",
-          "Zlevel": "03",
-          "Uname": "PIYUSH",
-          "Zdate": "2024-06-03T00:00:00Z",
-          "Ztime": "10:32:03",
-          "Zcomm": "",
-          "Zaction": "PEND"
-        },
-        {
-          "Vreqno": "2000000191",
-          "Zemail": "",
-          "Voyno": "1000000161",
-          "Zlevel": "01",
-          "Uname": "A.SHARMA",
-          "Zdate": "2024-06-03T00:00:00Z",
-          "Ztime": "08:36:08",
-          "Zcomm": "test appr",
-          "Zaction": "APPR"
-        },
-        {
-          "Vreqno": "2000000191",
-          "Zemail": "",
-          "Voyno": "1000000161",
-          "Zlevel": "02",
-          "Uname": "PANKAJ.J",
-          "Zdate": "2024-06-03T00:00:00Z",
-          "Ztime": "08:37:31",
-          "Zcomm": "testING APPROVARED",
-          "Zaction": "APPR"
-        }]
+        // let testData = [{
+        //   "Vreqno": "2000000191",
+        //   "Zemail": "",
+        //   "Voyno": "1000000161",
+        //   "Zlevel": "03",
+        //   "Uname": "PIYUSH",
+        //   "Zdate": "2024-06-03T00:00:00Z",
+        //   "Ztime": "10:32:03",
+        //   "Zcomm": "",
+        //   "Zaction": "PEND"
+        // },
+        // {
+        //   "Vreqno": "2000000191",
+        //   "Zemail": "",
+        //   "Voyno": "1000000161",
+        //   "Zlevel": "01",
+        //   "Uname": "PANKAJ.J",
+        //   "Zdate": "2024-06-03T00:00:00Z",
+        //   "Ztime": "08:36:08",
+        //   "Zcomm": "test appr",
+        //   "Zaction": "APPR"
+        // },
+        // {
+        //   "Vreqno": "2000000191",
+        //   "Zemail": "",
+        //   "Voyno": "1000000161",
+        //   "Zlevel": "02",
+        //   "Uname": "PANKAJ.J",
+        //   "Zdate": "2024-06-03T00:00:00Z",
+        //   "Ztime": "08:37:31",
+        //   "Zcomm": "testING APPROVARED",
+        //   "Zaction": "APPR"
+        // }]
 
       },
       ValueHelpVoyage: function () {
         let oView = this.getView();
 
         if (!this._voyageValueHelpDiaolog) {
-          this._voyageValueHelpDiaolog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
+          this._voyageValueHelpDiaolog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyageApproval", this);
           oView.addDependent(this._voyageValueHelpDiaolog);
         }
+        
         this._voyageValueHelpDiaolog.open();
 
       },
 
-      VoyageValueHelpClose: function (evt) {
+      VoyageValueHelpClose: async function (evt) {
 
-        let oMultiInput = this.byId("VoyageNo");
+        let oInput = this.byId("VoyageNo");
         let oDescriptionInput = this.byId("_voyageAppReqField");
         let aSelectedContexts = evt.getParameter("selectedContexts");
+
+
+        let oVoyno = aSelectedContexts[0].getObject().Voyno;
+        let oVreqno = aSelectedContexts[0].getObject().Vreqno;
+        oInput.setValue(oVoyno);
         let aFilteredData = [];
 
         let oVBox = this.byId("tab")
-        let selectedValues = [];
-        let selectedValues2 = [];
 
-        let oModel = this.getView().getModel("VoyApprovalModel")
-        let aExistingData = oModel ? oModel.getData() : [];
 
-        if (!oModel) {
-          oModel = new sap.ui.model.json.JSONModel();
-          this.getView().setModel(oModel, "VoyApprovalModel");
-          // this.getView().getModel("VoyApprovalModel").refresh();
+        oApprovalModel = new sap.ui.model.json.JSONModel();
+        this.getView().setModel(oApprovalModel, "VoyApprovalModel");
 
-        }
+        oApprovalStatusModel = new sap.ui.model.json.JSONModel();
 
-        let aExistingTokens = oMultiInput.getTokens();
-        let aExistingTokens2 = oDescriptionInput.getTokens();
+        this.getView().setModel(oApprovalStatusModel, "VoyApprovalStatusModel");
+
+
         if (aSelectedContexts && aSelectedContexts.length > 0) {
 
-          selectedValues = aSelectedContexts.map(function (oContext) {
-            let sPath = oContext.getPath();
-            let match = /Voyno='(\d+)'/g.exec(sPath);
-            console.log("match", match);
-            let VoynoValue = match ? match[1] : null;
-            console.log("VoynoValue", VoynoValue);
-            return VoynoValue;
 
-          }).filter(function (value) {
-            return value !== null;
-          });
+          let oModel = this.getOwnerComponent().getModel();
 
-          selectedValues2 = aSelectedContexts.map(function (oContext) {
-            let sPath = oContext.getPath();
-            let match = /Vreqno='(\d+)'/g.exec(sPath);
-            console.log("match2", match);
-            let VreqnoValue = match ? match[1] : null;
-            console.log("Vreqno", VreqnoValue);
-            return VreqnoValue;
-          }).filter(function (value) {
-            return value !== null;
+          let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, oVoyno);
+
+          let oBindList = oModel.bindList("/voyapprovalSet", null, null, aFilter);
+
+          let res = await oBindList.requestContexts().then(function (aContexts) {
+            aFilteredData = aContexts.map(context => context.getObject());
+            // Sort the aFilteredData array by Zlevel property
+
+            aFilteredData.sort((a, b) => a.Zlevel.localeCompare(b.Zlevel));
+            console.log("filterdata", aFilteredData);
+            return aFilteredData;
           });
 
-          console.log("Selected Values2:", selectedValues2);
-          console.log("Selected Values:", selectedValues);
-          selectedValues = Array.from(new Set(selectedValues));
-          selectedValues.forEach(function (voyno) {
-            if (!aExistingTokens.some(function (oToken) {
-              return oToken.getKey() === voyno;
-            })) {
-              oMultiInput.addToken(new sap.m.Token({
-                key: voyno,
-                text: voyno
-              }));
-            }
-          });
-          // array of Vreqno
-          selectedValues2.forEach(function (vreqno) {
-            if (!aExistingTokens2.some(function (oToken) {
-              return oToken.getKey() === vreqno;
-            })) {
-              oDescriptionInput.addToken(new sap.m.Token({
-                key: vreqno,
-                text: vreqno
-              }));
-            }
-          });
-
-          oVBox.setVisible(false)
-          aFilteredData = getModelData.filter(function (data) {
-            return selectedValues.includes(data.Voyno);
-          });
-          aFilteredData = aFilteredData.sort(function(a, b) {
-            return a.Zlevel.localeCompare(b.Zlevel);
-        });
           console.log("aFilteredData", aFilteredData);
-          // code for multiple selected entry
-          let aCombinedData = aExistingData.concat(aFilteredData);
 
-          aCombinedData = aCombinedData.filter((entry, index, self) =>
-            index === self.findIndex((t) => (
-              (t.Voyno === entry.Voyno && t.Vreqno === entry.Vreqno)
-            ))
-          );
-          console.log("aCombinedData", aCombinedData);
-          // oModel.setData(aFilteredData);
-
-          // console.log("Filtered data based on selected vendors:", aFilteredData);
         } else {
 
           oVBox.setVisible(false);
         }
-        let oTable = this.byId("approvalTable")
-        oTable.setVisible(true);
-        // console.log(selectedValues, "ye bhi ha")
+
+
 
         let testData = aFilteredData;
-        // let transformedData = {
-        //   Voyno: testData[0].Voyno,
-        //   Vreqno: testData[0].Vreqno,
-        //   Approvers: testData.map(item => ({
-        //     Zlevel: item.Zlevel,
-        //     Uname: item.Uname,
-        //     Ztime: item.Ztime,
-        //     Zcomm: item.Zcomm,
-        //     Zdate: item.Zdate,
-        //     Zaction: item.Zaction,
-        //     Zemail: item.Zemail
-        //   }))
-        // };
+
+        // fething last vreqno based on status
+        let xVreqno = await this.getVreqnoToshow(oVoyno);
+
         let transformedData = this.transformData(testData);
         console.log(transformedData);
-        oModel.setData(transformedData);
+        // oApprovalModel.setData(transformedData);
 
-        LoggedInUser = "A.SHARMA";
-        let that = this;
+        LoggedInUser = "PANKAJ.J";
         this.approverMatched = false;
+        let that = this;
         transformedData.forEach(data => {
-          that.createDynamicColumns(data.Approvers);
-        });
-           // IF USER not MATCHED then Hide the VOYAGE APPROVAL TABLE
-          //  if (!this.approverMatched) {
+          if (data.Vreqno == xVreqno) {
+            oApprovalModel.setData([data]);
 
-          //   oTable.setVisible(false);
-          //   return;
-          // }
+            that.createDynamicColumns(data.Approvers);
+          }
+        });
+        let transformedStatusData = that.transformStatusData([...testData]);
+        oApprovalStatusModel.setData(transformedStatusData);
+        transformedStatusData.forEach(data => {
+          that.createStatusDynamicColumns(data.Approvers);
+        });
+
+
+        let oFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, "");
+
+        evt.getSource().getBinding("items").filter([oFilter]);
+
 
       },
+      getVreqnoToshow: async function (voyno) {
+        let oVreqno;
+        let oModel = this.getOwnerComponent().getModel();
+        let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${voyno}')`);
 
+        await oBinding.requestObject().then((oContext) => {
+          console.log(oContext);
+
+          if (oContext) {
+            let Zaction = oContext.Zaction;
+            console.log(oContext.Voyno);
+            console.log(Zaction, oContext.Vreqno);
+            oVreqno = oContext.Vreqno;
+
+          } else {
+
+            console.log("oContext not found");
+          }
+        }).catch(error => {
+
+          console.error("Error while fetching contexts: ", error);
+        });
+        return oVreqno;
+      },
       transformData: function transformData(aFilteredData) {
-        const distinctVoynos = [...new Set(aFilteredData.map(item => item.Voyno))];
 
-        return distinctVoynos.map(voyno => {
-          const filteredItems = aFilteredData.filter(item => item.Voyno === voyno);
+        const distinctVreqnos = [...new Set(aFilteredData.map(item => item.Vreqno))];
+
+        return distinctVreqnos.map(vreqno => {
+
+          const filteredItems = aFilteredData.filter(item => item.Vreqno === vreqno);
+
+
+          const voyno = filteredItems[0].Voyno;
+
           return {
+            Vreqno: vreqno,
             Voyno: voyno,
-            Vreqno: filteredItems[0].Vreqno,
             Approvers: filteredItems.map(item => ({
               Zlevel: item.Zlevel,
               Uname: item.Uname,
@@ -233,28 +200,25 @@ sap.ui.define(
 
       // dynamic creation of colums
       createDynamicColumns: function (approvers) {
-
         let oTable = this.getView().byId("approvalTable");
         let oColumnTemplate = new sap.m.Text(); // Column template for text
 
         // Remove existing columns (except fixed columns)
-
         oTable.removeAllColumns();
 
-        // CONDITION TO CHECK WHETHER USER IS either creator or Approver
-        this.approverMatched = false;
-        approvers.forEach(approver => {
-          if (LoggedInUser === approver.Uname && approver.Zlevel !== '00'  ) {
+        // CONDITION  WHETHER USER IS either creator or Approver
+        let approverMatched = false;
 
-            this.approverMatched = true;
-            return
+        for (const approver of approvers) {
+          if (LoggedInUser === approver.Uname && approver.Zlevel !== '00') {
+            approverMatched = true;
+            break;
           }
+          console.log("Matched so hide the table");
+        }
 
-          console.log(" Matched so hide the table ");;
-        })
         // IF USER not MATCHED then Hide the VOYAGE APPROVAL TABLE
-        if (!this.approverMatched) {
-
+        if (!approverMatched) {
           oTable.setVisible(false);
           return;
         }
@@ -275,30 +239,35 @@ sap.ui.define(
 
         // Add dynamic columns for approvers
         let stopCreatingColumns = false;
+        let hideTableApproval = true;
 
-        // Add dynamic columns for approvers
+        for (let i = 0; i < approvers.length; i++) {
+          const approver = approvers[i];
 
-        approvers.forEach((approver, index) => {
           if (!stopCreatingColumns && approver.Zlevel !== "00") {
-
-            if (approver.Uname === LoggedInUser) {
-              let approverIndex = index; // Dynamic index for column headers
+            if (approver.Uname === LoggedInUser && (approver.Zaction === "PEND" || approver.Zaction === "")) {
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Approver " + approverIndex })
+                header: new sap.m.Label({ text: "Approver" })
               }));
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Status " })
+                header: new sap.m.Label({ text: "Status" })
               }));
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Approved on " })
+                header: new sap.m.Label({ text: "Approved on" })
               }));
+              oTable.setVisible(true);
+              hideTableApproval = false;
               stopCreatingColumns = true; // Stop creating further columns
+              break; // Exit the loop after adding columns
             }
           }
-        });
+        }
+        if( hideTableApproval){
+          oTable.setVisible(false);
+        }
 
-        // Bind items to table
 
+        console.log("voyModel data: ", oApprovalModel.getData(), this.getView().getModel("VoyApprovalModel").getData());
         oTable.bindItems({
           path: "VoyApprovalModel>/",
           template: new sap.m.ColumnListItem({
@@ -306,6 +275,7 @@ sap.ui.define(
           })
         });
       },
+
 
       createCells: function (approvers) {
         let cells = [];
@@ -323,31 +293,141 @@ sap.ui.define(
 
         // Dynamic cells for approvers
         let stopCreatingCells = false;
-        let that = this;
-        approvers.forEach((approver, index) => {
+
+        for (let i = 0; i < approvers.length; i++) {
+          const approver = approvers[i];
 
           if (!stopCreatingCells && approver.Zlevel !== "00") {
-
-            if (approver.Uname === LoggedInUser) {
+            if (approver.Uname === LoggedInUser && approver.Zaction === "PEND") {
               cells.push(new sap.m.Text({
-                text: "{VoyApprovalModel>Approvers/" + index + "/Uname}"
+                text: "{VoyApprovalModel>Approvers/" + i + "/Uname}"
               }));
               cells.push(new sap.m.Text({
-                text: "{VoyApprovalModel>Approvers/" + index + "/Zaction}"
+                text: "{VoyApprovalModel>Approvers/" + i + "/Zaction}"
               }));
               cells.push(new sap.m.Text({
                 text: {
-                  parts: [{ path: "VoyApprovalModel>Approvers/" + index + "/Zdate" }, { path: "VoyApprovalModel>Approvers/" + index + "/Zaction" }],
+                  parts: [
+                    { path: "VoyApprovalModel>Approvers/" + i + "/Zdate" },
+                    { path: "VoyApprovalModel>Approvers/" + i + "/Zaction" }
+                  ],
                   formatter: this.formatDate.bind(this)
                 }
               }));
               stopCreatingCells = true; // Stop creating further cells
+              break; // Exit the loop after adding cells
             }
+          }
+        }
+
+        return cells;
+      },
+      transformStatusData: function (aFilteredData) {
+        const distinctVreqnos = [...new Set(aFilteredData.map(item => item.Vreqno))];
+
+        return distinctVreqnos.map(Vreqno => {
+          const filteredItems = aFilteredData.filter(item => item.Vreqno === Vreqno);
+          
+
+          return {
+            Vreqno: Vreqno,
+            Voyno: filteredItems[0].Voyno,
+            Approvers: filteredItems.map(item => ({
+              Zlevel: item.Zlevel,
+              Uname: item.Uname,
+              Ztime: item.Ztime,
+              Zcomm: item.Zcomm,
+              Zdate: item.Zdate,
+              Zaction: item.Zaction,
+              Zemail: item.Zemail
+            }))
+          };
+        });
+      },
+      createStatusDynamicColumns: function (approvers) {
+        let oTable = this.getView().byId("statusTable");
+
+        oTable.removeAllColumns();
+
+        oTable.addColumn(new sap.m.Column({
+          header: new sap.m.Label({ text: "Approval Req No" }),
+          width: "10%",
+        }));
+        oTable.addColumn(new sap.m.Column({
+          header: new sap.m.Label({ text: "Voyage No." }),
+          width: "10%",
+        }));
+        oTable.addColumn(new sap.m.Column({
+          header: new sap.m.Label({ text: "Created By" }),
+        }));
+        oTable.addColumn(new sap.m.Column({
+          header: new sap.m.Label({ text: "Created On" })
+        }));
+
+        // If there are approvers
+        if (approvers.length > 0) {
+          for (let i = 1; i < approvers.length; i++) {
+            oTable.addColumn(new sap.m.Column({
+              header: new sap.m.Label({ text: "Approver " + i })
+            }));
+            oTable.addColumn(new sap.m.Column({
+              header: new sap.m.Label({ text: "Status" })
+            }));
+            oTable.addColumn(new sap.m.Column({
+              header: new sap.m.Label({ text: "Date" })
+            }));
+          }
+        }
+
+        // Bind the table items
+        oTable.bindItems({
+          path: "VoyApprovalStatusModel>/",
+          template: new sap.m.ColumnListItem({
+            cells: this.createStatusCells(approvers)
+          })
+        });
+      },
+
+
+      createStatusCells: function (approvers) {
+        let cells = [];
+
+        // Add static cells for fixed columns
+        cells.push(new sap.m.Text({ text: "{VoyApprovalStatusModel>Vreqno}" }));
+        cells.push(new sap.m.Text({ text: "{VoyApprovalStatusModel>Voyno}" }));
+
+        if (approvers.length > 0) {
+          cells.push(new sap.m.Text({ text: "{VoyApprovalStatusModel>Approvers/0/Uname}" }));
+          cells.push(new sap.m.Text({
+            text: {
+              path: "VoyApprovalStatusModel>Approvers/0/Zdate",
+              formatter: this.formatDate.bind(this)
+            }
+          }));
+        } else {
+          cells.push(new sap.m.Text({ text: "" }));
+          cells.push(new sap.m.Text({ text: "" }));
+        }
+
+        approvers.forEach((approver, index) => {
+          if (index > 0) {
+            cells.push(new sap.m.Text({ text: `{VoyApprovalStatusModel>Approvers/${index}/Uname}` }));
+            cells.push(new sap.m.Text({ text: `{VoyApprovalStatusModel>Approvers/${index}/Zaction}` }));
+            cells.push(new sap.m.Text({
+              text: {
+                parts: [
+                  { path: "VoyApprovalStatusModel>Approvers/" + index + "/Zdate" },
+                  { path: "VoyApprovalStatusModel>Approvers/" + index + "/Zaction" }
+                ],
+                formatter: this.formatDate.bind(this)
+              }
+            }));
           }
         });
 
         return cells;
       },
+
 
       formatDate: function (date, status) {
         if (status === undefined && date) {
@@ -373,12 +453,12 @@ sap.ui.define(
 
         if (selectedItem === "Voyage Approval Status Report") {
           oTable1.setVisible(true);
-          oTable2.setVisible(false);
+          // oTable2.setVisible(false);
           oVBox1.setVisible(true);
           oVBox2.setVisible(false);
         } else if (selectedItem === "Voyage Approval") {
           oTable1.setVisible(false);
-          oTable2.setVisible(true);
+          // oTable2.setVisible(true);
           oVBox1.setVisible(false);
           oVBox2.setVisible(true);
         } else {
@@ -444,7 +524,7 @@ sap.ui.define(
           return;
         }
 
-        sap.m.MessageToast.show("Comment: " + sComment);
+        sap.m.MessageToast.show("updating status .. ");
         this.byId("approvalDialog").close();
 
 
@@ -459,7 +539,7 @@ sap.ui.define(
           return;
         }
 
-        sap.m.MessageToast.show("Comment: " + sComment);
+        sap.m.MessageToast.show("updating status .. " );
         this.byId("RejectedDialog").close();
 
 
@@ -475,75 +555,102 @@ sap.ui.define(
 
         let data = selectedItems[0].getBindingContext('VoyApprovalModel').getObject();
         let userData = data.Approvers.filter(item => item.Zlevel !== "00" && item.Uname === userName);
-        let payload = {
-          Zcomm: sComment,
-          Zaction: stat
-        }
+
         // Remember : usetData is  an array , --  but question ? if approver 1, approver 2 , approver3 same
+
         let url = `/voyapprovalSet(Vreqno='${data.Voyno}',Voyno='${data.Vreqno}',Zlevel='${userData[0].Zlevel}',Uname='${userName}')`;
         console.log("Url", url);
         // return
 
-
-
-        let oModelVoyApproval = this.getOwnerComponent().getModel(); // Get Table model instance
+        let oModel = this.getOwnerComponent().getModel(); // Get Table model instance
 
         // Create a filter for the entity ID
         let fVreqno = new sap.ui.model.Filter("Vreqno", sap.ui.model.FilterOperator.EQ, data.Vreqno);
         let fVoyno = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, data.Voyno);
         let fZlevel = new sap.ui.model.Filter("Zlevel", sap.ui.model.FilterOperator.EQ, userData[0].Zlevel);
         let fUname = new sap.ui.model.Filter("Uname", sap.ui.model.FilterOperator.EQ, userName);
-        let vyreq = data.Vreqno;
-        let vyno = data.Voyno;
+
         let zlvl = userData[0].Zlevel;
         let uname = userName
         // Bind to the entity set with the filter
-        let oBindList = oModelVoyalApp.bindList("/voyapprovalSet", undefined, undefined, [fVreqno, fVoyno, fZlevel, fUname]);
+        let oBindList = oModel.bindList("/voyapprovalSet", undefined, undefined, [fVreqno, fVoyno, fZlevel, fUname]);
 
         // Request the contexts that match the filter
-        let res = await oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-          let filterContext = aContexts.filter((x, i) => x.getProperty('Voyno') === data.Voyno && x.getProperty('Zlevel') === zlvl)
-          filterContext[0].setProperty("Zcomm", sComment);
-          filterContext[0].setProperty("Zaction", stat);
+        let that = this;
+        sap.ui.core.BusyIndicator.show(0);
+        try {
 
-          oModelVoyApproval.refresh();
+          let res = await oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+            let filterContext = aContexts.filter((x, i) => x.getProperty('Voyno') === data.Voyno && x.getProperty('Zlevel') === zlvl)
+            filterContext[0].setProperty("Zcomm", sComment);
+            filterContext[0].setProperty("Zaction", stat);
 
+            // Refresh the model and rebind the table after 1.5 seconds
+            setTimeout(function () {
+              oModel.refresh();
 
-        })
-        return;
+              sap.ui.core.BusyIndicator.hide();
 
-        let oModel = this.getOwnerComponent().getModel("modelV2");
-
-        let statusText = (status === "APPR") ? "Approved" : "Rejected";
-
-        oModel.update(url, payload, {
-
-          success: function (result) {
-            console.log(result);
-            new sap.m.MessageBox.success(`Successfully ${statusText} by ${userName}`, {
-              title: "Approval Done",
-              onClose: function () {
-
-                window.location.reload();
+              that.rebindApprovalTable(data.Voyno);
+            }.bind(that), 1500);
 
 
-              }
-            });
-            oTable.removeSelections();
-            // this.byId("approveButton").setEnabled(false);
-            // this.byId("rejectButton").setEnabled(false);
-          },
-          error: function (err) {
-            new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value);
-            console.log("error occured while approving ", err);
-            // window.location.reload();  
 
-          }
-        });
-        oTable.removeSelections();
+          })
+        } catch (error) {
+          console.log("Errro in updating status");
+        }
+
 
       },
+      rebindApprovalTable: async function (voyno) {
+        let apprTable = this.byId("approvalTable");
+        apprTable.setVisible(false);
+        
+        this.byId("approveButton").setEnabled(false);
+        this.byId("rejectButton").setEnabled(false);
 
+        let oModel = this.getOwnerComponent().getModel();
+
+        let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, voyno);
+        let oBindList = oModel.bindList("/voyapprovalSet", null, null, aFilter);
+
+        let aFilteredData = await oBindList.requestContexts().then(function (aContexts) {
+          return aContexts.map(context => context.getObject());
+        });
+
+        aFilteredData.sort((a, b) => a.Zlevel.localeCompare(b.Zlevel));
+        console.log("filterdata after updating status", aFilteredData);
+        let testData = aFilteredData;
+
+        let transformedData = this.transformData(testData);
+        let transformedStatusData = this.transformStatusData([...testData]);
+        oApprovalStatusModel.setData(transformedStatusData);
+
+        let xVreqno = await this.getVreqnoToshow(voyno);
+
+        LoggedInUser = "PANKAJ.J";
+
+        this.approverMatched = false;
+        transformedData.forEach(data => {
+          if (data.Vreqno === xVreqno) {
+            oApprovalModel.setData([data]);
+
+            this.createDynamicColumns(data.Approvers);
+          }
+        });
+        transformedStatusData.forEach(data => {
+          this.createStatusDynamicColumns(data.Approvers);
+        });
+
+        let oTable = this.byId("approvalTable");
+        oTable.bindItems({
+          path: "VoyApprovalModel>/",
+          template: new sap.m.ColumnListItem({
+            cells: this.createCells(transformedData[0].Approvers)
+          })
+        });
+      },
       onCancelCommentApproval: function () {
         this.byId("approvalDialog").close();
         let oTable2 = this.byId("approvalTable");
@@ -572,7 +679,7 @@ sap.ui.define(
               rows: 3,
               width: "100%",
               placeholder: "Add your comment..."
-          
+
             })
           });
           this.getView().addDependent(oDialog);
@@ -631,7 +738,7 @@ sap.ui.define(
               if (aTokens[j].getKey() === vreqno) {
                 oVoyageAppReqField.removeToken(aTokens[j]);
                 console.log("Removed token for vreqno:", vreqno);
-                if(oVoyageAppReqField.getTokens().length === 0 ) {
+                if (oVoyageAppReqField.getTokens().length === 0) {
                   oVoyageAppReqField.setTokens([]);
                   that.onRefresh();
                 }
@@ -647,7 +754,7 @@ sap.ui.define(
 
         let oView = this.getView();
         if (!this.oVoyageDialog) {
-          this.oVoyageDialog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyage", this);
+          this.oVoyageDialog = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.createvoyage.fragments.valueHelpVoyageApproval", this);
           oView.addDependent(this.oVoyageDialog);
         }
         this.oVoyageDialog.open();
@@ -665,10 +772,11 @@ sap.ui.define(
 
       onRefresh: function () {
         // Reset multi inputs
-        let oMultiInput = this.byId("VoyageNo");
+        let oInput = this.byId("VoyageNo");
         let oDescriptionInput = this.byId("_voyageAppReqField");
-        oMultiInput.removeAllTokens();
-        oDescriptionInput.removeAllTokens();
+
+        oInput.setValue("");
+        oDescriptionInput.setValue("");
 
         // Hide tables and other elements
         let oTable1 = this.byId("statusTable");
@@ -685,6 +793,7 @@ sap.ui.define(
         // let oRejectButton = this.byId("rejectButton");
         // oApproveButton.setEnabled(false);
         // oRejectButton.setEnabled(false);
+
         let oSelect = this.byId("_IDGenSelect1"); // Replace "yourSelectControlId" with the actual ID of your select control
         if (oSelect) {
           oSelect.setSelectedKey(null);

@@ -25,7 +25,8 @@ sap.ui.define([
                 this.infoModel = new JSONModel({
                     "voyageNo": "",
                     "charteringNo": "",
-                    "vendorNo": ""
+                    "vendorNo": "",
+                    "status": ""
                 });
                 this.getView().setModel(this.infoModel, "vData");
                 console.log("Initial vData", this.getView().getModel("vData").getData());
@@ -74,11 +75,13 @@ sap.ui.define([
                 this.BidDetails = []
             
                 try {
+                    // debugger;
                     const biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
                     var vInfo = this.getView().getModel("vData");
                     vInfo.setProperty("/voyageNo", biddingData.Voyno);
                     vInfo.setProperty("/charteringNo", biddingData.Chrnmin);
                     vInfo.setProperty("/vendorNo", biddingData.Lifnr);
+                    vInfo.setProperty("/status", biddingData.Stat);
                     console.log("Updated vData", vInfo.getData());
             
                     await this.getHeaderDetails(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime);
@@ -104,35 +107,113 @@ sap.ui.define([
                 this.getView().getModel("voyageDetailsModel").setData({});
                 this.getView().getModel("hintDataModel").setData({});
             },
-            
-            getBidDetailsData:async function(){
-               
-                try{
-                var infoModel = this.getView().getModel("vData");
-                let voyageNo = infoModel.getProperty("/voyageNo")
-                // let voyageNo = 1000000052;
-                var oModel = this.getOwnerComponent().getModel();
 
-                var oBidListData = oModel.bindList(`/xNAUTIxSUBMITQUATATIONFETCH('${voyageNo}')/tovenditem`);
-                const aContexts = await oBidListData.requestContexts();
-                aContexts.forEach(function (oContext) {
-                    this.BidDetails.push(oContext.getObject());
-                }.bind(this));
-                if(this.BidDetails.length===0){
-                   sap.m.MessageToast.show("The data doesn't contain any Bid details.")
-                }
-                else{
-                    console.log("Bid details data:",this.BidDetails);
-                    var bidModel = new JSONModel()
-                    bidModel.setData(this.BidDetails[0])
-                    this.getView().setModel(bidModel,"bidDataModel")
-                    console.log("bid details:",this.getView().getModel("bidDataModel").getData());
-                }
-            }
-                catch(error){
-                    console.error("Error fetching data", error);
+            getBidDetailsData: async function() {
+                try {
+                    var infoModel = this.getView().getModel("vData");
+                    let voyageNo = infoModel.getProperty("/voyageNo");
+                    let charterNo = infoModel.getProperty("/charteringNo");
+                    let VendorNo = infoModel.getProperty("/vendorNo");
+                    var oModel = this.getOwnerComponent().getModel();
+                    
+                    // Define the filters
+                    var aFilters = [
+                        new sap.ui.model.Filter("Lifnr", sap.ui.model.FilterOperator.EQ, VendorNo),
+                        new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, charterNo),
+                        new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, voyageNo)
+                    ];
+                    
+                    // Fetch data with filters and expand the associated entity
+                    let oBidListData = oModel.bindList("/xNAUTIxZSUBMITQUOUTFETCH", undefined, undefined, undefined, {
+                        $expand: "tovenditem",
+                        $filter:`Lifnr eq '${VendorNo}' and Chrnmin eq '${charterNo}' and Voyno eq '${voyageNo}'`
+                    });
+                    
+                    this.getBidData = []; 
+                    let aContexts = await oBidListData.requestContexts(0);
+                    aContexts.forEach(function(oContext) {
+                        this.getBidData.push(oContext.getObject());
+                    }.bind(this));
+                    
+                    if (this.getBidData.length > 0) {
+                        // Process the main data and filter the associated data
+                        this.getBidData.forEach(mainData => {
+                            if (mainData.tovenditem) {
+                                // Create a new property `filteredTovenditem` and assign the filtered results to it
+                                mainData.filteredTovenditem = mainData.tovenditem.filter(associatedData => {
+                                    return associatedData.Lifnr === VendorNo && 
+                                           associatedData.Voyno === voyageNo && 
+                                           associatedData.Chrnmin === charterNo;
+                                });
+                            }
+                        });
+            
+                        // Set the processed data to the model
+                        const charteringModel = new sap.ui.model.json.JSONModel();
+                        charteringModel.setData(this.getBidData);
+                        this.getView().setModel(charteringModel, "charteringRequestModel");
+                        console.log("Request model data:", this.getView().getModel("charteringRequestModel").getData());
+                    } else {
+                        sap.m.MessageToast.show("No data found for vessel details and bid details.");
+                    }
+                    console.log("getBidData:", this.getBidData);
+                    
+                } catch (error) {
+                    console.error("Error fetching data:", error);
                     sap.m.MessageToast.show("Error fetching Bid details.");
-                } 
+                } finally {
+                    if (this._oBusyDialog) {
+                        this._oBusyDialog.close();
+                    }
+                }
+            },  
+            
+            tabShoworNot:function(status){
+             debugger;
+            },
+            
+            etBidDetailsData: async function() {
+                try {
+                    var infoModel = this.getView().getModel("vData");
+                    let voyageNo = infoModel.getProperty("/voyageNo");
+                    let charterNo = infoModel.getProperty("/charteringNo");
+                    let VendorNo = infoModel.getProperty("/vendorNo");
+                    var oModel = this.getOwnerComponent().getModel();
+                    var aFilters = [
+                        new sap.ui.model.Filter("Lifnr", sap.ui.model.FilterOperator.EQ, VendorNo),
+                        new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, charterNo),
+                        new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, voyageNo)
+                    ];
+                    let oBidListData = oModel.bindList("/xNAUTIxZSUBMITQUOUTFETCH", undefined, undefined, undefined, {
+                        $expand: "tovenditem",
+                        $filter:`Lifnr eq '${VendorNo}' and Chrnmin eq '${charterNo}' and Voyno eq '${voyageNo}'`
+                    });
+                    this.getBidData = []; 
+                    let aContexts = await oBidListData.requestContexts(0);
+                    aContexts.forEach(function(oContext) {
+                        this.getBidData.push(oContext.getObject());
+                    }.bind(this));
+            
+                    if (this.getBidData.length > 0) {
+                        this.charteringData = this.getBidData;
+                        
+                        const charteringModel = new sap.ui.model.json.JSONModel();
+                        charteringModel.setData(this.charteringData);
+                        this.getView().setModel(charteringModel, "charteringRequestModel");
+                        console.log("Request model data:", this.getView().getModel("charteringRequestModel").getData());
+                    } else {
+                        sap.m.MessageToast.show("No data found for the provided filter criteria.");
+                    }
+                    console.log("getBidData:", this.getBidData);
+                    
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    sap.m.MessageToast.show("Error fetching Bid details.");
+                } finally {
+                    if (this._oBusyDialog) {
+                        this._oBusyDialog.close();
+                    }
+                }
             },
 
             getHeaderDetails: async function (bidPath, startDate, startTime, endDate, endTime) {
@@ -583,7 +664,7 @@ onSubmitBid: function () {
     
 
             resetFormFields: function () {
-                debugger;
+                // debugger;
                 this.byId("vesselName").setValue("");
                 this.byId("vesselIMONo").setValue("");
                 this.byId("coorBidInput").setValue("");

@@ -11,6 +11,7 @@
         cancel="onValueHelpClose"
         items="{/xNAUTIxBusinessPartner1}"
         multiSelect="true"
+         initialFocus="SearchField"
       
         
         >

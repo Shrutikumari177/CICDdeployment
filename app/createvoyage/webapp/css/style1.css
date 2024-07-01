@@ -215,6 +215,8 @@
 }
 .transactionFlexBox{
     margin-bottom: 2%;
+    display: inline-flex !important;
+
 }
 /* .transactiontoolHeader1{
     position: fixed;
@@ -409,20 +411,20 @@
 
 .planInfoFlexHeader, .actualInfoFlexHeader{
 
-    align-items: center;
-    
     gap: 16px;
+    display: inline-flex;
+    align-items: center;
 }
 /*  making flex space  in  flex box between label and  input */
 .sapMFlexItem {
-    width : fit-content
+    width : 100%;
 }
 
 .sapMPage>section.sapMPageEnableScrolling{
-    scrollbar-width: none;
+    scrollbar-width: thin;
 }
 .scrollContainer{
-    scrollbar-width: none;
+    scrollbar-width: thin;
 }
 .page{
     background-color: white;
@@ -465,9 +467,11 @@
   .VoyageHeader{
     gap:8% ;
     margin-left: 60px;
+    display: inline-flex;
   }
   .voyageHeaderItem{
     margin-top: 0% !important;
+
   }
   .aprrejbtn{
     margin-top: 10px !important;
@@ -480,4 +484,20 @@
 
 .voyApprovalStatusPanel, .voyApprovalPanel {
     padding:8px !important;
+}
+
+
+/*    port and cost button   Hbox*/
+._hBoxPortBtn{
+    display: inline-flex !important;
+    align-items: flex-start !important;
+}
+
+/* canlFlex box css */
+.flexCanalBox {
+    display:  inline-flex !important;
+    align-items: flex-start !important;
+}
+._IDHBox2 {
+    display: inline-flex;
 }

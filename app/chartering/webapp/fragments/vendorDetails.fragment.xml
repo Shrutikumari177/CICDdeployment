@@ -13,7 +13,7 @@
                     </FlexBox>
                     <FlexBox class="headerItem">
                         <Label class="sapUiTinyMarginTop" text="Name1 : " />
-                        <Input value="{vendorDetail>/Name1}" editable="false" />
+                        <Input value="{vendorDetail>/Name1}"  editable="false" />
                     </FlexBox>
                     <FlexBox class="headerItem">
                         <Label class="sapUiTinyMarginTop" text="Name2 : " />

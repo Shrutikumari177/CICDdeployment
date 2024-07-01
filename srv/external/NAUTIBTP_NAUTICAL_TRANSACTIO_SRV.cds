@@ -1,4 +1,4 @@
-/* checksum : 1f1646657472b35509c9100917b62d86 */
+/* checksum : 664fef81915813d25263ef446c7ba3b0 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -1400,6 +1400,114 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
+@sap.label : 'fetch submit quotation'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxsubmitquafetch {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key Lifnr : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
+  @sap.label : 'BP Role'
+  @sap.quickinfo : 'BP Role for Screen Usage'
+  PartnerRole : String(7);
+  @sap.label : 'Title'
+  Anred : String(15);
+  @sap.label : 'Name'
+  @sap.quickinfo : 'Name 1'
+  Name1 : String(35);
+  @sap.label : 'Name 2'
+  Name2 : String(35);
+  @sap.label : 'Name 3'
+  Name3 : String(35);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Search Term 1'
+  Sort1 : String(20);
+  @sap.label : 'Street 2'
+  StrSuppl1 : String(40);
+  @sap.label : 'Street 3'
+  StrSuppl2 : String(40);
+  @sap.label : 'House Number'
+  HouseNum1 : String(10);
+  @sap.label : 'Street'
+  Stras : String(60);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Postal Code'
+  Pstlz : String(10);
+  @sap.label : 'City'
+  Ort01 : String(35);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country'
+  @sap.quickinfo : 'Country Key'
+  Land1 : String(3);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Region'
+  @sap.quickinfo : 'Region (State, Province, County)'
+  Regio : String(3);
+  @sap.label : 'Language Key'
+  Spras : String(2);
+  @sap.label : 'Telephone 1'
+  @sap.quickinfo : 'First telephone number'
+  Telf1 : String(16);
+  @sap.label : 'Telephone 2'
+  @sap.quickinfo : 'Second telephone number'
+  Telf2 : String(16);
+  @sap.label : 'Fax Number'
+  Telfx : String(31);
+  @sap.label : 'E-Mail Address'
+  SmtpAddr : String(241);
+  @sap.display.format : 'Date'
+  @sap.label : 'Created on'
+  @sap.quickinfo : 'Date on which the Record Was Created'
+  Erdat : Date;
+  @sap.display.format : 'Date'
+  @sap.label : 'To'
+  @sap.quickinfo : 'Valid-to date in current Release only 99991231 possible'
+  DateTo : Date;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  Voyno : String(20);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Charter Ext.No'
+  Chrnmex : String(20);
+  @sap.display.format : 'Date'
+  @sap.label : 'Creation Date'
+  @sap.quickinfo : 'Charter Request Creation Date'
+  Chrcdate : Date;
+  @sap.label : 'Creation Time'
+  @sap.quickinfo : 'Charter Request Creation Time'
+  Chrctime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding Start Date'
+  Chrqsdate : Date;
+  @sap.label : 'Bidding Start Time'
+  Chrqstime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding End Date'
+  Chrqedate : Date;
+  @sap.label : 'Bidding End Time'
+  Chrqetime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Quot.Deadline Date'
+  @sap.quickinfo : 'Charter Quatation Deadline date'
+  Chrqdate : Date;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Status'
+  zstat : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Action Taken'
+  Zaction : String(4);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
 @sap.label : 'SubmitQuotationFetch'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONFETCH {
   @sap.display.format : 'UpperCase'
@@ -1426,7 +1534,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONFETCH {
   @sap.label : 'Bid Time'
   Bidtime : Time;
   @cds.ambiguous : 'missing on condition?'
-  tovenditem : Association to NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
+  tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true
@@ -1461,7 +1569,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOST {
   @sap.label : 'Bid Time'
   Bidtime : Time;
   @cds.ambiguous : 'missing on condition?'
-  tovenditem : Association to NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
+  tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
 @cds.external : true
@@ -1500,10 +1608,10 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Vendor'
   @sap.quickinfo : 'Account Number of Vendor or Creditor'
-  Lifnr : String(10);
+  key Lifnr : String(10) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Code'
-  Zcode : String(12);
+  key Zcode : String(12) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Value'
   Value : String(50);
@@ -1895,76 +2003,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVoygItem {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
-@sap.label : 'cds view for BP Master Data'
-entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZBPMAS {
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Vendor'
-  @sap.quickinfo : 'Account Number of Vendor or Creditor'
-  key Lifnr : String(10) not null;
-  @sap.label : 'BP Role'
-  @sap.quickinfo : 'BP Role for Screen Usage'
-  PartnerRole : String(7);
-  @sap.label : 'Title'
-  Anred : String(15);
-  @sap.label : 'Name'
-  @sap.quickinfo : 'Name 1'
-  Name1 : String(35);
-  @sap.label : 'Name 2'
-  Name2 : String(35);
-  @sap.label : 'Name 3'
-  Name3 : String(35);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Search Term 1'
-  Sort1 : String(20);
-  @sap.label : 'Street 2'
-  StrSuppl1 : String(40);
-  @sap.label : 'Street 3'
-  StrSuppl2 : String(40);
-  @sap.label : 'House Number'
-  HouseNum1 : String(10);
-  @sap.label : 'Street'
-  Stras : String(60);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Postal Code'
-  Pstlz : String(10);
-  @sap.label : 'City'
-  Ort01 : String(35);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Country'
-  @sap.quickinfo : 'Country Key'
-  Land1 : String(3);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Region'
-  @sap.quickinfo : 'Region (State, Province, County)'
-  Regio : String(3);
-  @sap.label : 'Language Key'
-  Spras : String(2);
-  @sap.label : 'Telephone 1'
-  @sap.quickinfo : 'First telephone number'
-  Telf1 : String(16);
-  @sap.label : 'Telephone 2'
-  @sap.quickinfo : 'Second telephone number'
-  Telf2 : String(16);
-  @sap.label : 'Fax Number'
-  Telfx : String(31);
-  @sap.label : 'E-Mail Address'
-  SmtpAddr : String(241);
-  @sap.display.format : 'Date'
-  @sap.label : 'Created on'
-  @sap.quickinfo : 'Date on which the Record Was Created'
-  Erdat : Date;
-  @sap.display.format : 'Date'
-  @sap.label : 'To'
-  @sap.quickinfo : 'Valid-to date in current Release only 99991231 possible'
-  DateTo : Date;
-};
-
-@cds.external : true
-@cds.persistence.skip : true
-@sap.creatable : 'false'
-@sap.updatable : 'false'
-@sap.deletable : 'false'
-@sap.content.version : '1'
 @sap.label : 'Chatering Vendor Master table'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {
   @sap.display.format : 'UpperCase'
@@ -1979,5 +2017,40 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   Voyno : String(20);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'test submit quatation fetch'
+entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key Lifnr : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  key Chrnmin : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel IMO Number'
+  Vimono : String(40);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vessel Name'
+  Vname : String(40);
+  @sap.display.format : 'Date'
+  @sap.label : 'Bid Date'
+  Biddate : Date;
+  @sap.label : 'Bid Time'
+  Bidtime : Time;
+  @cds.ambiguous : 'missing on condition?'
+  tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 

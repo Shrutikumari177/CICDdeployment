@@ -14,11 +14,11 @@
 .icontab{
   margin-top: 5px;
  
-
+ 
 }
 .headerItem{
     gap :10px;
-    
+   
 }
 .charteringItem{
     margin-right:65%;
@@ -27,24 +27,61 @@
     gap:6% ;
     margin-left: 60px;
 }
-
-/* css for label alignment */
-.labeltxt{  
-    margin-right:25px !important;
-    }
-    .paylabeltxt{
-        margin-right:13px !important;
-    }
-    .sapMLabel {
-        text-align: end !important;
-    }
+ 
+/* chartering header create css */
+ 
     .voylabeltxt{
-        margin-right: 75px !important;
+        margin-right: 85px !important;
     }
-
-    .voytext{
-        margin-right: 94px !important;
-    }    
-
-    
-     
+   .purchaselabeltxt{
+    margin-right: 20px !important;
+   }
+   .paylabeltxt{
+    margin-right: 13px !important;
+   }
+   
+  /* Remove scrollbars from Dialog */
+#_IDDialog > .sapMDialogCont {
+    overflow: hidden !important;
+}
+ 
+/* Remove scrollbars from VBox */
+.flexbox-container {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    height: 100%; /* Ensure VBox takes up full height */
+}
+ 
+/* Remove scrollbars from FlexBox */
+.flexbox {
+    flex: 1;
+    margin: 0 10px; /* Adjust the margin as needed */
+    overflow: hidden;
+}
+.flex{
+    margin-left: 25px;
+}
+.headerItem{
+    gap :10px;
+   
+  }
+  .voytext{
+    margin-right: 113px;
+  }
+  .VoyageHeader{
+    gap:8% ;
+    margin-left: 60px;
+  }
+  .voyageHeaderItem{
+    margin-top: 0% !important;
+  }
+  .aprrejbtn{
+    margin-top: 10px !important;
+  }
+.labeltxt{  
+    margin-right:28px !important;
+    }
+ .chartlabeltxt{
+    margin-right: 113px !important;
+ }  

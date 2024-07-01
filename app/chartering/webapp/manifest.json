@@ -24,22 +24,10 @@
           "odataVersion": "4.0"
         }
       }
-    },
-    "crossNavigation": {
-      "inbounds": {
-        "createCharteringObj-createChart": {
-          "semanticObject": "createCharteringObj",
-          "action": "createChart",
-          "title": "{{flpTitle}}",
-          "signature": {
-            "parameters": {},
-            "additionalParameters": "allowed"
-          }
-        }
-      }
     }
   },
   "sap.ui": {
+    "fullWidth": true,
     "technology": "UI5",
     "icons": {
       "icon": "",

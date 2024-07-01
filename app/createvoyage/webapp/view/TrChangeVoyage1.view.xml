@@ -1,0 +1,1811 @@
+<mvc:View
+    controllerName="com.ingenx.nauti.createvoyage.controller.TrChangeVoyage1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:semantic="sap.m.semantic"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt"
+    xmlns:cards="sap.f.cards"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:ui="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        class="page"
+    >
+        <headerContent>
+            <Bar id="navbar">
+                <contentLeft>
+                    <Text text="Change Voyage Details" />
+                </contentLeft>
+            </Bar>
+        </headerContent>
+        <subHeader>
+            <Bar
+                design="Auto"
+                titleAlignment="None"
+            >
+                <contentLeft>
+                    <Button
+                        id="_submitBtn"
+                        text="Submit"
+                        press=".onSaveVoyage"
+                        type="Emphasized"
+                    />
+                    <Button
+                        id="_approvalBtn"
+                        text="Send for Approval"
+                        visible="true"
+                        press=".sendApproval"
+                        type="Emphasized"
+                    />
+                     <Button
+                        id="_cancelVoyageBtn"
+                        text="Cancel Voyage No."
+                    
+                        press=".onCancelVoayge"
+                        type="Emphasized"
+                        
+                    />
+                    <Button
+                        id="_refreshBtn"
+                        text="Refresh"
+                        type="Emphasized"
+                        press=".onRefresh"
+                        visible="false"
+                    />
+                 
+                </contentLeft>
+            </Bar>
+        </subHeader>
+
+        <form:SimpleForm layout="ResponsiveLayout">
+            <core:Title text="Header details" />
+            <Label
+                id="Label1"
+                text="Voyage Number"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="_voyageInput1"
+                width="200px"
+                editable="false"
+                showValueHelp="false"
+                placeholder="Select Voyage"
+                valueHelpRequest=".showVoyageValueHelp"
+                valueHelpOnly="true"
+            />
+            <Label
+                id="Label2"
+                text="Voyage Name"
+                class="sapUiTinyMarginTop"
+                textDirection="LTR"
+            />
+            <Input
+                id="Input2"
+                width="200px"
+                value="{voyHeaderModel>/0/Voynm}"
+            />
+            <Label
+                id="Label3"
+                text="Voyage Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Select
+                id="Select2"
+                width="200px"
+                forceSelection="false"
+                items="{
+                            path: '/VoyTypeSet'
+                        }"
+                selectedKey="{voyHeaderModel>/0/Voyty}"
+            >
+                <core:Item
+                    id="_Item2"
+                    key="{Voycd}"
+                    text="{Voydes}"
+                />
+            </Select>
+            <Label
+                id="_Label4"
+                text="Vessel Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Select
+                id="Select3"
+                width="200px"
+                forceSelection="false"
+                items="{
+                        path: '/CarTypeSet'
+                    }"
+                selectedKey="{voyHeaderModel>/0/Carty}"
+            >
+                <core:Item
+                    id="_Item3"
+                    key="{Carcd}"
+                    text="{Cardes}"
+                />
+            </Select>
+            <core:Title />
+
+            <Label
+                id="Label6"
+                text="Historical Frieght Cost"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input4"
+                width="200px"
+                value="{voyHeaderModel>/0/Freght}"
+                editable="false"
+            />
+
+            <Label
+                id="Label7"
+                text="Bid Type"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input5"
+                width="200px"
+                value="{voyHeaderModel>/0/Bidtype}"
+            />
+
+            <Label
+                id="Label5"
+                text="Currency"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input3"
+                width="200px"
+                value="{voyHeaderModel>/0/Curr}"
+                showValueHelp="true"
+                valueHelpRequest=".showValueHelpDialogCurr"
+            />
+            <Label
+                id="Label8"
+                text="Status"
+                class="sapUiTinyMarginTop"
+            />
+            <Input
+                id="Input6"
+                width="200px"
+                value="{voyHeaderModel>/0/GV_CSTATUS}"
+            />
+        </form:SimpleForm>
+
+        <Panel />
+        <Button
+            id="Hide"
+            icon="sap-icon://minimize"
+            class="sapUiTinyMargin"
+            visible="false"
+        />
+        <Text
+            id="header1"
+            text="Items Details"
+            class="sapUiMediumMarginBegin"
+            visible="false"
+        />
+
+        <!-- for animation  -->
+        <HBox id="_IDGenHBox">
+            <Select
+                id="animationSelect"
+                class="animation"
+            >
+                <core:Item
+                    id="_IDGenItem2"
+                    text="Slide animation"
+                    key="slide"
+                />
+                <core:Item
+                    id="_IDGenItem3"
+                    text="Base slide animation"
+                    key="baseSlide"
+                />
+                <core:Item
+                    id="_IDGenItem4"
+                    text="Fade animation"
+                    key="fade"
+                />
+                <core:Item
+                    id="_IDGenItem5"
+                    text="Flip animation"
+                    key="flip"
+                />
+                <core:Item
+                    id="_IDGenItem6"
+                    text="Show animation"
+                    key="show"
+                />
+                <layoutData>
+                    <FlexItemData
+                        id="_IDGenFlexItemData6"
+                        growFactor="1"
+                    />
+                </layoutData>
+            </Select>
+        </HBox>
+        <VBox
+            id="tab"
+            class="voyageHeaderItem"
+            width="100%"
+        >
+            <IconTabBar
+                id="_idIconTabBar"
+                tabDensityMode="Compact"
+                class="icontab1"
+            >
+                <items>
+                    <IconTabFilter
+                        text="Vessel Details"
+                        key="info"
+                        visible="false"
+                    >
+                        <Panel
+                            id="p1"
+                            height="600px"
+                            width="100%"
+                            visible="false"
+                        >
+                            <FlexBox
+                                id="vdsection1"
+                                class="vdsection"
+                                alignContent="Start"
+                                alignItems="Start"
+                            >
+                                <HBox alignItems="Start">
+                                    <Label
+                                        id="_IDGenLabel1"
+                                        text="Vessel Name:"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Input
+                                        id="_IDGenInput1"
+                                        width="150px"
+                                    />
+                                </HBox>
+                                <HBox
+                                    alignContent="Center"
+                                    alignItems="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel3"
+                                        text="Charter Party Agreement:"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Input
+                                        id="_IDGenInput3"
+                                        width="150px"
+                                    />
+                                </HBox>
+                                <HBox alignItems="Center">
+                                    <Label
+                                        id="_IDGenLabel2"
+                                        text="Vessel IMO No:"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Input
+                                        id="_IDGenInput2"
+                                        width="170px"
+                                    />
+                                </HBox>
+                            </FlexBox>
+                            <FlexBox
+                                id="vdsection2"
+                                class="vdsection2"
+                            />
+
+                            <Text
+                                id="_IDGenText1"
+                                text="Reference Details"
+                                class="vgheading"
+                            />
+                            <Table
+                                id="_IDGenTable3"
+                                width="60%"
+                                fixedLayout="false"
+                                mode="SingleSelectLeft"
+                                class="table"
+                                items="{voyHeaderModel>/}"
+                            >
+                                <columns>
+                                    <Column
+                                        id="_IDGenColumn2"
+                                        width="30%"
+                                    >
+                                        <Label
+                                            id="_IDGenLabel5"
+                                            text="Document Indicator"
+                                        />
+                                    </Column>
+                                    <Column
+                                        id="_IDGenColumn3"
+                                        width="50%"
+                                    >
+                                        <Label
+                                            id="_IDGenLabel6"
+                                            text="Reference Docuement No"
+                                        />
+                                    </Column>
+                                    <Column
+                                        id="_IDGenColumn31"
+                                        width="20%"
+                                    >
+                                        <Label
+                                            id="_IDGenLabel41"
+                                            text=" "
+                                        />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem1">
+                                        <cells>
+                                            <Select id="_IDGenSelect5">
+                                                <items>
+                                                    <core:Item
+                                                        id="_IDGenItem8"
+                                                        text=""
+                                                    />
+                                                    <core:Item
+                                                        id="_IDGenItem9"
+                                                        text="G - SALES CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDGenItem10"
+                                                        text="K - PURCHASE CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDGenItem11"
+                                                        text="P - PURCHASE ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDGenItem12"
+                                                        text="S - SALES ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDGenItem13"
+                                                        text="Z - NOMINATION KEY"
+                                                    />
+                                                </items>
+                                            </Select>
+                                        </cells>
+                                    </ColumnListItem>
+                                    <ColumnListItem id="_IDGenColumnListItem12">
+                                        <cells>
+                                            <Select id="_IDGenSelect14">
+                                                <items>
+                                                    <core:Item
+                                                        id="_IDItem8"
+                                                        text=""
+                                                    />
+                                                    <core:Item
+                                                        id="_IDItem19"
+                                                        text="G - SALES CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDItem10"
+                                                        text="K - PURCHASE CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDItem11"
+                                                        text="P - PURCHASE ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDItem12"
+                                                        text="S - SALES ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDItem13"
+                                                        text="Z - NOMINATION KEY"
+                                                    />
+                                                </items>
+                                            </Select>
+                                        </cells>
+                                    </ColumnListItem>
+                                    <ColumnListItem id="_IDGenlumnListItem12">
+                                        <cells>
+                                            <Select id="_IDGenSelt14">
+                                                <items>
+                                                    <core:Item
+                                                        id="_IDIem8"
+                                                        text=""
+                                                    />
+                                                    <core:Item
+                                                        id="_IDIem19"
+                                                        text="G - SALES CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDIem10"
+                                                        text="K - PURCHASE CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDIem11"
+                                                        text="P - PURCHASE ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDIem12"
+                                                        text="S - SALES ORDER"
+                                                    />
+                                                    <core:Item
+                                                        id="_IDIem13"
+                                                        text="Z - NOMINATION KEY"
+                                                    />
+                                                </items>
+                                            </Select>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                            <Button
+                                id="DocButton"
+                                icon="sap-icon://sys-minus"
+                                class="buttonSpacing"
+                            />
+                        </Panel>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="Vessel Plan/Actual"
+                        key="info"
+                    >
+                        <Panel
+                            id="p2"
+                            height="600px"
+                            width="100%"
+                            class=""
+                        >
+                            <Text
+                                id="_IDGenText3"
+                                text="Plan Info Details"
+                                class="vgheading"
+                            />
+
+                            <FlexBox class="planInfoFlexHeader">
+                                <Label
+                                    text="Plan Speed"
+                                    required="true"
+                                />
+                                <Input value="{voyItemModel>/0/Vspeed}" />
+
+                                <Label text="Freight Cost" />
+                                <Input
+                                    id="_friegthIdPlan"
+                                    value=" {path :'voyItemModel>/', formatter:'.CalcTotalFrcost'}"
+                                    liveChange=".liveFrCostChange"
+                                    width="200px"
+                                    type="Number"
+                                />
+
+                                <Label text="Unit" />
+                                <Select
+                                    id="_idFrunitPlan"
+                                    width="120px"
+                                    items="{
+                                     path: '/CargoUnitSet'
+                                    }"
+                                    selectedKey="{voyHeaderModel>/0/Frtu}"
+                                    
+                                >
+                                    <core:Item
+                                        key="{Uom}"
+                                        text="{Uomdes}"
+                                    />
+                                </Select>
+
+                                <Label text="Total Cost" />
+                                <Input
+                                    width="12rem"
+                                    id="_totalCostPlId"
+                                    value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
+                                />
+
+                                <Label text="Total Distance" />
+                                <Input
+                                    value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
+                                    editable="false"
+                                />
+
+                                <Label text="Total Days" />
+                                <Input
+                                    value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
+                                    id='_totalDays'
+                                />
+                            </FlexBox>
+
+                            <ScrollContainer
+                                id="_IDGenScrollContainer2"
+                                horizontal="true"
+                                vertical="false"
+                                class="scrollContainer"
+                            >
+                                <Table
+                                    id="_itemTable"
+                                    fixedLayout="false"
+                                    class="vesselDetailsTable"
+                                    items="{voyItemModel>/}"
+                                    mode="None"
+                                    sticky="ColumnHeaders"
+                                >
+                                    <columns>
+                                        <Column id="_IDColum">
+                                            <Label
+                                                id="_IDGel15"
+                                                text="LegID"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenln6">
+                                            <Label
+                                                id="_IDGLal15"
+                                                text="Port Code"
+                                            />
+                                        </Column>
+                                        <Column
+                                            id="_IDGenComn7"
+                                            visible="false"
+                                        >
+                                            <Label
+                                                id="_IDGenbel16"
+                                                text="Events"
+                                            />
+                                        </Column>
+
+                                        <Column id="_IDGenColn6">
+                                            <Label
+                                                id="_IDGenLel15"
+                                                text="Port name"
+                                            />
+                                        </Column>
+
+                                        <Column id="_IDGenColn8">
+                                            <Label
+                                                id="_IDGenLal17"
+                                                text="Other Cost"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenClumn9">
+                                            <Label
+                                                id="_IDGenabel18"
+                                                text="Freight Cost"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColmn10">
+                                            <Label
+                                                id="_IDGenabel19"
+                                                text="Total Cost"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn11">
+                                            <Label
+                                                id="_IDGenLabel20"
+                                                text="Cargo Size"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn12">
+                                            <Label
+                                                id="_IDGenLabel21"
+                                                text="Unit"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn13">
+                                            <Label
+                                                id="_IDGenLabel22"
+                                                text="Distance"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn14">
+                                            <Label
+                                                id="_IDGenLabel23"
+                                                text="UOM"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn15">
+                                            <Label
+                                                id="_IDGenLabel24"
+                                                text="Port Days"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn16">
+                                            <Label
+                                                id="_IDGenLabel25"
+                                                text="Weather"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn17">
+                                            <Label
+                                                id="_IDGenLabel26"
+                                                text="Sea Days"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn18">
+                                            <Label
+                                                id="_IDGenLabel27"
+                                                text="ETA"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColn18">
+                                            <Label
+                                                id="_IDGenLel27"
+                                                text="Time"
+                                            />
+                                        </Column>
+                                        <Column id="_IDln18">
+                                            <Label
+                                                id="_nLel27"
+                                                text="ETD"
+                                            />
+                                        </Column>
+                                        <Column id="GenColn18">
+                                            <Label
+                                                id="GenLel27"
+                                                text="Time"
+                                            />
+                                        </Column>
+                                        <Column id="_oln18">
+                                            <Label
+                                                id="_Iel27"
+                                                text="Status"
+                                            />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem
+                                            id="_IDGenColumnListItem4"
+                                        >
+                                            <cells>
+                                                <Input
+                                                    value="{voyItemModel>Vlegn}"
+                                                    width="2rem"
+                                                    editable="false"
+                                                />
+                                                <!--"{path :'voyItemModel>Vlegn', formatter:'.formattedLegId'}" -->
+                                                <Input
+                                                    width="7rem"
+                                                    value="{voyItemModel>Portc}"
+                                                    showValueHelp="true"
+                                                    valueHelpRequest=".onPortValueHelpRequest"
+                                                    valueHelpOnly=""
+                                                />
+                                                <Input value="" />
+                                                <Input
+                                                    value="{voyItemModel>Portn}"
+                                                    editable="false"
+                                                    width="7rem"
+                                                />
+
+                                                <Text
+                                                    text="{path :'voyItemModel>Othco',formatter: '.formatter.numberFormat'}"
+                                                    width="100px"
+                                                />
+                                                <Text
+                                                    text="{path :'voyItemModel>Frcost',formatter: '.formatter.numberFormat'}"
+                                                    width="140px"
+                                                />
+                                                <Text
+                                                    text="{path :'voyItemModel>Totco',formatter: '.formatter.numberFormat'}"
+                                                    width="140px"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Cargs}"
+                                                    width="100px"
+                                                    change=".onPortTabCargoSizeChange"
+                                                />
+                                                <!-- value="{path :'voyItemModel>Cargs',formatter: '.formatter.numberFormat'}" -->
+                                                <!-- liveChange=".liveCargoChange" -->
+                                                <!--  formatter:'.liveCostChange'   -->
+                                                <Input
+                                                    value="{voyItemModel>Cargu}"
+                                                    width="70px"
+                                                    showValueHelp="true"
+                                                    valueHelpRequest=".showValueHelpDialogCargoUnit"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Pdist}"
+                                                    width="80px"
+                                                    editable="false"
+                                                />
+                                                <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
+                                                <Input
+                                                    value="{voyItemModel>Medst}"
+                                                    width="40px"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Ppdays}"
+                                            
+                                                    liveChange=".onPortDaysChange"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Vwead}"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Vsdays}"
+                                                    editable="false"
+                                                />
+                                                <DatePicker
+                                                    displayFormat="dd-MM-yyyy"
+                                                    valueFormat="MM/dd/yyyy"
+                                                    value="{voyItemModel>Vetad}"
+                                                    width="120px"
+                                                    editable="false"
+                                                />
+                                                <TimePicker
+                                                    width="120px"
+                                                    value="{voyItemModel>Vetat}"
+                                                    valueFormat="HH:mm:ss"
+                                                    support2400="true"
+                                                    displayFormat="HH:mm:ss"
+                                                    editable="false"
+                                                />
+                                                <!-- <Input
+                                        value="{voyItemModel>Vetad}"
+                                        width="90px"
+                                        editable="false"
+                                    /> -->
+                                                <!-- <Input
+                                        value="{voyItemModel>Vetat}"
+                                        width="130px" editable="false"
+                                    /> -->
+                                                <DatePicker
+                                                    id="myDatePicker"
+                                                    displayFormat="dd-MM-yyyy"
+                                                    valueFormat="yyyy-MM-dd"
+                                                    value="{voyItemModel>Vetdd}"
+                                                    width="120px"
+                                                    liveChange=".onVetddDatePickerLiveChange1"
+                                                    change=".onVetddDatePickerChange"
+                                                />
+                                                <!-- dateValue="{voyItemModel>Vetdd}" -->
+                                                <!-- <Input
+                                        value="{voyItemModel>Vetdd}"
+                                        width="90px"
+                                        
+                                    /> -->
+
+                                                <!-- <Input
+                                        value="{voyItemModel>Vetdt}"
+                                        width="90px"
+                                    /> -->
+                                                <TimePicker
+                                                    width="120px"
+                                                    value="{voyItemModel>Vetdt}"
+                                                    valueFormat="HH:mm:ss"
+                                                    support2400="true"
+                                                    displayFormat="HH:mm:ss"
+                                                />
+                                                <Input
+                                                    value="{voyItemModel>Pstat}"
+                                                    width="90px"
+                                                />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                            <HBox class="sapUiTinyMarginTop _hBoxPortBtn">
+                                <Button
+                                    id="_addPort1"
+                                    text="Add Port"
+                                    press=".onAddPortRow1"
+                                    type="Emphasized"
+                                    visible="false"
+                                />
+                                <Button
+                                    id="_removePort1"
+                                    text="Remove"
+                                    press=".onDeletePort"
+                                    type="Emphasized"
+                                    class="sapUiTinyMarginBegin"
+                                    visible="false"
+                                />
+                            </HBox>
+
+                            <Text
+                                id="_IDGnText3"
+                                text="Actual Info Details"
+                                class="vgheading"
+                                visible="false"
+                            />
+                            <FlexBox
+                                class="actualInfoFlexHeader"
+                                visible="false"
+                            >
+                                <Label
+                                    text="Plan Speed"
+                                    required="true"
+                                />
+                                <Input value="{voyItemModel1>/0/Vspeed}" />
+
+                                <Label text="Freight Cost" />
+                                <Input
+                                    id="_friegthIdPlan2"
+                                    value=" {path :'voyItemModel1>/', formatter:'.CalcTotalFrcost'}"
+                                    liveChange=".liveFrCostChange"
+                                    width="200px"
+                                />
+
+                                <Label text="Unit" />
+                                <Select
+                                    id="_idFrunitPlan2"
+                                    width="120px"
+                                    items="{
+                            path: '/CargoUnitSet'
+                        }"
+                                    selectedKey="{voyHeaderModel1>/0/Frtu}"
+                                >
+                                    <core:Item
+                                        key="{Uom}"
+                                        text="{Uomdes}"
+                                    />
+                                </Select>
+
+                                <Label text="Total Cost" />
+                                <Input
+                                    width="12rem"
+                                    id="_totalCostPlId2"
+                                    value=" {path :'voyItemModel1>/', formatter:'.calctotalCost'}"
+                                />
+
+                                <Label text="Total Dist" />
+                                <Input
+                                    value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
+                                />
+
+                                <Label text="Total Days" />
+                                <Input
+                                    value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}"
+                                />
+                            </FlexBox>
+
+                            <ScrollContainer
+                                horizontal="true"
+                                vertical="false"
+                                class="scrollContainer"
+                                visible="false"
+                            >
+                                <Table
+                                    id="_IDGenTable10"
+                                    fixedLayout="false"
+                                    class="vesselDetailsTable"
+                                >
+                                    <columns>
+                                        <Column>
+                                            <Label text="LegID" />
+                                        </Column>
+                                        <Column>
+                                            <Label text="Port Cost" />
+                                        </Column>
+                                        <Column>
+                                            <Label text="Events" />
+                                        </Column>
+
+                                        <Column>
+                                            <Label text="Port name" />
+                                        </Column>
+
+                                        <Column>
+                                            <Label text="Other Cost" />
+                                        </Column>
+                                        <Column>
+                                            <Label text="Frieght Cost" />
+                                        </Column>
+                                        <Column id="_IDGeColmn10">
+                                            <Label
+                                                id="_IDGnabel19"
+                                                text="Total Cost"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenClumn11">
+                                            <Label
+                                                id="_IDGenabel20"
+                                                text="Cargo Size"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenClumn12">
+                                            <Label
+                                                id="_IDGenabel21"
+                                                text="Unit"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenClumn13">
+                                            <Label
+                                                id="_IDGnLabel22"
+                                                text="Distance"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenolumn14">
+                                            <Label
+                                                id="_IDenLabel23"
+                                                text="UOM"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenolumn15">
+                                            <Label
+                                                id="_IDGnLabel24"
+                                                text="Port Days"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColmn16">
+                                            <Label
+                                                id="_IDGenLael25"
+                                                text="Weather"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColmn17">
+                                            <Label
+                                                id="_IDGenLbel26"
+                                                text="Sea Days"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColun18">
+                                            <Label
+                                                id="_IDGeLabel27"
+                                                text="ETA"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenCon18">
+                                            <Label
+                                                id="_IDGenLl27"
+                                                text="Time"
+                                            />
+                                        </Column>
+                                        <Column id="_IDl18">
+                                            <Label
+                                                id="_nLe27"
+                                                text="ETD"
+                                            />
+                                        </Column>
+                                        <Column id="GenCol18">
+                                            <Label
+                                                id="GenLl27"
+                                                text="Time"
+                                            />
+                                        </Column>
+                                        <Column id="_ol18">
+                                            <Label
+                                                id="_Iel7"
+                                                text="Status"
+                                            />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem
+                                            id="_IDGenColumListItem4"
+                                        >
+                                            <cells>
+                                                <CheckBox id="_IDGenChekBox1" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+
+                            <Text
+                                id="_IDGenText14"
+                                text="Plan Details"
+                                class="vgheading"
+                            />
+                            <ScrollContainer
+                                horizontal="true"
+                                vertical="false"
+                                class="scrollContainer"
+                            >
+                                <Table
+                                    id="_costTablePlan"
+                                    class="costplantables"
+                                    mode="MultiSelect"
+                                    items="{costdetailsModel>/}"
+                                >
+                                    <columns>
+                                        <Column
+                                            id="_IDGenColu36"
+                                            width="5rem"
+                                        >
+                                            <Label
+                                                id="abel48"
+                                                text="LegId"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGemn37">
+                                            <Label
+                                                id="_IDbel49"
+                                                text="Cost Code"
+                                            />
+                                        </Column>
+
+                                        <Column id="_IDGenColumn39">
+                                            <Label
+                                                id="_IDGenLabel51"
+                                                text="Cost Description"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn40">
+                                            <Label
+                                                id="_IDGenLabel52"
+                                                text="Unit Of Cost"
+                                            />
+                                        </Column>
+                                         <Column id="_IDGenColumn42">
+                                            <Label
+                                                id="_IDGenLabel54"
+                                                text="Currency"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenColumn41">
+                                            <Label
+                                                id="_IDGenLabel53"
+                                                text="Projected Cost"
+                                            />
+                                        </Column>
+                                       
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem
+                                            id="_IDGenColumnListItem7"
+                                        >
+                                            <cells>
+                                                <Input
+                                                    id="_IDGenInput15"
+                                                    value="{costdetailsModel>Vlegn}"
+                                                    liveChange="onVlegnInputLiveChange"
+                                                />
+                                                <Input
+                                                    id="cost"
+                                                    value="{costdetailsModel>Costcode}"
+                                                    showValueHelp="true"
+                                                    valueHelpRequest="showValueHelpDialogCost"
+                                                    valueHelpOnly="true"
+                                                />
+                                                <Input
+                                                    id="_IDGenTe"
+                                                    value="{costdetailsModel>Cstcodes}"
+                                                />
+                                                <Select
+                                                    width="200px"
+                                                    id="_Select5"
+                                                    forceSelection="false"
+                                                    items="{
+                                                path: '/CargoUnitSet'
+                                            }"
+                                                    valueStateText="Select"
+                                                    selectedKey="{costdetailsModel>Costu}"
+                                                >
+                                                    <core:Item
+                                                        id="_Item4"
+                                                        text="{Uomdes}"
+                                                        key="{Uom}"
+                                                    />
+                                                </Select>
+                                                 <Input
+                                                    id="Curr"
+                                                    value="{costdetailsModel>Costcurr}"
+                                                    editable="false"
+                                                    showValueHelp="false"
+                                                    valueHelpRequest="showValueHelpDialogCurr"
+                                                    liveChange="showValueHelpDialogCurr"
+                                                />
+                                                <Input
+                                                    id="DGene"
+                                                    value="{costdetailsModel>Procost}"
+                                                    change=".onCostLiveChange"
+                                                />
+                                               
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+
+                            <HBox class="sapUiTinyMarginTop _hBoxPortBtn">
+                                <Button
+                                    id="_addCostPl"
+                                    text="Add Cost"
+                                    press=".onAddCost"
+                                    type="Emphasized"
+                                />
+                                <Button
+                                    id="_removeCostPl"
+                                    text="Remove"
+                                    press=".onDeleteCost"
+                                    type="Emphasized"
+                                    class="sapUiTinyMarginBegin"
+                                />
+                            </HBox>
+                            <Button
+                                id="mainPageSave"
+                                text="Save"
+                                press=".onSave"
+                                visible="false"
+                            />
+                            <Button
+                                id="_IDGenButton22"
+                                text="Cancel"
+                                press="onCancel"
+                                visible="false"
+                            />
+
+                            <Text
+                                id="_IDGenText18"
+                                text="Actual Details"
+                                class="vgheading"
+                                visible="false"
+                            />
+                            <Table
+                                id="Table6"
+                                class="costplantables"
+                                mode="MultiSelect"
+                                visible="false"
+                            >
+                                <columns>
+                                    <Column id="_IDGenlu36">
+                                        <Label
+                                            id="ab48"
+                                            text="LegId"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGn37">
+                                        <Label
+                                            id="_Iel49"
+                                            text="Cost Code"
+                                        />
+                                    </Column>
+
+                                    <Column id="_IDGeolumn39">
+                                        <Label
+                                            id="_IDGLabel51"
+                                            text="Cost Description"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenComn40">
+                                        <Label
+                                            id="_GenLabel52"
+                                            text="Unit Of Cost"
+                                        />
+                                    </Column>
+                                     <Column id="_IDGenCumn42">
+                                        <Label
+                                            id="_IDGeabel54"
+                                            text="Currency"
+                                        />
+                                    </Column>
+                                    <Column id="_IDGenCumn41">
+                                        <Label
+                                            id="_IDGenbel53"
+                                            text="Projected Cost"
+                                        />
+                                    </Column>
+                                   
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColuListItem7">
+                                        <cells>
+                                            <Text
+                                                id="_IenText15"
+                                                text=""
+                                            />
+                                            <Input
+                                                id="cost1"
+                                                value=""
+                                                showValueHelp="true"
+                                                valueHelpRequest="showValueHelpDialogCost"
+                                            />
+                                            <Input
+                                                id="_IDGTe"
+                                                value=""
+                                            />
+                                            <Select
+                                                id="Select5"
+                                                width="200px"
+                                                forceSelection="false"
+                                                items="{
+                                                path: '/CargoUnitSet'
+                                            }"
+                                            >
+                                                <core:Item
+                                                    id="_Item5"
+                                                    key="{Uom}"
+                                                    text="{Uomdes}"
+                                                />
+                                            </Select>
+                                               <Input
+                                                id="curr1"
+                                                value=""
+                                                showValueHelp="true"
+                                                valueHelpRequest="showValueHelpDialogCurr"
+                                            />
+                                            <Input
+                                                id="DGe"
+                                                value=""
+                                            />
+                                         
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                            <!-- </Panel> -->
+
+                            <!-- Panel for ButtonB -->
+                            <!-- <Panel
+                                 id="panelB"
+                                 height="600px"
+                                  class="voyagePanel"
+                             > -->
+                            <!-- <HBox visible="false">
+                                <Button
+                                    icon="sap-icon://zoom-in"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://sort-ascending"
+                                    class="btnIcon"
+                                    press="sortOptionsTab1Asc"
+                                />
+                                <Button
+                                    icon="sap-icon://sort-descending"
+                                    class="btnIcon"
+                                    press="sortOptionsTab1Desc"
+                                />
+                                <Button
+                                    icon="sap-icon://search"
+                                    class="btnIcon"
+                                    press="showSearchFieldsTab1"
+                                />
+                                <Button
+                                    icon="sap-icon://zoom-in"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://filter"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://sum"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="../images/subtotals.png"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://print"
+                                    class="btnIcon"
+                                    press="tab1exp"
+                                />
+                                <Button
+                                    icon="sap-icon://detail-view"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="../images/Export.png"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://table-chart"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://message-information"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://full-screen"
+                                    class="btnIcon"
+                                />
+                            </HBox>
+                            <HBox
+                                id="valueSearchTab1"
+                                class="InputSearch"
+                                visible="false"
+                            >
+                                <Label text="Enter LegId for searching : " />
+                                <Input id="searchFieldTab1" />
+                                <Button
+                                    text="Search"
+                                    press="searchLegIdTab1"
+                                />
+                                <Button
+                                    text="Refresh"
+                                    press="refreshTab1"
+                                />
+                                <Button
+                                    icon="sap-icon://decline"
+                                    press="closeSearchTab1"
+                                />
+                            </HBox>
+                            <ui:Table
+                                visible="false"
+                                width="100%"
+                                class="costplantables"
+                                rows="{tsFields>/fields}"
+                                id="tstab1"
+                            >
+                        
+                                <ui:columns>
+                                    <ui:Column id="name">
+                                        <Label text="LegId" />
+                                        <ui:template>
+                                            <Text text="{tsFields>LegId}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Port Code" />
+                                        <ui:template>
+                                            <Text text="{tsFields>PortCode}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column id="categories">
+                                        <Label text="Event No" />
+                                        <ui:template>
+                                            <Text text="{tsFields>EventNo}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Event Type" />
+                                        <ui:template>
+                                            <Text text="{tsFields>EventType}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Normal Text" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>NormalText}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Status" />
+                                        <ui:template>
+                                            <Text text="{tsFields>Status}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned Start Date" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedStartDate}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned Start Time" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedStartTime}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned End Date" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedEndDate}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned End Time" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedEndTime}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Event Status Text" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>EventStatus}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                </ui:columns>
+                            </ui:Table>
+                            <HBox visible="false">
+                                <Button
+                                    icon="sap-icon://zoom-in"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://sort-ascending"
+                                    class="btnIcon"
+                                    press="sortOptionsTab2Asc"
+                                />
+                                <Button
+                                    icon="sap-icon://sort-descending"
+                                    class="btnIcon"
+                                    press="sortOptionsTab2Desc"
+                                />
+                                <Button
+                                    icon="sap-icon://search"
+                                    class="btnIcon"
+                                    press="showSearchFieldsTab2"
+                                />
+                                <Button
+                                    icon="sap-icon://zoom-in"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://filter"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://sum"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="../images/subtotals.png"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://print"
+                                    class="btnIcon"
+                                    press="tab2exp"
+                                />
+                                <Button
+                                    icon="sap-icon://detail-view"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="../images/Export.png"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://slim-arrow-down"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://table-chart"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://message-information"
+                                    class="btnIcon"
+                                />
+                                <Button
+                                    icon="sap-icon://full-screen"
+                                    class="btnIcon"
+                                />
+                            </HBox>
+                            <HBox
+                                id="valueSearchTab2"
+                                class="InputSearch"
+                                visible="false"
+                            >
+                                <Label text="Enter LegId for searching : " />
+                                <Input id="searchFieldTab2" />
+                                <Button
+                                    text="Search"
+                                    press="searchLegIdTab2"
+                                />
+                                <Button
+                                    text="Refresh"
+                                    press="refreshTab2"
+                                />
+                                <Button
+                                    icon="sap-icon://decline"
+                                    press="closeSearchTab2"
+                                />
+                            </HBox>
+                            <ui:Table
+                                width="100%"
+                                class="costplantables"
+                                rows="{tsFields>/fields}"
+                                id="tstab2"
+                                visible="false"
+                            >
+                            
+                                <ui:columns>
+                                    <ui:Column id="name1">
+                                        <Label text="LegId" />
+                                        <ui:template>
+                                            <Text text="{tsFields>LegId}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Port Code" />
+                                        <ui:template>
+                                            <Text text="{tsFields>PortCode}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column id="categories1">
+                                        <Label text="Event No" />
+                                        <ui:template>
+                                            <Text text="{tsFields>EventNo}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Event Type" />
+                                        <ui:template>
+                                            <Text text="{tsFields>EventType}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Normal Text" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>NormalText}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Status" />
+                                        <ui:template>
+                                            <Text text="{tsFields>Status}" />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned Start Date" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedStartDate}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned Start Time" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedStartTime}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned End Date" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedEndDate}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Planned End Time" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>PlannedEndTime}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                    <ui:Column>
+                                        <Label text="Event Status Text" />
+                                        <ui:template>
+                                            <Text
+                                                text="{tsFields>EventStatus}"
+                                            />
+                                        </ui:template>
+                                    </ui:Column>
+                                </ui:columns>
+                            </ui:Table> -->
+                            <!-- </Panel> -->
+                        </Panel>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="Bid Details"
+                        key="info"
+                    >
+                        <Panel
+                            id="p3"
+                            height="600px"
+                            width="100%"
+                            class=""
+                        >
+                            <l:VerticalLayout
+                                width="100%"
+                                class="sapUiContentPadding1"
+                            >
+                                <l:BlockLayout background="Dashboard">
+                                    <l:BlockLayoutRow>
+                                        <l:BlockLayoutCell
+                                            width="1"
+                                            class=""
+                                        >
+                                            <Table
+                                                headerText="Technical Details"
+                                                alternateRowColors="true"
+                                                id="submitTechDetailTable"
+                                                sticky="ColumnHeaders"
+                                            >
+                                                <columns>
+                                                    <Column width="42.5%">
+                                                        <Text text="Heads" />
+                                                    </Column>
+                                                    <Column width="15%">
+                                                        <Text
+                                                            text="Relevance"
+                                                        />
+                                                    </Column>
+                                                    <Column width="42.5%">
+                                                        <Text
+                                                            text="Possible Value"
+                                                        />
+                                                    </Column>
+                                                </columns>
+                                            </Table>
+                                        </l:BlockLayoutCell>
+                                        <l:BlockLayoutCell width="1">
+                                            <Table
+                                                alternateRowColors="true"
+                                                id="CommercialDetailTable"
+                                                sticky="ColumnHeaders"
+                                                headerText="Commercial Details"
+                                                items="{
+                                        path: 'commercialModel>/myData'    }"
+                                            >
+                                                <columns>
+                                                    <Column width="42.5%">
+                                                        <Text text="Heads" />
+                                                    </Column>
+                                                    <Column width="15%">
+                                                        <Text
+                                                            text="Relevance"
+                                                        />
+                                                    </Column>
+                                                    <Column width="42.5%">
+                                                        <Text
+                                                            text="Possible Value"
+                                                        />
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem>
+                                                        <cells>
+                                                            <Text
+                                                                text="{commercialModel>CodeDesc}"
+                                                            />
+                                                            <CheckBox
+                                                                selected="{commercialModel>RevBid}"
+                                                                select="toggleCheckbox"
+                                                            />
+                                                            <Input
+                                                                value="{commercialModel>Cunit}"
+                                                                showValueHelp="true"
+                                                                editable="{path: 'commercialModel>RevBid', formatter:'.showValueHelpBasedOnRevBid'}"
+                                                                valueHelpRequest=".showValueHelpDialogCurr"
+                                                            />
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                             <Button
+                                                text="Save"
+                                                press=".onSaveCommercialDetail"
+                                                type="Emphasized"
+                                                class="sapUiSmallMargin"
+                                            />
+                                        </l:BlockLayoutCell>
+                                    </l:BlockLayoutRow>
+                                </l:BlockLayout>
+                            </l:VerticalLayout>
+
+                            <!-- <HBox
+                    id="HBox2"
+                    width="100%"
+                >
+                    <FlexBox
+                        width="10%"
+                        class="flexbtn"
+                    >
+                        <Button
+                            id="add"
+                            icon="sap-icon://sys-add"
+                            press=".onAddRow2"
+                            type="Default"
+                        />
+                        <Button
+                            id="minus"
+                            icon="sap-icon://sys-minus"
+                            press=".onDeleteRow2"
+                            type="Default"
+                        />
+                    </FlexBox>
+                    <FlexBox width="20%">
+                        <Button
+                            id="saveprofileId"
+                            type="Default"
+                            text="Save Profile"
+                        />
+                    </FlexBox>
+                    <FlexBox width="20%">
+                        <Label
+                            id="_IDGenLabel49"
+                            text="Select Profile :"
+                             class="sapUiTinyMarginTop sapUiTinyMarginRight"
+                        />
+                        <Select
+                            id="_IDGenSelect4"
+                            width="120px"
+                        >
+                            <items>
+                                <core:Item id="_IDGenItem7" />
+                            </items>
+                        </Select>
+                    </FlexBox>
+                    <FlexBox width="30%">
+                        <Button
+                            id="_IDGenBuon13"
+                            icon="sap-icon://sys-add"
+                            press=".onAddRow2"
+                            type="Default"
+                        />
+                        <Button
+                            id="_IDGenBuon14"
+                            icon="sap-icon://sys-minus"
+                            press=".onDeleteRow2"
+                            type="Default"
+                        />
+                    </FlexBox>
+                </HBox> -->
+                        </Panel>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="Document Upload"
+                        key="info"
+                    >
+                        <Panel
+                            id="p4"
+                            height="600px"
+                            width="100%"
+                            class=""
+                        >
+                            <l:VerticalLayout id="_IDGenVerticalLayout1">
+                                <u:FileUploader
+                                    id="fileUploader"
+                                    name="myFileUpload"
+                                    uploadUrl="upload/"
+                                    tooltip="Upload your file to the local server"
+                                    uploadComplete="handleUploadComplete"
+                                    buttonText="Choose File"
+                                    icon="sap-icon://value-help"
+                                />
+                            </l:VerticalLayout>
+                        </Panel>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="Long Text"
+                        key="info"
+                    >
+                        <Panel
+                            id="p5"
+                            height="600px"
+                            width="100%"
+                            class=""
+                        >
+                            <Label text="Long Text" />
+                            <TextArea
+                                id="TextArea1"
+                                value=""
+                                height="300px"
+                                width="100%"
+                            />
+                        </Panel>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </VBox>
+    </Page>
+</mvc:View>

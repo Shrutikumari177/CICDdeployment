@@ -1,17 +1,17 @@
 
 <core:FragmentDefinition
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">  xmlns="sap.m"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core">  
     <SelectDialog
         id="mySelectDialog1"
         noDataText="Loading..."
         title="Select Vendor"
         search="onValueHelpSearchvendor"
         confirm="onValueHelpClose"
-        cancel="onValueHelpClose"
+        cancel="onCancelValueHelp"
         items="{/xNAUTIxBusinessPartner1}"
         multiSelect="true"
+        initialFocus="SearchField"
        
         >
         <StandardListItem id="_IDGenStandardListItem2"

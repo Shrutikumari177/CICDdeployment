@@ -420,34 +420,29 @@ sap.ui.define(
 
       newEntries: function () {
         newEntryFlag = true;
+ 
+        let selectedItem = this.byId("createTypeTable").getSelectedItems();
+        if (selectedItem.length == 0) {
+ 
+          this.getView().byId("createTypeTable").setVisible(false);
+          this.getView().byId("entryBtn").setEnabled(false);
+          this.getView().byId("editBtn").setEnabled(false);
+          this.getView().byId("deleteBtn").setEnabled(false);
+          this.getView().byId("entryTypeTable").setVisible(true)
+          this.getView().byId("mainPageFooter").setVisible(true)
 
-        // Reset copyFlag and editFlag
-        // copyFlag = false;
-        editFlag = false;
-
-        // Clear selected items if any
-        this.byId("createTypeTable").removeSelections();
-
-        // Reset input fields and remove additional rows
         var oEntryTable = this.getView().byId("entryTypeTable");
         var items = oEntryTable.getItems();
         for (var i = items.length - 1; i > 0; i--) {
           oEntryTable.removeItem(items[i]);
         }
-
-        // Clear input fields of the first row
+ 
         var firstItemCells = items[0].getCells();
         firstItemCells[0].setValue("");
         firstItemCells[1].setValue("");
-
-        // Show entry table and hide create table
-        this.getView().byId("entryBtn").setEnabled(false);
-        this.getView().byId("createTypeTable").setVisible(false);
-        this.getView().byId("entryTypeTable").setVisible(true);
-        this.getView().byId("mainPageFooter").setVisible(true);
-        this.getView().byId("editBtn").setEnabled(false);
-        this.getView().byId("deleteBtn").setEnabled(false);
-        // this.getView().byId("copyBtn").setEnabled(false);
+        } else {
+          MessageToast.show("Unselect the Selected Row !")
+        }
       },
       pressEdit: function () {
         // Get reference to the view
@@ -568,15 +563,18 @@ sap.ui.define(
       onDeleteRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var aSelectedItems = oTable.getSelectedItems();
+    
 
-        // Remove selected rows
+        if (aSelectedItems.length === 0) {
+            sap.m.MessageToast.show("Please select an item");
+            return;
+        }
         aSelectedItems.forEach(function (oSelectedItem) {
-          oTable.removeItem(oSelectedItem);
+            oTable.removeItem(oSelectedItem);
         });
-
-        // Clear selection after deletion
+    
         oTable.removeSelections();
-      },
+    },
       onSave: function () {
       var that = this;
       var oTable = that.byId("entryTypeTable");
@@ -928,7 +926,7 @@ sap.ui.define(
         let aItems = oTable.getSelectedItems();
         if (!aItems.length) {
 
-          MessageToast.show("Please Select  Items ");
+          MessageToast.show("Please Select at least one row ");
           return;
         }
 

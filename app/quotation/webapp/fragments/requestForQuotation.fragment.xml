@@ -8,7 +8,7 @@
         search="onChartSearch"
         confirm="onValueHelpCloseChartering"
         cancel="onValueHelpCloseChartering"
-        items="{/xNAUTIxCharteringHeaderItem}"> 
+        items="{/xNAUTIxAPPROVEDCHAT}"> 
         <StandardListItem id="_IDGenStandardListItem1"
             title="{Chrnmin}"
             

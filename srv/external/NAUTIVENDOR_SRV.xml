@@ -62,6 +62,7 @@
             <EntityType Name="DynamicTable" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="key"/>
+                    <PropertyRef Name="value"/>
                 </Key>
                 <Property Name="key" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:label="Key" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Name" sap:sortable="false" sap:filterable="false"/>

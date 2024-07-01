@@ -1,0 +1,25 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="mySelect"
+        noDataText="Loading..."
+        title="Chartering No."
+        search=".onCharteringSearch"
+        confirm=".ChartingValueHelpClose"
+        cancel=".ChartingValueHelpCancel"
+        items="{/xNAUTIxCHARTERVALUEHELP}"
+      
+         initialFocus="SearchField"
+         rememberSelections="false"
+       
+        >
+        <StandardListItem id="_IDGenStand"
+       
+            title="{Chrnmin}"
+            description="{Creqno}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

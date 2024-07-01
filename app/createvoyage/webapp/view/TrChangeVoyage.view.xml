@@ -655,12 +655,12 @@
                                     text="Port Code"
                                 />
                             </Column>
-                            <!-- <Column id="_IDGenComn7">
+                            <Column id="_IDGenComn7" visible="false">
                                 <Label
                                     id="_IDGenbel16"
                                     text="Events"
                                 />
-                            </Column> -->
+                            </Column>
 
                             <Column id="_IDGenColn6">
                                 <Label
@@ -776,7 +776,7 @@
                                         valueHelpRequest=".onPortValueHelpRequest"
                                         change=".onPortEnterPress"
                                     />
-                                    <!-- <Input value="" /> -->
+                                    <Input value="" />
                                     <Input
                                         value="{voyItemModel>Portn}"
                                         editable="false"
@@ -1406,6 +1406,7 @@
                                 <Input
                                     id="_IDGenInput15"
                                     value="{costdetailsModel>Vlegn}"
+                                     liveChange="onVlegnInputLiveChange"
                                 />
                                 <Input
                                     id="cost"

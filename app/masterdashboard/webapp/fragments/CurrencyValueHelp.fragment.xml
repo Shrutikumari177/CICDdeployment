@@ -1,0 +1,33 @@
+
+<core:FragmentDefinition xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
+    <TableSelectDialog
+        id="sortT1AscOptions"
+        class="sapUiContentPadding"
+        contentWidth="50%"
+        contentHeight="60%"
+        title="Currency Type"
+        items="{/xNAUTIxStandardCurrencyFetch}"
+        cancel="handleValueHelpClose"
+        confirm="handleValueHelpClose"
+        search="CurSearch"
+        >
+       
+                <columns>
+                    <Column >
+                        <Text text="Currency Code"></Text>
+                    </Column>
+ 
+                    <Column >
+                        <Text text="Currency Description"></Text>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem >
+                        <Text text="{waers}"></Text>
+                        <Text text="{ltext}"></Text>
+                    </ColumnListItem>
+                </items>
+           
+ 
+        </TableSelectDialog>
+</core:FragmentDefinition>

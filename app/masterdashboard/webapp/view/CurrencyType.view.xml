@@ -1,4 +1,5 @@
 
+ 
 <mvc:View
     xmlns:tnt="sap.tnt"
     xmlns:form="sap.ui.layout.form"
@@ -8,10 +9,9 @@
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns:core="sap.ui.core"
-   
 >
     <Page id="_IDGenPage1">
-        
+       
         <headerContent>
             <!-- Your header content goes here -->
             <Bar id="_IDGenBar2">
@@ -30,27 +30,27 @@
                         text="Maintain Currency Type"
                     />
                 </contentLeft>
-                
+               
             </Bar>
         </headerContent>
-
-        <Panel class="tablepanel">
+ 
+        <Panel id="_IDGenPanel1" class="tablepanel">
         <Bar
             id="_IDGenBar12"
             class="headerBar2" >
             <contentLeft>
                 <Button id="entryBtn"
-                    text="New Entries"
+                    text="New Entries" type="Emphasized"
                     press="newEntries"
                 />
-                
-        
-                <Button  id="deleteBtn" text="Delete" press="onDeletePress"/>
+               
+       
+                <Button  id="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
                
             </contentLeft>
         </Bar>
         <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
-
+ 
         <Table
             id="createTypeTable"
             mode="MultiSelect"
@@ -62,8 +62,8 @@
             sticky="ColumnHeaders"
             noDataText="loading ..."
             enableBusyIndicator="true"
-           
-         >
+        >
+ 
             <columns>
                 <Column id="_IDGenColumn1" width="300px">
                     <Text
@@ -85,9 +85,9 @@
                         <Text
                             id="code"
                             text="{Navoycur}"
-                        
+                       
                         />
-                        <HBox >
+                        <HBox id="_IDGenHBox1" >
                         <Input
                             id="DescInput"
                             value="{Navoygcurdes}"
@@ -95,13 +95,11 @@
                              maxLength="30"
                              width="400px"
                              
-                            
+                           
                         />
-                        
-                        <Button id="update" class="sapUiTinyMarginBegin" text="Update" icon="sap-icon://save" type="Accept" visible="false"  press="onUpdatePressBtn"></Button>
-                        <Button id="delete" class="sapUiTinyMarginBegin" text="Cancel" icon="sap-icon://delete" type="Reject" visible="false" press="onCancelPressBtn"></Button>
-
-
+                       
+ 
+ 
                         </HBox>
                        
                     </cells>
@@ -110,7 +108,7 @@
         </Table>
         </ScrollContainer>
         </Panel>
-
+ 
         <Table
             id="entryTypeTable"
             updateFinished="onTableUpdateFinished"
@@ -121,17 +119,17 @@
             visible="false"
          >
             <columns>
-                <Column>
-                    <Text text="Currency" />
+                <Column id="_IDGenColumn3">
+                    <Text id="_IDGenText3" text="Country" />
                 </Column>
-                <Column>
-                    <Text text=" Description" />
+                <Column id="_IDGenColumn4">
+                    <Text id="_IDGenText4" text="Country Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
-                        <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="showValueHelpCurrency" valueHelpIconSrc="true"/>
+                        <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="currencyValueHelp" valueHelpOnly="true"/>
                         <Input id="NAVOYGCURDES2" />
                     </cells>
                 </ColumnListItem>
@@ -147,15 +145,15 @@
            
          >
             <columns>
-                <Column>
-                    <Text text="Currency " />
+                <Column id="_IDGenColumn5">
+                    <Text id="_IDGenText5" text="Currency Type" />
                 </Column>
-                <Column>
-                    <Text text="Description" />
+                <Column id="_IDGenColumn6">
+                    <Text id="_IDGenText6" text=" Currency Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem3">
                     <cells>
                         <Text id="NAVOYCUR1" text="" />
                         <Input id="NAVOYGCURDES1"  editable="true" liveChange="OndescriptionChanged"/>

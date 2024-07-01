@@ -101,6 +101,7 @@
                             showValueHelp="true"
                             valueHelpOnly="true"
                             width="200px"
+                            
                         />
                     </FlexBox>
 
@@ -122,6 +123,7 @@
                             width="200px"
                             valueHelpOnly="true"
                             tokenUpdate="onTokenUpdate"
+                            enabled="false"
                         />
                     </FlexBox>
                     <FlexBox

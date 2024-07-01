@@ -1,5 +1,4 @@
 
-
 sap.ui.define(
   [
     "sap/ui/core/mvc/Controller",
@@ -209,6 +208,24 @@ sap.ui.define(
         console.log(aSelectedVendorIDs, "yhi ha")
       },
 
+      onCancelValueHelp: function (oEvent) {
+        var oDialog = oEvent.getSource();
+        var oBinding = oDialog.getBinding("items");
+
+        // Clear any filters
+        oBinding.filter([]);
+        
+        // Clear search field
+        oDialog.getModel().setProperty("/searchValue", "");
+
+        // Clear all selections
+        oDialog.unselectAll();
+        
+        // Reset the items aggregation
+        oBinding.refresh(true);
+
+        oDialog.close();
+      },
 
 
 
@@ -220,6 +237,8 @@ sap.ui.define(
           this._oTankInfomat = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.chartering.fragments.voyageChartering", this);
           oView.addDependent(this._oTankInfomat);
         }
+        this.byId("VendNo").setEnabled(true)
+
         this._oTankInfomat.open();
 
       },
@@ -353,6 +372,7 @@ sap.ui.define(
 
       },
       onRefresh: function () {
+        // Clear input fields
         this.byId("chatExt").setValue("");
         this.byId("voyNO").setValue("");
         var multiInput = this.byId("VendNo");
@@ -361,15 +381,21 @@ sap.ui.define(
         this.byId("PurchaseOrg").setValue("");
         this.byId("PurchaseGroup").setValue("");
         this.byId("PaymentTerm").setValue("");
-        this.byId("Save").setEnabled(true); // Save button
-        this.byId("Refresh").setEnabled(true); // Refresh button
-    
+        this.byId("Save").setEnabled(true); // Enable Save button
+        this.byId("Refresh").setEnabled(true); // Enable Refresh button
         
+        // Hide table and container
         var oTable = this.byId("myTable");
         oTable.setVisible(false);
-        
         var oVBox = this.byId("tab");
         oVBox.setVisible(false);
+        this.byId("VendNo").setEnabled(false)
+    
+        // Clear the vendor model data
+        var oVendorModel = this.getView().getModel("vendorModel");
+        if (oVendorModel) {
+            oVendorModel.setData([]);
+        }
     },
     
 
@@ -397,6 +423,35 @@ sap.ui.define(
 
         oEvent.getSource().getBinding("items").filter([oFilter]);
       },
+      onPurchaseGroupSearch: function (oEvent) {
+        var sValue = oEvent.getParameter("value");
+   
+        var oFilter = new Filter(
+          "Ekgrp",
+          FilterOperator.Contains,
+          sValue
+        );
+   
+        oEvent.getSource().getBinding("items").filter([oFilter]);
+      },
+   
+      onPaymentTermSearch: function(oEvent){
+      var sValue = oEvent.getParameter("value");
+      var oFilter = new Filter("Paytrm",FilterOperator.Contains,
+      sValue
+   
+      );
+      oEvent.getSource().getBinding("items").filter([oFilter]);
+      },
+   
+      onPurchaseOrgSearch: function(oEvent){
+        var sValue = oEvent.getParameter("value");
+        var oFilter = new Filter("Ekorg",FilterOperator.Contains,
+        sValue
+   
+        );
+        oEvent.getSource().getBinding("items").filter([oFilter]);
+        },
 
 
       onSaveCh: async function () {
@@ -457,6 +512,10 @@ sap.ui.define(
             sap.m.MessageToast.show("Please enter a Purchase Organization");
             return;
         }
+        if (!oPurchaseGr) {
+          sap.m.MessageToast.show("Please enter a Purchase Group");
+          return;
+      }
     
         if (!oPaymentTerm) {
             sap.m.MessageToast.show("Please enter a Payment Term");

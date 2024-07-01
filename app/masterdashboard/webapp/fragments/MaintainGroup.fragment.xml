@@ -1,0 +1,25 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="mySelect"
+        noDataText="Loading..."
+        title="Select Users"
+       search="onMaintainUserSearch"
+        confirm="onMaintaingroupHelpClose"
+        cancel="onMaintaingroupHelpClose"
+        items="{/xNAUTIxSAPUSERS}"
+       
+        >
+        <StandardListItem id="_IDGenStand"
+       
+            title="{bname}"
+           
+         
+       
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>
