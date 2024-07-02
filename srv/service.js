@@ -308,7 +308,7 @@ module.exports = async (srv) => {
     registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
         'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet',
         'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet',
-        'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet',
+        'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
         'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP'
     ]);
 

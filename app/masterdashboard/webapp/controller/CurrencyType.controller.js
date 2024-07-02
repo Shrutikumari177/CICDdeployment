@@ -46,7 +46,7 @@ sap.ui.define(
        
 
 
-       
+        
        onBackPress: function () {
         const that = this;
 
@@ -126,7 +126,7 @@ sap.ui.define(
           console.log(originalDesc, originalDesc.trim());
           if (desc === originalDesc) {
 
-            that.resetView();
+            that.onCancelPressBtn();
 
             oRouter.navTo("RouteMasterDashboard");
             that.resetView();
@@ -161,158 +161,6 @@ sap.ui.define(
             )
           }
 
-        }
-
-      },
-      onPressHome: function () {
-        const that = this;
-        var oEntryTable = that.getView().byId("entryTypeTable");
-        const oRouter = this.getOwnerComponent().getRouter();
-        if (aSelectedIds.length === 0 && !newEntryFlag) {
-
-          // If no items have been selected, navigate to "RouteMasterDashboard"
-          const oRouter = this.getOwnerComponent().getRouter();
-          oRouter.navTo("RouteHome");
-
-        }
-        // else if (copyFlag) {
-        //   var oTable = this.byId("entryTypeTable"); // Assuming you have the table reference
-        //   var aItems = oTable.getItems();
-        //   let flag = false;
-        //   for (let i = 0; i < aItems.length; i++) {
-        //     var oCells = aItems[i].getCells();
-        //     var oInput = oCells[1]; // Index 1 corresponds to the Input field
-        //     var sValue = this.removeExtraSpaces(oInput.getValue());
-
-        //     console.log(onCopyInput[i] + ":" + sValue + ":");
-        //     if (onCopyInput[i] !== sValue.trim()) {
-        //       flag = true;
-        //       break;
-        //     }
-        //   }
-
-        //   if (flag) {
-        //     sap.m.MessageBox.confirm("Do you want to discard the changes?", {
-        //       title: "Confirmation",
-        //       onClose: function (oAction) {
-        //         if (oAction === sap.m.MessageBox.Action.OK) {
-        //           // Reset the view to its initial state
-        //           oRouter.navTo("RouteHome");
-        //             setTimeout(() => {
-
-        //               that.resetView();
-        //             }, 1600);
-        //         }
-        //       }.bind(this) // Ensure access to outer scope
-        //     });
-        //   } else {
-        //     // If no changes have been made, navigate to the initial screen immediately
-        //     oRouter.navTo("RouteHome");
-        //     setTimeout(() => {
-
-        //       that.resetView();
-        //     }, 1600);
-
-        //   }
-        // }
-
-        else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
-          oRouter.navTo("RouteHome");
-          this.byId("createTypeTable").removeSelections();
-        }
-        else if (newEntryFlag) {
-          let voyCode = this.getView().byId("NAVOYCUR2").getValue().trim();
-          let voyCodeDesc = this.getView().byId("NAVOYGCURDES2").getValue().trim();
-          if (voyCode == "" && voyCodeDesc == "") {
-
-            const oRouter = that.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteHome");
-            setTimeout(() => {
-              oEntryTable.setVisible(false);
-              // Clear input fields of the first row
-              oEntryTable.getItems()[0].getCells()[0].setValue("");
-              oEntryTable.getItems()[0].getCells()[1].setValue("");
-
-              // Remove items except the first row
-              var items = oEntryTable.getItems();
-              for (var i = items.length - 1; i > 0; i--) {
-                oEntryTable.removeItem(items[i]);
-              }
-              that.resetView();
-            }, 1500);
-
-          } else {
-            sap.m.MessageBox.confirm(
-              "Do you want to discard the changes?", {
-              title: "Confirmation",
-              onClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                  // If user clicks OK, reset the view to its initial state
-                  const oRouter = that.getOwnerComponent().getRouter();
-                  oRouter.navTo("RouteHome");
-                  setTimeout(() => {
-                    oEntryTable.setVisible(false);
-                    // Clear input fields of the first row
-                    oEntryTable.getItems()[0].getCells()[0].setValue("");
-                    oEntryTable.getItems()[0].getCells()[1].setValue("");
-
-                    // Remove items except the first row
-                    var items = oEntryTable.getItems();
-                    for (var i = items.length - 1; i > 0; i--) {
-                      oEntryTable.removeItem(items[i]);
-                    }
-                    that.resetView();
-                  }, 1500);
-                } else {
-                  // If user clicks Cancel, do nothing
-                }
-              }
-            }
-            );
-
-          }
-
-        }
-
-
-        else if (editFlag) {
-
-          var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
-          var aItems = oTable.getItems();
-          let flag = false;
-          for (let i = 0; i < aItems.length; i++) {
-            var oCells = aItems[i].getCells();
-            var oInput = oCells[1]; // Index 1 corresponds to the Input field
-            var sValue = oInput.getValue();
-            if (onEditInput[i] !== sValue) {
-              flag = true;
-              break;
-            }
-          }
-
-          if (flag) {
-            sap.m.MessageBox.confirm("Do you want to discard the changes?", {
-              title: "Confirmation",
-              onClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                  // Reset the view to its initial state
-                  oRouter.navTo("RouteHome");
-                  setTimeout(() => {
-
-                    that.resetView();
-                  }, 1500);
-                }
-              }.bind(this) // Ensure access to outer scope
-            });
-          } else {
-            // If no changes have been made, navigate to the initial screen immediately
-            oRouter.navTo("RouteHome");
-            setTimeout(() => {
-
-              that.resetView();
-            }, 1500);
-
-          }
         }
 
       },
@@ -359,7 +207,7 @@ sap.ui.define(
           this.getView().byId("createTypeTable").setVisible(false)
           this.getView().byId("entryTypeTable").setVisible(true)
           this.getView().byId("mainPageFooter").setVisible(true)
-          this.getView().byId("entryBtn").setEnabled(false);
+ 
           this.getView().byId("deleteBtn").setEnabled(false);
           var oEntryTable = this.getView().byId("entryTypeTable");
         var items = oEntryTable.getItems();
@@ -375,9 +223,94 @@ sap.ui.define(
           MessageToast.show("Unselect the Selected Row !")
         }
       },
-         
+      // onCreateSent: function (ev) {
+      //   sap.m.MessageToast.show("Creating..")
+      //   console.log(ev.getParameter("context")?.getObject())
+      // },
+      // onCreateCompleted: function (ev) {
+      //   let isSuccess = ev.getParameter('success');
+      //   if (isSuccess) {
+      //     sap.m.MessageToast.show("Successfully Created.")
+      //     copyFlag = false;
+ 
+      //     this.getView().byId("deleteBtn").setEnabled(true);
+ 
+      //     this.getView().byId("entryBtn").setEnabled(true);
+      //     this.getView().byId("createTypeTable").setVisible(true).removeSelections();
+      //   } else {
+      //     sap.m.MessageToast.show("Fail to Create.")
+      //     this.getView().byId("deleteBtn").setEnabled(true);
+      //   }
+      // },
+      // onSave: function () {
+      //   var that = this.getView();
+      //   var value1 = this.getView().byId("NAVOYCUR2").getValue();
+      //   var value2 = this.getView().byId("NAVOYGCURDES2").getValue();
+ 
+      //   if (!value1 || !value2) {
+      //     MessageToast.show("Please enter both fields.");
+      //     return;
+      //   }
+ 
+      //   let data = {
+      //     Navoycur: value1,
+ 
+      //     Navoygcurdes: value2
+      //   };
+      //   const oJsonModel = new sap.ui.model.json.JSONModel(data);
+      //   that.setModel(oJsonModel, "oJsonModel");
+      //   let oModel = this.getView().getModel();
+      //   let oBindListSP = oModel.bindList("/CurTypeSet");
+ 
+      //   oBindListSP.attachCreateSent(this.onCreateSent, this);
+      //   oBindListSP.attachCreateCompleted(this.onCreateCompleted, this);
+ 
+      //   oBindListSP.attachEventOnce("dataReceived", function () {
+      //     let existingEntries = oBindListSP.getContexts().map(function (context) {
+      //       return context.getProperty("Navoycur");
+      //     });
+ 
+      //     if (existingEntries.includes(value1)) {
+      //       MessageToast.show("Entry already exists with same code.");
+      //     } else {
+ 
+      //       try {
+      //         oBindListSP.create({
+      //           Navoycur: value1,
+      //           Navoygcurdes: value2
+      //         });
+      //         that.getModel().refresh();
+      //         that.byId("Navoycur2").setValue("");
+      //         that.byId("Navoygcurdes2").setValue("");
+ 
+      //         MessageToast.show("Data created Successfully");
+ 
+      //         that.byId("createTypeTable").setVisible(true);
+      //         that.byId("createTypeTable").removeSelections();
+ 
+      //         aSelectedIds = []
+      //         that.byId("entryTypeTable").setVisible(false);
+      //         that.byId("mainPageFooter").setVisible(false);
+      //         that.getView().byId("deleteBtn").setEnabled(true);
+ 
+ 
+      //       } catch (error) {
+      //         MessageToast.show("Error while saving data");
+      //       }
+      //     }
+      //   });
+      //   oBindListSP.getContexts();
+      // },
+ 
+ 
+     
+   
+ 
+ 
+     
       onCreateSent: function (ev) {
         sap.m.MessageToast.show("Creating..")
+        
       },
       onCreateCompleted: function (ev) {
         let isSuccess = ev.getParameter('success');
@@ -466,85 +399,83 @@ sap.ui.define(
          var oInput = this.byId("NAVOYCUR2");
        var  oInput1 = this.byId("NAVOYGCURDES2");
    
-        if (!oSelectedItem) {
+        if (!oSelectedItem ) {
           oInput.resetProperty("value");
           oInput1.resetProperty("value");
-          return;
+          let oBinding = oEvent.getSource().getBinding("items");
+
+          oBinding.filter([]);
+          return
         }
    
         oInput.setValue(oSelectedItem.getCells()[0].getText());
         oInput1.setValue(oSelectedItem.getCells()[1].getText());
+        
         let oBinding = oEvent.getSource().getBinding("items");
+
         oBinding.filter([]);
+        console.log("hello");
+  
+// let oFilter = new sap.ui.model.Filter("wears", sap.ui.model.FilterOperator.Contains, "");
+ 
+        // oEvent.getSource().getBinding("items").filter([oFilter]);
       },
  
      
       onSaveCancel: function () {
-        var that = this.getView();
-        var value1 = that.byId("NAVOYCUR2").getValue();
-        var value2 = that.byId("NAVOYGCURDES2").getValue();
+        this.onBackPress();
+        // var that = this.getView();
+        // var value1 = that.byId("NAVOYCUR2").getValue();
+        // var value2 = that.byId("NAVOYGCURDES2").getValue();
  
-        // Check if there are changes in the input fields
-        if (value1 || value2) {
-          // If changes are detected, prompt the user
-          sap.m.MessageBox.confirm(
-            "Do you want to discard the changes?",
-            {
-              onClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                  // If user confirms, discard changes and switch visibility
-                  that.byId("NAVOYCUR2").setValue("");
-                  that.byId("NAVOYGCURDES2").setValue("");
-                  that.byId("createTypeTable").setVisible(true);
-                  that.byId("entryTypeTable").setVisible(false);
-                  that.byId("mainPageFooter").setVisible(false);
-                  var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
-                  if (deleteBtn) {
-                    deleteBtn.setEnabled(true); // Enable delete button
-                  }
-                  MessageToast.show("Changes discarded.");
-                }
-              }
-            }
-          );
-        } else {
-          // If no changes, simply switch visibility and enable delete button
-          that.byId("createTypeTable").setVisible(true);
-          that.byId("entryTypeTable").setVisible(false);
-          that.byId("mainPageFooter").setVisible(false);
-          
-          var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
-          if (deleteBtn) {
-            deleteBtn.setEnabled(true); // Enable delete button
-          }
-          var entryBtn = that.byId("entryBtn"); // Store reference to delete button
-          if (entryBtn) {
-            entryBtn.setEnabled(true); // Enable delete button
-          }
-        }
+        // // Check if there are changes in the input fields
+        // if (value1 || value2) {
+        //   // If changes are detected, prompt the user
+        //   MessageBox.confirm(
+        //     "Do you want to discard the changes?",
+        //     {
+        //       onClose: function (oAction) {
+        //         if (oAction === MessageBox.Action.OK) {
+        //           // If user confirms, discard changes and switch visibility
+        //           that.byId("NAVOYCUR2").setValue("");
+        //           that.byId("NAVOYGCURDES2").setValue("");
+        //           that.byId("createTypeTable").setVisible(true);
+        //           that.byId("entryTypeTable").setVisible(false);
+        //           that.byId("mainPageFooter").setVisible(false);
+        //           var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //           if (deleteBtn) {
+        //             deleteBtn.setEnabled(true); // Enable delete button
+        //           }
+        //           MessageToast.show("Changes discarded.");
+        //         }
+        //       }
+        //     }
+        //   );
+        // } else {
+        //   // If no changes, simply switch visibility and enable delete button
+        //   that.byId("createTypeTable").setVisible(true);
+        //   that.byId("entryTypeTable").setVisible(false);
+        //   that.byId("mainPageFooter").setVisible(false);
+        //   var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //   if (deleteBtn) {
+        //     deleteBtn.setEnabled(true); // Enable delete button
+        //   }
+        // }
       },
 
       CurSearch: function(oEvent) {
-   
 
-        var sValue1 = oEvent.getParameter("value");
+    var sValue1 = oEvent.getParameter("value");
 
-        var oFilter1 = new sap.ui.model.Filter("waers", sap.ui.model.FilterOperator.Contains, sValue1);
+    var oFilter1 = new sap.ui.model.Filter("waers", sap.ui.model.FilterOperator.Contains, sValue1);
+    var oFilter2 = new sap.ui.model.Filter("ltext", sap.ui.model.FilterOperator.Contains, sValue1);
+    var andFilter = new sap.ui.model.Filter({
+      filters: [oFilter1, oFilter2]
+  });
 
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
-      },
+    oEvent.getSource().getBinding("items").filter([andFilter]);
+},
 
-
-
-
-     
- 
-     
- 
- 
- 
- 
- 
  
       resetView: function () {
         // Reset view to initial state

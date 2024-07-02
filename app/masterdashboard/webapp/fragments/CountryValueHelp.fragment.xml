@@ -9,7 +9,7 @@
         items="{/xNAUTIxCountrySetFetch}"
         cancel="handleValueHelpClose"
         confirm="handleValueHelpClose"
-         search="CurSearch"
+        liveChange="CurSearch"
         >
      
                 <columns>

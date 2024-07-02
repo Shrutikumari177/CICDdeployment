@@ -354,14 +354,14 @@ sap.ui.define(
           this.getView().byId("mainPageFooter").setVisible(true)
  
           this.getView().byId("deleteBtn").setEnabled(false);
-          let oEntryTable = this.getView().byId("entryTypeTable");
-        let items = oEntryTable.getItems();
-        for (let i = items.length - 1; i > 0; i--) {
+          var oEntryTable = this.getView().byId("entryTypeTable");
+        var items = oEntryTable.getItems();
+        for (var i = items.length - 1; i > 0; i--) {
           oEntryTable.removeItem(items[i]);
         }
  
         // Clear input fields of the first row
-        let firstItemCells = items[0].getCells();
+        var firstItemCells = items[0].getCells();
         firstItemCells[0].setValue("");
         firstItemCells[1].setValue("");
  
@@ -393,9 +393,9 @@ sap.ui.define(
         }
       },
       onSave: function () {
-        let that = this.getView();
-        let value1 = this.getView().byId("ZfValue2").getValue();
-        let value2 = this.getView().byId("ZfDesc2").getValue();
+        var that = this.getView();
+        var value1 = this.getView().byId("ZfValue2").getValue();
+        var value2 = this.getView().byId("ZfDesc2").getValue();
  
         if (!value1 || !value2) {
           MessageToast.show("Please enter both fields.");
@@ -452,9 +452,9 @@ sap.ui.define(
         oBindListSP.getContexts();
       },
       handleValueHelpClose: function (oEvent) {
-        let oSelectedItem = oEvent.getParameter("selectedItem");
-         let oInput = this.byId("ZfValue2");
-       let  oInput1 = this.byId("ZfDesc2");
+        var oSelectedItem = oEvent.getParameter("selectedItem");
+         var oInput = this.byId("ZfValue2");
+       var  oInput1 = this.byId("ZfDesc2");
    
         if (!oSelectedItem) {
           oInput.resetProperty("value");
@@ -485,9 +485,9 @@ sap.ui.define(
       },
       onSaveCancel: function () {
         this.onBackPress();
-        // let that = this.getView();
-        // let value1 = that.byId("ZfValue2").getValue();
-        // let value2 = that.byId("ZfDesc2").getValue();
+        // var that = this.getView();
+        // var value1 = that.byId("ZfValue2").getValue();
+        // var value2 = that.byId("ZfDesc2").getValue();
  
         // // Check if there are changes in the input fields
         // if (value1 || value2) {
@@ -503,7 +503,7 @@ sap.ui.define(
         //           that.byId("createTypeTable").setVisible(true);
         //           that.byId("entryTypeTable").setVisible(false);
         //           that.byId("mainPageFooter").setVisible(false);
-        //           let deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //           var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
         //           if (deleteBtn) {
         //             deleteBtn.setEnabled(true); // Enable delete button
         //           }
@@ -517,7 +517,7 @@ sap.ui.define(
         //   that.byId("createTypeTable").setVisible(true);
         //   that.byId("entryTypeTable").setVisible(false);
         //   that.byId("mainPageFooter").setVisible(false);
-        //   let deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //   var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
         //   if (deleteBtn) {
         //     deleteBtn.setEnabled(true); // Enable delete button
         //   }
@@ -605,14 +605,12 @@ sap.ui.define(
 
       CurSearch:function (oEvent) {
 
-        let sValue1 = oEvent.getParameter("value");
-        let sLength = sValue1.length;
+        var sValue1 = oEvent.getParameter("value");
 
-        let oFilter1 = new sap.ui.model.Filter("land1", sLength === 2 ? sap.ui.model.FilterOperator.EQ : sap.ui.model.FilterOperator.Contains, sValue1);
-        let oFilter2 = new sap.ui.model.Filter("landx50", sap.ui.model.FilterOperator.Contains, sValue1);
-        let andFilter = new sap.ui.model.Filter({
-          filters: [oFilter1, oFilter2],
-          and : false
+        var oFilter1 = new sap.ui.model.Filter("land1", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oFilter2 = new sap.ui.model.Filter("landx50", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1, oFilter2]
       });
 
       oEvent.getSource().getBinding("items").filter([andFilter]);
@@ -622,7 +620,7 @@ sap.ui.define(
      
  
       countryValueHelp: function () {
-        let oView = this.getView();
+        var oView = this.getView();
         if (!this._oCurrency) {
           this._oCurrency = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.masterdashboard.fragments.CountryValueHelp", this);
           oView.addDependent(this._oCurrency);

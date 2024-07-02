@@ -25,7 +25,7 @@ sap.ui.define(
     let saveObj = {};
     let cancelObj = {}
 
-    return Controller.extend("com.ingenx.nauti.masterdashboard.controller.EventMaster", {
+    return Controller.extend("com.ingenx.nauti.masterdashboard.controller.CostMaster", {
 
       onInit: function () {
         this.getView().byId("createTypeTable").setVisible(true);
@@ -61,41 +61,43 @@ sap.ui.define(
       //   );
       // },
 
+
       onCodeLiveChange: function (oEvent) {
         // Get the input control
         var oInput = oEvent.getSource();
         
+        // Get the current value of the input
         var sValue = oInput.getValue();
-
-        var newValue = sValue.charAt(0).toUpperCase() + sValue.slice(1);
         
         // Check if the value contains any non-alphanumeric characters
-        if (/[^a-zA-Z]/.test(newValue)) {
+        if (/[^a-zA-Z0-9]/.test(sValue)) {
             // Remove any non-alphanumeric characters
-            newValue = newValue.replace(/[^a-zA-Z]/g, '');
+            sValue = sValue.replace(/[^a-zA-Z0-9]/g, '');
             
             // Update the value of the input
-            
+            oInput.setValue(sValue);
             
             // Show a message to the user
-            sap.m.MessageToast.show("Only alphabetic characters are allowed.");
+            sap.m.MessageToast.show("Only alphanumeric characters are allowed.");
         }
         
         // Check if the length of the value exceeds 4
         if (sValue.length > 4) {
             // Truncate the value to keep only the first 4 characters
-            newValue = newValue.substring(0, 4);
+            sValue = sValue.substring(0, 4);
         
             // Update the value of the input
-          
+            oInput.setValue(sValue);
         
             // Show a message to the user
             sap.m.MessageToast.show("Maximum length is 4 characters.");
         }
-        if (newValue !== sValue) {
-          oInput.setValue(newValue);
-      }
       },
+      
+    
+   
+    
+    
 
       onLiveChange: function(oEvent) {
         var oInput = oEvent.getSource();
@@ -408,7 +410,7 @@ sap.ui.define(
             let cells = oSelectedItem.getCells();
             console.log(cells);
 
-            return [oSelectedItem.getBindingContext().getProperty("Evtty"), oSelectedItem.getBindingContext().getProperty("Text")]
+            return [oSelectedItem.getBindingContext().getProperty("Costcode"), oSelectedItem.getBindingContext().getProperty("Cstcodes")]
 
           } else {
 
@@ -460,8 +462,8 @@ sap.ui.define(
         // Iterating over selected items and printing values
         aSelectedItems.forEach(function (oItem) {
           var oBindingContext = oItem.getBindingContext();
-          var sValue = oBindingContext.getProperty("Evtty");
-          var sDescription = oBindingContext.getProperty("Text");
+          var sValue = oBindingContext.getProperty("Costcode");
+          var sDescription = oBindingContext.getProperty("Cstcodes");
           console.log("desc", sDescription);
           onEditInput.push(sDescription);
         });
@@ -488,8 +490,8 @@ sap.ui.define(
           let oContext = oSelectedItem.getBindingContext();
 
           // Get the properties from the context
-          let sValue = oContext.getProperty("Evtty");
-          let sDesc = oContext.getProperty("Text");
+          let sValue = oContext.getProperty("Costcode");
+          let sDesc = oContext.getProperty("Cstcodes");
 
           // console.log(sValue, sDesc);
 
@@ -569,7 +571,7 @@ sap.ui.define(
         var aSelectedItems = oTable.getSelectedItems();
     
         if (aSelectedItems.length === 0) {
-            sap.m.MessageToast.show("Please select an item.");
+            sap.m.MessageToast.show("Please select at least one row.");
             return;
         }
         aSelectedItems.forEach(function (oSelectedItem) {
@@ -577,6 +579,7 @@ sap.ui.define(
         });
         oTable.removeSelections();
       },
+    
       onSave: function () {
       var that = this;
       var oTable = that.byId("entryTypeTable");
@@ -598,10 +601,10 @@ sap.ui.define(
               return;
           }
   
-          var oBindListSP = that.getView().getModel().bindList("/EventMasterSet");
+          var oBindListSP = that.getView().getModel().bindList("/CostMasterSet");
           oBindListSP.attachEventOnce("dataReceived", function () {
               var existingEntries = oBindListSP.getContexts().map(function (context) {
-                  return context.getProperty("Evtty").toUpperCase(); // Convert to lowercase
+                  return context.getProperty("Costcode").toUpperCase(); // Convert to lowercase
               });
   
               if (existingEntries.includes(value1)) {
@@ -641,12 +644,12 @@ sap.ui.define(
               // Format Uomdes value
               var formattedUomdes = that.formatUomdes(value2);
   
-              var oBindListSP = that.getView().getModel().bindList("/EventMasterSet");
+              var oBindListSP = that.getView().getModel().bindList("/CostMasterSet");
   
               try {
                   oBindListSP.create({
-                      Evtty: value1,
-                      Text: formattedUomdes
+                      Costcode: value1,
+                      Cstcodes: formattedUomdes
                   });
                   that.getView().getModel().refresh();
                   that.resetView();
@@ -660,8 +663,8 @@ sap.ui.define(
       },
   
       // Function to format Uomdes
-      formatUomdes: function (Text) {
-        return Text.toLowerCase().replace(/\b\w/g, function (char) {
+      formatUomdes: function (Cstcodes) {
+        return Cstcodes.toLowerCase().replace(/\b\w/g, function (char) {
           return char.toUpperCase();
         });
       },
@@ -777,7 +780,6 @@ sap.ui.define(
         let oCreateTable = oView.byId("createTypeTable");
         let oUpdateTable = oView.byId("updateTypeTable");
 
-        // Get all items from the updateTypeTable
         let aItems = oUpdateTable.getItems();
 
         let i = 0;
@@ -788,7 +790,7 @@ sap.ui.define(
           sDesc = this.removeExtraSpaces(sDesc);
           if (onEditInput[i].trim() !== sDesc.trim()) {
             flagNothingtoUpdate = false;
-            break; // Break the loop when condition is met
+            break; 
           }
         }
 
@@ -797,63 +799,31 @@ sap.ui.define(
           return;
         }
 
-        // Iterate over the items to update the corresponding item in the createTypeTable
         aItems.forEach(function (oItem) {
-          let sValue = oItem.getCells()[0].getText(); // Assuming Value is in the first cell
-          let sDesc = oItem.getCells()[1].getValue(); // Assuming Field Description is in the second cell
+          let sValue = oItem.getCells()[0].getText(); 
+          let sDesc = oItem.getCells()[1].getValue(); 
 
-
-
-          // Find the corresponding item in the createTypeTable
           let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
-            return oCreateItem.getCells()[0].getText() === sValue; // Assuming Value is in the first cell
+            return oCreateItem.getCells()[0].getText() === sValue; 
           });
 
-          // Update the corresponding item in the createTypeTable
           if (oCreateItem) {
-            oCreateItem.getCells()[1].setText(sDesc.replace(/\s+/g, " ").trim()); // Assuming Field Description is in the second cell
+            oCreateItem.getCells()[1].setText(sDesc.replace(/\s+/g, " ").trim()); 
           }
         });
 
-        // Show the createTypeTable
+
         oCreateTable.setVisible(true).removeSelections();
 
-        // let oModel = this.getView().getModel();
-        // oModel.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
-
-        // let oBindList = oModel.bindList("/ClassMasterSet", {
-        //   $$updateGroupId: "update"
-        // });
-
-
-        // oBindList.attachPatchSent(this.onPatchSent, this);
-        // oBindList.attachPatchCompleted(this.onPatchCompleted, this);
-
-        // Hide the updateTypeTable
         oUpdateTable.setVisible(false);
-
-        // Hide the footer for the updateTypeTable
-        // oView.byId("mainPageFooter2").setVisible(false);
-
-        // Enable other buttons
-        // oView.byId("deleteBtn").setEnabled(true);
-        // oView.byId("copyBtn").setEnabled(true);
-        // oView.byId("entryBtn").setEnabled(true);
-
-        // Clear the updateTypeTable after updating the createTypeTable
 
         this.onPatchSent();
         setTimeout(() => {
           this.resetView();
           oUpdateTable.removeAllItems();
           this.onPatchCompleted({ getParameter: () => ({ success: true }) });
-
-
         }, 1500);
 
-
-
-        // oModel.submitBatch("update");
       },
 
       removeExtraSpaces: function (sentence) {
@@ -866,38 +836,35 @@ sap.ui.define(
         return cleanedSentence;
       },
       onCancelEdit: function () {
-        // let classCodeInput = this.getView().byId("CLASSDESC1");
-
         var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
-        var aItems = oTable.getItems();
-        let flag = false;
-        for (let i = 0; i < aItems.length; i++) {
-          var oCells = aItems[i].getCells();
-          var oInput = oCells[1]; // Index 1 corresponds to the Input field
-          var sValue = this.removeExtraSpaces(oInput.getValue());
-
-          console.log(onEditInput[i] + ":" + sValue + ":");
-          if (onEditInput[i] !== sValue.trim()) {
-            flag = true;
-            break;
+          var aItems = oTable.getItems();
+          let flag = false;
+          for (let i = 0; i < aItems.length; i++) {
+            var oCells = aItems[i].getCells();
+            var oInput = oCells[1]; // Index 1 corresponds to the Input field
+            var sValue = oInput.getValue();
+            if (onEditInput[i] !== sValue) {
+              flag = true;
+              break;
+            }
           }
-        }
 
-        if (flag) {
-          sap.m.MessageBox.confirm("Do you want to discard the changes?", {
-            title: "Confirmation",
-            onClose: function (oAction) {
-              if (oAction === sap.m.MessageBox.Action.OK) {
-                // Reset the view to its initial state
-                this.resetView();
-              }
-            }.bind(this) // Ensure access to outer scope
-          });
-        } else {
-          // If no changes have been made, navigate to the initial screen immediately
-          this.resetView();
+          if (flag) {
+            sap.m.MessageBox.confirm("Do you want to discard the changes?", {
+              title: "Confirmation",
+              onClose: function (oAction) {
+                if (oAction === sap.m.MessageBox.Action.OK) {
+                  // Reset the view to its initial state
+                  this.resetView();
+                }
+              }.bind(this) // Ensure access to outer scope
+            });
+          } else {
+            // If no changes have been made, navigate to the initial screen immediately
+            this.resetView();
 
-        }
+          }
+        
       },
 
       resetView: function () {
@@ -962,9 +929,9 @@ sap.ui.define(
           const oContext = oItem.getBindingContext();
           oContext.delete().then(function () {
             // Successful deletion
-            MessageToast.show(`${deleteMsg} deleted successfully`);
+            MessageToast.show(`${deleteMsg} deleted sucessfully`);
 
-            console.log("Successfully Deleted");
+            console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
             // Handle deletion error
@@ -997,8 +964,8 @@ sap.ui.define(
         // Iterating over selected items and printing values
         aSelectedItems.forEach(function (oItem) {
           var oBindingContext = oItem.getBindingContext();
-          var sValue = oBindingContext.getProperty("Evtty");
-          var sDescription = oBindingContext.getProperty("Text");
+          var sValue = oBindingContext.getProperty("Costcode");
+          var sDescription = oBindingContext.getProperty("Cstcodes");
           console.log("desc", sDescription);
           onCopyInput.push(sDescription);
         });

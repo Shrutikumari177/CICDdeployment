@@ -3,15 +3,16 @@ sap.ui.define(
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/ui/core/Fragment",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "sap/ui/model/odata/ODataMetaModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
     "sap/ui/model/json/JSONModel"
   ],
-  function (BaseController,History,Filter,FilterOperator,MessageToast,MessageBox,ODataMetaModel,JSONModel) {
+  function (BaseController, History, MessageToast, JSONModel, MessageBox, ODataMetaModel, Filter, FilterOperator) {
     "use strict";
+
     let aSelectedIds = [];
     let copyFlag = false;
     let editFlag = false;

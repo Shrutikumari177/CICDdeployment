@@ -35,7 +35,9 @@ service nauticalservice {
         entity MasBidTemplateSet as projection on NAUTIVENDOR_SRV.MasBidTemplateSet
     {        key Code, Value, Cvalue, Cunit, Datatype, Tablename, MultiChoice     }    
 ;
-
+ entity xNAUTIxCountrySetFetch as projection on NAUTIMASTER_BTP_SRV.xNAUTIxCountrySetFetch
+    {        key land1, spras, landx50     }    
+;
 
     entity xNAUTIxVENFBIDPOST           as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBIDPOST {
