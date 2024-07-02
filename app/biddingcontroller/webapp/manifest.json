@@ -132,5 +132,9 @@
       "async": true,
       "id": "App"
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "nauticalCloudSrv"
   }
 }

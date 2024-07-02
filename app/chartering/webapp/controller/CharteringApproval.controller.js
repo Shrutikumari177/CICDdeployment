@@ -17,41 +17,28 @@ sap.ui.define(
 
     return BaseController.extend("com.ingenx.nauti.chartering.controller.CharteringApproval", {
       onInit: function () {
-
-        // let testData = [{
-        //   "Creqno": "2000000191",
-        //   "Zemail": "",
-        //   "Chrnmin": "1000000161",
-        //   "Zlevel": "03",
-        //   "Uname": "PIYUSH",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "10:32:03",
-        //   "Zcomm": "",
-        //   "Zaction": "PEND"
-        // },
-        // {
-        //   "Creqno": "2000000191",
-        //   "Zemail": "",
-        //   "Chrnmin": "1000000161",
-        //   "Zlevel": "01",
-        //   "Uname": "A.SHARMA",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "08:36:08",
-        //   "Zcomm": "test appr",
-        //   "Zaction": "APPR"
-        // },
-        // {
-        //   "Creqno": "2000000191",
-        //   "Zemail": "",
-        //   "Chrnmin": "1000000161",
-        //   "Zlevel": "02",
-        //   "Uname": "A.SHARMA",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "08:37:31",
-        //   "Zcomm": "testING APPROVARED",
-        //   "Zaction": "APPR"
-        // }]
-
+        this.getUserInfo();
+      },
+      
+      getUserInfo: function () {
+        return new Promise(function (resolve, reject) {
+          sap.ushell.Container.getService("UserInfo")
+            .getShellUserInfo()
+            .then(function (userInfo) {
+              let user = {
+                id: userInfo.id,
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                fullName: userInfo.fullName,
+                email: userInfo.email,
+              };
+              console.log("User Info ", user);
+              resolve(user);
+            })
+            .catch(function (error) {
+              reject(error);
+            });
+        });
       },
       ValueHelpChartering: function () {
         let oView = this.getView();

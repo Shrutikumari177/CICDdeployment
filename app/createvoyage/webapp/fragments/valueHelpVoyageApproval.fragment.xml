@@ -9,10 +9,10 @@
         confirm=".VoyageValueHelpClose"
         cancel=".VoyageValueHelpClose"
         items="{/xNAUTIxgetvoyapproval}"
-        multiSelect="true"
+        multiSelect="false"
+        liveChange="onVoyageSearch1"
         initialFocus="SearchField"
-        
-       
+        rememberSelections="false"
         >
         <StandardListItem id="_IDGenStand"
        

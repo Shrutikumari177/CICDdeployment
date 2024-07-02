@@ -42,8 +42,6 @@ sap.ui.define(
             onInit: async function () {
 
 
-                // Set the model to the view
-                // let portDataModel = new JSONModel();
                 bidPayload = [];
                 let model = this.getOwnerComponent().getModel();
                 let oBindList = model.bindList("/PortMasterSet");
@@ -75,31 +73,6 @@ sap.ui.define(
 
                 await this._initBidTemplate();
 
-
-            },
-            getBidDetails1: function (voyageNumber) {
-                let data;
-                let that = this;
-                bidItemModel = new JSONModel();
-                bidPayload = [];
-                let oModel = this.getOwnerComponent().getModel("modelV2");
-
-                oModel.read("/xNAUTIxBIDITEM", {
-                    success: function (oData) {
-                        data = oData.results.filter(item => item.Voyno === voyageNumber);
-                        console.log(data);
-                        data.forEach((el) => delete el.__metadata);
-                        bidItemModel.setData(data);
-                        that.getView().setModel(bidItemModel, "bidItemModel");
-                        that.getView().getModel('bidItemModel').refresh();
-                        console.log(that.getView().getModel("bidItemModel").getData());
-
-                    },
-                    error: function (err) {
-                        console.log("Error occured :", err);
-
-                    }
-                })
 
             },
             debounce: function (func, wait) {
@@ -269,7 +242,12 @@ sap.ui.define(
                         console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
 
 
-                    } else {
+                    }  else if (aContexts.length === 0 ) {
+                        
+                        new sap.m.MessageBox.error(`No Data found against ${myVOYNO} Voyage no.`);
+                    }
+                    
+                    else {
                         console.warn("Entity with Voyage No." + myVOYNO + "has duplicate resource");
                         new sap.m.MessageBox.error(`Entity with Voyage ${myVOYNO} has duplicate resource`);
                     }
@@ -418,7 +396,7 @@ sap.ui.define(
                 let sBidHelpTableName = sBidHelpTableData.Tablename;
                 let sBidHelpTableTitle = sBidHelpTableData.Value;
                 let oHelpTableData = await this._getHelpTableData(sBidHelpTableName);
-                if (Array.isArray(oHelpTableData?.data)) {
+                if (Array.isArray(oHelpTableData && oHelpTableData.data)) {
                     // console.table(oHelpTableData.data);
                     this._showHelpTableDialog(oSource, oHelpTableData, sBidHelpTableTitle);
                 } else {
@@ -458,7 +436,7 @@ sap.ui.define(
                         let oHelpDataRow = {};
                         let oData = aContexts[i].getObject();
 
-                        if (oData?.__metadata) {
+                        if (oData && oData.__metadata) {
                             delete oData.__metadata;
                         }
 
@@ -592,7 +570,7 @@ sap.ui.define(
                     columnArray = oHelpTable.getModel().getProperty("/columns");
 
                 for (let columnObject of columnArray) {
-                    if (columnObject?.col) {
+                    if ( columnObject && columnObject.col) {
                         aFilter.push(
                             new sap.ui.model.Filter(
                                 columnObject.col,
@@ -1509,6 +1487,24 @@ sap.ui.define(
 
 
             },
+            calctotalCostNew: function (voyItemsArr) {
+                // console.log(voyItemsArr);
+                let totalCost = 0;
+                let arr = voyItemsArr;
+                if (arr && arr.length) {
+
+                    arr.forEach((port) => {
+                        totalCost += parseFloat(port.Totco);
+
+                    })
+                    // console.log("total Totco cost: ", totalCost);
+                    
+                    this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
+                    return formatter.numberFormat(totalCost);
+                }
+
+
+            },
             // port value help
             onPortValueHelpRequest: function (oEvent) {
                 let oInputSource = oEvent.getSource();
@@ -2363,9 +2359,23 @@ sap.ui.define(
                     title: "Select: Currency",
                     contentWidth: "25%",
                     contentHeight: "50%",
+                    sticky:["ColoumHeaders"],
+                    fixedLayout:"false",
                     content: new sap.m.Table({
                         mode: sap.m.ListMode.SingleSelectMaster,
                         noDataText: "Loading ...",
+                        headerToolbar: [
+                            new sap.m.OverflowToolbar({
+                                content: [
+                                    new sap.m.SearchField({
+                                        width: "auto",
+                                        placeholder: "Search Value/Description",
+                                        tooltip: "Search Value/Description",
+                                        liveChange: this._onHelpTableCurrSearch.bind(this),
+                                    }),
+                                ],
+                            }),
+                        ],
                         columns: [
                             new sap.m.Column({
                                 header: new sap.m.Text({ text: "Currency Code" }),
@@ -2399,6 +2409,7 @@ sap.ui.define(
                     path: "/CurTypeSet", // Replace with your entity set
                     template: new sap.m.ColumnListItem({
                         cells: [
+
                             new sap.m.Text({ text: "{Navoycur}" }),
                             new sap.m.Text({ text: "{Navoygcurdes}" }),
                         ],

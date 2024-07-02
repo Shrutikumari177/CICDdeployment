@@ -10,7 +10,6 @@
         search=".onVoyageFilterSearch"
         confirm="onVoyageValueHelpClose"
         cancel="onVoyageValueHelpClose"
-        
         items="{voyageNumModel>/voyageNumbers}"
         initialFocus="SearchField"
         multiSelect="false"

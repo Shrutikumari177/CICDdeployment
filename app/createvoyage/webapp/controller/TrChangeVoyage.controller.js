@@ -337,7 +337,7 @@ sap.ui.define(
                 let sBidHelpTableName = sBidHelpTableData.Tablename;
                 let sBidHelpTableTitle = sBidHelpTableData.Value;
                 let oHelpTableData = await this._getHelpTableData(sBidHelpTableName);
-                if (Array.isArray(oHelpTableData?.data)) {
+                if (Array.isArray(oHelpTableData && oHelpTableData.data)) {
                     console.table(oHelpTableData.data);
                     this._showHelpTableDialog(oSource, oHelpTableData, sBidHelpTableTitle);
                 } else {
@@ -368,7 +368,7 @@ sap.ui.define(
                             let distinctArray = Array.from(distinctSet);
                             for (let j = 0; j < oData.results.length; j++) {
                                 let oHelpDataRow = {};
-                                if (oData?.results[j]?.__metadata) {
+                                if (oData && oData.results[j] && oData.results[j].__metadata) {
                                     delete oData.results[j].__metadata;
                                 }
                                 for (let k = j, len = 0; k < distinctSet.size + j; k++, len++) {
@@ -491,7 +491,7 @@ sap.ui.define(
                     columnArray = oHelpTable.getModel().getProperty("/columns");
 
                 for (let columnObject of columnArray) {
-                    if (columnObject?.col) {
+                    if (columnObject && columnObject.col) {
                         aFilter.push(
                             new sap.ui.model.Filter(
                                 columnObject.col,

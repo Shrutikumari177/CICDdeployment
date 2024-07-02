@@ -11,35 +11,23 @@
     "@sap-cloud-sdk/mail-client": "^3.15.0",
     "@sap-cloud-sdk/resilience": "^3.15.0",
     "@sap/cds": "^7.9.2",
-    "@sap/cds-hana": "^2.0.0",
-    "@sap/cds-mtxs": "^1.18.1",
+    "@sap/cds-hana": "^2",
     "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
-    "@sap/xssec": "^3.6.1",
+    "@sap/xssec": "^3",
     "axios": "^1.7.2",
     "express": "^4.19.2"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^7",
+    "@sap/cds-dk": "^7.9.4",
     "@sap/ux-specification": "^1.120.10",
     "rimraf": "^3.0.2"
   },
-  "engines": {
-    "node": "^18"
-  },
   "scripts": {
     "start": "cds-serve",
-    "watch-masterdashboard": "cds watch --open masterdashboard/webapp/index.html?sap-ui-xx-viewCache=false",
     "undeploy": "cf undeploy nautical --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-createvoyage": "cds watch --open createvoyage/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-chartering": "cds watch --open chartering/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-quotation": "cds watch --open quotation/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-submitquotation": "cds watch --open submitquotation/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-reports": "cds watch --open reports/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-report": "cds watch --open report/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-biddingcontroller": "cds watch --open biddingcontroller/webapp/index.html?sap-ui-xx-viewCache=false"
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "cds": {
     "requires": {
@@ -137,12 +125,7 @@
         "multitenancy": true,
         "auth": "xsuaa",
         "db": "hana",
-        "cds.xt.SaasProvisioningService": true,
-        "cds.xt.DeploymentService": true,
-        "destinationOptions": {
-          "selectionStrategy": "subscriberFirst",
-          "useCache": false
-        }
+        "connectivity": true
       },
       "NAUTIVENDOR_SRV": {
         "kind": "odata-v2",

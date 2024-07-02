@@ -378,7 +378,6 @@ sap.ui.define(
          
       onCreateSent: function (ev) {
         sap.m.MessageToast.show("Creating..")
-        console.log(ev.getParameter("context")?.getObject())
       },
       onCreateCompleted: function (ev) {
         let isSuccess = ev.getParameter('success');

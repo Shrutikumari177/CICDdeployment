@@ -32,6 +32,19 @@
           "odataVersion": "2.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "quotationObject-quotationAction": {
+          "semanticObject": "quotationObject",
+          "action": "quotationAction",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -161,8 +174,6 @@
           "viewName": "CompareRequestForQuotation"
         }
       }
-
-      
     },
     "rootView": {
       "viewName": "com.ingenx.nauti.quotation.view.App",
@@ -170,5 +181,9 @@
       "async": true,
       "id": "App"
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "nauticalCloudSrv"
   }
 }

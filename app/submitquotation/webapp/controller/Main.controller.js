@@ -113,7 +113,7 @@ sap.ui.define([
                     element.Stat = statusLevel.CLOSED;
                     counts.Closed++;
                 } else {
-                    if (element?.ChartReqtoVendBid?.results.length > 0) {
+                    if (element && element.ChartReqtoVendBid  && element.ChartReqtoVendBid.results.length > 0) {
                         element.Stat = statusLevel.SUBMIT;
                     } else {
                         element.Stat = statusLevel.OPEN;

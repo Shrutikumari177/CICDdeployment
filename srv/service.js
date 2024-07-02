@@ -627,7 +627,7 @@ async function getDistanceBetweenPort(startLatitude, startLongitude, endLatitude
     } catch (error) {
         console.error('Error:', error);
         const pathResponse = {
-            seaDistance: null,
+            seaDistance: 0.000,
             route: null,
             code: 500,
             message: `${error}`
