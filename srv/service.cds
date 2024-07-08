@@ -20,7 +20,10 @@ service nauticalservice {
     {        key Creqno, key Chrnmin, key Zlevel, key Uname, Zcomm, Zaction, Zemail     }    
 ;
      entity voyappstatusSet as projection on NAUTIVOYSTATUS_SRV.voyappstatusSet
-    {        Vreqno, key Voyno, Zlevel, Zcomm, Zaction     }    
+    {        Vreqno, key Voyno, Zlevel, Zcomm, Zaction     } 
+;
+entity xNAUTIxportmascds as projection on NAUTIMASTER_BTP_SRV.xNAUTIxportmascds
+    {        key Country, key Portc, Portn, Reancho, Latitude, Longitude, Countryn, Locid, Ind     }    
 ;
 
     entity ControllerLiveBidDetails     as projection on nauticalschema.ControllerLiveBidDetails;
@@ -1051,7 +1054,7 @@ service nauticalservice {
 
     entity headerinvSet                 as
         projection on NAUTIINVITECOMPARE_SRV.headerinvSet {
-            key Chrnmin
+            key Chrnmin, HEADERTOITEM
         };
 
     entity iteminvSet                   as

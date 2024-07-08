@@ -79,6 +79,22 @@ modules:
       - comingenxnautireport.zip
       name: comingenxnautireport
       target-path: resources/
+    - artifacts:
+      - comingenxnautibiddingcontroller.zip
+      name: comingenxnautibiddingcontroller
+      target-path: resources/
+    - artifacts:
+      - comingenxnautichartering.zip
+      name: comingenxnautichartering
+      target-path: resources/
+    - artifacts:
+      - comingenxnautiquotation.zip
+      name: comingenxnautiquotation
+      target-path: resources/
+    - artifacts:
+      - comingenxnautisubmitquotation.zip
+      name: comingenxnautisubmitquotation
+      target-path: resources/
 - name: comingenxnautimasterdashboard
   type: html5
   path: app/masterdashboard
@@ -102,6 +118,46 @@ modules:
 - name: comingenxnautireport
   type: html5
   path: app/report
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautibiddingcontroller
+  type: html5
+  path: app/biddingcontroller
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautichartering
+  type: html5
+  path: app/chartering
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautiquotation
+  type: html5
+  path: app/quotation
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautisubmitquotation
+  type: html5
+  path: app/submitquotation
   build-parameters:
     build-result: dist
     builder: custom

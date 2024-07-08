@@ -100,7 +100,7 @@
           "autoExpandSelect": true,
           "earlyRequests": true
         }
-    }
+      }
     },
     "resources": {
       "css": [
@@ -120,7 +120,7 @@
         "clearControlAggregation": false
       },
       "routes": [
-       {
+        {
           "name": "RouteMain",
           "pattern": ":?query:",
           "target": [
@@ -130,7 +130,9 @@
         {
           "name": "RouteBidding",
           "pattern": "biddingDetail",
-          "target":[ "TargetBidDetail"]
+          "target": [
+            "TargetBidDetail"
+          ]
         }
       ],
       "targets": {
@@ -147,7 +149,7 @@
           "clearControlAggregation": false,
           "viewId": "Bidding",
           "viewName": "Bidding"
-      }
+        }
       }
     },
     "rootView": {
@@ -156,5 +158,9 @@
       "async": true,
       "id": "App"
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "nauticalCloudSrv"
   }
 }

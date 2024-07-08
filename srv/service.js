@@ -307,7 +307,7 @@ module.exports = async (srv) => {
     // Register handlers for NAUTIMASTER_BTP_SRV entities
     registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
         'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet',
-        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet',
+        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet','xNAUTIxportmascds',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
         'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP'
     ]);
@@ -357,6 +357,7 @@ function registerHandlers(srv, service, entities) {
     // Handle 'getRoute' entity
     srv.on('READ', 'getRoute', async (req) => {
         const { startLatitude, startLongitude, endLatitude, endLongitude } = req._queryOptions;
+        console.log('End Longitude:', req._queryOptions);
         console.log('Start Latitude:', startLatitude);
         console.log('Start Longitude:', startLongitude);
         console.log('End Latitude:', endLatitude);
@@ -572,7 +573,7 @@ function registerHandlers(srv, service, entities) {
 
             // return path;
             // Call the custom function to handle the request
-            return await getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude);
+            return await getDistanceBetweenPort(req._queryOptions);
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Error fetching data');
@@ -582,12 +583,24 @@ function registerHandlers(srv, service, entities) {
 
 
 
-async function getDistanceBetweenPort(startLatitude, startLongitude, endLatitude, endLongitude) {
-    console.log('Parameters:', startLatitude, startLongitude, endLatitude, endLongitude);
+async function getDistanceBetweenPort(routeParams) {
+   
+    const {startLatitude, startLongitude, endLatitude, endLongitude} = routeParams;
 
     // Construct the URL with parameters
-    const url = `https://distances.dataloy.com/route/route?point=${startLatitude},${startLongitude}&point=${endLatitude},${endLongitude}&avoid_eca_factor=1&avoid_hra_factor=1&avoid_ice_factor=1`;
+    let url = `https://distances.dataloy.com/route/route?point=${startLatitude},${startLongitude}&point=${endLatitude},${endLongitude}&avoid_eca_factor=1&avoid_hra_factor=1&avoid_ice_factor=1`;
 
+
+    const blockParams = ['block_sc', 'block_pc', 'block_kc', 'block_nw', 'block_ne', 'block_cc', 'block_ts'];
+
+    // Add optional block parameters based on params
+    blockParams.forEach(paramKey => {
+        // Check if the param exists in param and is set to 'true'
+        if (routeParams[paramKey] === 'true') {
+            url += `&${paramKey}=true`;
+        }
+        // console.log(url);
+    });
     // Construct request headers
     const myHeaders = new Headers();
     myHeaders.append("X-API-Key", process.env.API_KEY);

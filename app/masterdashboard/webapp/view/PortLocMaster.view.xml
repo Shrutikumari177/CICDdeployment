@@ -8,8 +8,6 @@
 >
     <Page id="page">
         <headerContent>
-            <!-- Your header content goes here -->
-
             <Bar id="_IDGenBar2">
                 <contentLeft>
                     <Button
@@ -30,6 +28,14 @@
                         text="Port Location Master"
                     />
                 </contentLeft>
+                <contentRight>
+                    <SearchField
+                        id="searchField"
+                        width="300px"
+                        search="onSearch"
+                        placeholder="Search..."
+                    />
+                </contentRight>
             </Bar>
         </headerContent>
 
@@ -46,18 +52,23 @@
                     /> -->
 
                     <!-- <Button id="copyBtn" text="Copy As" press="pressCopy"/> -->
+                    <!-- <Button
+                        id="saveBtn"
+                        text="Save" type="Emphasized"
+                        press="onSave"
+                    /> -->
 
-                    <Button
+                    <!-- <Button
                         id="editBtn"
                         text="Edit" type="Emphasized"
                         press="pressEdit"
-                    />
+                    /> -->
 
-                    <Button
+                    <!-- <Button
                         id="deleteBtn"
                         text="Delete" type="Emphasized"
                         press="onDeletePress"
-                    />
+                    /> -->
                 </contentLeft>
             </Bar>
 
@@ -71,7 +82,7 @@
                     id="createTypeTable"
                     width="100%"
                     class="mastertables"
-                    items="{/PortmasterSet}"
+                    items="{dataModel>/}"
                     updateFinished="onTableUpdateFinished"
                     mode="MultiSelect"
                     sticky="ColumnHeaders"
@@ -79,7 +90,7 @@
                     noDataText="Loading...."
                     growing="true"
                     growingThreshold="500"
-                >
+                  >
                     <columns>
                         <Column>
                             <Label text="Country" />
@@ -122,48 +133,45 @@
                         <cells>
                             <Text
                                 id="_IDGenText3"
-                                text="{Country}"
+                                text="{dataModel>Country}"
                             />
 
                             <Text
                                 id="_IDGenText4"
-                                text="{Portc}"
+                                text="{dataModel>Portc}"
                             />
 
                             <Text
                                 id="_IDGenText5"
-                                text="{Portn}"
+                                text="{dataModel>Portn}"
                             />
 
                             <Text
                                 id="_IDGenText6"
-                                text="{Reancho}"
+                                text="{dataModel>Reancho}"
                             />
 
                             <Text
                                 id="_IDGenText7"
-                                text="{Latitude}"
+                                text="{dataModel>Latitude}"
                             />
 
                             <Text
                                 id="_IDGenText8"
-                                text="{Longitude}"
+                                text="{dataModel>Longitude}"
                             />
 
                             <Text
                                 id="_IDGenText9"
-                                text="{Countryn}"
+                                text="{dataModel>Countryn}"
                             />
 
                             <Text
                                 id="_IDGenText10"
-                                text="{Locid}"
+                                text="{dataModel>Locid}"
                             />
 
-                            <Text
-                                id="_IDGenText11"
-                                text="{Ind}"
-                            />
+                            <CheckBox id="_IDGenCheckBox1" selected="{dataModel>Ind}" select="onIndSelect" />
                         </cells>
                     </ColumnListItem>
                 </Table>

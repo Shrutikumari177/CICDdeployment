@@ -10,19 +10,19 @@
     <VBox  alignItems="End" class="flex">
   <FlexBox   class="headerItem">
      <Label  text="Bidding Start Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}" change="onselectBSD"/>
+     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}" change="onselectBSD" />
      
     </FlexBox>
      <FlexBox  class="headerItem">
 
      <Label  text="Bidding End Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" change="onselectBSD" />
+     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" change="onselectBED" />
      
     </FlexBox>
 <FlexBox  class="headerItem" >
      <Label class="sapUiTinyMarginTop" required="true"
      text="Controller Quoted Value :"/>
-     <Input  value="{addBiddingModel>/ControllerQuotedValue}" width="150px"/>
+     <Input id="ControllerQValue" value="{addBiddingModel>/ControllerQuotedValue}" width="150px"/>
     </FlexBox>
     <FlexBox  class="headerItem">
      <Label  class="sapUiTinyMarginTop" text="Mode of Bidding :" required="true"/>
@@ -36,15 +36,15 @@
      <VBox  alignItems="End" class="flex">
      <FlexBox  class="headerItem">
       <Label  class="sapUiTinyMarginTop" text="Bidding Start Time :" required="true"/>
-     <TimePicker width="150px" value="{addBiddingModel>/BiddingStartTime}" />
+     <TimePicker id="BidSTime" width="150px" value="{addBiddingModel>/BiddingStartTime}"  change="onselectBSTime"/>
      </FlexBox>
      <FlexBox class="headerItem">
      <Label  class="sapUiTinyMarginTop" text="Bidding End Time :" required="true"/>
-    <TimePicker   width="150px" value="{addBiddingModel>/BiddingEndTime}"/>
+    <TimePicker id="BidETime"  width="150px" value="{addBiddingModel>/BiddingEndTime}" change="onselectBETime"/>
      </FlexBox>
      <FlexBox  class="headerItem">
       <Label  class="sapUiTinyMarginTop" text="Unit : " required="true"/>
-     <Input  value="{addBiddingModel>/Unit}" width="150px"/>
+     <Input   value="{addBiddingModel>/Unit}" id="unit" editable="false" width="150px"/>
      </FlexBox>
      </VBox>
      </FlexBox>
@@ -54,7 +54,7 @@
          <footer>
         	<OverflowToolbar id="_IDGenOverflowToolbar1" >	
                 <ToolbarSpacer id="_IDGenToolbarSpacer1"/>		
-				<Button id="_IDGenButton1" type="Accept" text="Send Email" press="onSave">
+				<Button id="_IDGenButton1" type="Accept" text="Send Email" press="onSaveEmail">
 				</Button>
                 <Button id="_IDGenButton2" type="Reject" text="Cancel" press="onCancel">
 				</Button>

@@ -3,15 +3,16 @@ sap.ui.define(
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/ui/core/Fragment",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "sap/ui/model/odata/ODataMetaModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
     "sap/ui/model/json/JSONModel"
   ],
-  function (BaseController,History,Filter,FilterOperator,MessageToast,MessageBox,ODataMetaModel,JSONModel) {
+  function (BaseController, History, MessageToast, JSONModel, MessageBox, ODataMetaModel, Filter, FilterOperator) {
     "use strict";
+
     let aSelectedIds = [];
     let copyFlag = false;
     let editFlag = false;
@@ -82,7 +83,7 @@ sap.ui.define(
       },
 
 
-      onSearch: function (oEvent) {
+      onSearch1: function (oEvent) {
         var sQuery = oEvent.getParameter("query");
         var oTable = this.byId("createTypeTable");
         var oBinding = oTable.getBinding("items");
@@ -90,10 +91,33 @@ sap.ui.define(
 
         if (sQuery && sQuery.length > 0) {
           aFilters.push(new Filter("Countryn", FilterOperator.Contains, sQuery));
+          
+
+
+
         }
 
         oBinding.filter(aFilters);
       },
+      onSearch:function (oEvent) {
+
+        let sValue1 = oEvent.getParameter("value");
+        let sLength = sValue1.length;
+
+        let oFilter1 = new sap.ui.model.Filter("Portc", sLength === 2 ? sap.ui.model.FilterOperator.EQ : sap.ui.model.FilterOperator.Contains, sValue1);
+        let oFilter2 = new sap.ui.model.Filter("Portn", sap.ui.model.FilterOperator.Contains, sValue1);
+        let andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1, oFilter2],
+          and : false
+      });
+
+      oEvent.getSource().getBinding("items").filter([andFilter]);
+
+      },
+
+        
+
+
       // onIndSelect: function(oEvent) {
 
       //   var oCheckBox = oEvent.getSource();

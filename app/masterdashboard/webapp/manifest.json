@@ -23,23 +23,6 @@
           "annotations": [],
           "odataVersion": "4.0"
         }
-      },
-      "MASTER_BTP_SRV_Annotation": {
-        "uri": "/destinations/Ingenx_OData_SAP1/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='%2FNAUTI%2FMASTER_BTP_ANNO_MDL',Version='0001')/$value/",
-        "type": "ODataAnnotation",
-        "settings": {
-          "localUri": "localService/MASTER_BTP_SRV/MASTER_BTP_SRV_Annotation.xml"
-        }
-      },
-      "vendorsSrv": {
-        "uri": "/v2/odata/v4/nauticalservice/",
-        "type": "OData",
-        "settings": {
-          "annotations": [
-            "MASTER_BTP_SRV_Annotation"
-          ],
-          "odataVersion": "2.0"
-        }
       }
     },
     "crossNavigation": {
@@ -106,17 +89,6 @@
           "operationMode": "Server",
           "autoExpandSelect": true,
           "earlyRequests": true
-        }
-      },
-      "vendorV2Model": {
-        "dataSource": "vendorsSrv",
-        "preload": true,
-        "settings": {
-          "synchronizationMod8e": "None",
-          "operationMode": "Server",
-          "autoExpandSelect": true,
-          "earlyRequests": true,
-          "defaultBindingMode": "TwoWay"
         }
       }
     },
