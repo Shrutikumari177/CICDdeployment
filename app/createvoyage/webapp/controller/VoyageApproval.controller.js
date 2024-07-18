@@ -14,54 +14,52 @@ sap.ui.define(
 
     let sloc;
     let LoggedInUser;
+    let userEmail;
+    let username;
 
     return BaseController.extend("com.ingenx.nauti.createvoyage.controller.VoyageApproval", {
-      onInit: function () {
-          this.getLoggedInUserInfo();
-        // let testData = [{
-        //   "Vreqno": "2000000191",
-        //   "Zemail": "",
-        //   "Voyno": "1000000161",
-        //   "Zlevel": "03",
-        //   "Uname": "PANKAJ.J",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "10:32:03",
-        //   "Zcomm": "",
-        //   "Zaction": "PEND"
-        // },
-        // {
-        //   "Vreqno": "2000000191",
-        //   "Zemail": "",
-        //   "Voyno": "1000000161",
-        //   "Zlevel": "01",
-        //   "Uname": "PANKAJ.J",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "08:36:08",
-        //   "Zcomm": "test appr",
-        //   "Zaction": "APPR"
-        // },
-        // {
-        //   "Vreqno": "2000000191",
-        //   "Zemail": "",
-        //   "Voyno": "1000000161",
-        //   "Zlevel": "02",
-        //   "Uname": "PANKAJ.J",
-        //   "Zdate": "2024-06-03T00:00:00Z",
-        //   "Ztime": "08:37:31",
-        //   "Zcomm": "testING APPROVARED",
-        //   "Zaction": "APPR"
-        // }]
-
+      onInit: async function () {
+        await this.getLoggedInUserInfo();
+        await this.getSUerIdInfo()
+        
       },
 
-      getLoggedInUserInfo : function(){
-        let User = sap.ushell.Container.getService("UserInfo");
-        let userID = User.getId();
-        let userEmail = User.getEmail()
-        let userFullName = User.getFullName();
-        console.log("userEmail", userEmail);
-        console.log("userFullName", userFullName);
-        console.log("userID", userID);
+      getLoggedInUserInfo : async function(){
+        try {
+          let User = await sap.ushell.Container.getService("UserInfo");
+          let userID = User.getId();
+          userEmail = User.getEmail();
+          let userFullName = User.getFullName();
+          console.log("userEmail", userEmail);
+          console.log("userFullName", userFullName);
+          console.log("userID", userID);
+        } catch (error) {
+          userEmail = "ashwani.sharma@ingenxtec.com";
+        }
+      },
+      getSUerIdInfo :async function(){
+        let userMail = userEmail;
+        let oModel = this.getOwnerComponent().getModel();
+        let aFilter = new sap.ui.model.Filter("SmtpAddr", sap.ui.model.FilterOperator.EQ, userMail);
+
+
+        let oBindList = oModel.bindList("/xNAUTIxuserEmail", null, null, aFilter);
+       
+        
+        let res = await oBindList.requestContexts().then(function (aContexts) {
+            let aFilteredData = aContexts.map(context => context.getObject());
+            
+            if (aFilteredData.length > 0) {
+                username = aFilteredData[0].username; 
+            }
+        
+            console.log("filterdata", aFilteredData);
+            console.log("user login", username);
+           
+            return username;
+        });
+        
+        
       },
 
       ValueHelpVoyage: function () {
@@ -77,7 +75,8 @@ sap.ui.define(
       },
 
       VoyageValueHelpClose: async function (evt) {
-
+        let userlogin = username;
+        console.log("hii",userlogin);
         let oInput = this.byId("VoyageNo");
         let oDescriptionInput = this.byId("_voyageAppReqField");
         let aSelectedContexts = evt.getParameter("selectedContexts");
@@ -139,7 +138,7 @@ sap.ui.define(
         console.log(transformedData);
         // oApprovalModel.setData(transformedData);
 
-        LoggedInUser = "PANKAJ.J";
+        LoggedInUser =username;
         this.approverMatched = false;
         let that = this;
         transformedData.forEach(data => {
@@ -739,7 +738,7 @@ sap.ui.define(
 
         let xVreqno = await this.getVreqnoToshow(voyno);
 
-        LoggedInUser = "PANKAJ.J";
+        LoggedInUser =username;
 
         this.approverMatched = false;
         transformedData.forEach(data => {

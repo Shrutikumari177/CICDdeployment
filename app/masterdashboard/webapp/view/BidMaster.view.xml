@@ -183,7 +183,7 @@
             updateFinished="onTableUpdateFinished"
             selectionChange="selectedItems"
             width="100%"
-             class="mastertables"
+             class=""
             visible="false"
             mode="MultiSelect"
            

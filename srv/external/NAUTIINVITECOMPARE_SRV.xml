@@ -3,6 +3,26 @@
     xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
     <edmx:DataServices m:DataServiceVersion="2.0">
         <Schema Namespace="NAUTI.INVITECOMPARE_SRV" xml:lang="en" sap:schema-version="1"
             xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -37,6 +57,13 @@
                 <Property Name="Zcom" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Zmode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Type (Auto/manual)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
+            <EntityType Name="xNAUTIxvendbid_valType" sap:label="value help for dist vendbid" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+            </EntityType>
             <Association Name="INVITETOVEND" sap:content-version="1">
                 <End Type="NAUTI.INVITECOMPARE_SRV.headerinv" Multiplicity="1" Role="FromRole_INVITETOVEND"/>
                 <End Type="NAUTI.INVITECOMPARE_SRV.iteminv" Multiplicity="*" Role="ToRole_INVITETOVEND"/>
@@ -49,7 +76,8 @@
                     </Dependent>
                 </ReferentialConstraint>
             </Association>
-            <EntityContainer Name="NAUTI_INVITECOMPARE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+            <EntityContainer Name="NAUTI_INVITECOMPARE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="xNAUTIxvendbid_val" EntityType="NAUTI.INVITECOMPARE_SRV.xNAUTIxvendbid_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="headerinvSet" EntityType="NAUTI.INVITECOMPARE_SRV.headerinv" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="iteminvSet" EntityType="NAUTI.INVITECOMPARE_SRV.iteminv" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <AssociationSet Name="INVITETOVENDSet" Association="NAUTI.INVITECOMPARE_SRV.INVITETOVEND" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
@@ -57,6 +85,21 @@
                     <End EntitySet="iteminvSet" Role="ToRole_INVITETOVEND"/>
                 </AssociationSet>
             </EntityContainer>
+            <Annotations Target="NAUTI.INVITECOMPARE_SRV.NAUTI_INVITECOMPARE_SRV_Entities"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                                <String>groupby</String>
+                                <String>filter</String>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Rollup" EnumMember="None"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
             <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/INVITECOMPARE_SRV/$metadata"
                 xmlns:atom="http://www.w3.org/2005/Atom"/>
                 <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/INVITECOMPARE_SRV/$metadata"

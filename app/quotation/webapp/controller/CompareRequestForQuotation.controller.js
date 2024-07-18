@@ -18,9 +18,10 @@ sap.ui.define([
     let Zfrieghcode ;
     let Zfrieghdesc;
     let vendorArray = [];
-   
+    let extractUnitData;
     let getModelData = [];
     let ocharteringNo;
+    let portName =[];
     var isBidStartDateSelected = false;
 var isBidStartTimeSelected = false;
 var isBidEndDateSelected = false;
@@ -57,9 +58,29 @@ var isBidEndTimeSelected = false;
 
             }.bind(this));
             console.log("myVendata", getVendorModelData);
+
+
+            // let oPortModel = new sap.ui.model.json.JSONModel();
+            // this.getView().setModel(oPortModel, "PortModel");
+            var oPortModel2 = this.getOwnerComponent().getModel();
+            var oVenBindList = oPortModel2.bindList("/xNAUTIxnewportcds");
+            oVenBindList.requestContexts(0, Infinity).then(function (aContexts) {
+                aContexts.forEach(function (oContext) {
+                    portName.push(oContext.getObject());
+                });
+                oModel.setData(portName);
+
+            }.bind(this));
+            console.log("myPortdata", portName);
             
-            // this.attachEventOnce("afterRendering", this._attachInputValidation.bind(this));
+            
         },
+
+        // setDatePickerInputReadonly(oDatePicker) {
+        //     var $input = oDatePicker.$().find("input");
+        //     $input.prop("readonly", true);
+        //   },
+       
 
 
         calculateAndBindRankings: function (Chrnmin) {
@@ -75,16 +96,18 @@ var isBidEndTimeSelected = false;
             ];
             console.log("Chrnmin", Chrnmin);
             const oListBinding = oModel.bindList(sEntitySet, undefined, undefined, aFilters);
-
+            let receivedData = [];
 
             oListBinding.requestContexts().then(function (aContexts) {
                 aData = aContexts.map(function (oContext) {
+                    receivedData.push(oContext.getObject())
                     return oContext.getObject();
                 });
 
                 console.log("Fetched Data:", aData);
                 if (aData && aData.length > 0) {
                     const vendorsData = aData[0].Vendors.map(vendor => ({
+                        
                         Chrnmin: aData[0].Chrnmin,
                         Voyno: aData[0].Voyno,
                         vendorId: vendor.vendorId,
@@ -181,6 +204,8 @@ var isBidEndTimeSelected = false;
 
                 console.error("Error fetching data:", oError);
             });
+
+            console.error("receivedData", receivedData);
         },
         checkBoxEnabled: function (sEligibility) {
             return sEligibility === "Yes";
@@ -262,25 +287,42 @@ var isBidEndTimeSelected = false;
                 }
             }
         },
+        // onChartLiveChange1: function (oEvent) {
+
+        //     var sValue = oEvent.getParameter("value");
+
+        //     var oFilter = new Filter("Chrnmin", FilterOperator.Contains, sValue);
+
+        //     oEvent.getSource().getBinding("items").filter([oFilter]);
+        // },
+
         onChartLiveChange1: function (oEvent) {
-
-            var sValue = oEvent.getParameter("value");
-
-            var oFilter = new Filter("Chrnmin", FilterOperator.Contains, sValue);
-
-            oEvent.getSource().getBinding("items").filter([oFilter]);
-        },
-
-
+       
+            var sValue1 = oEvent.getParameter("value");
+            var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+            var oBinding = oEvent.getSource().getBinding("items");
+            var oSelectDialog = oEvent.getSource();
+       
+            oBinding.filter([oFilter1]);
+       
+            oBinding.attachEventOnce("dataReceived", function() {
+                var aItems = oBinding.getCurrentContexts();
+       
+                if (aItems.length === 0) {
+                    oSelectDialog.setNoDataText("No data found");
+                } else {
+                    oSelectDialog.setNoDataText("Loading");
+                }
+            });
+          },
 
         onSubmitInvite: function () {
-
             let oVoyageno = this.byId("Voyageno").getValue();
             var aData = [];
-            var extractUnitData;
+          
             var oTableModel = this.getView().getModel(); // Assuming the table model is the main view model
             var oListBinding = oTableModel.bindList("/xNAUTIxVOYAGEHEADERTOITEM");
-
+        
             oListBinding.requestContexts().then(function (aContexts) {
                 aData = aContexts.map(function (oContext) {
                     return oContext.getObject();
@@ -291,20 +333,32 @@ var isBidEndTimeSelected = false;
                     return item.Frtu;
                 });
                 extractUnitData = extractData[0];
-                var a = sap.ui.getCore().byId("unit");
-                a.setValue(extractUnitData);
+                console.log("selected data is ",extractUnitData);
+                debugger;
+                // Set value for the "unit" input field in the first fragment
+                var oUnitInput = sap.ui.getCore().byId("unit");
+                if (oUnitInput) {
+                    oUnitInput.setValue(extractUnitData);
+                }
+        
+                // Set value for the "FreightUnit" input field in the second fragment
+                var oFreightUnitInput = sap.ui.getCore().byId("FreightUnit");
+                if (oFreightUnitInput) {
+                    oFreightUnitInput.setValue(extractUnitData);
+                }
+        
             }.bind(this)).catch(function (oError) {
                 console.error("Error fetching data:", oError);
             });
-
+        
             var oTable = this.byId("table");
             var aSelectedItems = oTable.getSelectedItems();
-
+        
             if (aSelectedItems.length === 0) {
                 MessageBox.error("Please select at least one row.");
                 return;
             }
-
+        
             // var vendorArray = [];
             var aIneligibleVendors = aSelectedItems.reduce(function (aAccumulator, oItem) {
                 var oContext = oItem.getBindingContext("rankings");
@@ -315,7 +369,7 @@ var isBidEndTimeSelected = false;
                 }
                 return aAccumulator;
             }, []);
-
+        
             if (aIneligibleVendors.length > 0) {
                 sVendors = aIneligibleVendors.join(", ");
                 MessageBox.error(`You have selected ineligible vendor(s): ${sVendors}.`);
@@ -323,7 +377,7 @@ var isBidEndTimeSelected = false;
                 if (!this._oDialog) {
                     this._oDialog = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.SubmitInvite", this);
                     this.getView().addDependent(this._oDialog);
-
+        
                     var oModel = new sap.ui.model.json.JSONModel({
                         BiddingStartDate: null,
                         BiddingEndDate: null,
@@ -340,7 +394,9 @@ var isBidEndTimeSelected = false;
                 this._oDialog.open();
             }
         },
+        
 
+        
         onSave: function () {
             var oView = this.getView();
             var oDialog = this._oDialog; // Assuming _oDialog is your SubmitInvite fragment instance
@@ -623,7 +679,8 @@ var isBidEndTimeSelected = false;
         
                 // Get the vendor names from the context
                 let oData = oContext.getObject();
-                let vendorsNames = oData.vendorsName.map(vendor => `- ${vendor}`).join("\n"); // Modify this line
+                                                    
+                let vendorsNames = oData.vendorsName.map((vendor, index) => `${index + 1}. ${vendor}`).join("\n");
         
                 sap.m.MessageBox.success(`Emails sent successfully to these companies:\n${vendorsNames}`, {
                     onClose: () => {
@@ -654,53 +711,6 @@ var isBidEndTimeSelected = false;
             }
         },
         
-        // onCreateCompleted: function (oEvent) {
-        //     let oParameters = oEvent.getParameters();
-        //     let oContext = oParameters.context;
-        //     let bSuccess = oParameters.success;
-        
-        //     if (bSuccess) {
-        //         console.log("oParameters", oParameters);
-        //         console.log("oContext", oContext.sPath);
-        //         console.log("bSuccess", bSuccess);
-        
-        //         // Get the vendor names from the context
-        //         let oData = oContext.getObject();
-        //         let vendorsNames = oData.vendorsName.join(", ");
-        
-        //         sap.m.MessageBox.success(`Emails sent successfully to these companies: ${vendorsNames}`, {
-        //             onClose: () => {
-        //                 if (this._oDialog1) {
-        //                     this._oDialog1.close();
-        //                 }
-        //                 this.onRefresh(); 
-        //                 // Call the onRefresh function to refresh the fragment or view
-        //             }
-        //         });
-        
-        //         this.getView().byId("sumbit").setEnabled(false);
-        //         this.getView().byId("Button1").setEnabled(false);
-        
-        //     } else {
-        //         var errorResponse = oEvent.getParameter("response");
-        //         console.error("Error creating entity:", errorResponse);
-        //         if (errorResponse) {
-        //             try {
-        //                 var errorJson = JSON.parse(errorResponse.responseText);
-        //                 sap.m.MessageBox.error(errorJson.error.message.value);
-        //             } catch (e) {
-        //                 sap.m.MessageBox.error("An unknown error occurred while creating the entity.");
-        //             }
-        //         } else {
-        //             sap.m.MessageBox.error("An unknown error occurred while creating the entity.");
-        //         }
-        //     }
-        // },
-        
-        
-
-
-
 
         onCancel: function () {
             var oModel = this._oDialog.getModel("addBiddingModel");
@@ -732,27 +742,274 @@ var isBidEndTimeSelected = false;
                 this._oDialog.close();
             }
         },
-
+   
         onNavigateDetails: function (oEvent) {
-            bedDetailsModel = new sap.ui.model.json.JSONModel();
-
+            var that = this; // Store reference to the current context
+            this.onGetUnitData().then(function (extractUnitData) {
+                var oFreightUnitInput = sap.ui.getCore().byId("FreightUnit");
+                if (oFreightUnitInput) {
+                    oFreightUnitInput.setValue(extractUnitData);
+                }
+            }).catch(function (error) {
+                console.error("Error fetching unit data:", error);
+            });
+        
+            var bedDetailsModel = new sap.ui.model.json.JSONModel();
             var oSelectedItem = oEvent.getSource();
             var oBindingContext = oSelectedItem.getBindingContext("rankings");
             var iIndex = oBindingContext.getPath().split("/").pop();
             var SelectedChartData = aData[0].Vendors[iIndex];
-
             bedDetailsModel.setData(SelectedChartData);
             this.getView().setModel(bedDetailsModel, "ChartingFilterModel");
-            console.log("selectedData", this.getView().getModel("ChartingFilterModel"));
-
-            console.log("Selected Row Index:", SelectedChartData);
-            oView = this.getView();
+        
+            var oView = this.getView();
             if (!this._oDialog1) {
                 this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.quotation.fragments.InviteNegoDetails", this);
                 oView.addDependent(this._oDialog1);
             }
             this._oDialog1.open();
+        
+            this.createDynamicForm();
         },
+        createDynamicForm: function() {
+            var oModel = this.getView().getModel("ChartingFilterModel");
+            var bidDetails = oModel.getProperty("/bidDetails");
+        
+            // Define static fields based on vendor data
+            var staticFields = [
+                { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
+                { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
+                { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
+                { label: "Total Score", value: "{ChartingFilterModel>/score}" },
+                { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" },
+                { label: "Freight Unit", value: "", id: "FreightUnit" } // Added Freight Unit with empty initial value
+            ];
+        
+            // Prepare containers for each part of the form
+            var oTechnicalContainer = new sap.ui.layout.form.FormContainer({
+                title: new sap.ui.core.Title({ text: "Technical Details" })
+            });
+        
+            var oCommercialContainer = new sap.ui.layout.form.FormContainer({
+                title: new sap.ui.core.Title({ text: "Commercial Details" })
+            });
+        
+            // Add static fields to the technical container
+            staticFields.forEach(function(field) {
+                var oFormElement = new sap.ui.layout.form.FormElement({
+                    label: new sap.m.Label({ text: field.label }),
+                    fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
+                });
+                oTechnicalContainer.addFormElement(oFormElement);
+            });
+        
+            // Add dynamic fields from bidDetails to the appropriate containers
+            bidDetails.forEach(function(detail) {
+                var oFormElement = new sap.ui.layout.form.FormElement({
+                    label: new sap.m.Label({ text: detail.CodeDesc }),
+                    fields: [
+                        new sap.m.Input({
+                            value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
+                            editable: false
+                        })
+                    ]
+                });
+        
+                // Add fScore field if defined
+                if (detail.fScore !== undefined) {
+                    // Add a label for the second input (fScore)
+                    var oScoreLabel = new sap.m.Label({ text: "Score-" + detail.CodeDesc });
+                    var oScoreInput = new sap.m.Input({
+                        value: detail.fScore,
+                        editable: false
+                    });
+                    var oFlexBox = new sap.m.FlexBox({
+                        alignItems: "Center",
+                        items: [ oScoreInput]
+                    });
+        
+                    // Add the fScore field to both Technical and Commercial containers
+                    var oScoreFormElement = new sap.ui.layout.form.FormElement({
+                        label: new sap.m.Label({ text: "Score-" + detail.CodeDesc }),
+                        fields: [oFlexBox]
+                    });
+        
+                    oTechnicalContainer.addFormElement(oScoreFormElement);
+                    oCommercialContainer.addFormElement(oFormElement);
+                } else {
+                    // Only one input field if fScore is not defined
+                    oFormElement.addField(new sap.m.Input({
+                        value: detail.Value || detail.Cvalue,
+                        editable: false
+                    }));
+        
+                    // Add the regular field to the appropriate container
+                    if (detail.Type === "Technical") {
+                        oTechnicalContainer.addFormElement(oFormElement);
+                    } else if (detail.Type === "Commercial") {
+                        oCommercialContainer.addFormElement(oFormElement);
+                    }
+                }
+            });
+        
+            // Create forms for technical and commercial details
+            var oTechnicalForm = new sap.ui.layout.form.Form({
+                layout: new sap.ui.layout.form.ResponsiveGridLayout(),
+                formContainers: [oTechnicalContainer]
+            });
+        
+            var oCommercialForm = new sap.ui.layout.form.Form({
+                layout: new sap.ui.layout.form.ResponsiveGridLayout(),
+                formContainers: [oCommercialContainer]
+            });
+        
+            // Use a HorizontalLayout to display forms side by side
+            var oHorizontalLayout = new sap.ui.layout.HorizontalLayout({
+                content: [oTechnicalForm, oCommercialForm]
+            });
+        
+            // Display the forms in a dialog or any other container as per your requirement
+            var oDialog = this._oDialog1;
+            oDialog.removeAllContent();
+            oDialog.addContent(oHorizontalLayout);
+        },
+        
+        
+        
+        
+        
+        
+      
+        
+        // createDynamicForm: function() {
+        //     var oModel = this.getView().getModel("ChartingFilterModel");
+        //     var bidDetails = oModel.getProperty("/bidDetails");
+            
+        //     var oFormContainer = new sap.ui.layout.form.FormContainer();
+            
+        //     // Define static fields based on vendor data
+        //     var staticFields = [
+        //         { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
+        //         { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
+        //         { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
+        //         { label: "Total Score", value: "{ChartingFilterModel>/score}" },
+        //         { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" },
+        //         { label: "Freight Unit", value: "", id: "FreightUnit" }, // Added Freight Unit with empty initial value
+        //     ];
+            
+        //     // Add static fields to the form
+        //     staticFields.forEach(function(field) {
+        //         var oFormElement = new sap.ui.layout.form.FormElement({
+        //             label: new sap.m.Label({ text: field.label }),
+        //             fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
+        //         });
+        //         oFormContainer.addFormElement(oFormElement);
+        //     });
+            
+        //     // Add dynamic fields from bidDetails
+        //     bidDetails.forEach(function(detail) {
+        //         var oFormElement = new sap.ui.layout.form.FormElement({
+        //             label: new sap.m.Label({ text: detail.CodeDesc }),
+        //             fields: [
+        //                 new sap.m.Input({
+        //                     value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
+        //                     editable: false
+                            
+        //                 })
+        //             ]
+        //         });
+                
+        //         // Add fScore field if defined
+        //         if (detail.fScore !== undefined) {
+        //             // Add a label for the second input (fScore)
+        //             var oScoreLabel = new sap.m.Label({ text: "Score-" + detail.CodeDesc });
+        //             var oScoreInput = new sap.m.Input({
+        //                 value: detail.fScore,
+        //                 editable: false
+        //             });
+        //             var oFlexBox = new sap.m.FlexBox({
+        //                 alignItems: "Center",
+        //                 items: [oScoreLabel, oScoreInput]
+        //             });
+        //             oFormElement.addField(oFlexBox);
+        //         } else {
+        //             // Only one input field if fScore is not defined
+        //             oFormElement.addField(new sap.m.Input({
+        //                 value: detail.Value || detail.Cvalue,
+        //                 editable: false
+        //             }));
+        //         }
+                
+        //         oFormContainer.addFormElement(oFormElement);
+        //     });
+            
+        //     var oForm = new sap.ui.layout.form.Form({
+        //         layout: new sap.ui.layout.form.ResponsiveGridLayout(),
+        //         formContainers: [oFormContainer]
+        //     });
+            
+        //     var oDialog = this._oDialog1;
+        //     oDialog.removeAllContent();
+        //     oDialog.addContent(oForm);
+        // },
+        
+        
+      
+        
+        // createDynamicForm: function() {
+        //     var oModel = this.getView().getModel("ChartingFilterModel");
+        //     var bidDetails = oModel.getProperty("/bidDetails");
+        
+        //     var oFormContainer = new sap.ui.layout.form.FormContainer();
+        
+        //     // Define static fields based on vendor data
+        //     var staticFields = [
+        //         { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
+        //         { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
+        //         { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
+        //         { label: "Total Score", value: "{ChartingFilterModel>/score}" },
+        //         { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" }
+        //     ];
+        
+        //     // Add static fields to the form
+        //     staticFields.forEach(function(field) {
+        //         var oFormElement = new sap.ui.layout.form.FormElement({
+        //             label: new sap.m.Label({ text: field.label }),
+        //             fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
+        //         });
+        //         oFormContainer.addFormElement(oFormElement);
+        //     });
+        
+        //     // Add dynamic fields from bidDetails
+        //     bidDetails.forEach(function(detail) {
+        //         var oFormElement = new sap.ui.layout.form.FormElement({
+        //             label: new sap.m.Label({ text: detail.CodeDesc }),
+        //             fields: [
+        //                 new sap.m.Input({
+        //                     value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
+        //                     editable: false
+        //                 })
+        //             ]
+        //         });
+        //         oFormContainer.addFormElement(oFormElement);
+        //     });
+        
+        //     var oForm = new sap.ui.layout.form.Form({
+        //         layout: new sap.ui.layout.form.ResponsiveGridLayout(),
+        //         formContainers: [oFormContainer]
+        //     });
+        
+        //     var oDialog = this._oDialog1;
+        //     oDialog.removeAllContent();
+        //     oDialog.addContent(oForm);
+        // }
+        
+// ,        
+        
+        
+        
+        
+      
         oncancell: function () {
             this._oDialog1.close();
         },
@@ -777,6 +1034,41 @@ var isBidEndTimeSelected = false;
             });
             this.getView().byId("ButtonInvite").setEnabled(bEnableButton);
         },
+        onGetUnitData: function () {
+            return new Promise((resolve, reject) => {
+                let oVoyageno = this.byId("Voyageno").getValue();
+                let extractUnitData;
+                
+                // Ensure oTableModel is initialized correctly
+                let oTableModel = this.getView().getModel();
+                if (!oTableModel) {
+                    reject("Table model is not initialized.");
+                    return;
+                }
+        
+                let oListBinding = oTableModel.bindList("/xNAUTIxVOYAGEHEADERTOITEM");
+        
+                oListBinding.requestContexts().then(function (aContexts) {
+                    let aData = aContexts.map(function (oContext) {
+                        return oContext.getObject();
+                    });
+        
+                    let extractData = aData.filter(item => {
+                        return item.Voyno === oVoyageno;
+                    }).map(function (item) {
+                        return item.Frtu;
+                    });
+        
+                    extractUnitData = extractData[0];
+                    console.log("Selected data is ", extractUnitData);
+                    resolve(extractUnitData); // Resolve the promise with extractUnitData
+                }).catch(function (oError) {
+                    console.error("Error fetching data:", oError);
+                    reject(oError); // Reject the promise if there's an error
+                });
+            });
+        },
+        
         onRefresh: function () {
             
             this.byId("charteringNo").setValue("");
@@ -829,10 +1121,7 @@ var isBidEndTimeSelected = false;
             // Reset other fields as needed
             this.byId("unit").setValue("");
         
-            // Additional logic to hide or reset other UI elements if necessary
-            // Example: this.byId("TableId").setVisible(false);
-            // Example: this.byId("ButtonId").setVisible(true);
-        
+         
             // Refresh the model bindings if needed
             var oModel = this.getView().getModel("addBiddingModel");
             if (oModel) {
@@ -848,113 +1137,6 @@ var isBidEndTimeSelected = false;
                 });
             }
         },
-        
-        // onselectBSD: function (oEvent) {
-        //     var oDatePicker = oEvent.getSource();
-        //     var oSelectedDate1 = oDatePicker.getDateValue();
-        //     var oCurrentDate = new Date();
-        //     oCurrentDate.setHours(0, 0, 0, 0);
-        
-        //     if (oSelectedDate1 < oCurrentDate) {
-        //         oDatePicker.setValue("");
-        //         oDatePicker.setValueState("Error");
-        //         MessageBox.error("Past dates are not allowed. Please select a current or future date.");
-        //     } else {
-        //         oDatePicker.setValueState("None");
-        //     }
-        // },
-        
-        // onselectBED: function (oEvent) {
-        //     var oDatePicker = oEvent.getSource();
-        //     var oSelectedDate = oDatePicker.getDateValue();
-        //     var oCurrentDate = new Date();
-        //     oCurrentDate.setHours(0, 0, 0, 0);
-        
-        //     // Get the Bidding Start Date value
-        //     var oBiddingStartDatePicker = sap.ui.getCore().byId("date1");
-        //     var oBiddingStartDate = oBiddingStartDatePicker.getDateValue();
-        
-        //     if (oSelectedDate < oCurrentDate) {
-        //         oDatePicker.setValue("");
-        //         oDatePicker.setValueState("Error");
-        //         MessageBox.error("Past dates are not allowed. Please select a current or future date.");
-        //     } else if (oBiddingStartDate && oSelectedDate < oBiddingStartDate) {
-        //         oDatePicker.setValue("");
-        //         oDatePicker.setValueState("Error");
-        //         MessageBox.error("Bidding End Date cannot be before Bidding Start Date. Please select a valid date.");
-        //     } else {
-        //         oDatePicker.setValueState("None");
-        //     }
-        // },
-        
-        // // onselectBSTime: function (oEvent) {
-        // //     var oTimePicker = oEvent.getSource();
-        // //     var oSelectedTime = oTimePicker.getTimeValue();
-        // //     var oCurrentDate = new Date();
-        // //     var oSelectedDate = sap.ui.getCore().byId("date1").getDateValue();
-        
-        // //     if (oSelectedDate && oSelectedDate.toDateString() === oCurrentDate.toDateString() && oSelectedTime < oCurrentDate) {
-        // //         oTimePicker.setValue("");
-        // //         oTimePicker.setValueState("Error");
-        // //         MessageBox.error("Past times are not allowed for today. Please select a current or future time.");
-        // //     } else {
-        // //         oTimePicker.setValueState("None");
-        // //     }
-        // // },
-        
-        // // onselectBETime: function (oEvent) {
-        // //     var oTimePicker = oEvent.getSource();
-        // //     var oSelectedTime = oTimePicker.getTimeValue();
-        // //     var oSelectedDate = sap.ui.getCore().byId("date2").getDateValue();
-        // //     var oCurrentDate = new Date();
-        // //     var oBiddingStartDate = sap.ui.getCore().byId("date1").getDateValue();
-        // //     var oBiddingStartTime = sap.ui.getCore().byId("BidSTime").getTimeValue();
-        
-        // //     if (oSelectedDate && oSelectedDate.toDateString() === oCurrentDate.toDateString() && oSelectedTime < oCurrentDate) {
-        // //         oTimePicker.setValue("");
-        // //         oTimePicker.setValueState("Error");
-        // //         MessageBox.error("Past times are not allowed for today. Please select a current or future time.");
-        // //     } else if (oBiddingStartDate && oSelectedDate.toDateString() === oBiddingStartDate.toDateString() && oSelectedTime < oBiddingStartTime) {
-        // //         oTimePicker.setValue("");
-        // //         oTimePicker.setValueState("Error");
-        // //         MessageBox.error("Bidding End Time cannot be before Bidding Start Time. Please select a valid time.");
-        // //     } else {
-        // //         oTimePicker.setValueState("None");
-        // //     }
-        // // },
-        // // onselectBSTime: function (oEvent) {
-        // //     var oTimePicker = oEvent.getSource();
-        // //     var oSelectedTime = oTimePicker.getDateValue(); // Using getDateValue() to get the time in Date format
-        // //     var oBiddingEndTime = sap.ui.getCore().byId("BidETime").getDateValue(); // Using getDateValue() to get the time in Date format
-        
-        // //     if (oBiddingEndTime && oSelectedTime >= oBiddingEndTime) {
-        // //         oTimePicker.setValue("");
-        // //         oTimePicker.setValueState("Error");
-        // //         MessageBox.error("Bidding Start Time must be less than Bidding End Time and at least 30 minutes before Bidding End Time.");
-        // //     } else {
-        // //         oTimePicker.setValueState("None");
-        // //     }
-        // // },
-        
-        // // onselectBETime: function (oEvent) {
-        // //     var oTimePicker = oEvent.getSource();
-        // //     var oSelectedTime = oTimePicker.getDateValue(); // Using getDateValue() to get the time in Date format
-        // //     var oBiddingStartTime = sap.ui.getCore().byId("BidSTime").getDateValue(); // Using getDateValue() to get the time in Date format
-        
-        // //     if (oBiddingStartTime) {
-        // //         var oTimeDifference = oSelectedTime - oBiddingStartTime;
-        // //         var oThirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
-        
-        // //         if (oSelectedTime <= oBiddingStartTime || oTimeDifference < oThirtyMinutes) {
-        // //             oTimePicker.setValue("");
-        // //             oTimePicker.setValueState("Error");
-        // //             MessageBox.error("Bidding End Time must be greater than Bidding Start Time and at least 30 minutes after Bidding Start Time.");
-        // //         } else {
-        // //             oTimePicker.setValueState("None");
-        // //         }
-        // //     }
-        // // }
-// Initialize state tracking variables
 
 
 validateTime: function (startDateTime, endDateTime) {
@@ -1050,9 +1232,10 @@ onselectBSTime: function (oEvent) {
         MessageBox.error("Please select the Bid Start Date and Bid End Date first.");
         var oTimePicker = oEvent.getSource();
         oTimePicker.setValue("");
-        oTimePicker.setValueState("Error");
+        // oTimePicker.setValueState("Error");
         return;
     }
+
 
     var oTimePicker = oEvent.getSource();
     var oSelectedTime = oTimePicker.getDateValue(); // Using getDateValue() to get the time in Date format
@@ -1068,7 +1251,7 @@ onselectBSTime: function (oEvent) {
 
         if (!this.validateTime(startDateTime, endDateTime)) {
             oTimePicker.setValue("");
-            oTimePicker.setValueState("Error");
+            // oTimePicker.setValueState("Error");
             MessageBox.error("Bidding Start Time must be at least 30 minutes before Bidding End Time.");
             isBidStartTimeSelected = false;
             return;
@@ -1092,7 +1275,7 @@ onselectBETime: function (oEvent) {
         MessageBox.error("Please select the Bid Start Date, Bid Start Time, and Bid End Date first.");
         var oTimePicker = oEvent.getSource();
         oTimePicker.setValue("");
-        oTimePicker.setValueState("Error");
+        // oTimePicker.setValueState("Error");
         return;
     }
 

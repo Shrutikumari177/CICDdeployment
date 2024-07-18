@@ -38,6 +38,8 @@ module.exports = async (srv) => {
 
     srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
+    srv.on('READ', 'xNAUTIxvendbid_val', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
+
 
     // srv.on('CREATE', 'ControllerLiveBidDetails', async (req) => {
 

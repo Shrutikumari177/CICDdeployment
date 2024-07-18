@@ -582,20 +582,30 @@ sap.ui.define(
         oTable.addItem(oNewRow);
     },
 
-      onDeleteRow1: function () {
-        var oTable = this.byId("entryTypeTable");
-        var aSelectedItems = oTable.getSelectedItems();
-    
+    onDeleteRow1: function () {
+      var oTable = this.byId("entryTypeTable");
+      var aSelectedItems = oTable.getSelectedItems();
+      var aItems = oTable.getItems();
+      var oCreateTypeTable = this.byId("createTypeTable");
 
-        if (aSelectedItems.length === 0) {
-            sap.m.MessageToast.show("Please select an item");
-            return;
-        }
-        aSelectedItems.forEach(function (oSelectedItem) {
-            oTable.removeItem(oSelectedItem);
-        });
-    
-        oTable.removeSelections();
+      if (aItems.length <= 1) {
+        sap.m.MessageToast.show("The table must have at least one row.");
+        oCreateTypeTable.removeSelections();
+        return;
+      }
+
+
+      if (aSelectedItems.length === 0) {
+        sap.m.MessageToast.show("Please select an item");
+        oCreateTypeTable.removeSelections();
+        return;
+      }
+      aSelectedItems.forEach(function (oSelectedItem) {
+        oTable.removeItem(oSelectedItem);
+      });
+
+      oTable.removeSelections();
+      oCreateTypeTable.removeSelections();
     },
     validateAllRows: function () {
       var oTable = this.byId("entryTypeTable");

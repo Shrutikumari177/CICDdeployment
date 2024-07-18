@@ -1,18 +1,18 @@
 <core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:core="sap.ui.core">  
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
     <SelectDialog
         id="mySelectDialog11"
         noDataText="Loading..."
         title="Select Chartering No"
-        search="onChartSearch1"
-        liveChange="onChartSearch1"
+        liveChange="onChartLiveChange1"
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
-        items="{ path: '/CharteringSet' ,  sorter: {
+        initialFocus="SearchField"
+        items="{ path: '/xNAUTIxvendbid_val' ,  sorter: {
                 path: 'Chrnmin',
                 descending: true
-            }}"> 
+            }}">
         <StandardListItem id="_IDGenStandardListItem11"
             title="{Chrnmin}"
             iconDensityAware="false"

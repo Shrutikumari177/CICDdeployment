@@ -18,7 +18,9 @@ using NAUTICONTRACTAWARD_SRV from './external/NAUTICONTRACTAWARD_SRV.cds';
 
 
 service nauticalservice {
-    
+     entity xNAUTIxvendbid_val as projection on NAUTIINVITECOMPARE_SRV.xNAUTIxvendbid_val
+    {        key Voyno, Chrnmin     }    
+;
      entity xNAUTIxSAPUSERS as projection on NAUTIMASTER_BTP_SRV.xNAUTIxSAPUSERS
     {        key bname, uflag     }    
 ;

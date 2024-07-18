@@ -1,6 +1,7 @@
-/* checksum : 5d95bba80e31cbc2507db78152092d6c */
+/* checksum : 80e7c27c7d3c2ca7ab77d12b487cced9 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
+@sap.message.scope.supported : 'true'
 @sap.supported.formats : 'atom json xlsx'
 service NAUTIINVITECOMPARE_SRV {};
 
@@ -168,5 +169,23 @@ entity NAUTIINVITECOMPARE_SRV.iteminvSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Zmode : String(4) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'value help for dist vendbid'
+entity NAUTIINVITECOMPARE_SRV.xNAUTIxvendbid_val {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  Chrnmin : String(10);
 };
 
