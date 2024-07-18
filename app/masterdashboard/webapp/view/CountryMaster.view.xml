@@ -32,16 +32,16 @@
             </Bar>
         </headerContent>
        
-        <Panel class="tablepanel">
+        <Panel id="_IDGenPanel1" class="tablepanel">
  
         <Bar
             id="_IDGenBar12"
             class="headerBar2" >
             <contentLeft>
-                <Button id="entryBtn" text="New Entries" type="Emphasized" press="newEntries" />
+                <Button id="entryBtn" text="New Entries" press="newEntries"  type="Emphasized" />
                
        
-                <Button  id="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+                <Button  id="deleteBtn" text="Delete" press="onDeletePress" type="Emphasized"/>
             </contentLeft>
         </Bar>
         <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
@@ -84,7 +84,7 @@
                             text="{ZfValue}"
                        
                         />
-                        <HBox >
+                        <HBox id="_IDGenHBox1" >
                         <Input
                             id="DescInput"
                             value="{ZfDesc}"
@@ -109,7 +109,9 @@
         </Panel>
         <Table
             id="entryTypeTable"
+            
             updateFinished="onTableUpdateFinished"
+            mode="MultiSelect"            
             selectionChange="selectedItems"
             growing="true"
             width="100%"
@@ -117,18 +119,18 @@
             visible="false"
          >
             <columns>
-                <Column>
-                    <Text text="Country" />
+                <Column id="_IDGenColumn3">
+                    <Text id="_IDGenText3" text="Country" />
                 </Column>
-                <Column>
-                    <Text text="Description" />
+                <Column id="_IDGenColumn4">
+                    <Text id="_IDGenText4" text="Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
                         <Input id="ZfValue2" maxLength="3" showValueHelp="true" valueHelpRequest="countryValueHelp" valueHelpOnly="true"/>
-                        <Input id="ZfDesc2" />
+                        <Input id="ZfDesc2" editable="false"/>
                     </cells>
                 </ColumnListItem>
             </items>
@@ -143,15 +145,15 @@
            
          >
             <columns>
-                <Column>
-                    <Text text="Country Code" />
+                <Column id="_IDGenColumn5">
+                    <Text id="_IDGenText5" text="Country Code" />
                 </Column>
-                <Column>
-                    <Text text=" Description" />
+                <Column id="_IDGenColumn6">
+                    <Text id="_IDGenText6" text=" Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem3">
                     <cells>
                         <Text id="ZfValue1" text="" />
                         <Input id="ZfDesc1"  editable="true" liveChange="OndescriptionChanged"/>
@@ -165,15 +167,19 @@
                 visible="false"
             >
                 <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                 <Button id="add" text="Add Row" icon="sap-icon://sys-add" press=".onAddRow1" type="Success"></Button>
+                <Button id="minus" text="Delete Row" icon="sap-icon://sys-minus" press=".onDeleteRow1" type="Reject"></Button>
                 <Button
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onSaveCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
         <OverflowToolbar

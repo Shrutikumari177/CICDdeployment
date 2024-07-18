@@ -1,464 +1,464 @@
 {
-  "_version": "1.59.0",
-  "sap.app": {
-    "id": "com.ingenx.nauti.masterdashboard",
-    "type": "application",
-    "i18n": "i18n/i18n.properties",
-    "applicationVersion": {
-      "version": "0.0.1"
-    },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "resources": "resources.json",
-    "sourceTemplate": {
-      "id": "@sap/generator-fiori:basic",
-      "version": "1.13.1",
-      "toolsId": "35d1ab54-ce37-4bbe-a7e8-dc197332044e"
-    },
-    "dataSources": {
-      "mainService": {
-        "uri": "/odata/v4/nauticalservice/",
-        "type": "OData",
-        "settings": {
-          "annotations": [],
-          "odataVersion": "4.0"
+    "_version": "1.59.0",
+    "sap.app": {
+        "id": "com.ingenx.nauti.masterdashboard",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.13.1",
+            "toolsId": "35d1ab54-ce37-4bbe-a7e8-dc197332044e"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/odata/v4/nauticalservice/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "masterdashboard-display": {
+                    "semanticObject": "masterdashboard",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    }
+                }
+            }
         }
-      }
     },
-    "crossNavigation": {
-      "inbounds": {
-        "masterdashboard-display": {
-          "semanticObject": "masterdashboard",
-          "action": "display",
-          "title": "{{flpTitle}}",
-          "signature": {
-            "parameters": {},
-            "additionalParameters": "allowed"
-          }
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
         }
-      }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.122.1",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "com.ingenx.nauti.masterdashboard.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "com.ingenx.nauti.masterdashboard.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteMasterDashboard",
+                    "pattern": ":?query:",
+                    "target": [
+                        "TargetMasterDashboard"
+                    ]
+                },
+                {
+                    "name": "RouteConfigReleaseDashboard",
+                    "pattern": "ConfigRelease",
+                    "target": [
+                        "TargetConfigReleaseDashboard"
+                    ]
+                },
+                {
+                    "name": "RouteVoyageType",
+                    "pattern": "VoyageType",
+                    "target": [
+                        "TargetVoyageType"
+                    ]
+                },
+                {
+                    "name": "RouteVesselType",
+                    "pattern": "VesselType",
+                    "target": [
+                        "TargetVesselType"
+                    ]
+                },
+                {
+                    "name": "RouteCurrencyType",
+                    "pattern": "MasterCurrencyType",
+                    "target": [
+                        "TargetCurrencyType"
+                    ]
+                },
+                {
+                    "name": "RouteClassMaster",
+                    "pattern": "ClassMaster",
+                    "target": [
+                        "TargetClassMaster"
+                    ]
+                },
+                {
+                    "name": "RouteBidMaster",
+                    "pattern": "BidMaster",
+                    "target": [
+                        "TargetBidMaster"
+                    ]
+                },
+                {
+                    "name": "RouteUoM",
+                    "pattern": "UoM",
+                    "target": [
+                        "TargetUoMMaster"
+                    ]
+                },
+                {
+                    "name": "RouteCostMaster",
+                    "pattern": "CostMaster",
+                    "target": [
+                        "TargetCostMaster"
+                    ]
+                },
+                {
+                    "name": "RouteEventMaster",
+                    "pattern": "EventMaster",
+                    "target": [
+                        "TargetEventMaster"
+                    ]
+                },
+                {
+                    "name": "RouteCountryMaster",
+                    "pattern": "CountryMaster",
+                    "target": [
+                        "TargetCountryMaster"
+                    ]
+                },
+                {
+                    "name": "RouteBusinessPartner",
+                    "pattern": "BusinessPartner",
+                    "target": [
+                        "TargetBusinessPartner"
+                    ]
+                },
+                {
+                    "name": "RouteBPMasterDetails",
+                    "pattern": "BPMasterDetails",
+                    "target": [
+                        "TargetBPMasterDetails"
+                    ]
+                },
+                {
+                    "name": "RouteVendorDataSyncing",
+                    "pattern": "VendorDataSyncing",
+                    "target": [
+                        "TargetVendorDataSyncing"
+                    ]
+                },
+                {
+                    "name": "RouteConfigRelease",
+                    "pattern": "ConfigRelease",
+                    "target": [
+                        "TargetConfigRelease"
+                    ]
+                },
+                {
+                    "name": "RouteConfigMaintainGroup",
+                    "pattern": "MaintainGroup",
+                    "target": [
+                        "TargetMaintainGroup"
+                    ]
+                },
+                {
+                    "name": "RouteConfigVoyage",
+                    "pattern": "ConfigVoyage",
+                    "target": [
+                        "TargetConfigVoyage"
+                    ]
+                },
+                {
+                    "name": "RouteConfigChartering",
+                    "pattern": "ConfigChartering",
+                    "target": [
+                        "TargetConfigChartering"
+                    ]
+                },
+                {
+                    "name": "RoutePortLocMaster",
+                    "pattern": "portLoc",
+                    "target": [
+                        "TargetPortLocMaster"
+                    ]
+                },
+                {
+                    "name": "RouteRouteMaster",
+                    "pattern": "RouteMaster",
+                    "target": [
+                        "TargetRouteMaster"
+                    ]
+                },
+                {
+                    "name": "RoutePortMaster",
+                    "pattern": "PortMaster",
+                    "target": [
+                        "TargetPortMaster"
+                    ]
+                },
+                {
+                    "name": "RouteRefDocIndicator",
+                    "pattern": "RefDocIndicator",
+                    "target": [
+                        "TargetRefDocIndicator"
+                    ]
+                },
+                {
+                    "name": "RouteApiUrl",
+                    "pattern": "ApiUrl",
+                    "target": [
+                        "TargetApiUrl"
+                    ]
+                },
+                {
+                    "name": "RouteUpload",
+                    "pattern": "Upload",
+                    "target": [
+                        "TargetUpload"
+                    ]
+                }
+            ],
+            "targets": {
+                "TargetMasterDashboard": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "MasterDashboard",
+                    "viewName": "MasterDashboard"
+                },
+                "TargetConfigReleaseDashboard": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ConfigReleaseDashboard",
+                    "viewName": "ConfigReleaseDashboard"
+                },
+                "TargetVoyageType": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "VoyageType",
+                    "viewName": "VoyageType"
+                },
+                "TargetVesselType": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "VesselType",
+                    "viewName": "VesselType"
+                },
+                "TargetCurrencyType": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "CurrencyType",
+                    "viewName": "CurrencyType"
+                },
+                "TargetClassMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ClassMaster",
+                    "viewName": "ClassMaster"
+                },
+                "TargetBidMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "BidMaster",
+                    "viewName": "BidMaster"
+                },
+                "TargetUoMMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "UOMMaster",
+                    "viewName": "UOMMaster"
+                },
+                "TargetCostMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "CostMaster",
+                    "viewName": "CostMaster"
+                },
+                "TargetEventMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "EventMaster",
+                    "viewName": "EventMaster"
+                },
+                "TargetCountryMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "CountryMaster",
+                    "viewName": "CountryMaster"
+                },
+                "TargetBusinessPartner": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "BusinessPartner",
+                    "viewName": "BusinessPartner"
+                },
+                "TargetBPMasterDetails": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "BPMasterDetails",
+                    "viewName": "BPMasterDetails"
+                },
+                "TargetVendorDataSyncing": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "VendorDataSyncing",
+                    "viewName": "VendorDataSyncing"
+                },
+                "TargetConfigRelease": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ConfigReleaseStrategy",
+                    "viewName": "ConfigReleaseStrategy"
+                },
+                "TargetMaintainGroup": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ConfigMaintainGroup",
+                    "viewName": "ConfigMaintainGroup"
+                },
+                "TargetConfigVoyage": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ConfigVoyage",
+                    "viewName": "ConfigVoyage"
+                },
+                "TargetConfigChartering": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ConfigChartering",
+                    "viewName": "ConfigChartering"
+                },
+                "TargetPortLocMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "PortLocMaster",
+                    "viewName": "PortLocMaster"
+                },
+                "TargetRouteMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "RouteMaster",
+                    "viewName": "RouteMaster"
+                },
+                "TargetPortMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "PortMaster",
+                    "viewName": "PortMaster"
+                },
+                "TargetRefDocIndicator": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "RefDocIndicator",
+                    "viewName": "RefDocIndicator"
+                },
+                "TargetApiUrl": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "ApiUrl",
+                    "viewName": "ApiUrl"
+                },
+                "TargetUpload": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "UploadSection",
+                    "viewName": "UploadSection"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "com.ingenx.nauti.masterdashboard.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "nauticalMasterSrv"
     }
-  },
-  "sap.ui": {
-    "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    }
-  },
-  "sap.ui5": {
-    "flexEnabled": true,
-    "dependencies": {
-      "minUI5Version": "1.122.1",
-      "libs": {
-        "sap.m": {},
-        "sap.ui.core": {},
-        "sap.f": {},
-        "sap.suite.ui.generic.template": {},
-        "sap.ui.comp": {},
-        "sap.ui.generic.app": {},
-        "sap.ui.table": {},
-        "sap.ushell": {}
-      }
-    },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
-    },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "com.ingenx.nauti.masterdashboard.i18n.i18n"
-        }
-      },
-      "": {
-        "dataSource": "mainService",
-        "preload": true,
-        "settings": {
-          "synchronizationMode": "None",
-          "operationMode": "Server",
-          "autoExpandSelect": true,
-          "earlyRequests": true
-        }
-      }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
-    },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "viewType": "XML",
-        "async": true,
-        "viewPath": "com.ingenx.nauti.masterdashboard.view",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "clearControlAggregation": false
-      },
-      "routes": [
-        {
-          "name": "RouteMasterDashboard",
-          "pattern": ":?query:",
-          "target": [
-            "TargetMasterDashboard"
-          ]
-        },
-        {
-          "name": "RouteConfigReleaseDashboard",
-          "pattern": "ConfigRelease",
-          "target": [
-            "TargetConfigReleaseDashboard"
-          ]
-        },
-        {
-          "name": "RouteVoyageType",
-          "pattern": "VoyageType",
-          "target": [
-            "TargetVoyageType"
-          ]
-        },
-        {
-          "name": "RouteVesselType",
-          "pattern": "VesselType",
-          "target": [
-            "TargetVesselType"
-          ]
-        },
-        {
-          "name": "RouteCurrencyType",
-          "pattern": "MasterCurrencyType",
-          "target": [
-            "TargetCurrencyType"
-          ]
-        },
-        {
-          "name": "RouteClassMaster",
-          "pattern": "ClassMaster",
-          "target": [
-            "TargetClassMaster"
-          ]
-        },
-        {
-          "name": "RouteBidMaster",
-          "pattern": "BidMaster",
-          "target": [
-            "TargetBidMaster"
-          ]
-        },
-        {
-          "name": "RouteUoM",
-          "pattern": "UoM",
-          "target": [
-            "TargetUoMMaster"
-          ]
-        },
-        {
-          "name": "RouteCostMaster",
-          "pattern": "CostMaster",
-          "target": [
-            "TargetCostMaster"
-          ]
-        },
-        {
-          "name": "RouteEventMaster",
-          "pattern": "EventMaster",
-          "target": [
-            "TargetEventMaster"
-          ]
-        },
-        {
-          "name": "RouteCountryMaster",
-          "pattern": "CountryMaster",
-          "target": [
-            "TargetCountryMaster"
-          ]
-        },
-        {
-          "name": "RouteBusinessPartnerDashboard",
-          "pattern": "BusinessPartner",
-          "target": [
-            "TargetBusinessPartner"
-          ]
-        },
-        {
-          "name": "RouteBPMasterDetails",
-          "pattern": "BPMasterDetails",
-          "target": [
-            "TargetBPMasterDetails"
-          ]
-        },
-        {
-          "name": "RouteVendorDataSyncing",
-          "pattern": "VendorDataSyncing",
-          "target": [
-            "TargetVendorDataSyncing"
-          ]
-        },
-        {
-          "name": "RouteConfigRelease",
-          "pattern": "ConfigRelease",
-          "target": [
-            "TargetConfigRelease"
-          ]
-        },
-        {
-          "name": "RouteConfigMaintainGroup",
-          "pattern": "MaintainGroup",
-          "target": [
-            "TargetMaintainGroup"
-          ]
-        },
-        {
-          "name": "RouteConfigVoyage",
-          "pattern": "ConfigVoyage",
-          "target": [
-            "TargetConfigVoyage"
-          ]
-        },
-        {
-          "name": "RouteConfigChartering",
-          "pattern": "ConfigChartering",
-          "target": [
-            "TargetConfigChartering"
-          ]
-        },
-        {
-          "name": "RoutePortLocMaster",
-          "pattern": "portLoc",
-          "target": [
-            "TargetPortLocMaster"
-          ]
-        },
-        {
-          "name": "RouteRouteMaster",
-          "pattern": "RouteMaster",
-          "target": [
-            "TargetRouteMaster"
-          ]
-        },
-        {
-          "name": "RoutePortMaster",
-          "pattern": "PortMaster",
-          "target": [
-            "TargetPortMaster"
-          ]
-        },
-        {
-          "name": "RouteRefDocIndicator",
-          "pattern": "RefDocIndicator",
-          "target": [
-            "TargetRefDocIndicator"
-          ]
-        },
-        {
-          "name": "RouteApiUrl",
-          "pattern": "ApiUrl",
-          "target": [
-            "TargetApiUrl"
-          ]
-        },
-        {
-          "name": "RouteUpload",
-          "pattern": "Upload",
-          "target": [
-            "TargetUpload"
-          ]
-        }
-      ],
-      "targets": {
-        "TargetMasterDashboard": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "MasterDashboard",
-          "viewName": "MasterDashboard"
-        },
-        "TargetConfigReleaseDashboard": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ConfigReleaseDashboard",
-          "viewName": "ConfigReleaseDashboard"
-        },
-        "TargetVoyageType": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "VoyageType",
-          "viewName": "VoyageType"
-        },
-        "TargetVesselType": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "VesselType",
-          "viewName": "VesselType"
-        },
-        "TargetCurrencyType": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "CurrencyType",
-          "viewName": "CurrencyType"
-        },
-        "TargetClassMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ClassMaster",
-          "viewName": "ClassMaster"
-        },
-        "TargetBidMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "BidMaster",
-          "viewName": "BidMaster"
-        },
-        "TargetUoMMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "UOMMaster",
-          "viewName": "UOMMaster"
-        },
-        "TargetCostMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "CostMaster",
-          "viewName": "CostMaster"
-        },
-        "TargetEventMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "EventMaster",
-          "viewName": "EventMaster"
-        },
-        "TargetCountryMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "CountryMaster",
-          "viewName": "CountryMaster"
-        },
-        "TargetBusinessPartner": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "BusinessPartnerDashboard",
-          "viewName": "BusinessPartnerDashboard"
-        },
-        "TargetBPMasterDetails": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "BPMasterDetails",
-          "viewName": "BPMasterDetails"
-        },
-        "TargetVendorDataSyncing": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "VendorDataSyncing",
-          "viewName": "VendorDataSyncing"
-        },
-        "TargetConfigRelease": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ConfigReleaseStrategy",
-          "viewName": "ConfigReleaseStrategy"
-        },
-        "TargetMaintainGroup": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ConfigMaintainGroup",
-          "viewName": "ConfigMaintainGroup"
-        },
-        "TargetConfigVoyage": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ConfigVoyage",
-          "viewName": "ConfigVoyage"
-        },
-        "TargetConfigChartering": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ConfigChartering",
-          "viewName": "ConfigChartering"
-        },
-        "TargetPortLocMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "PortLocMaster",
-          "viewName": "PortLocMaster"
-        },
-        "TargetRouteMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "RouteMaster",
-          "viewName": "RouteMaster"
-        },
-        "TargetPortMaster": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "PortMaster",
-          "viewName": "PortMaster"
-        },
-        "TargetRefDocIndicator": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "RefDocIndicator",
-          "viewName": "RefDocIndicator"
-        },
-        "TargetApiUrl": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ApiUrl",
-          "viewName": "ApiUrl"
-        },
-        "TargetUpload": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "UploadSection",
-          "viewName": "UploadSection"
-        }
-      }
-    },
-    "rootView": {
-      "viewName": "com.ingenx.nauti.masterdashboard.view.App",
-      "type": "XML",
-      "async": true,
-      "id": "App"
-    }
-  },
-  "sap.cloud": {
-    "public": true,
-    "service": "nauticalCloudSrv"
-  }
 }

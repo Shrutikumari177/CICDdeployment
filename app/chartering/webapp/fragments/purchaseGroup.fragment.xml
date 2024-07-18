@@ -11,6 +11,7 @@
         cancel="onPurchaseGroupValueHelpClose"
         items="{/xNAUTIxpurchGroup}"
         initialFocus="SearchField"
+        liveChange="onPurchaseGroupSearch"
        
         >
         <StandardListItem id="_IDGenStand"

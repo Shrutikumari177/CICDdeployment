@@ -14,32 +14,56 @@ sap.ui.define(
 
     let sloc;
     let LoggedInUser;
+    let userEmail;
+    let username;
 
     return BaseController.extend("com.ingenx.nauti.chartering.controller.CharteringApproval", {
-      onInit: function () {
-        this.getUserInfo();
+      onInit: async function () {
+
+        await this.getLoggedInUserInfo();
+        await this.getSUerIdInfo()
+
       },
-      
-      getUserInfo: function () {
-        return new Promise(function (resolve, reject) {
-          sap.ushell.Container.getService("UserInfo")
-            .getShellUserInfo()
-            .then(function (userInfo) {
-              let user = {
-                id: userInfo.id,
-                firstName: userInfo.firstName,
-                lastName: userInfo.lastName,
-                fullName: userInfo.fullName,
-                email: userInfo.email,
-              };
-              console.log("User Info ", user);
-              resolve(user);
-            })
-            .catch(function (error) {
-              reject(error);
-            });
+
+      getLoggedInUserInfo : async function(){
+        try {
+          let User = await sap.ushell.Container.getService("UserInfo");
+          let userID = User.getId();
+          userEmail = User.getEmail();
+          let userFullName = User.getFullName();
+          console.log("userEmail", userEmail);
+          console.log("userFullName", userFullName);
+          console.log("userID", userID);
+        } catch (error) {
+          userEmail = "ashwani.sharma@ingenxtec.com";
+        }
+      },
+      getSUerIdInfo :async function(){
+        let userMail = userEmail;
+        let oModel = this.getOwnerComponent().getModel();
+        let aFilter = new sap.ui.model.Filter("SmtpAddr", sap.ui.model.FilterOperator.EQ, userMail);
+
+
+        let oBindList = oModel.bindList("/xNAUTIxuserEmail", null, null, aFilter);
+       
+        
+        let res = await oBindList.requestContexts().then(function (aContexts) {
+            let aFilteredData = aContexts.map(context => context.getObject());
+            
+            if (aFilteredData.length > 0) {
+                username = aFilteredData[0].username; 
+            }
+        
+            console.log("filterdata", aFilteredData);
+            console.log("user login", username);
+           
+            return username;
         });
+        
+        
       },
+       
+
       ValueHelpChartering: function () {
         let oView = this.getView();
 
@@ -53,7 +77,8 @@ sap.ui.define(
       },
 
       ChartingValueHelpClose: async function (evt) {
-
+        let userlogin = username;
+        console.log("hii",userlogin);
         let oInput = this.byId("CharteringNo");
         let oDescriptionInput = this.byId("_CharteringAppReqField");
         let aSelectedContexts = evt.getParameter("selectedContexts");
@@ -104,14 +129,14 @@ sap.ui.define(
 
         let testData = aFilteredData;
 
-        // fething last creqno based on status
+       
         let xCreqno = await this.getCreqnoToshow(oChrnmin);
 
         let transformedData = this.transformData(testData);
         console.log(transformedData);
-        // oApprovalModel.setData(transformedData);
+        
 
-        LoggedInUser = "A.SHARMA";
+        LoggedInUser = username;
         this.approverMatched = false;
         let that = this;
         transformedData.forEach(data => {
@@ -185,83 +210,110 @@ sap.ui.define(
         });
       },
 
-      // dynamic creation of colums
+   
+     
       createDynamicColumns: function (approvers) {
-        let oTable = this.getView().byId("approvalTable");
-        let oColumnTemplate = new sap.m.Text(); // Column template for text
-
-        // Remove existing columns (except fixed columns)
-        oTable.removeAllColumns();
-
-        // CONDITION  WHETHER USER IS either creator or Approver
-        let approverMatched = false;
-
-        for (const approver of approvers) {
-          if (LoggedInUser === approver.Uname && approver.Zlevel !== '00') {
-            approverMatched = true;
-            break;
-          }
-          console.log("Matched so hide the table");
-        }
-
-        // IF USER not MATCHED then Hide the VOYAGE APPROVAL TABLE
-        if (!approverMatched) {
-          oTable.setVisible(false);
-          return;
-        }
-
-        // Add fixed columns
-        oTable.addColumn(new sap.m.Column({
-          header: new sap.m.Label({ text: "Approval Req No" })
-        }));
-        oTable.addColumn(new sap.m.Column({
-          header: new sap.m.Label({ text: "Chartering No" })
-        }));
-        oTable.addColumn(new sap.m.Column({
-          header: new sap.m.Label({ text: "Created By" })
-        }));
-        oTable.addColumn(new sap.m.Column({
-          header: new sap.m.Label({ text: "Created On" })
-        }));
-
-        // Add dynamic columns for approvers
-        let stopCreatingColumns = false;
-        let hideTableApproval = true;
-
-        for (let i = 0; i < approvers.length; i++) {
-          const approver = approvers[i];
-
-          if (!stopCreatingColumns && approver.Zlevel !== "00") {
-            if (approver.Uname === LoggedInUser && (approver.Zaction === "PEND" || approver.Zaction === "")) {
+              let oTable = this.getView().byId("approvalTable");
+              let oColumnTemplate = new sap.m.Text(); // Column template for text
+         
+              oTable.removeAllColumns();
+         
+              let approverMatched = false;
+              let userLevel = null;
+         
+              for (const approver of approvers) {
+                  if (LoggedInUser === approver.Uname && approver.Zlevel !== '00') {
+                      approverMatched = true;
+                      userLevel = parseInt(approver.Zlevel, 10); // Convert Zlevel to integer for comparison
+                      console.log("User matched at level: ", userLevel);
+                      break;
+                  }
+              }
+         
+              if (!approverMatched) {
+                  oTable.setVisible(false);
+                  console.log("Logged-in user is not an approver or has Zlevel '00'");
+                  return;
+              }
+         
+              // Check if all lower levels (excluding '00') are approved
+              let allLowerLevelsApproved = true;
+              for (const approver of approvers) {
+                  let approverLevel = parseInt(approver.Zlevel, 10);
+                  if (approverLevel < userLevel && approverLevel > 0 && approver.Zaction !== 'APPR') {
+                      allLowerLevelsApproved = false;
+                      console.log("Lower level not approved: ", approver);
+                      break;
+                  }
+              }
+         
+              // Hide table if not all lower levels are approved
+              if (!allLowerLevelsApproved) {
+                  oTable.setVisible(false);
+                  console.log("Not all lower levels approved");
+                  return;
+              }
+         
+              // Adding fixed columns
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Approver" })
+                  header: new sap.m.Label({ text: "Approval Req No" })
               }));
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Status" })
+                  header: new sap.m.Label({ text: "Chartering No." })
               }));
               oTable.addColumn(new sap.m.Column({
-                header: new sap.m.Label({ text: "Approved on" })
+                  header: new sap.m.Label({ text: "Created By" })
               }));
-              oTable.setVisible(true);
-              hideTableApproval = false;
-              stopCreatingColumns = true; // Stop creating further columns
-              break; // Exit the loop after adding columns
-            }
-          }
-        }
-        if( hideTableApproval){
-          oTable.setVisible(false);
-        }
-
-
-        console.log("voyModel data: ", oApprovalModel.getData(), this.getView().getModel("VoyApprovalModel").getData());
-        oTable.bindItems({
-          path: "VoyApprovalModel>/",
-          template: new sap.m.ColumnListItem({
-            cells: this.createCells(approvers)
-          })
-        });
-      },
+              oTable.addColumn(new sap.m.Column({
+                  header: new sap.m.Label({ text: "Created On" })
+              }));
+         
+              let stopCreatingColumns = false;
+              let hideTableApproval = true;
+         
+              for (let i = 0; i < approvers.length; i++) {
+                  const approver = approvers[i];
+         
+                  if (!stopCreatingColumns && approver.Zlevel !== "00") {
+                      if (approver.Uname === LoggedInUser && (approver.Zcomm === "PEND" || approver.Zcomm === "")) {
+                          oTable.addColumn(new sap.m.Column({
+                              header: new sap.m.Label({ text: "Approver" })
+                          }));
+                          oTable.addColumn(new sap.m.Column({
+                              header: new sap.m.Label({ text: "Status" })
+                          }));
+                          oTable.addColumn(new sap.m.Column({
+                              header: new sap.m.Label({ text: "Approved on" })
+                          }));
+                          oTable.setVisible(true);
+                          hideTableApproval = false;
+                          stopCreatingColumns = true;
+                          console.log("Columns added for user: ", LoggedInUser);
+                          break; // Exit the loop after adding columns
+                      }
+                  }
+              }
+              if (hideTableApproval) {
+                  oTable.setVisible(false);
+                  console.log("Table hidden due to no pending approvals for logged-in user");
+              }
+         
+              console.log("voyModel data: ", this.getView().getModel("VoyApprovalModel").getData());
+              oTable.bindItems({
+                  path: "VoyApprovalModel>/",
+                  template: new sap.m.ColumnListItem({
+                      cells: this.createCells(approvers)
+                  })
+              });
+          },
+       
+  
+    
+ 
+  
+    
+  
+  
 
 
       createCells: function (approvers) {
@@ -614,7 +666,7 @@ sap.ui.define(
 
         let xCreqno = await this.getCreqnoToshow(chrnmin);
 
-        LoggedInUser = "A.SHARMA";
+        LoggedInUser = "username";
 
         this.approverMatched = false;
         transformedData.forEach(data => {
@@ -747,23 +799,32 @@ sap.ui.define(
 
 
       onCharteringSearch: function (oEvent) {
-        // debugger;
-        let sValue = oEvent.getParameter("value");
-
-        let oFilter = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue);
-
-        oEvent.getSource().getBinding("items").filter([oFilter]);
+        
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
 
       onRefresh: function () {
-        // Reset multi inputs
         let oInput = this.byId("CharteringNo");
        
 
         oInput.setValue("");
        
 
-        // Hide tables and other elements
         let oTable1 = this.byId("statusTable");
         let oTable2 = this.byId("approvalTable");
         let oVBox1 = this.byId("tab");

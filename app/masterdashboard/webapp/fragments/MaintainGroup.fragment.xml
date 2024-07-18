@@ -7,8 +7,10 @@
         noDataText="Loading..."
         title="Select Users"
        search="onMaintainUserSearch"
+       liveChange="onMaintainUserSearch"
         confirm="onMaintaingroupHelpClose"
         cancel="onMaintaingroupHelpClose"
+         initialFocus="SearchField"
         items="{/xNAUTIxSAPUSERS}"
        
         >

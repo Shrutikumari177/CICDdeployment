@@ -1,4 +1,4 @@
-/* checksum : 493ca600ab879d94d672e0bf460d6f90 */
+/* checksum : ba27d84518f4693870657710593b5d0d */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -780,6 +780,48 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxCountrySetFetch {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
+@sap.label : 'currency valuehelp tran'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxcurrency_val {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Currency'
+  key Navoycur : String(3) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Currency Description'
+  Navoygcurdes : String(30);
+  @sap.display.format : 'UpperCase'
+  @sap.label : ''
+  @sap.quickinfo : 'COUNTRY'
+  NAVOCOUNT : String(15);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'current with countrt'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxcury_count {
+  @sap.label : 'Currency'
+  @sap.quickinfo : 'Currency Key'
+  @sap.semantics : 'currency-code'
+  key Waers : String(5) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country Key'
+  key Land1 : String(3) not null;
+  @sap.label : 'Long Text'
+  Ltext : String(40);
+  @sap.label : 'Name'
+  @sap.quickinfo : 'Country Name'
+  landx : String(15);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
 @sap.label : 'Bidding Master'
 entity NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
   @sap.display.format : 'UpperCase'
@@ -809,6 +851,44 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Multiple Choice'
   Multi_Choice : Boolean;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'post mas new cds'
+entity NAUTIMASTER_BTP_SRV.xNAUTIxnewportcds {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Port Code'
+  @sap.quickinfo : 'Unified Port Code - Unique'
+  key Portc : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country'
+  Country : String(3);
+  @sap.label : 'Port Name'
+  Portn : String(25);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Related Anchorage'
+  Reancho : String(30);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Latitude'
+  Latitude : String(15);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Longitude'
+  Longitude : String(15);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Country Name'
+  Countryn : String(25);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Location ID'
+  Locid : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Process indicator'
+  @sap.quickinfo : 'Subsequent process indicator for document base table'
+  Ind : String(1);
 };
 
 @cds.external : true

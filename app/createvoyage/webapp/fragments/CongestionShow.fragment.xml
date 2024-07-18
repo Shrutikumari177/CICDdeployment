@@ -1,0 +1,109 @@
+<core:FragmentDefinition xmlns:form="sap.ui.layout.form" xmlns="sap.m" xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls" xmlns:viz.data="sap.viz.ui5.data" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+    <Dialog title="Congestion Details" class="sapUiSmallMargin" contentHeight="80%" contentWidth="80%">
+        <VBox>
+            <Panel>
+                <FlexBox class="charteringHeader" direction="Row">
+                    <VBox id="_IDGenVBox1" alignItems="End" class="charteringheader">
+                        <FlexBox id="_IDHBox1" class="headerItem" direction="Row" alignItems="Center">
+                            <Label id="Lab" text="Origin Port:" class="sapUiTinyMarginTop" />
+                            <Input id="charteringNo" editable="false" value="{/StartPort}" width="200px" />
+                        </FlexBox>
+                        <FlexBox id="_IDGenHBox4" class="headerItem" direction="Row" alignItems="Center">
+                            <Label id="Label3" text="Destination Port:" class="sapUiTinyMarginTop" tooltip="Time spent by cargo at the port after import." />
+                            <Input id="chartExt" editable="false" value="{/EndPort}" width="200px" />
+                        </FlexBox>
+                    </VBox>
+                    <VBox id="_IDGenVBox2" alignItems="End" class="charteringheader">
+                        <FlexBox id="_IDGenHBox5" class="headerItem" direction="Row" alignItems="Center">
+                            <Label id="_Label4" text="ETA:" class="sapUiTinyMarginTop" />
+                            <Input id="voyname" editable="false" width="200px" value="2"/>
+                        </FlexBox>
+                        <FlexBox id="_IDGenHBox6" class="headerItem" direction="Row" alignItems="Center">
+                            <Label id="Label5" text="Predicted ETA:" class="sapUiTinyMarginTop" />
+                            <Input id="creationDate" width="200px" editable="false" value="3" />
+                        </FlexBox>
+                    </VBox>
+                </FlexBox>
+            </Panel>
+            <IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" stretchContentHeight="true">
+                <items>
+                    <IconTabFilter text="Port Dwell" key="info">
+                        <Table id="dualTable" inset="false">
+                            <columns>
+                                <Column>
+                                    <Text text="Port Dwell" />
+                                </Column>
+                                <Column>
+                                    <Text text="Start Port" />
+                                </Column>
+                                <Column>
+                                    <Text text="End Port" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="IMPORT DWELL" tooltip="Import Dwell: Arrival to Gate-Out This metric tracks the processing and waiting time for your inbound shipments, from the moment the vessel arrives to when the container is gated out. Use it to enhance your logistics planning and streamline inbound supply chain" />
+                                        <Text text="2" />
+                                        <Text text="1" />
+                                    </cells>
+                                </ColumnListItem>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="EXPORT DWELL" tooltip="Export Dwell: Gate-In to Vessel Loading From the container‘s gate-in at the port to its loading onto the vessel, Export Dwell measures processing and waiting time for outbound shipments. Employ this data to optimize your supply chain efficiency for outbound cargo" />
+                                        <Text text="2" />
+                                        <Text text="1" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                        <Title text="Port Congestion: 1 day" class="title"></Title>
+                    </IconTabFilter>
+                    <IconTabFilter text="Congestion" key="attachments">
+                        <viz:VizFrame id="vizFrame" uiConfig="{applicationSet:'fiori'}" vizType="line" width="1030px" height="430px">
+                            <viz:dataset>
+                                <viz.data:FlattenedDataset data="{/ChartDataDate}">
+                                    <viz.data:dimensions>
+                                        <viz.data:DimensionDefinition name="Date" value="{Date}" />
+                                    </viz.data:dimensions>
+                                    <viz.data:measures>
+                                        <viz.data:MeasureDefinition name="Median Delay" value="{MedianDelay}" />
+                                    </viz.data:measures>
+                                </viz.data:FlattenedDataset>
+                            </viz:dataset>
+                            <viz:feeds>
+                                <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Date" />
+                                <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Median Delay" />
+                            </viz:feeds>
+                        </viz:VizFrame>
+                    </IconTabFilter>
+                    <IconTabFilter text="Nearby Ports" key="notes">
+                        <viz:VizFrame id="vizFrame2" uiConfig="{applicationSet:'fiori'}" vizType="column" width="1030px" height="430px" selectData="onVizSelection">
+                            <viz:dataset>
+                                <viz.data:FlattenedDataset data="{/ChartDataPort}">
+                                    <viz.data:dimensions>
+                                        <viz.data:DimensionDefinition name="Port" value="{Port}" />
+                                    </viz.data:dimensions>
+                                    <viz.data:measures>
+                                        <viz.data:MeasureDefinition name="Median Delay" value="{MedianDelay}" />
+                                    </viz.data:measures>
+                                </viz.data:FlattenedDataset>
+                            </viz:dataset>
+                            <viz:feeds>
+                                <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Port" />
+                                <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Median Delay" />
+                            </viz:feeds>
+                        </viz:VizFrame>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </VBox>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

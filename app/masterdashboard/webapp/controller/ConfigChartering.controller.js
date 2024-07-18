@@ -121,6 +121,24 @@ sap.ui.define(
     
         this._oApprpover.open();
     },
+    onMaintainUserSearch: function(oEvent) {
+
+      var sValue1 = oEvent.getParameter("value");
+  
+      var oFilter1 = new sap.ui.model.Filter("Zgroup", sap.ui.model.FilterOperator.Contains, sValue1);
+      var andFilter = new sap.ui.model.Filter({
+        filters: [oFilter1]
+      });
+  
+      oEvent.getSource().getBinding("items").filter([andFilter]);
+    },
+    onApproverSearch: function (oEvent) {
+      var sValue1 = oEvent.getParameter("value");
+
+      var oFilter1 = new sap.ui.model .Filter("Zuser", sap.ui.model.FilterOperator.Contains, sValue1);
+
+      oEvent.getSource().getBinding("items").filter([oFilter1]);
+    },
     
     onApproverClose: function(oEvent) {
         var oSelectedItem = oEvent.getParameter("selectedItem");

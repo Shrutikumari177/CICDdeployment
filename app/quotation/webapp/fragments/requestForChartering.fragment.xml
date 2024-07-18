@@ -8,7 +8,9 @@
         search="onChartSearch1"
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
-        items="{/CharteringSet}"> 
+        items="{/CharteringSet}"
+        liveChange="onChartSearch1"
+        > 
         <StandardListItem id="_IDGenStandardListItem11"
             title="{Chrnmin}"
             iconDensityAware="false"

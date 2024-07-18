@@ -2,6 +2,9 @@
 .footerBar{
     background-color: rgb(193, 230, 252) !important;
 }
+.title{
+    margin-top: 5%;
+}
 
 /* .sapMLIBShowSeparator>td{
     border: 1px solid rgb(214, 211, 211);
@@ -403,11 +406,11 @@
 .cellNoPadding {
     position: relative;
 }
-.cellNoPadding1 {
+/* .cellNoPadding1 {
     position: relative;
     margin: 4px 2px !important;
     padding:0px !important;
-}
+} */
 
 .planInfoFlexHeader, .actualInfoFlexHeader{
 

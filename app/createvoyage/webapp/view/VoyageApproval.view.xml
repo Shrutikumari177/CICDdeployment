@@ -77,7 +77,7 @@
                     >
                         <Label
                             id="_IDGenLabel1"
-                            text="Voyage No: "
+                            text="Voyage Number: "
                             class="sapUiTinyMarginTop"
                         />
                         <!-- <MultiInput
@@ -108,7 +108,7 @@
                     >
                         <Label
                             id="_IDGLabel1"
-                            text="Voyage Approval Request No: "
+                            text="Voyage Approval Request No.: "
                             class="sapUiTinyMarginTop"
                             visible="false"
                         />
@@ -238,10 +238,10 @@
                             >
                                 <columns>
                                     <!-- <Column>
-                                <Label text="Voyage No" />
+                                <Label text="Voyage No." />
                             </Column>
                             <Column>
-                                <Label text="Voyage Req No" />
+                                <Label text="Voyage Req No." />
                             </Column>
                             <Column>
                                 <Label text="Created By" />

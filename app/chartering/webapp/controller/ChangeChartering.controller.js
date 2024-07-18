@@ -17,10 +17,13 @@ sap.ui.define(
     let ChartNoValue;
     let chartObject = {};
     let jsonModel1 = [];
+    let userEmail;
+    let username;
+
     return BaseController.extend("com.ingenx.nauti.chartering.controller.ChangeChartering", {
-      onInit() {
+      onInit :async function ()  {
 
-
+        await this.getLoggedInUserInfo();
 
 
         let oModel2 = new sap.ui.model.json.JSONModel();
@@ -36,6 +39,20 @@ sap.ui.define(
         console.log("myvendorData", getVendorModelData)
 
       },
+      getLoggedInUserInfo : async function(){
+        try {
+          let User = await sap.ushell.Container.getService("UserInfo");
+          let userID = User.getId();
+          userEmail = User.getEmail();
+          let userFullName = User.getFullName();
+          console.log("userEmail", userEmail);
+          console.log("userFullName", userFullName);
+          console.log("userID", userID);
+        } catch (error) {
+          userEmail = undefined;
+        }
+      },
+      
       onNavigateDetails: function (oEvent) {
 
         const oContext = oEvent.getSource().getBindingContext("vendorModel1");
@@ -185,11 +202,23 @@ sap.ui.define(
         }
       },
       onVendorHelpSearch: function (oEvent) {
+       
         var sValue1 = oEvent.getParameter("value");
-
-        var oFilter1 = new Filter("Lifnr", FilterOperator.Contains, sValue1);
-
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
+        var oFilter1 = new sap.ui.model.Filter("Lifnr", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
 
 
@@ -304,13 +333,26 @@ sap.ui.define(
 
       },
 
+     
       onChartSearch: function (oEvent) {
         var sValue1 = oEvent.getParameter("value");
-
-        var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
-
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
-      },
+        var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
+    },
+    
 
       onSaveChartering: function () {
         let that = this;
@@ -382,47 +424,74 @@ sap.ui.define(
         }
       },
 
-
-
-
-      onSendForApproval: function () {
-        let oChrmin = this.byId("charteringNo").getValue();
+      onSendForApproval:async function () {
+        const oChrmin = this.byId("charteringNo").getValue();
 
         if (!oChrmin) {
-          sap.m.MessageBox.error("Please enter Chartering No");
-          return;
+            sap.m.MessageBox.error("Please enter Chartering No.");
+            return;
         }
 
         let oModel = this.getOwnerComponent().getModel();
         let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${oChrmin}')`);
+        let eligibleforApproval = false;
+        await oBinding.requestObject().then((oContext) => {
+            console.log(oContext);
 
-        oBinding.requestObject().then((oContext) => {
-          console.log(oContext);
+            if (oContext) {
+                let Zaction = oContext.Zaction;
+                console.log(oContext.Chrnmin);
+                console.log(Zaction);
 
-          if (oContext) {
-            let Zaction = oContext.Zaction;
-            console.log(oContext.Chrnmin);
-            console.log(Zaction);
+                if (Zaction === "REJ") {
+                  eligibleforApproval = true;
+                    
 
-            if (Zaction === "REJ") {
-              // Allow creation despite REJ status
-              this.onSendForApprovalCreate();
-            } else if (Zaction === "Appr") {
-              sap.m.MessageBox.error("Already sent for approval");
+                   
+                } else if (Zaction.toUpperCase() === "APPR") {
+                    sap.m.MessageBox.warning("Already sent for approval , status:Approved ");
+                } else {
+                    sap.m.MessageBox.warning("Already sent for approval , Status:  Pending");
+                }
             } else {
-              sap.m.MessageBox.error("Already sent for approval Status: " + Zaction);
-            }
-          } else {
-            // No existing approval found, proceed with creation
-            this.onSendForApprovalCreate();
-          }
-        }).catch(error => {
-          console.error("Error while fetching contexts: ", error);
-          this.onSendForApprovalCreate(); // Proceed with creation on error
-        });
-      },
 
-      onSendForApprovalCreate: function () {
+              eligibleforApproval = true;
+            }
+        }).catch(error => {
+          console.log("Error", );
+          if (error.message.includes("No record found in charter status") || error.error.message.includes("No record found in charter status")) {
+            eligibleforApproval = true
+          }
+        });
+        const that = this;
+        if(eligibleforApproval){
+          that.onSendForApprovalCreate();
+        }
+
+
+
+    },
+
+    checkforValidUser : async function(){
+      try {
+        let oModel = this.getOwnerComponent().getModel();
+        let oBinding = oModel.bindContext(`/xNAUTIxuserEmail(SmtpAddr='${userEmail}')`);
+        await oBinding.requestObject().then((oContext) => {
+          console.log(oContext);
+          userEmail = oContext.SmtpAddr;
+          console.log("hii", userEmail);
+        }).catch((error) => {
+          throw error
+        });
+    
+      } catch (error) {
+        userEmail = undefined
+        sap.m.MessageBox.error("User is not allowed to send for approval");
+        console.log("User Not Found", error.message);
+      }
+    },
+
+      onSendForApprovalCreate1: function () {
         let oChrmin = this.byId("charteringNo").getValue();
 
         if (!oChrmin) {
@@ -439,13 +508,16 @@ sap.ui.define(
             "Zemail": "sarath.venkateswara@ingenxtec.com"
           });
           console.log("saving data:", saveddata);
-
+          let oBusyDialog = new sap.m.BusyDialog();
+          oBusyDialog.open();
+        
           oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
             let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Chrnmin === oChrmin);
             if (ApprovalNo.length > 0) {
               let appNo = ApprovalNo[0].getObject().Creqno;
               console.log(appNo);
               sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
+              oBusyDialog.close();
             } else {
               sap.m.MessageBox.error("Error: Approval not found after creation");
             }
@@ -458,56 +530,142 @@ sap.ui.define(
           sap.m.MessageBox.error("Error while saving data");
         }
       },
-
-
-
-
-
-
-
-      onCancelChartering: function () {
-        const chartNoValue = this.getView().byId("charteringNo").getValue(); // Assuming you have an input field for ChartNo
-        if (!chartNoValue) {
+      onSendForApprovalCreate: async function () {
+        let oChrmin = this.byId("charteringNo").getValue();
+        if (!oChrmin) {
           sap.m.MessageBox.error("Please enter Chartering No");
           return;
         }
-
-        const that = this;
-        sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
-          MessageBox.confirm(
-            "Are you sure you want to delete?", {
-            title: "Confirm",
-            onClose: function (oAction) {
-              if (oAction === MessageBox.Action.OK) {
-                that.deleteCharteringSet(chartNoValue);
-              } else {
-                sap.m.MessageToast.show("Deletion canceled");
-              }
+        await this.checkforValidUser();
+        if(!userEmail){
+          return;
+        }
+        let oBindListSP = this.getView().getModel().bindList("/chartapprSet");
+      
+        try {
+          let saveddata = oBindListSP.create({
+            "Creqno": "",
+            "Chrnmin": oChrmin,
+            "Zemail": userEmail
+          });
+          console.log("saving data:", saveddata);
+          let oBusyDialog = new sap.m.BusyDialog();
+          oBusyDialog.open();
+        
+          oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
+            let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Chrnmin === oChrmin);
+            if (ApprovalNo.length > 0) {
+              let appNo = ApprovalNo[0].getObject().Creqno;
+              console.log(appNo);
+              sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
+              oBusyDialog.close();
+            } else {
+              sap.m.MessageBox.error("Error: Approval not found after creation");
             }
-          }
-          );
-        });
+          }).catch(function (error) {
+              throw error;
+          });
+        } catch (error) {
+          console.error("Error while saving data:", error);
+          oBusyDialog.close();
+          sap.m.MessageBox.error("Error while saving data");
+          
+        }
       },
-      deleteCharteringSet: function (chartNoValue) {
-        let that = this;
-        let oModel = this.getOwnerComponent().getModel();
-        let oBindList = oModel.bindList("/CharteringSet");
-        oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-          aContexts.forEach(function (oContext) {
-            getChartModelData.push(oContext.getObject());
-            if (oContext.getObject().Chrnmin === chartNoValue) {
+      
 
-              oContext.delete();
+      
 
-              sap.m.MessageToast.show("Entry with  '" + chartNoValue + "' deleted successfully from CharteringSet");
-              that.onRefresh();
+      
 
-            }
+        onCancelChartering: async function () {
+
+
+          const chartNoValue = this.getView().byId("charteringNo").getValue(); // Assuming you have an input field for ChartNo
+          if (!chartNoValue) {
+              sap.m.MessageBox.error("Please Select Chartering No.");
+              return;
+          }
+          let oModel = this.getOwnerComponent().getModel();
+          let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${chartNoValue}')`);
+          let eligibleforCancel = false;
+          await oBinding.requestObject().then((oContext) => {
+              console.log("testcontext",oContext);
+
+              if (oContext) {
+                  let Zaction = oContext.Zaction;
+                  console.log(oContext.Chrnmin);
+                  console.log(Zaction);
+
+                  if (Zaction === "REJ") {
+                      eligibleforCancel = true;
+
+                  } else if (Zaction.toUpperCase() === "APPR") {
+                      sap.m.MessageBox.warning("Already sent for approval, can't be cancel");
+                  } else {
+                      sap.m.MessageBox.warning("Already sent for approval, can't be cancel");
+                  }
+              } else {
+
+                
+                  eligibleforCancel = true;
+
+              }
+          }).catch(error => {
+            console.log("Error", );
+              if (error.message.includes("No record found in charter status") || error.error.message.includes("No record found in charter status")) {
+                  eligibleforCancel = true
+              }
           });
 
-        }.bind(this))
+          const that = this;
+          if (eligibleforCancel) {
+
+              sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
+                  MessageBox.confirm(
+                      "Are you sure you want to delete?", {
+                      title: "Confirm",
+                      onClose: function (oAction) {
+                          if (oAction === MessageBox.Action.OK) {
+                              that.deleteCharteringSet(chartNoValue);
+                          } else {
+                              sap.m.MessageToast.show("Deletion cancelled");
+                          }
+                      }
+                  }
+                  );
+              });
+          }
+      },
+      deleteCharteringSet: function (chartNoValue) {
+          let that = this;
+          let oModel = this.getOwnerComponent().getModel();
+
+          let oBindList = oModel.bindList("/CharteringSet");
+          oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+              let voyageData = []
+              aContexts.forEach(function (oContext) {
+                  voyageData.push(oContext.getObject());
+                  if (oContext.getObject().Chrnmin === chartNoValue) {
+
+                      oContext.delete();
+
+                      sap.m.MessageToast.show("Entry with  '" + chartNoValue + "' deleted successfully");
+                      that.onRefresh();
+
+                  }
+              });
+
+          }.bind(this))
 
       },
+     
+      
+   
+
+
+
+
 
 
       onRefresh: function () {

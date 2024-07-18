@@ -40,12 +40,13 @@
             class="headerBar2" >
             <contentLeft>
                 <Button id="entryBtn"
-                    text="New Entries" type="Emphasized"
+                    text="New Entries"
                     press="newEntries"
+                    type="Emphasized"
                 />
                
        
-                <Button  id="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+                <Button  id="deleteBtn" text="Delete" press="onDeletePress"  type="Emphasized"/>
                
             </contentLeft>
         </Bar>
@@ -117,20 +118,21 @@
             width="100%"
             class="tablepanel entrytables"
             visible="false"
+            mode="MultiSelect"
          >
             <columns>
                 <Column id="_IDGenColumn3">
-                    <Text id="_IDGenText3" text="Country" />
+                    <Text id="_IDGenText3" text="Currency" />
                 </Column>
                 <Column id="_IDGenColumn4">
-                    <Text id="_IDGenText4" text="Country Description" />
+                    <Text id="_IDGenText4" text="Currency Description" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
                         <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="currencyValueHelp" valueHelpOnly="true"/>
-                        <Input id="NAVOYGCURDES2" />
+                        <Input id="NAVOYGCURDES2" editable="false" />
                     </cells>
                 </ColumnListItem>
             </items>
@@ -167,15 +169,19 @@
                 visible="false"
             >
                 <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                <Button id="add" text="Add Row" icon="sap-icon://sys-add" press=".onAddRow1" type="Success"></Button>
+                <Button id="minus" text="Delete Row" icon="sap-icon://sys-minus" press=".onDeleteRow1" type="Reject"></Button>
                 <Button
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onSaveCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
         <OverflowToolbar

@@ -10,19 +10,20 @@ sap.ui.define(
     "sap/m/Label",
     "sap/m/Token",
     "com/ingenx/nauti/createvoyage/model/formatter",
+    "com/ingenx/nauti/createvoyage/utils/helperFunctions",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
-  function (Controller, JSONModel, MessageBox, MessageToast, Fragment, ColumnListItem, Label, Token, formatter) {
+  function (Controller, JSONModel, MessageBox, MessageToast, Fragment, ColumnListItem, Label, Token, formatter, helperFunctions) {
     "use strict";
 
     let pathVariable = [];
-    let latLngArr = [];
-    let routeArr = [];
-    let map;
-    let oJsonModel;
-    let DataNode = {
+    var latLngArr = [];
+    var routeArr = [];
+    var map;
+    var oJsonModel;
+    var DataNode = {
       portData: [],
       allPort: [],
       temp: latLngArr,
@@ -34,13 +35,17 @@ sap.ui.define(
     var pathFetchedFromDb;
     let boolPortsLoaded = false;
     let pathToExclude = [];
+
     let selectedPort = undefined
+    let startPort;
+    let endPort;
+ 
 
     return Controller.extend("com.ingenx.nauti.createvoyage.controller.CreateVoyage", {
       formatter: formatter,
+      helperFunctions: helperFunctions,
       onInit: function () {
 
-        let that = this;
         this._BusyDialog = new sap.m.BusyDialog({
           title: "Loading...",
         });
@@ -114,38 +119,14 @@ sap.ui.define(
         //   console.log("oEVent after create completed ",oEvent)
         // })
       },
-      getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude, pathToExclude) {
+      setDatePickerInputReadonly: function (oDatePicker) {
+        var $input = oDatePicker.$().find("input");
+        $input.prop("readonly", true);
+      },
+      getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
         let oModel = this.getOwnerComponent().getModel();
         console.log("oModel", oModel);
-
-        // Base URL with required parameters
         let url = `/getRoute?startLatitude=${startLatitude}&startLongitude=${startLongitude}&endLatitude=${endLatitude}&endLongitude=${endLongitude}`;
-        console.log("pathToExclude ", typeof pathToExclude);
-        // Add optional block parameters based on pathToExclude
-        if (pathToExclude && pathToExclude.length != 0) {
-          if (pathToExclude.includes("SUEZ")) {
-            url += `&block_sc=true`;
-          }
-          if (pathToExclude.includes("PANAMA")) {
-            url += `&block_pc=true`;
-          }
-          if (pathToExclude.includes("KIEL")) {
-            url += `&block_kc=true`;
-          }
-          if (pathToExclude.includes("NW PASSAGE")) {
-            url += `&block_nw=true`;
-          }
-          if (pathToExclude.includes("NE PASSAGE")) {
-            url += `&block_ne=true`;
-          }
-          if (pathToExclude.includes("CORINTH")) {
-            url += `&block_cc=true`;
-          }
-          if (pathToExclude.includes("TORRES")) {
-            url += `&block_ts=true`;
-          }
-        }
-
         let oBindList = oModel.bindList(url, null, null, null);
 
         return new Promise((resolve, reject) => {
@@ -194,58 +175,60 @@ sap.ui.define(
         });
       },
 
-      _renderMap: function () {
-        map = L.map("map", {
-          center: [23, 98],
-          zoom: 4,
-          maxZoom: 10,
-          minZoom: 2,
-          zoomSnap: 1,
-          zoomDelta: 1,
-        });
-        const apiKey =
-          "AAPKe27e88812313402183412454166a77bfxD0NeqearqElOoWipt7HJRkpfNICD533yGyWnO-xYLxgs9GZ-S6l5yIA9rtKDfqQ";
-        const basemapEnum = "ArcGIS:Navigation";
-        L.esri.Vector.vectorBasemapLayer(basemapEnum, {
-          apiKey: apiKey,
-        }).addTo(map);
+      _renderMap: async function () {
+        try {
 
-        // show the scale bar on the lower left corner
-        L.control
-          .scale({
-            imperial: true,
-            metric: true,
-          })
-          .addTo(map);
-        var anchorIcon = L.icon({
-          iconUrl: `${this._oRootPath}/Img/Anchor.png`,
-          //	shadowUrl: './Img/Anchor-shadow.png',
-          iconSize: [20, 20], // size of the icon
-          //	shadowSize: [41, 41], // size of the shadow
-          iconAnchor: [7, 12], // point of the icon which will correspond to marker's location
-          // shadowAnchor: [4, 62], // the same for the shadow
-          popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
-        });
+          map = L.map("map", {
+            center: [23, 98],
+            zoom: 4,
+            maxZoom: 10,
+            minZoom: 2,
+            zoomSnap: 1,
+            zoomDelta: 1,
+          });
+          const apiKey =
+            "AAPKe27e88812313402183412454166a77bfxD0NeqearqElOoWipt7HJRkpfNICD533yGyWnO-xYLxgs9GZ-S6l5yIA9rtKDfqQ";
+          const basemapEnum = "ArcGIS:Navigation";
+          L.esri.Vector.vectorBasemapLayer(basemapEnum, {
+            apiKey: apiKey,
+          }).addTo(map);
 
-        const oDataModel = this.getOwnerComponent().getModel();
+          // show the scale bar on the lower left corner
+          L.control
+            .scale({
+              imperial: true,
+              metric: true,
+            })
+            .addTo(map);
+          var anchorIcon = L.icon({
+            iconUrl: `${this._oRootPath}/Img/Anchor.png`,
+            //	shadowUrl: './Img/Anchor-shadow.png',
+            iconSize: [20, 20], // size of the icon
+            //	shadowSize: [41, 41], // size of the shadow
+            iconAnchor: [7, 12], // point of the icon which will correspond to marker's location
+            // shadowAnchor: [4, 62], // the same for the shadow
+            popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
+          });
 
-        var that = this;
-        this._BusyDialog.setTitle("Loading Ports...");
-        this._BusyDialog.setText("Please wait...");
-        this._BusyDialog.open();
-        window.that = this;
+          const oDataModel = this.getOwnerComponent().getModel();
 
-        const portModel = new JSONModel({
-          sPortMasterData: [],
-        });
+          var that = this;
+          this._BusyDialog.setTitle("Loading Ports...");
+          this._BusyDialog.setText("Please wait...");
+          this._BusyDialog.open();
+          window.that = this;
 
-        let oPortMasterTypeContext = oDataModel.bindList("/PortMasterSet");
-        oPortMasterTypeContext.requestContexts().then(function (context) {
-          context.forEach(item => {
-            portModel.getData().sPortMasterData.push(item.getObject());
+          const portModel = new JSONModel({
+            sPortMasterData: [],
+          });
+          let fetchedPortData = await helperFunctions.readEntity(oDataModel, "PortMasterSet", undefined, undefined, undefined, undefined);
+          // console.log("Port data", fetchedPortData);
 
-          })
+          portModel.getData().sPortMasterData.push(...fetchedPortData);
+
+
           console.log("oPort Master ", portModel.getData().sPortMasterData);
+
           portMasterData = portModel.getData().sPortMasterData;
           let oData = portModel.getData().sPortMasterData;
           oJsonModel.getData().allPort = oData;
@@ -271,7 +254,11 @@ sap.ui.define(
             clearTimeout(that._BusyTimeout);
             map.invalidateSize(true);
           }
-        })
+
+        } catch (error) {
+          console.log("Error occured :", error);
+          sap.m.MessageBox.error(error.message);
+        }
       },
 
 
@@ -286,8 +273,11 @@ sap.ui.define(
         return hash;
       },
 
-      onMarkerClick: async function (oEvent, pathToExclude) {
+      onMarkerClick: async function (oEvent) {
+
+
         let lastPortData = structuredClone(oJsonModel.getData());
+
         sap.ui.core.BusyIndicator.show();
         if (oJsonModel.getData().portData.length) {
           if (oJsonModel.getData().portData[oJsonModel.getData().portData.length - 1].PortName === "Total") {
@@ -296,15 +286,13 @@ sap.ui.define(
         }
         oJsonModel.getData().oEdit = true;
         oJsonModel.refresh();
-        if (!pathToExclude) {
-          selectedPort = oJsonModel.getData().allPort.find((element) => element.Portn === oEvent.target._popup._source._popup._content);
-        }
+        var selectedPort = oJsonModel.getData().allPort.find((element) => element.Portn === oEvent.target._popup._source._popup._content);
         let existFlag = oJsonModel.getData().portData.findIndex(x => x.PortName === selectedPort.Portn);
         console.log(existFlag);
-        if (existFlag !== -1 && pathToExclude.length == 0) {
+        if (existFlag !== -1) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
-          MessageBox.error("Port can not be repeated,select a diffrent port.");
+          MessageBox.warning("Port already selected, please choose a diffrent one");
           return;
         }
         let legId = oJsonModel.getData().portData.length + 1;
@@ -313,12 +301,14 @@ sap.ui.define(
           PortId: selectedPort.Portc,
           PortName: selectedPort.Portn,
           Distance: "",
+
           Weather: "",
           CargoSize: "",
           CargoUnit: "",
           Speed: "",
           SeaDays: "",
           PortDays: "",
+
           ArrivalDate: null,
           ArrivalTime: null,
           DepartureDate: null,
@@ -328,9 +318,13 @@ sap.ui.define(
           portObj.Distance = "00000";
         }
         oJsonModel.getData().portData.push(portObj);
+        // console.log("json model ", oJsonModel.getData());
+        // console.log("json model port data", oJsonModel.getData().portData);
         oJsonModel.refresh();
         var portLng = oJsonModel.getData().portData.length;
         var that = window.that;
+        //  that.byId("blockRow2").setVisible(true);
+        //   that.byId("blockRow3").setVisible(true);
         if (portLng < 2) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
@@ -340,16 +334,34 @@ sap.ui.define(
           that.byId("createVoyageButton").setEnabled(true);
           that.byId("freighSimButton").setEnabled(true);
           that.byId("calculateVoyageButton").setEnabled(true);
+          that.byId("CongestionButton").setEnabled(true);
           var oDataModel = that.getOwnerComponent().getModel();
           var IvToPort = oJsonModel.getData().portData[portLng - 1].PortId;
           let ToPortName = oJsonModel.getData().portData[portLng - 1].PortName;
           var IvFromPort = oJsonModel.getData().portData[portLng - 2].PortId;
           let FromPortName = oJsonModel.getData().portData[portLng - 2].PortName;
-          var IvOptimized = "X";
+
+
+
+          var IvOptimized;
+          // if (that.getView().byId("idRoutes").getState()) {
+          // IvOptimized = "";
+          // } else {
+          IvOptimized = "X";
+          // }
+          var aFilter = [];
           var aFilter = [];
           aFilter.push(new sap.ui.model.Filter("IvFromPort", "EQ", IvFromPort));
           aFilter.push(new sap.ui.model.Filter("IvToPort", "EQ", IvToPort));
+          // Create a filter for IvOptimized with a boolean value as a string
           aFilter.push(new sap.ui.model.Filter("IvOptimized", "EQ", IvOptimized));
+
+          // addding new vairable for port conjestion
+          startPort = IvFromPort;
+          console.log("start Port ",startPort);
+ 
+          endPort = IvToPort;
+          console.log("End Port ",endPort);
 
           const esModel = new JSONModel({
             sEsRoutePathData: [],
@@ -361,14 +373,18 @@ sap.ui.define(
           pathFetchedFromDb = oData;
           console.log("pathFetchedFromDb ", pathFetchedFromDb);
           if (!oData.route.length) {
-            console.log("Clicked");
-            oData = await that.getRouteSeaPath(fromPort.Latitude, fromPort.Longitude, toPort.Latitude, toPort.Longitude, pathToExclude);
+            console.log("Clicked   ");
+            oData = await that.getRouteSeaPath(fromPort.Latitude, fromPort.Longitude, toPort.Latitude, toPort.Longitude);
           }
+
           prepareData(oData, FromPortName, ToPortName);
           sap.ui.core.BusyIndicator.hide();
+
         }
 
         function prepareData(oData, FromPortName, ToPortName) {
+
+          // if (!oData.results[0].route.results.length) {
           if (!oData.route.length) {
             MessageBox.error(`No Route between Ports ${FromPortName} and ${ToPortName}`, {
               onClose: () => {
@@ -376,15 +392,24 @@ sap.ui.define(
                 oJsonModel.refresh();
               }
             });
+
           } else {
-            var arrNew = that.groupBy(oData.route, "PathId");
+            // for (var i = 0; i < oData.results[0].route.results.length; i++) {
+            for (var i = 0; i < oData.route.length; i++) {
+              // console.log(oData.results[0].route.results);
+              // var arrNew = that.groupBy(oData.results[0].route.results, "PathId");
+              var arrNew = that.groupBy(oData.route, "PathId");
+            }
             for (var i = 1; i < Object.keys(arrNew).length + 1; i++) {
               var path = ["M"];
               for (var j = 0; j < arrNew[i].length; j++) {
+
                 path.push([Number(arrNew[i][j].Latitude), Number(arrNew[i][j].Longitude)]);
               }
+
             }
             console.log("ODATYTAA ", path);
+            // Added reference to each path that is drawn on the map, so it is now possible to refresh/remove it later "Khushal
             let pathVarLengthBefore = pathVariable.length;
             pathVariable.push(
               L.curve([...path], {
@@ -395,167 +420,18 @@ sap.ui.define(
             for (let i = pathVarLengthBefore; i < pathVariable.length; i++) {
               pathVariable[i].addTo(map);
             }
+            console.log("asdfghj ", pathFetchedFromDb.marineApiRoute.EvDistance);
             if (pathFetchedFromDb.marineApiRoute.EvDistance) {
-              oJsonModel.getData().portData[portLng - 1].Distance = pathFetchedFromDb.marineApiRoute.EvDistance;
-            } else {
-              oJsonModel.getData().portData[portLng - 1].Distance = parseInt(oData.seaDistance);
+              console.log("asdfghj ", pathFetchedFromDb.marineApiRoute.EvDistance);
+              oJsonModel.getData().portData[portLng - 1].Distance = pathFetchedFromDb.marineApiRoute.EvDistance
+            }
+            else {
+              oJsonModel.getData().portData[portLng - 1].Distance = parseInt(oData.seaDistance)
             }
             oJsonModel.refresh();
           }
         }
       },
-
-      // onMarkerClick: async function (oEvent) {
-
-
-      //   let lastPortData = structuredClone(oJsonModel.getData());
-
-      //   sap.ui.core.BusyIndicator.show();
-      //   if (oJsonModel.getData().portData.length) {
-      //     if (oJsonModel.getData().portData[oJsonModel.getData().portData.length - 1].PortName === "Total") {
-      //       oJsonModel.getData().portData.pop();
-      //     }
-      //   }
-      //   oJsonModel.getData().oEdit = true;
-      //   oJsonModel.refresh();
-      //   var selectedPort = oJsonModel.getData().allPort.find((element) => element.Portn === oEvent.target._popup._source._popup._content);
-      //   let existFlag =   oJsonModel.getData().portData.findIndex( x =>  x.PortName === selectedPort.Portn);
-      //      console.log( existFlag);
-      //      if( existFlag !== -1){
-      //       var that = window.that;
-      //       sap.ui.core.BusyIndicator.hide();
-      //       MessageBox.error("Port can not be repeated,select a diffrent port.");
-      //       return;
-      //      }
-      //   let legId = oJsonModel.getData().portData.length + 1;
-      //   var portObj = {
-      //     LegId: legId.toString(),
-      //     PortId: selectedPort.Portc,
-      //     PortName: selectedPort.Portn,
-      //     Distance: "",
-
-      //     Weather: "",
-      //     CargoSize: "",
-      //     CargoUnit: "",
-      //     Speed: "",
-      //     SeaDays: "",
-      //     PortDays: "",
-
-      //     ArrivalDate: null,
-      //     ArrivalTime: null,
-      //     DepartureDate: null,
-      //     DepartureTime: null,
-      //   };
-      //   if (!oJsonModel.getData().portData.length) {
-      //     portObj.Distance = "00000";
-      //   }
-      //   oJsonModel.getData().portData.push(portObj);
-      //   // console.log("json model ", oJsonModel.getData());
-      //   // console.log("json model port data", oJsonModel.getData().portData);
-      //   oJsonModel.refresh();
-      //   var portLng = oJsonModel.getData().portData.length;
-      //   var that = window.that;
-      //   //  that.byId("blockRow2").setVisible(true);
-      //   //   that.byId("blockRow3").setVisible(true);
-      //   if (portLng < 2) {
-      //     var that = window.that;
-      //     sap.ui.core.BusyIndicator.hide();
-      //     that.byId("speedInput").setEditable(true);
-      //     return;
-      //   } else {
-      //     that.byId("createVoyageButton").setEnabled(true);
-      //     that.byId("freighSimButton").setEnabled(true);
-      //     that.byId("calculateVoyageButton").setEnabled(true);
-      //     var oDataModel = that.getOwnerComponent().getModel();
-      //     var IvToPort = oJsonModel.getData().portData[portLng - 1].PortId;
-      //     let ToPortName = oJsonModel.getData().portData[portLng - 1].PortName;
-      //     var IvFromPort = oJsonModel.getData().portData[portLng - 2].PortId;
-      //     let FromPortName = oJsonModel.getData().portData[portLng - 2].PortName;
-
-
-
-      //     var IvOptimized;
-      //     // if (that.getView().byId("idRoutes").getState()) {
-      //     // IvOptimized = "";
-      //     // } else {
-      //     IvOptimized = "X";
-      //     // }
-      //     var aFilter = [];
-      //     var aFilter = [];
-      //     aFilter.push(new sap.ui.model.Filter("IvFromPort", "EQ", IvFromPort));
-      //     aFilter.push(new sap.ui.model.Filter("IvToPort", "EQ", IvToPort));
-      //     // Create a filter for IvOptimized with a boolean value as a string
-      //     aFilter.push(new sap.ui.model.Filter("IvOptimized", "EQ", IvOptimized));
-
-      //     const esModel = new JSONModel({
-      //       sEsRoutePathData: [],
-      //     });
-      //      let fromPort = that.getLatLongForPort(portMasterData, IvFromPort);
-      //      let toPort = that.getLatLongForPort(portMasterData, IvToPort);
-      //      console.log(fromPort, toPort);
-      //     var oData = await that.getRouteData(IvFromPort, IvToPort, IvOptimized);
-      //     pathFetchedFromDb = oData;
-      //     console.log("pathFetchedFromDb ", pathFetchedFromDb);
-      //     if(!oData.route.length){
-      //       console.log("Clicked   ");
-      //       oData = await that.getRouteSeaPath(fromPort.Latitude, fromPort.Longitude, toPort.Latitude, toPort.Longitude);
-      //     }
-
-      //     prepareData(oData, FromPortName, ToPortName);
-      //     sap.ui.core.BusyIndicator.hide();
-
-      //   }
-
-      //   function prepareData(oData, FromPortName, ToPortName) {
-
-      //     // if (!oData.results[0].route.results.length) {
-      //     if (!oData.route.length) {
-      //       MessageBox.error(`No Route between Ports ${FromPortName} and ${ToPortName}`, {
-      //         onClose: () => {
-      //           oJsonModel.setData(lastPortData);
-      //           oJsonModel.refresh();
-      //         }
-      //       });
-
-      //     } else {
-      //       // for (var i = 0; i < oData.results[0].route.results.length; i++) {
-      //       for (var i = 0; i < oData.route.length; i++) {
-      //         // console.log(oData.results[0].route.results);
-      //         // var arrNew = that.groupBy(oData.results[0].route.results, "PathId");
-      //         var arrNew = that.groupBy(oData.route, "PathId");
-      //       }
-      //       for (var i = 1; i < Object.keys(arrNew).length + 1; i++) {
-      //         var path = ["M"];
-      //         for (var j = 0; j < arrNew[i].length; j++) {
-
-      //           path.push([Number(arrNew[i][j].Latitude), Number(arrNew[i][j].Longitude)]);
-      //         }
-
-      //       }
-      //       console.log("ODATYTAA ",path);
-      //       // Added reference to each path that is drawn on the map, so it is now possible to refresh/remove it later "Khushal
-      //       let pathVarLengthBefore = pathVariable.length;
-      //       pathVariable.push(
-      //         L.curve([...path], {
-      //           color: "red",
-      //           fill: false,
-      //         })
-      //       );
-      //       for (let i = pathVarLengthBefore; i < pathVariable.length; i++) {
-      //         pathVariable[i].addTo(map);
-      //       }
-      //       console.log("asdfghj ",pathFetchedFromDb.marineApiRoute.EvDistance);
-      //       if(pathFetchedFromDb.marineApiRoute.EvDistance){
-      //         console.log("asdfghj ",pathFetchedFromDb.marineApiRoute.EvDistance);
-      //         oJsonModel.getData().portData[portLng - 1].Distance = pathFetchedFromDb.marineApiRoute.EvDistance
-      //       }
-      //       else{
-      //         oJsonModel.getData().portData[portLng - 1].Distance = parseInt(oData.seaDistance)
-      //       }
-      //       oJsonModel.refresh();
-      //     }
-      //   }
-      // },
 
       getRouteData: function (from, to, optimized) {
         let oModel = this.getView().getModel();
@@ -586,18 +462,15 @@ sap.ui.define(
       },
       //  for canal selection
       onCheckBoxSelect: function (oEvent) {
-        console.log("oJSONMODEL PORT DATA", oJsonModel.getData().portData);
+
+        let selectedPortslength = oJsonModel.getData().portData().length;
+        if (selectedPortslength <= 1) {
+          sap.m.MessageToast.show("Please choose choose atleast two ports");
+          return
+        }
         let oSource = oEvent.getSource();
         let textType = oSource.getText();
         let isSelected = oEvent.getParameter("selected");
-
-        // If only one port is selected, prevent selecting another one and return
-        if (oJsonModel.getData().portData.length <= 1) {
-          sap.m.MessageToast.show("Please choose at least two ports");
-          oSource.setSelected(false);
-          return;
-        }
-
         console.log(textType, isSelected);
         if (!pathToExclude.includes(textType) && isSelected) {
           pathToExclude.push(textType);
@@ -607,9 +480,162 @@ sap.ui.define(
         }
         console.log(pathToExclude);
 
-        // Call onMarkerClick and pass pathToExclude
-        this.onMarkerClick(oEvent, pathToExclude);
+        // that.onMarkerClick();
+
       },
+      // congestion dialog close function
+      oncancell: function () {
+        this._voyageValueHelpDialog.close();
+    },
+       // Predict button press function
+      navToCongestion: function (oEvent) {
+        let oView = this.getView();
+        let oBusyDialog = new sap.m.BusyDialog();
+        oBusyDialog.open();
+ 
+        let rawDataINBOM = [
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 1.5 },
+          { Date: "June 10 2024", MedianDelay: 1.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 1.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+ 
+          { MedianDelay: 3.5, Port: "Hazira" },
+          { MedianDelay: 2.5, Port: "KAKINADA" },
+          { MedianDelay: 3.2, Port: "Mormugao" }
+        ];
+        let rawDataKOCHI = [
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 1.5 },
+          { Date: "June 10 2024", MedianDelay: 1.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 1.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+          { MedianDelay: 3.2, Port: "KOCHI" },
+ 
+          { MedianDelay: 3.2, Port: "Krishnapatnam" },
+          { MedianDelay: 3.2, Port: "Chennai" },
+ 
+        ];
+ 
+        let rawDataINVTZ = [
+          { Date: "June 1 2024", MedianDelay: 1.0 },
+          { Date: "June 5 2024", MedianDelay: 1.2 },
+          { Date: "June 10 2024", MedianDelay: 2.5 },
+          { Date: "June 15 2024", MedianDelay: 3.0 },
+          { Date: "June 20 2024", MedianDelay: 1.5 },
+          { Date: "June 25 2024", MedianDelay: 2.5 },
+          { Date: "June 30 2024", MedianDelay: 1.5 },
+          { MedianDelay: 1.0, Port: "Kakinada" },
+          { MedianDelay: 3.2, Port: "Gangavaram" },
+          { MedianDelay: 3.2, Port: "Krishnapatnam" },
+          { MedianDelay: 3.2, Port: "Chennai" },
+          { MedianDelay: 1.2, Port: "Vishakhapatnam" },
+ 
+        ];
+ 
+        let rawDataINPRT = [
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 3.5 },
+          { Date: "June 10 2024", MedianDelay: 2.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 2.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+          { MedianDelay: 1.0, Port: "Chennai" },
+          { MedianDelay: 3.2, Port: "Kolkata" },
+          { MedianDelay: 3.2, Port: "Paradeep" }
+ 
+        ];
+ 
+        let oModel = this.getOwnerComponent().getModel();
+        let oEndPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${endPort}')`);
+        let oStartPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${startPort}')`);
+ 
+        // Fetching end port name
+        oEndPortBinding.requestObject().then((oEndPortContext) => {
+          console.log("endport name", oEndPortContext);
+          let endPortName = oEndPortContext.Portn; // Assuming 'Portn' is the property holding the port name
+ 
+          oStartPortBinding.requestObject().then((oStartPortContext) => {
+            console.log("startport name", oStartPortContext);
+            let startPortName = oStartPortContext.Portn; // Assuming 'Portn' is the property holding the port name
+ 
+            let rawData;
+            switch (endPort) {
+              case "INBOM":
+                rawData = rawDataINBOM;
+                break;
+              case "INVTZ":
+                rawData = rawDataINVTZ;
+                break;
+              case "INPRT":
+                rawData = rawDataINPRT;
+                break;
+                case "KOCHI":
+                rawData = rawDataKOCHI;
+                break;
+              default:
+                rawData = rawDataINBOM;
+                break;
+            }
+ 
+            let dateMedianDelayData = rawData.filter(item => item.Date).map(item => ({ Date: item.Date, MedianDelay: item.MedianDelay }));
+            let portMedianDelayData = rawData.filter(item => item.Port).map(item => ({ Port: item.Port, MedianDelay: item.MedianDelay }));
+ 
+            let oData = {
+              ChartDataDate: dateMedianDelayData,
+              ChartDataPort: portMedianDelayData,
+              StartPort: startPortName,
+              EndPort: endPortName,
+            };
+ 
+            let oChartModel = new sap.ui.model.json.JSONModel(oData);
+ 
+            if (!this._voyageValueHelpDialog) {
+              Fragment.load({
+                id: oView.getId(),
+                name: "com.ingenx.nauti.createvoyage.fragments.CongestionShow",
+                controller: this
+              }).then(function (oDialog) {
+                oView.addDependent(oDialog);
+                this._voyageValueHelpDialog = oDialog;
+                this._voyageValueHelpDialog.setModel(oChartModel);
+                this._voyageValueHelpDialog.open();
+                this._setChartTitles();
+              }.bind(this));
+            } else {
+              this._voyageValueHelpDialog.setModel(oChartModel);
+              this._voyageValueHelpDialog.open();
+              this._setChartTitles();
+            }
+          });
+        });
+        oBusyDialog.close();
+      },
+
+_setChartTitles: function() {
+  let oVizFrame1 = this.byId("vizFrame");
+  let oVizFrame2 = this.byId("vizFrame2");
+
+  oVizFrame1.setVizProperties({
+      title: {
+          visible: true,
+          text: "Median Delay Over Time "
+      }
+  });
+
+  oVizFrame2.setVizProperties({
+      title: {
+          visible: true,
+          text: "Median Delay by Port"
+      }
+  });
+},
+
 
       onClear: function (oEvent) {
 
@@ -626,14 +652,14 @@ sap.ui.define(
         this.byId("headerCarty").setValue("");
         this.byId("headerCurr").setValue("");
         this.byId("headerBidty").setValue("");
-        this.byId("blockRow2").setVisible(false);
+        // this.byId("blockRow2").setVisible(false);
         this.byId("blockRow3").setVisible(false);
       },
 
       onCalc: function (oEvent) {
         let selectedPorts = oJsonModel.getData().portData;
         let GvSpeed = selectedPorts[0].Speed;
-        let oModel = this.getOwnerComponent().getModel("NAUTICALCV_SRV");
+        // let oModel = this.getOwnerComponent().getModel("NAUTICALCV_SRV");
 
         let ZCalcNav = [];
         for (let i = 0; i < selectedPorts.length; i++) {
@@ -663,6 +689,23 @@ sap.ui.define(
           MessageBox.error("Please select Departure Date and Time");
           return false;
         }
+
+        //  for oData V2 model
+        // ZCalcNav.push({
+        //   Portc: selectedPorts[0].PortId,
+        //   Portn: selectedPorts[0].PortName,
+        //   Pdist: selectedPorts[0].Distance,
+        //   Medst: "NM",
+        //   Vspeed: GvSpeed,
+        //   Ppdays: selectedPorts[0].PortDays,
+        //   // Vsdays: selectedPorts[0].SeaDays,
+        //   // Vetdd: selectedPorts[0].DepartureDate, // Bad JS Date Value - DDMMYYYY 00:00:00 Timezone
+        //   Vetdd: new Date(dayjs.utc(selectedPorts[0].DepartureDateValue)), // DepartureDateValue must be in MM/DD/YYYY format for this to work
+        //   Vetdt: formatter.timeFormat(selectedPorts[0].DepartureTime),
+        //   Vwead: selectedPorts[0].Weather,
+        // });
+
+        //   for oData v4 model
         ZCalcNav.push({
           Portc: selectedPorts[0].PortId,
           Portn: selectedPorts[0].PortName,
@@ -670,10 +713,8 @@ sap.ui.define(
           Medst: "NM",
           Vspeed: GvSpeed,
           Ppdays: selectedPorts[0].PortDays,
-          // Vsdays: selectedPorts[0].SeaDays,
-          // Vetdd: selectedPorts[0].DepartureDate, // Bad JS Date Value - DDMMYYYY 00:00:00 Timezone
-          Vetdd: new Date(dayjs.utc(selectedPorts[0].DepartureDateValue)), // DepartureDateValue must be in MM/DD/YYYY format for this to work
-          Vetdt: formatter.timeFormat(selectedPorts[0].DepartureTime),
+          Vetdd: selectedPorts[0].DepartureDateValue,
+          Vetdt: selectedPorts[0].DepartureTime,
           Vwead: selectedPorts[0].Weather,
         });
         for (let i = 1; i < selectedPorts.length; i++) {
@@ -693,7 +734,40 @@ sap.ui.define(
           ZCalcNav: ZCalcNav,
         };
         console.log(oPayload);
+
         const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
+        // testing  oData v4
+        const oDataModelV4 = this.getOwnerComponent().getModel();
+        let oBindList = oDataModelV4.bindList("/ZCalculateSet", true);
+
+        oBindList.create(oPayload, true).created(x => { console.log(x); });
+        oBindList.attachCreateCompleted(function (p) {
+          let p1 = p.getParameters();
+      
+          let oData = p1.context.getObject();
+          console.table(oData.ZCalcNav);
+          
+
+          let totalDays = 0;
+          console.log(oData.ZCalcNav[0].Vetad, oData.ZCalcNav[0].Vetat, oData.ZCalcNav[0].Vetdd, oData.ZCalcNav[0].Vetdt, oData.ZCalcNav[1].Vetad, oData.ZCalcNav[1].Vetat, oData.ZCalcNav[1].Vetdd, oData.ZCalcNav[1].Vetdt);
+
+          oData.ZCalcNav.forEach((data, index) => {
+            selectedPorts[index].SeaDays = data.Vsdays;
+            selectedPorts[index].Speed = GvSpeed;
+            selectedPorts[index].Weather = data.Vwead;
+            selectedPorts[index].ArrivalDate = formatter.dateStringToDateObj(data.Vetad);
+            selectedPorts[index].ArrivalTime = formatter.timeStringToDateObj(data.Vetat);
+            selectedPorts[index].DepartureDate = formatter.dateStringToDateObj(data.Vetdd);
+            selectedPorts[index].DepartureTime = data.Vetdt;
+
+            totalDays += Number(selectedPorts[index].SeaDays) + Number(selectedPorts[index].PortDays);
+            oJsonModel.refresh();
+          });
+
+          that.byId("daysInput").setValue(totalDays.toFixed(1));
+        });
+
+        return
         oDataModelV2.create("/ZCalculateSet", oPayload, {
           success: function (oData) {
             console.log(oData);
@@ -721,12 +795,6 @@ sap.ui.define(
       onVoyageCreate: function (oEvent) {
         that = window.that;
 
-        let oRouter = this.getOwnerComponent().getRouter();
-
-        // oRouter.navTo("RouteTrChangeVoyage", {
-        //   "VOYAGE_NO": "1000000112"
-        // });
-        // return;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
         const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();
@@ -784,6 +852,32 @@ sap.ui.define(
 
         let ZCreatePlanNav = [];
 
+        // for (let i = 0; i < selectedPorts.length; i++) {
+        //   ZCreatePlanNav.push({
+        //     Vlegn: selectedPorts[i].LegId,
+        //     Portn: selectedPorts[i].PortName,
+        //     Portc: selectedPorts[i].PortId,
+        //     Pdist: selectedPorts[i].Distance,
+        //     Medst: "NM",
+        //     Vspeed: selectedPorts[i].Speed,
+
+        //     Ppdays: selectedPorts[i].PortDays,
+        //     Vsdays: selectedPorts[i].SeaDays,
+        //     Vetad: selectedPorts[i].ArrivalDate,
+        //     Vetat: formatter.timeFormat(selectedPorts[i].ArrivalTime),
+        //     Vetdd: selectedPorts[i].DepartureDate,
+        //     Vetdt: formatter.timeFormat(selectedPorts[i].DepartureTime),
+        //     Vwead: selectedPorts[i].Weather,
+        //     Cargs: selectedPorts[i].CargoSize,
+        //     Cargu: selectedPorts[i].CargoUnit,
+        //   });
+        //   if (i) {
+        //     totalCargoSize += +selectedPorts[i].CargoSize;
+        //   }
+        // }
+
+        //  oData v4  model changes temporary
+
         for (let i = 0; i < selectedPorts.length; i++) {
           ZCreatePlanNav.push({
             Vlegn: selectedPorts[i].LegId,
@@ -795,10 +889,10 @@ sap.ui.define(
 
             Ppdays: selectedPorts[i].PortDays,
             Vsdays: selectedPorts[i].SeaDays,
-            Vetad: selectedPorts[i].ArrivalDate,
-            Vetat: formatter.timeFormat(selectedPorts[i].ArrivalTime),
-            Vetdd: selectedPorts[i].DepartureDate,
-            Vetdt: formatter.timeFormat(selectedPorts[i].DepartureTime),
+            Vetad: formatter.dateFormatV4(selectedPorts[i].ArrivalDate),
+            Vetat: formatter.timeFormatV4(selectedPorts[i].ArrivalTime),
+            Vetdd: formatter.dateFormatV4(selectedPorts[i].DepartureDate),
+            Vetdt: selectedPorts[i].DepartureTime,
             Vwead: selectedPorts[i].Weather,
             Cargs: selectedPorts[i].CargoSize,
             Cargu: selectedPorts[i].CargoUnit,
@@ -822,12 +916,43 @@ sap.ui.define(
           return;
         }
         console.log("payload for create:", oPayload);
-        // let oRouter = this.getOwnerComponent().getRouter();
 
-        // oRouter.navTo("RouteTrChangeVoyage", {
-        //   "VOYAGE_NO": "1000000034"
-        // });
-        // return;
+
+        // oData V4 model Create method
+
+        const oDataModelV4 = this.getOwnerComponent().getModel();
+        let oRouter = this.getOwnerComponent().getRouter();
+        let oBindList = oDataModelV4.bindList("/ZCreatePlanSet", true);
+
+        oBindList.create(oPayload, true).created(x => { console.log(x) });
+
+        oBindList.attachCreateCompleted(function (p) {
+          let p1 = p.getParameters();
+          
+          let oContext = p1.context;
+          let oData = oContext.getObject();
+          if (p1.success) {
+            console.log(oData);
+
+            MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
+              title: "Voyage Created",
+              onClose: function () {
+
+                console.log("sent voyage no. :", oData.Voyno)
+
+                oRouter.navTo("RouteTrChangeVoyage", {
+                  "VOYAGE_NO": oData.Voyno
+                });
+
+              }
+            });
+
+          } else {
+            sap.m.MessageBox.error("Error occurred while creating voyage");
+            console.log("error messages : ", oContext.getMessages());
+          }
+        });
+        return
         oDataModelV2.create("/ZCreatePlanSet", oPayload, {
           success: function (oData) {
             // console.log(oData);
@@ -877,12 +1002,14 @@ sap.ui.define(
         oRouter.navTo("freightsim");
       },
       navToFreightSim: function (oEvent) {
+
         oJsonModel.refresh();
 
         let legOneCargoSize = oJsonModel.getData().portData[0].CargoSize;
         let totalCargoSize = oJsonModel.getData().portData.reduce((acc, item, index) => {
           return (acc = +acc + (index > 0 ? +item.CargoSize : 0));
         }, 0);
+        
         let oRouter = this.getOwnerComponent().getRouter();
         if (totalCargoSize > legOneCargoSize) {
           sap.m.MessageBox.error("The sum of Leg 2 (and onwards) Cargo Size must be less than Leg One Cargo Size", {

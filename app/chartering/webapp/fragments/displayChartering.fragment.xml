@@ -10,6 +10,8 @@
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
         items="{/xNAUTIxCharteringHeaderItem}"
+        liveChange="onChartSearch"
+        initialFocus="SearchField"
         
     >
         

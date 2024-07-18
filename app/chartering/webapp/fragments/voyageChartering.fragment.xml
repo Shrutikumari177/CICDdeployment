@@ -11,6 +11,7 @@
         cancel="onValueHelpClosevoy"
         items="{/xNAUTIxvoy_valuehelp}"
         initialFocus="SearchField"
+        liveChange="onValueHelpSearch"
   
          >
         <StandardListItem id="_IDGenStandardListItem1"

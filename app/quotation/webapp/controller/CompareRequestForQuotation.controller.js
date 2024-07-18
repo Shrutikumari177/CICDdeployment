@@ -61,24 +61,6 @@ var isBidEndTimeSelected = false;
             // this.attachEventOnce("afterRendering", this._attachInputValidation.bind(this));
         },
 
-        // _attachInputValidation: function () {
-        //     let oControllerQValue = this.byId("ControllerQValue");
-        //     if (oControllerQValue) {
-        //         oControllerQValue.attachBrowserEvent("input", this._onControllerQuotedValueInput.bind(this));
-        //     }
-        // },
-        
-        // _onControllerQuotedValueInput: function (oEvent) {
-        //     let input = oEvent.target;
-        //     let value = input.value;
-        
-        //     // Replace any non-numeric characters
-        //     value = value.replace(/[^0-9]/g, '');
-        
-        //     // Update the input field's value
-        //     input.value = value;
-        // },
-
 
         calculateAndBindRankings: function (Chrnmin) {
             // debugger;
@@ -280,7 +262,7 @@ var isBidEndTimeSelected = false;
                 }
             }
         },
-        onChartSearch1: function (oEvent) {
+        onChartLiveChange1: function (oEvent) {
 
             var sValue = oEvent.getParameter("value");
 
@@ -629,8 +611,7 @@ var isBidEndTimeSelected = false;
                 }
             });
         },
-        
-        onCreateCompleted: function (oEvent) {
+        onCreateCompleted: function(oEvent) {
             let oParameters = oEvent.getParameters();
             let oContext = oParameters.context;
             let bSuccess = oParameters.success;
@@ -642,9 +623,9 @@ var isBidEndTimeSelected = false;
         
                 // Get the vendor names from the context
                 let oData = oContext.getObject();
-                let vendorsNames = oData.vendorsName.join(", ");
+                let vendorsNames = oData.vendorsName.map(vendor => `- ${vendor}`).join("\n"); // Modify this line
         
-                sap.m.MessageBox.success(`Emails sent successfully to these companies: ${vendorsNames}`, {
+                sap.m.MessageBox.success(`Emails sent successfully to these companies:\n${vendorsNames}`, {
                     onClose: () => {
                         if (this._oDialog1) {
                             this._oDialog1.close();
@@ -672,6 +653,49 @@ var isBidEndTimeSelected = false;
                 }
             }
         },
+        
+        // onCreateCompleted: function (oEvent) {
+        //     let oParameters = oEvent.getParameters();
+        //     let oContext = oParameters.context;
+        //     let bSuccess = oParameters.success;
+        
+        //     if (bSuccess) {
+        //         console.log("oParameters", oParameters);
+        //         console.log("oContext", oContext.sPath);
+        //         console.log("bSuccess", bSuccess);
+        
+        //         // Get the vendor names from the context
+        //         let oData = oContext.getObject();
+        //         let vendorsNames = oData.vendorsName.join(", ");
+        
+        //         sap.m.MessageBox.success(`Emails sent successfully to these companies: ${vendorsNames}`, {
+        //             onClose: () => {
+        //                 if (this._oDialog1) {
+        //                     this._oDialog1.close();
+        //                 }
+        //                 this.onRefresh(); 
+        //                 // Call the onRefresh function to refresh the fragment or view
+        //             }
+        //         });
+        
+        //         this.getView().byId("sumbit").setEnabled(false);
+        //         this.getView().byId("Button1").setEnabled(false);
+        
+        //     } else {
+        //         var errorResponse = oEvent.getParameter("response");
+        //         console.error("Error creating entity:", errorResponse);
+        //         if (errorResponse) {
+        //             try {
+        //                 var errorJson = JSON.parse(errorResponse.responseText);
+        //                 sap.m.MessageBox.error(errorJson.error.message.value);
+        //             } catch (e) {
+        //                 sap.m.MessageBox.error("An unknown error occurred while creating the entity.");
+        //             }
+        //         } else {
+        //             sap.m.MessageBox.error("An unknown error occurred while creating the entity.");
+        //         }
+        //     }
+        // },
         
         
 
@@ -795,9 +819,8 @@ var isBidEndTimeSelected = false;
             this.byId("date1").setValue("");
             this.byId("date2").setValue("");
             this.byId("ControllerQValue").setValue("");
-            this.byId("modeSelect").setSelectedKey("Mode1"); // Assuming "Mode1" is the default key for Auto
+            this.byId("modeSelect").setSelectedKey("Mode1"); 
         
-            // Reset time pickers to current time or default
             var oCurrentTime = new Date();
             var oDateFormat = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" });
             this.byId("BidSTime").setValue(oDateFormat.format(oCurrentTime));
@@ -949,7 +972,7 @@ onselectBSD: function (oEvent) {
 
     if (oSelectedDate1 < oCurrentDate) {
         oDatePicker.setValue("");
-        oDatePicker.setValueState("Error");
+        // oDatePicker.setValueState("Error");
         MessageBox.error("Past dates are not allowed. Please select a current or future date.");
         isBidStartDateSelected = false;
     } else {
@@ -980,7 +1003,7 @@ onselectBED: function (oEvent) {
         MessageBox.error("Please select the Bid Start Date first.");
         var oDatePicker = oEvent.getSource();
         oDatePicker.setValue("");
-        oDatePicker.setValueState("Error");
+        // oDatePicker.setValueState("Error");
         return;
     }
 
@@ -995,12 +1018,12 @@ onselectBED: function (oEvent) {
 
     if (oSelectedDate < oCurrentDate) {
         oDatePicker.setValue("");
-        oDatePicker.setValueState("Error");
+        // oDatePicker.setValueState("Error");
         MessageBox.error("Past dates are not allowed. Please select a current or future date.");
         isBidEndDateSelected = false;
     } else if (oBiddingStartDate && oSelectedDate < oBiddingStartDate) {
         oDatePicker.setValue("");
-        oDatePicker.setValueState("Error");
+        // oDatePicker.setValueState("Error");
         MessageBox.error("Bidding End Date cannot be before Bidding Start Date. Please select a valid date.");
         isBidEndDateSelected = false;
     } else {
@@ -1087,7 +1110,7 @@ onselectBETime: function (oEvent) {
 
         if (endDateTime <= startDateTime) {
             oTimePicker.setValue("");
-            oTimePicker.setValueState("Error");
+            // oTimePicker.setValueState("Error");
             MessageBox.error("Bidding End Time cannot be less than or equal to Bidding Start Time.");
             isBidEndTimeSelected = false;
             return;
@@ -1095,7 +1118,7 @@ onselectBETime: function (oEvent) {
 
         if (!this.validateTime(startDateTime, endDateTime)) {
             oTimePicker.setValue("");
-            oTimePicker.setValueState("Error");
+            // oTimePicker.setValueState("Error");
             MessageBox.error("Bidding End Time must be at least 30 minutes after Bidding Start Time.");
             isBidEndTimeSelected = false;
             return;

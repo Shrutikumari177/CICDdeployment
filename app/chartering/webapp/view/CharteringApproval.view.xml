@@ -77,7 +77,7 @@
                     >
                         <Label
                             id="_IDGenLabel1"
-                            text="Chartering No: "
+                            text="Chartering Number: "
                             class="sapUiTinyMarginTop"
                         />
                         <!-- <MultiInput

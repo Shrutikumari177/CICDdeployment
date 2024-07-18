@@ -9,9 +9,7 @@
     xmlns:core="sap.ui.core"
 >
     <Page id="_IDGenPage1" >
-     
-   
-     <headerContent>
+        <headerContent>
             <Bar id="_IDGenBar2">
                 <contentLeft>
                     <Button
@@ -40,8 +38,9 @@
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries" type="Emphasized"
+                    text="New Entries"
                     press="newEntries"
+                    type="Emphasized"
                 />
                 <!-- <Button
                     id="copyBtn"
@@ -50,14 +49,16 @@
                 /> -->
                 <Button
                     id="editBtn"
-                    text="Edit" type="Emphasized"
+                    text="Edit"
                     press="pressEdit"
+                    type="Emphasized"
                 />
 
                 <Button
                     id="deleteBtn"
-                    text="Delete" type="Emphasized"
+                    text="Delete"
                     press="onDeletePress"
+                    type="Emphasized"
                 />
                 
                 
@@ -136,8 +137,8 @@
             <items>
                 <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
-                        <Input id="maintaingrpCode"  maxLength="15" liveChange="onCodeLiveChange" showValueHelp="true" valueHelpRequest="onMaintaingroup"  />
-                        <Input id="maintaingrpCodeDesc" maxLength="4" liveChange="onLiveChange" />
+                        <Input id="maintaingrpCode" liveChange="onCodeLiveChange" showValueHelp="true" valueHelpRequest="onMaintaingroup"  valueHelpOnly ="true" />
+                        <Input id="maintaingrpCodeDesc"  liveChange="onLiveChange" />
                     </cells>
                 </ColumnListItem>    
             </items>
@@ -185,12 +186,14 @@
                    
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                    
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 
@@ -206,12 +209,14 @@
                   
                     text="Update"
                     press="onUpdate"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton23"
                    
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
  
@@ -227,3 +232,4 @@
         <!--this is first page-->
     </ScrollContainer>
 </mvc:View>
+

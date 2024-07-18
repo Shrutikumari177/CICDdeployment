@@ -807,7 +807,7 @@ sap.ui.define(
      
 
       if (flagNothingtoUpdate) {
-        sap.m.MessageToast.show("nothing to update ");
+        sap.m.MessageToast.show("Nothing to update ");
         return;
       }
 

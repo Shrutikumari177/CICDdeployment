@@ -60,6 +60,7 @@
                 </contentLeft>
             </Bar>
         </subHeader>
+        
 
         <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />
@@ -177,8 +178,9 @@
                             id="Input3"
                             width="200px"
                             value="{voyHeaderModel>/0/Curr}"
-                            showValueHelp="true"
+                            showValueHelp="false"
                             valueHelpRequest=".showValueHelpDialogCurr"
+                            editable="false"
                         />
                     </HBox>
 
@@ -198,7 +200,7 @@
             </HBox>
         </form:SimpleForm>
 
-        <Panel />
+        
         <Button
             id="Hide"
             icon="sap-icon://minimize"
@@ -510,6 +512,7 @@
                                     }"
                                     selectedKey="{voyHeaderModel>/0/Frtu}"
                                     change="onCargoUniSelectChange"
+                                    
                                 >
                                     <core:Item
                                         key="{Uom}"
@@ -556,7 +559,7 @@
                                         <Column id="_IDColum">
                                             <Label
                                                 id="_IDGel15"
-                                                text="LegID"
+                                                text="LegId"
                                             />
                                         </Column>
                                         <Column id="_IDGenln6">
@@ -895,7 +898,7 @@
                                 >
                                     <columns>
                                         <Column>
-                                            <Label text="LegID" />
+                                            <Label text="LegId" />
                                         </Column>
                                         <Column>
                                             <Label text="Port Cost" />
@@ -1068,7 +1071,7 @@
                                                     id="_IDGenInput15"
                                                     value="{costdetailsModel>Vlegn}"
                                                     liveChange="onVlegnInputLiveChange"
-                                                    type="Number"
+                                            
                                                 />
                                                 <Input
                                                     id="cost"
@@ -1645,7 +1648,7 @@
                                                 sticky="ColumnHeaders"
                                             >
                                                 <columns>
-                                                    <Column width="42.5%">
+                                                    <Column width="40%">
                                                         <Text text="Heads" />
                                                     </Column>
                                                     <Column width="15%">
@@ -1653,9 +1656,14 @@
                                                             text="Relevance"
                                                         />
                                                     </Column>
-                                                    <Column width="42.5%">
+                                                    <Column width="35%">
                                                         <Text
                                                             text="Possible Value"
+                                                        />
+                                                    </Column>
+                                                     <Column width="10%">
+                                                        <Text
+                                                            text="Hint"
                                                         />
                                                     </Column>
                                                 </columns>
@@ -1693,13 +1701,15 @@
                                                             />
                                                             <CheckBox
                                                                 selected="{commercialModel>RevBid}"
-                                                                select="toggleCheckbox"
+                                                                select="toggleCheckbox2"
+                                                                editable="false"
                                                             />
                                                             <Input
                                                                 value="{commercialModel>Cunit}"
-                                                                showValueHelp="true"
-                                                                editable="{path: 'commercialModel>RevBid', formatter:'.showValueHelpBasedOnRevBid'}"
+                                                                showValueHelp="false"
                                                                 valueHelpRequest=".showValueHelpDialogCurr"
+                                                                editable="false"
+                                                                
                                                             />
                                                         </cells>
                                                     </ColumnListItem>
@@ -1793,12 +1803,11 @@
                                     uploadUrl="odata/v4/nautical/FileuploadSet"
                                     sendXHR="true"
                                     httpRequestMethod="Post"
-                                    uploadComplete="handleUploadComplete"
                                     change=".handleValueChangeUpload"
                                     tooltip="Upload your file to the local server"
                                     buttonText="Choose File"
                                     icon="sap-icon://value-help"
-                                    fileType="[pdf]"
+                                    fileType="pdf"
                                     typeMissmatch="handleTypeMissmatch"
                                 />
                                 <Button

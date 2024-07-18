@@ -1,4 +1,4 @@
-//jdlk
+
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
@@ -11,12 +11,11 @@ sap.ui.define(
 
         "sap/ui/model/json/JSONModel",
         "com/ingenx/nauti/createvoyage/model/formatter",
-        "sap/m/MessageBox"
+        "sap/m/MessageBox",
+        "com/ingenx/nauti/createvoyage/utils/helperFunctions"
 
     ],
-    function (BaseController, Fragment, Filter, FilterOperator, Export, ExportTypeCSV, ExportTypePDF, JSONModel, formatter,
-
-    ) {
+    function (BaseController, Fragment, Filter, FilterOperator, Export, ExportUtils, ExportTypeCSV, JSONModel, formatter, MessageBox, helperFunctions) {
         "use strict";
 
 
@@ -36,11 +35,13 @@ sap.ui.define(
         let bidPayload = [];
         let myVOYNO;
         let oCommercialModel;
+        let userEmail;
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
             onInit: async function () {
 
+                await this.getLoggedInUserInfo();
 
                 bidPayload = [];
                 let model = this.getOwnerComponent().getModel();
@@ -58,7 +59,7 @@ sap.ui.define(
 
 
                 oRouter.getRoute("RouteTrChangeVoyage").attachPatternMatched(this.onObjectMatched, this);
-                
+
                 let hideButton = this.byId("Hide");
                 let hideButton1 = this.byId("Hide1");
                 if (hideButton) {
@@ -70,11 +71,23 @@ sap.ui.define(
                 oBidCharterModel = new JSONModel();
                 this.getView().setModel(oBidCharterModel, "oBidCharterModel");
                 this.debouncedOnPortDaysChange = this.debounce(this._onPortDaysChange.bind(this), 300);
-                
+
                 await this._initBidTemplate();
 
+            },
 
-
+            getLoggedInUserInfo: async function () {
+                try {
+                    let User = await sap.ushell.Container.getService("UserInfo");
+                    let userID = User.getId();
+                    userEmail = User.getEmail();
+                    let userFullName = User.getFullName();
+                    console.log("userEmail", userEmail);
+                    console.log("userFullName", userFullName);
+                    console.log("userID", userID);
+                } catch (error) {
+                    userEmail = undefined;
+                }
             },
             debounce: function (func, wait) {
                 let timeout;
@@ -97,7 +110,7 @@ sap.ui.define(
                     this.getView().setBusy(false); // Hide busy indicator even if there's an error
                 });
             },
-       
+
             _fetchData: function (oValue) {
                 return new Promise((resolve, reject) => {
                     voyItemModel.refresh();
@@ -110,7 +123,7 @@ sap.ui.define(
                     resolve();
                 });
             },
-            getBidDetails: function (VoyageNo) {
+            getBidDetails1: async function (VoyageNo) {
 
                 let that = this;
                 bidItemModel = new JSONModel();
@@ -119,7 +132,7 @@ sap.ui.define(
                 let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
                     $filter: `Voyno eq '${VoyageNo}'`
                 });
-                oBindList.requestContexts(0, Infinity).then(function (oContexts) {
+                await oBindList.requestContexts(0, Infinity).then(function (oContexts) {
 
                     console.log(oContexts);
                     let data = [];
@@ -128,27 +141,88 @@ sap.ui.define(
                     })
                     console.log("bid details data : ", data);
 
-                    // let commercialData = data.filter(item => (item.Zcode === "FREIG" || item.Zcode === "DEMURRAGE")    );
-                    // oCommercialModel.setData({ myData: commercialData });
+                    //clone data to bidPayload 
+
+                    if (data.length) {
+                        bidPayload = [...data];
+                        console.log(bidPayload);
+                        that.relevanceDataTechnical();
+
+                    }
 
                     bidItemModel.setData(data);
                     that.getView().setModel(bidItemModel, "bidItemModel");
                     that.getView().getModel('bidItemModel').refresh();
 
-                    let oTable1 = that.byId("submitTechDetailTable");
-
                     console.table(that.getView().getModel("bidItemModel").getData());
-                    //clone data to bidPayload 
-                    bidPayload = [...data];
-
 
                 })
 
+            },
+            getBidDetails: async function (VoyageNo) {
+                let that = this;
+                if (!that._busyDialog) {
+                    that._busyDialog = new sap.m.BusyDialog({
+                        title: "Please Wait",
+                        text: "Loading bid details..."
+                    });
+                }
+                that._busyDialog.open();
+                try {
+                    let bidItemModel = new sap.ui.model.json.JSONModel();
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
+                        $filter: `Voyno eq '${VoyageNo}'`
+                    });
+                    let oContexts = await oBindList.requestContexts(0, Infinity);
+                    let data = [];
+                    oContexts.forEach(oContext => {
+                        data.push(oContext.getObject());
+                    });
+                    console.log("Bid details data:", data);
+                    bidItemModel.setData(data);
+                    that.getView().setModel(bidItemModel, "bidItemModel");
+                    that.getView().getModel("bidItemModel").refresh();
+                    console.table(that.getView().getModel("bidItemModel").getData());
+                    let templateData = await that._getBidTemplate(oModel, "technical");
+                    bidPayload = [...data];
+                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable")); 
+                } catch (error) {
+                    console.error("Error loading bid details:", error);
+                } finally {
+                    if (that._busyDialog) {
+                        that._busyDialog.close();
+                        that._busyDialog = null;
+                    }
+                }
+            },  
+            relevanceDataTechnical: function () {
+                console.log("rel fn called");
+                let otechtable = this.byId('submitTechDetailTable');
+                console.log(otechtable);
+                let tableItems = otechtable.getItems();
+                for (let i = 0; i < tableItems.length; i++) {
+                    let oItems = tableItems[i];
+                    let oCells = oItems.getCells();
+                    let oText = oCells[0].getText();
+                    const foundObject = bidPayload.find(obj => obj.CodeDesc === oText);
+                    if (foundObject) {
+                        oCells[1].setSelected(true);
+                        this.toggleCheckbox(undefined, tableItems[i]);
+                    }
+                    else {
+                        oCells[1].setSelected(false);
+                        oCells[2].setValue("").setEditable(false);
+                        // this.toggleCheckbox(undefined, tableItems[i] );
 
+
+                    }
+
+                }
 
             },
 
-            onObjectMatched(oEvent) {
+            onObjectMatched: async function (oEvent) {
                 let that = this;
                 that._BusyDialog = new sap.m.BusyDialog();
                 that._BusyDialog.open();
@@ -157,45 +231,13 @@ sap.ui.define(
                 myVOYNO = oEvent.getParameter("arguments").VOYAGE_NO;
                 voyageNum = myVOYNO;
                 console.log("myVoyno  received:", myVOYNO);
-                this.byId('_voyageInput1').setValue(myVOYNO);
+                that.byId('_voyageInput1').setValue(myVOYNO);
+                let iconTab = this.byId("_idIconTabBar");
+                iconTab.setSelectedKey('info1');
 
-                oCommercialModel = new JSONModel({
-                    myData: [
-                        {
-                            "CodeDesc": "DEMURRAGE",
-                            "Cunit": "",
-                            "Cvalue": 0,
-                            "Good": "",
-                            "Mand": "",
-                            "Must": "",
-                            "RevBid": false,
-                            "Value": "",
-                            "Voyno": myVOYNO,
-                            "Zcode": "DEMURRAGE",
-                            "Zmax": "0",
-                            "Zmin": "0"
-                        }
-                        ,
-                        {
-                            "CodeDesc": "FREIGHT",
-                            "Cunit": "",
-                            "Cvalue": 0,  // Decimal 
-                            "Good": "",
-                            "Mand": "",
-                            "Must": "",
-                            "RevBid": false,
-                            "Value": "",
-                            "Voyno": myVOYNO,
-                            "Zcode": "FREIG",
-                            "Zmax": "0",
-                            "Zmin": "0"
-                        }
-                    ]
-                });
 
+                await that.getBidDetails(myVOYNO);
                 // Set the model to the view
-                that.getView().setModel(oCommercialModel, "commercialModel");
-                that.getBidDetails(myVOYNO);
 
                 let oModel = this.getOwnerComponent().getModel();
                 let aFilter = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, myVOYNO);
@@ -246,7 +288,43 @@ sap.ui.define(
                         console.log("LineItem :", that.getView().getModel("voyItemModel").getData());
                         console.log("costdetails :", that.getView().getModel("costdetailsModel").getData());
 
+                        that.sCunit = voyHeaderModel.getData()[0].Curr;
+                        oCommercialModel = new JSONModel({
+                            myData: [
+                                {
+                                    "CodeDesc": "DEMURRAGE",
+                                    "Cunit": that.sCunit,
+                                    "Cvalue": 0,
+                                    "Good": "",
+                                    "Mand": "",
+                                    "Must": "",
+                                    "RevBid": true,
+                                    "Value": "",
+                                    "Voyno": myVOYNO,
+                                    "Zcode": "DEMURRAGE",
+                                    "Zmax": "0",
+                                    "Zmin": "0"
+                                }
+                                ,
+                                {
+                                    "CodeDesc": "FREIGHT",
+                                    "Cunit": that.sCunit,
+                                    "Cvalue": 0,  // Decimal 
+                                    "Good": "",
+                                    "Mand": "",
+                                    "Must": "",
+                                    "RevBid": true,
+                                    "Value": "",
+                                    "Voyno": myVOYNO,
+                                    "Zcode": "FREIG",
+                                    "Zmax": "0",
+                                    "Zmin": "0"
+                                }
+                            ]
+                        });
 
+
+                        that.getView().setModel(oCommercialModel, "commercialModel");
                     } else if (aContexts.length === 0) {
 
                         new sap.m.MessageBox.error(`No Data found against ${myVOYNO} Voyage no.`);
@@ -258,8 +336,8 @@ sap.ui.define(
                     }
                 }).catch(function (oError) {
 
-                    console.error("Error while fetching entity:", oError);
-                    new sap.m.MessageBox.error("Error while fetching entity");
+                    console.log(`${oError.name} :${oError.message}`);
+                    new sap.m.MessageBox.error(`${oError.name} :${oError.message}`);
 
                 }).finally(function () {
                     if (that._BusyDialog) {
@@ -274,19 +352,7 @@ sap.ui.define(
 
             },
 
-            // onRefresh : function (){
-            //     voyHeaderModel.setData([]);
-            //     voyItemModel.setData([]);
-            //     costdetailsModel.setData([]);
-            //     bidItemModel.setData([]);
 
-            //     voyHeaderModel.refresh();
-            //     voyItemModel.refresh();
-            //     costdetailsModel.refresh();
-            //     bidItemModel().refresh();
-
-
-            // },
 
             //  code and function for bid details
             _initBidTemplate: async function () {
@@ -294,7 +360,7 @@ sap.ui.define(
                 let that = this;
                 return new Promise(async function (resolve, reject) {
 
-                    let oModel = that.getOwnerComponent().getModel("modelV2");
+                    let oModel = that.getOwnerComponent().getModel();
                     //   let open = that.getOwnerComponent().getModel("status").getProperty("/open");
                     let oView = that.getView();
                     let templateData = await that._getBidTemplate(oModel, "technical");
@@ -321,39 +387,79 @@ sap.ui.define(
 
             _getBidTemplate: function (oModel, detailType) {
                 let index = "Not Found";
-                return new Promise((resolve, reject) => {
-                    oModel.read(`/MasBidTemplateSet`, {
-                        success: (oData) => {
-                            oData.results.forEach((el, i) => {
+                return new Promise(async (resolve, reject) => {
+                    try {
 
-                                delete el.__metadata;
-                                if (detailType === "technical") {
+                        let oData = await helperFunctions.readEntity(oModel, "MasBidTemplateSet", undefined, undefined, undefined, undefined);
+                        console.log("MasBidTemplate", oData);
+                        oData.sort((a, b) => {
+                            if (a.Datatype.toLocaleLowerCase() < b.Datatype.toLocaleLowerCase()) {
+                                return -1;
+                            }
+                            if (a.Datatype.toLocaleLowerCase() > b.Datatype.toLocaleLowerCase()) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                        for (let i = oData.length - 1; i >= 0; i--) {
+                            let el = oData[i];
 
-                                    if (el.Code === "FREIG" || el.Code === "DEMURRAGE") index = i;
-                                    if (index !== "Not Found") {
-                                        oData.results.splice(index, 1);
-                                        index = "Not Found";
-                                    }
+                            delete el.__metadata;
+
+                            if (detailType === "technical") {
+                                if (el.Code === "FREIG" || el.Code === "DEMURRAGE") {
+                                    oData.splice(i, 1);
                                 }
-                                // else if (detailType === "commercial") {
-                                //     if (el.Code == ! "FREIG" || el.Code == ! "DEMURRAGE") index = i;
-                                //     if (index !== "Not Found") {
-                                //         oData.results.splice(index, 1);
-                                //         index = "Not Found";
+                                // } else if (detailType === "commercial") {
+                                //     if (el.Code !== "FREIG" && el.Code !== "DEMURRAGE") {
+                                //         oData.splice(i, 1);
                                 //     }
-
                                 // }
-                            });
-                            resolve(oData.results);
-                        },
-                        error: (oResponse) => {
-                            reject(oResponse);
-                        },
-                    });
+                            };
+                            resolve(oData);
+
+                        }
+                    } catch (err) {
+                        console.log(err);
+                        sap.m.MessageBox.error(`${err.name} : ${err.message}`);
+                    }
+
+                    // oModel.read(`/MasBidTemplateSet`, {
+                    //     success: (oData) => {
+                    //         oData.results.sort((a, b) => {
+                    //             if (a.Datatype.toLocaleLowerCase() < b.Datatype.toLocaleLowerCase()) {
+                    //                 return -1;
+                    //             }
+                    //             if (a.Datatype.toLocaleLowerCase() > b.Datatype.toLocaleLowerCase()) {
+                    //                 return 1;
+                    //             }
+                    //             return 0;
+                    //         });
+                    //         for (let i = oData.results.length - 1; i >= 0; i--) {
+                    //             let el = oData.results[i];
+
+                    //             delete el.__metadata;
+
+                    //             if (detailType === "technical") {
+                    //                 if (el.Code === "FREIG" || el.Code === "DEMURRAGE") {
+                    //                     oData.results.splice(i, 1);
+                    //                 }
+                    //             } else if (detailType === "commercial") {
+                    //                 if (el.Code !== "FREIG" && el.Code !== "DEMURRAGE") {
+                    //                     oData.results.splice(i, 1);
+                    //                 }
+                    //             }
+                    //         };
+                    //         resolve(oData.results);
+                    //     },
+                    //     error: (oResponse) => {
+                    //         reject(oResponse);
+                    //     },
                 });
+
             },
 
-            _setBidTemplate: function (templateData, oTable) {
+            _setBidTemplate1: function (templateData, oTable) {
                 let editFlag = true;
                 let oView = this.getView();
                 let that = this;
@@ -361,7 +467,7 @@ sap.ui.define(
                     let oItem;
                     let oCells = [];
                     oCells.push(new sap.m.Text({ text: el.Value }));
-                    oCells.push(new sap.m.CheckBox({ select: this.toggleCheckbox }));
+                    oCells.push(new sap.m.CheckBox({ select: this.toggleCheckbox.bind(this) }));
 
                     //  changes by deepanshu
                     oCells.push(
@@ -375,7 +481,11 @@ sap.ui.define(
 
                         }));
 
-
+                    oCells.push(new sap.m.Button({
+                        icon: "sap-icon://hint", press: function (oEvent) {
+                            that.handlePopoverPress(oEvent, that);
+                        }
+                    }))
 
                     oItem = new sap.m.ColumnListItem({
                         cells: oCells,
@@ -383,12 +493,119 @@ sap.ui.define(
                     oTable.addItem(oItem);
                 });
             },
+            _setBidTemplate: function (templateData, oTable) {
+                let oView = this.getView();
+                let that = this;
+                oTable.removeAllItems();
+                templateData.forEach((el) => {
+                    let oItem;
+                    let oCells = [];
+                    oCells.push(new sap.m.Text({ text: el.Value }));
+                    let filterItems = bidPayload.filter(item => item.CodeDesc === el.Value);
+                    let resultData = this.getInputData(filterItems);
+                    let isEditable = resultData ? true : false;
+                    oCells.push(new sap.m.CheckBox({ 
+                        select: this.toggleCheckbox.bind(this),
+                        selected: isEditable,
+                        // editable: !isEditable
+                    }));
+                    oCells.push(
+                        new sap.m.Input({
+                            showValueHelp: true,
+                            valueHelpRequest: function (oEvent) {
+                                that._showValueHelpDialogMaster(oEvent, el.Datatype, el.Tablename, el.Value, el.Code);
+                            },
+                            editable: isEditable, 
+                            valueHelpOnly: true,
+                            value: resultData 
+                        })
+                    );
+                    // Add the Button
+                    oCells.push(new sap.m.Button({
+                        icon: "sap-icon://hint",
+                        press: function (oEvent) {
+                            that.handlePopoverPress(oEvent, that);
+                        }
+                    }));
+                    oItem = new sap.m.ColumnListItem({
+                        cells: oCells,
+                    });
+                    oTable.addItem(oItem);
+                });
+            },
+            handlePopoverPress: function (oEvent, that) {
+                let oButton = oEvent.getSource();
+                let oView = that.oView;
+                let oCodeDesc = oEvent.getSource().getParent().getCells()[0].getText();
+                let filterItems = bidPayload.filter(item =>
+                    item.CodeDesc === oCodeDesc
+                );
 
-            toggleCheckbox: function (oEvent) {
+                let hintModel = new sap.ui.model.json.JSONModel();
+                hintModel.setData({
+                    hintData: filterItems
+                })
+                oView.setModel(hintModel, "hintModel");
+
+
+                // create popover
+                if (!that._pPopover) {
+                    that._pPopover = Fragment.load({
+                        id: oView.getId(),
+                        name: "com.ingenx.nauti.createvoyage.fragments.Popover",
+                        controller: that
+                    }).then(function (oPopover) {
+                        oView.addDependent(oPopover);
+                        // oPopover.bindElement("hintModel>/");
+
+                        return oPopover;
+                    });
+                }
+
+                that._pPopover.then(function (oPopover) {
+                    oPopover.setModel(hintModel, "hintModel");
+                    oPopover.openBy(oButton);
+                });
+            },
+
+            hintCheckBox: function (value) {
+                return value === "X" ? true : false;
+
+            },
+
+            toggleCheckbox: function (oEvent, itemRow) {
+                // debugger;
+                let boolean, oSource, oInput, oText;
+                if (oEvent) {
+                    boolean = oEvent.getParameter('selected');
+                    oSource = oEvent.getSource();
+                    oInput = oSource.getParent().getCells()[2];
+                    oText = oSource.getParent().getCells()[0].getText();
+                } else {
+                    boolean = true;
+                    oInput = itemRow.getCells()[2];
+                    oText = itemRow.getCells()[0].getText();
+
+                }
+
+                let filterItems = bidPayload.filter(item => item.CodeDesc === oText);
+
+                let resultData = this.getInputData(filterItems); // seeting value to input source
+
+                boolean ? oInput.setValue(resultData).setEditable(boolean) : oInput.setValue("").setEditable(boolean);
+            },
+            toggleCheckbox2: function (oEvent) {
                 let boolean = oEvent.getParameter('selected');
                 let oSource = oEvent.getSource();
                 let oInput = oSource.getParent().getCells()[2];
-                oInput.setValue("").setEditable(boolean);
+                if (boolean) {
+
+                    oInput.setValue(this.sCunit).setEditable(boolean);
+                } else {
+                    oInput.setValue("").setEditable(boolean);
+
+
+                }
 
             },
             _onHelpTableRequest: async function (oEvent, description) {
@@ -695,24 +912,32 @@ sap.ui.define(
                     }
                 });
                 console.table(bidPayload);
-                sap.m.MessageToast.show("Date Saved");
             },
 
-            onAddNewBid: function (oEvent, Code, description) {
-                var oButton = oEvent.getSource();
-                var oDialog = oButton.getParent(); // Assuming the button is nested inside the dialog
-                var oTable = oDialog.getContent()[0]; // Assuming the table is the second item in the dialog's content
-                var oModel = oTable.getModel("tempModel");
+            onAddNewBid: function (oEvent, Code, description, oDialogRef) {
+                let oButton, oDialog;
+                if (oDialogRef) {
+                    oDialog = oDialogRef;
+
+
+                } else {
+                    oButton = oEvent.getSource();
+                    oDialog = oButton.getParent();
+
+                }
+                // Add row button is nested inside the dialog
+                let oTable = oDialog.getContent()[0]; // Assuming the table is the second item in the dialog's content
+                let oModel = oTable.getModel("tempModel");
 
                 // Generate a unique group name for each row based on current timestamp
                 var groupName = "Group_" + new Date().getTime();
 
                 // Add a new empty entry to the model
 
-                var newData = {
+                let newData = {
                     CodeDesc: description, // dynamic code description
                     Cunit: "", // Fixed value, can be changed if required
-                    Cvalue: "0.000", // Fixed value, can be changed if required
+                    Cvalue: "0.0", // Fixed value, can be changed if required
                     Good: "", // Empty initially, can be changed by user
                     Mand: "", // Empty initially, can be changed by user
                     Must: "", // Empty initially, can be changed by user
@@ -726,10 +951,16 @@ sap.ui.define(
 
                 // allowing user only to create new entry when previous entry filled only
                 let length = oModel.getData().length;
+
+                if (oDialogRef && length) {
+
+                    // if bid data exists and  template Input value help pressed also then no need to add empty row
+                    return;
+                }
                 if (length) {
                     let entry = oModel.getData()[length - 1]
-                    if (entry.Value === "") {
-                        new sap.m.MessageToast.show("please fill the details for last entry");
+                    if (entry.Value === "" || entry.Zmin == "" || entry.Zmax == "" ||  (entry.Good === "" && entry.Mand === "" && entry.Must === "")) {
+                        new sap.m.MessageToast.show("please fill the last entry first");
                         return;
                     }
 
@@ -898,13 +1129,17 @@ sap.ui.define(
             formatZmaxEditable: function (sGood, sMand, sMust) {
                 return sGood === "X" || sMand === "X";
             },
+
             _showValueHelpDialogMaster: function (oEvent, datatype, tablename, description, Code) {
+
                 let oSource = oEvent.getSource();
                 let that = this;
                 let obj;
                 if (datatype === "DATE") {
                     obj = new sap.m.DatePicker({ valueFormat: "dd.MM.YYYY", value: "{tempModel>Value}" });
+
                 } else if (tablename) {
+
                     obj = new sap.m.Input({
                         value: "{tempModel>Value}",
                         showValueHelp: true,
@@ -915,15 +1150,14 @@ sap.ui.define(
                     obj = new sap.m.Input({ value: "{tempModel>Value}" });
                 }
                 let tempModel = new JSONModel();
-                let oData = [...bidPayload];
+
+                let sBidData = JSON.parse(JSON.stringify(bidPayload)); // Deep cloning bidPayload
                 let filterdata = [];
-                oData.forEach((item, i) => {
+                sBidData.forEach((item, i) => {
+
                     if (item.CodeDesc === description) {
                         item.RevBid = true;
-                        // item.Good = item.Good === 'X' ? true : false;
-                        // item.Mand = item.Mand === 'X' ? true : false;
-                        // item.Must = item.Must === 'X' ? true : false;
-                        // item.rGroup = `Group${i}`
+
                         filterdata.push(item);
 
                     }
@@ -940,11 +1174,14 @@ sap.ui.define(
                     title: `Bid Details  -  ${description}`,
                     titleAlignment: "Center",
                     contentWidth: "60%",
-                    contentHeight: "60%",
+                    contentHeight: "40%",
                     content: [
 
                         new sap.m.Table({
                             mode: sap.m.ListMode.MultiSelect,
+                            alternateRowColors: true,
+                            sticky: ["ColumnHeaders"],
+                            includeItemInSelection: true,
                             columns: [
                                 new sap.m.Column({ header: new sap.m.Text({ text: "Possible value" }), width: "220px" }),
                                 new sap.m.Column({ header: new sap.m.Text({ text: "Good To Have" }), hAlign: "Center" }),
@@ -992,7 +1229,7 @@ sap.ui.define(
                                                     context.getModel().setProperty(context.getPath() + "/Mand", "X");
                                                     context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
-                                                    oEvent.getSource().getParent().getCells()[5].setEditable(true);
+                                                    oEvent.getSource().getParent().getCells()[5].setValue("").setEditable(true);
                                                 }
                                             }
                                         }),
@@ -1016,8 +1253,10 @@ sap.ui.define(
                                             }
                                         }),
                                         new sap.m.Input({
-                                            placeholder: "e.g 0-5",
+                                            placeholder: "0-5",
                                             value: "{tempModel>Zmin}",
+                                            type: sap.m.InputType.Number,
+                                            liveChange: that.checkRangeforZmin.bind(that),
                                             editable: {
                                                 parts: [{ path: "tempModel>Good" }, { path: "tempModel>Mand" }, { path: "tempModel>Must" }],
                                                 formatter: function (sGood, sMand, sMust) {
@@ -1026,8 +1265,11 @@ sap.ui.define(
                                             }
                                         }),
                                         new sap.m.Input({
-                                            placeholder: "e.g 0-5",
+                                            type: "Number",
+                                            placeholder: "1-5",
+                                            type: sap.m.InputType.Number,
                                             value: "{tempModel>Zmax}",
+                                            liveChange: that.checkRangeforZmax.bind(that),
                                             editable: {
                                                 parts: [{ path: "tempModel>Good" }, { path: "tempModel>Mand" }, { path: "tempModel>Must" }],
                                                 formatter: function (sGood, sMand, sMust) {
@@ -1043,11 +1285,11 @@ sap.ui.define(
                             text: "Add row",
                             type: "Emphasized",
                             press: function (oEvent) {
-                                that.onAddNewBid(oEvent, Code, description)
+                                that.onAddNewBid(oEvent, Code, description, undefined) // adding 4th parameter for make fn reusable
                             }
                         }).addStyleClass("sapUiTinyMargin"),
                         new sap.m.Button({
-                            text: "Delete",
+                            text: "delete",
                             press: function (oEvent) {
                                 that.onDeleteBidDetail(oEvent)
                             }
@@ -1093,7 +1335,7 @@ sap.ui.define(
                                 }
                                 for (let entry of entries) {
                                     if (!entry.Value || (!entry.Good && !entry.Mand && !entry.Must) || !entry.Zmax || !entry.Zmin) {
-                                        new sap.m.MessageBox.information("Please fill empty field or remove entry.");
+                                        new sap.m.MessageBox.warning("Please fill empty field or remove entry.");
                                         return; // Exit the press function
                                     }
                                 }
@@ -1108,30 +1350,28 @@ sap.ui.define(
                                         bidPayload.push(newEntry);
                                     }
                                 }
+                                // on Save locally saving bid changes
 
+                                let oInputValue = that.getInputData(filterData);
+                                oSource.setValue(oInputValue);
 
-                                for (let i = 0; i < filterData.length; i++) {
-                                    if (filterData[i].Mand) {
-                                        oSource.setValue(filterData[i].Value);
-                                        break;
-                                    }
-                                    if (filterdata[i].Good) {
-                                        oSource.setValue(filterdata[i].Value);
-
-                                    }
-                                }
-                                // that.lateInputField(oInput, selectedValue);
                                 console.table(bidPayload);
                                 oDialog.close();
+                            } else {
+                                sap.m.MessageBox.warning("Please add some details before saving");
+                                oSource.setValue("");
                             }
 
-                        }.bind(this),
+
+                        }.bind(this)
                     }),
                     endButton: new sap.m.Button({
-                        text: "Cancel",
+                        text: "Close",
                         type: "Reject",
                         press: function () {
                             oDialog.close();
+                            console.log("kjkj");
+                            console.table(bidPayload);
                         },
                     }),
                 });
@@ -1140,6 +1380,74 @@ sap.ui.define(
                 this.getView().addDependent(oDialog); // Bind the dialog to the view
                 this.assignGroupToRadioButton(oDialog);
                 oDialog.open(); // Open the dialog
+                this.onAddNewBid(oEvent, Code, description, oDialog);
+            },
+            getInputData: function (hintData) {
+                var firstMandValue = null;
+                var firstGoodValue = null;
+
+                for (var i = 0; i < hintData.length; i++) {
+                    var item = hintData[i];
+
+                    if (item.Mand === "X") {
+                        if (firstMandValue === null) {
+                            firstMandValue = item.Value;
+                        }
+                    }
+
+                    if (item.Good === "X") {
+                        if (firstGoodValue === null) {
+                            firstGoodValue = item.Value;
+                        }
+                    }
+                }
+
+                if (firstMandValue !== null) {
+                    return firstMandValue;
+                } else if (firstGoodValue !== null) {
+                    return firstGoodValue;
+                } else {
+                    return null;
+                }
+            },
+            
+            checkRangeforZmax: function (oEvent) {
+                // Get the input control
+                let oInput = oEvent.getSource();
+
+                let value = oInput.getValue();
+
+                let numericValue = parseFloat(value);
+
+                // Check if the value is within the range [1-5]
+                if (numericValue >= 1 && numericValue <= 5) {
+                    // Value is within the range, set value state to None
+                    oInput.setValueState(sap.ui.core.ValueState.None);
+                    oInput.setValueStateText("");
+                } else {
+                    // Value is out of range, set value state to Error
+                    oInput.setValueState(sap.ui.core.ValueState.Error);
+                    oInput.setValueStateText("Value must be between 1 and 5");
+                }
+            },
+            checkRangeforZmin: function (oEvent) {
+                // Get the input control
+                let oInput = oEvent.getSource();
+
+                let value = oInput.getValue();
+
+                let numericValue = parseFloat(value);
+
+                // Check if the value is within the range [1-5]
+                if (numericValue >= 0 && numericValue <= 5) {
+                    // Value is within the range, set value state to None
+                    oInput.setValueState(sap.ui.core.ValueState.None);
+                    oInput.setValueStateText("");
+                } else {
+                    // Value is out of range, set value state to Error
+                    oInput.setValueState(sap.ui.core.ValueState.Error);
+                    oInput.setValueStateText("Value must be between 1 and 5");
+                }
             },
             assignGroupToRadioButton: function (oDialog) {
                 let oDialogModel = oDialog.getModel("tempModel");
@@ -1263,11 +1571,11 @@ sap.ui.define(
 
                 let ZCalcNav = [];
                 for (let i = 0; i < selectedPorts.length; i++) {
-                    //   if (!selectedPorts[i].Weather) {
-                    //     // new sap.ui.m.MessageBox.error("Please enter Weather ");
-                    //     // return false;
-                    //     selectedPorts[i].Weather = "0";
-                    //   }
+                      if (!selectedPorts[i].Weather) {
+                        // new sap.ui.m.MessageBox.error("Please enter Weather ");
+                        // return false;
+                        selectedPorts[i].Weather = "0";
+                      }
                     if (!selectedPorts[i].Cargs) {
                         new sap.ui.m.MessageBox.error("Please enter CargoSize ");
                         return false;
@@ -1320,6 +1628,35 @@ sap.ui.define(
                     ZCalcNav: ZCalcNav,
                 };
                 console.log(oPayload);
+                const oDataModelV4 = this.getOwnerComponent().getModel();
+                let oBindList = oDataModelV4.bindList("/ZCalculateSet", true);
+
+                oBindList.create(oPayload, true).created(x => { console.log(x); });
+                oBindList.attachCreateCompleted(function (p) {
+                    let p1 = p.getParameters();
+
+                    let oData = p1.context.getObject();
+                    console.table(oData.ZCalcNav);
+
+                    //   console.log(oData.ZCalcNav[0].Vetad, oData.ZCalcNav[0].Vetat, oData.ZCalcNav[0].Vetdd, oData.ZCalcNav[0].Vetdt, oData.ZCalcNav[1].Vetad, oData.ZCalcNav[1].Vetat, oData.ZCalcNav[1].Vetdd, oData.ZCalcNav[1].Vetdt);
+
+                    let totalDays = 0;
+
+                    oData.ZCalcNav.forEach((data, index) => {
+                        selectedPorts[index].Vsdayss = data.Vsdays;
+                        selectedPorts[index].Vspeed = GvSpeed;
+                        selectedPorts[index].Vwead = data.Vwead;
+                        selectedPorts[index].Vetad = formatter.dateStringToDateObj(data.Vetad);
+                        selectedPorts[index].Vetat = formatter.timeStringToDateObj(data.Vetat);
+                        selectedPorts[index].Vetdd = formatter.dateStringToDateObj(data.Vetdd);
+                        selectedPorts[index].Vetdt = data.Vetdt;
+
+                        totalDays += Number(selectedPorts[index].Vsdays) + Number(selectedPorts[index].Ppdays);
+                        voyItemModel.refresh();
+                    });
+                })
+
+                return
                 const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
                 oDataModelV2.create("/ZCalculateSet", oPayload, {
                     success: function (oData) {
@@ -1455,28 +1792,10 @@ sap.ui.define(
                 }
 
             },
-            FrieghtCostToShow : function (fcost ){
+            FrieghtCostToShow: function (fcost) {
                 return formatter.numberFormat(fcost)
             },
 
-            // fn  for Ui display formated Frcost
-            CalcTotalFrcost1: function (odata) {
-                console.log(odata);
-                let totalFrCost = 0;
-
-                let arr = odata;
-                if (arr && arr.length) {
-
-                    arr.forEach((port) => {
-                        totalFrCost += parseFloat(port.Frcost);
-
-                    })
-                    console.log("total fr cost: ", totalFrCost);
-
-                    return formatter.numberFormat(totalFrCost);
-                }
-
-            },
 
             //fn to calculate sum for all freight costs and other costs to show in header of item table
             calctotalCost: function (voyItemsArr) {
@@ -1676,7 +1995,7 @@ sap.ui.define(
                 }
 
             },
-            onCargoUniSelectChange : function ( oEvent) {
+            onCargoUniSelectChange: function (oEvent) {
                 let oSelectedUnit = oEvent.getSource().getSelectedKey();
                 this.liveFrCostChange();
 
@@ -1789,15 +2108,30 @@ sap.ui.define(
             // FUNCTION : To Add new empty cost charge row 
             onAddCost: function () {
 
+                let itemdDataLength = voyItemModel.getData().length;
+
+                if (!itemdDataLength) {
+                    new sap.m.MessageBox.warning("Please add a port");
+                    return;
+                }
                 let oTableModel = costdetailsModel;
                 let oTableData = oTableModel.getData();
                 let currency = voyHeaderModel.getData()[0].Curr;
                 let unit = voyHeaderModel.getData()[0].toitem[0].Cargu;
+                let lastEntry = oTableData[oTableData.length - 1];
+
+                if (lastEntry && (lastEntry.Vlegn == "" || lastEntry.Procost == "" || lastEntry.Cstcodes == "" || lastEntry.Costu == "")) {
+                    sap.m.MessageToast.show("Please fill the last entry first");
+                    return
+                }
+
                 oTableData.push({ Voyno: myVOYNO, Vlegn: "", Procost: "", Prcunit: "", Costu: unit, Costcode: "", Cstcodes: "", Costcurr: currency, CostCheck: false });
                 oTableModel.refresh();
                 this.byId('_costTablePlan').removeSelections();
 
             },
+
+            //  cost charges live  LegId change
             onVlegnInputLiveChange: function (oEvent) {
                 let oInput = oEvent.getSource();
                 let value = oInput.getValue();
@@ -1807,7 +2141,7 @@ sap.ui.define(
                 let maxLegId = oItems.length;
 
                 // Check if the value is a valid integer and within the allowed range
-                if (isNaN(oVlegn) || oVlegn > maxLegId || oVlegn <= 0) {
+                if (oVlegn > maxLegId || oVlegn <= 0) {
                     new sap.m.MessageToast.show("Invalid LegId", {
                         duration: 600
                     });
@@ -1820,6 +2154,15 @@ sap.ui.define(
                             duration: 800
                         });
                         oInput.setValue("");
+
+
+                    } else {
+                        // Set the input value with the integer value
+                        oInput.setValue(oVlegn);
+
+                        // Update the model with the integer value for Vlegn
+                        let path = oInput.getBindingContext("costdetailsModel").getPath();
+                        costdetailsModel.setProperty(path + "/Vlegn", oVlegn);
                     }
                 }
             },
@@ -1969,10 +2312,11 @@ sap.ui.define(
             },
 
             onSaveVoyage: function () {
-                let oModel = this.getOwnerComponent().getModel('modelV2');
+                let oModel = this.getOwnerComponent().getModel();
                 let headerDetail = voyHeaderModel.getData();
                 let itemDetails = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
+
                 // console.log(voyHeaderModel.getData(), voyItemDetail, costData);
 
                 let frcostPlValue = this.byId("_friegthIdPlan").getValue();
@@ -1987,6 +2331,9 @@ sap.ui.define(
 
                     return
                 };
+
+                // saving commercial Details to bidPayload;
+                this.onSaveCommercialDetail();
 
 
                 let payload = {
@@ -2020,48 +2367,47 @@ sap.ui.define(
                     tobiditem: [...bidPayload],
 
                 };
-                // tobiditem: [...bidPayload, ...commerDetailPayload]   // be work on logic to check before pushig data again validation
-                //   tobiditem: [
-                //     {
 
-                //                     Voyno: "1000000034",
-                //                     Zcode: "CLASS",
-                //                     Value: "A",
-                //                     Cvalue: 0,
-                //                     Cunit: "",
-                //                     CodeDesc: "CLASS OF VESSEL",
-                //                     RevBid: true,
-                //                     Good: "X",
-                //                     Mand: "",
-                //                     Must: "",
-                //                     Zmin: 3,
-                //                     Zmax: 4
-                //                 },
-                //                 {
-                //                     Voyno: "1000000034",
-                //                     Zcode: "DAT1",
-                //                     Value: "01.09.2023",
-                //                     Cvalue: 0,
-                //                     Cunit: "",
-                //                     CodeDesc: "LAST CLEANING DATE",
-                //                     RevBid: true,
-                //                     Good: "X",
-                //                     Mand: "",
-                //                     Must: "",
-                //                     Zmin: 2,
-                //                     Zmax: 5
-                //                 }
-                //   ]
+
                 let that = this;
                 console.log("voyage payload :", payload);
                 console.table(bidPayload);
-                new sap.m.MessageToast.show("Saving data ...")
+
+                new sap.m.MessageToast.show("Saving voyage data ...", { duration: 500 });
+
+                // oData v4 model create code
+
+                const oDataModelV4 = this.getOwnerComponent().getModel();
+                let oBindList = oDataModelV4.bindList("/xNAUTIxVOYAGEHEADERTOITEM", true);
+
+                oBindList.create(payload, true).created(x => {
+                    console.log("fsf", x);
+                });
+
+                oBindList.attachCreateCompleted(function (p) {
+                    let p1 = p.getParameters();
+
+                    let oContext = p1.context;
+                    let oData = oContext.getObject();
+
+                    if (p1.success) {
+                        console.log(oData);
+
+                        MessageBox.success(`Successfully saved `);
+
+                    } else {
+                        sap.m.MessageBox.error(p1.context.oModel.mMessages[""][0].message);
+                        console.log(p1.context.oModel.mMessages[""][0].message);
+                    }
+
+
+                });
+                return
                 oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
                     success: function (oData) {
                         console.log("result :", oData);
                         new sap.m.MessageBox.success("Changes saved Succcesfully.");
                         that.getOwnerComponent().getModel().refresh();
-                        that.getDataforvoyage(myVOYNO);
 
 
                     },
@@ -2143,13 +2489,8 @@ sap.ui.define(
                 bidItemModel.refresh();
                 this.toggleEnable(false);
 
-
-                // Clear any existing filters on the SelectDialog
-
-
-
             },
-            sendApproval: function () {
+            sendApproval: async function () {
 
                 if (!myVOYNO) {
                     sap.m.MessageBox.error("Please enter Voyage No.");
@@ -2158,8 +2499,9 @@ sap.ui.define(
 
                 let oModel = this.getOwnerComponent().getModel();
                 let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
+                let eligibleforApproval = false;
 
-                oBinding.requestObject().then((oContext) => {
+                await oBinding.requestObject().then((oContext) => {
                     console.log(oContext);
 
                     if (oContext) {
@@ -2168,29 +2510,50 @@ sap.ui.define(
                         console.log(Zaction);
 
                         if (Zaction === "REJ") {
-                            // Allow creation despite REJ status
+                            eligibleforApproval = true;
 
-                            this.onSendForApprovalCreate();
                         } else if (Zaction.toUpperCase() === "APPR") {
-                            sap.m.MessageBox.information("Already sent for approval - Status: Approved ");
+                            sap.m.MessageBox.warning("Already sent for approval - Status: Approved ");
                         } else {
-                            sap.m.MessageBox.information("Already sent for approval - Status: Pending");
+                            sap.m.MessageBox.warning("Already sent for approval - Status: Pending");
                         }
                     } else {
 
                         // No existing approval found, proceed with creation
-                        this.onSendForApprovalCreate();
+                        eligibleforApproval = true;
                     }
                 }).catch(error => {
                     if (error.message.includes("No record found in voyage status")) {
 
-                        this.onSendForApprovalCreate(); // Proceed with creation on error
+                        eligibleforApproval = true // Proceed with creation on error
                     }
                     console.error("Error while fetching contexts: ", error);
 
                 });
+                const that = this;
+                if (eligibleforApproval) {
+                    that.onSendForApprovalCreate();
+                }
             },
-            onSendForApprovalCreate: function () {
+            checkforValidUser: async function () {
+                try {
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBinding = oModel.bindContext(`/xNAUTIxuserEmail(SmtpAddr='${userEmail}')`);
+                    await oBinding.requestObject().then((oContext) => {
+                        console.log(oContext);
+                        userEmail = oContext.SmtpAddr;
+                        console.log("hii", userEmail);
+                    }).catch((error) => {
+                        throw error
+                    });
+
+                } catch (error) {
+                    userEmail = undefined
+                    sap.m.MessageBox.error("User is not allowed to send for approval");
+                    console.log("User Not Found", error.message);
+                }
+            },
+            onSendForApprovalCreate: async function () {
 
 
                 if (!myVOYNO) {
@@ -2198,6 +2561,10 @@ sap.ui.define(
                     return;
                 }
 
+                await this.checkforValidUser();
+                if (!userEmail) {
+                    return;
+                }
                 let oBindListSP = this.getView().getModel().bindList("/voyapprovalSet");
 
                 try {
@@ -2207,6 +2574,8 @@ sap.ui.define(
                         "Zemail": "sarath.venkateswara@ingenxtec.com"
                     });
                     console.log("saving data:", saveddata);
+                    let oBusyDialog = new sap.m.BusyDialog();
+                    oBusyDialog.open();
 
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
@@ -2219,14 +2588,16 @@ sap.ui.define(
                         }
                     }).catch(function (error) {
                         console.error("Error while requesting contexts:", error);
-                        // sap.m.MessageBox.error("Duplicate Entry: Already sent for approval");
+                        throw error
+
                     });
                 } catch (error) {
                     console.error("Error while saving data:", error);
+                    oBusyDialog.close();
                     sap.m.MessageBox.error("Error while saving data");
                 }
             },
-            
+
             onCancelVoayge: async function () {
 
 
@@ -2582,6 +2953,7 @@ sap.ui.define(
                 oDialog.open();
             },
 
+
             showValueHelpDialogCost: function (oEvent) {
 
                 let oInputSource = oEvent.getSource();
@@ -2592,7 +2964,7 @@ sap.ui.define(
                 let oVlegn = oEvent.getSource().oParent.getCells()[0].getValue();
                 oVlegn = parseInt(oVlegn, 10);
                 if (!oVlegn) {
-                    new sap.m.MessageToast.show("Please fill the LegID first ");
+                    new sap.m.MessageToast.show("Please fill the LegId first ");
                     return;
 
                 }
@@ -2618,17 +2990,21 @@ sap.ui.define(
                             let sCostCode = oSelectedItem.getCells()[0].getText();
                             let sCostDesc = oSelectedItem.getCells()[1].getText();
 
-
                             // console.log("selected values :", sCostCode, sCostDesc, costDescInput);
                             let costData = costdetailsModel.getData();
-
                             let isDuplicateEntry = false;
+                            let itemsLength = voyItemModel.getData().length;
                             for (let i = 0; i < costData.length; i++) {
-                                if (oVlegn === 1 && sCostCode === 1001) {
-                                    new sap.m.MessageBox.warning("Source Port can not have unloading charges");
-                                    break;
+
+                                if (oVlegn === 1 && sCostCode == 1001) {
+                                    new sap.m.MessageToast.show("Source Port can not have unloading charges");
+                                    return
+                                } else if (oVlegn === itemsLength && (sCostCode == 1000 || (sCostDesc.toUpperCase() == 'LOADING CHARGES'))) {
+                                    new sap.m.MessageToast.show("Loading charges not applicable to destination port");
+                                    return;
                                 }
-                                if (parseInt(costData[i].Vlegn) === oVlegn && costData[i].Costcode === sCostCode) {
+
+                                else if (parseInt(costData[i].Vlegn) === oVlegn && costData[i].Costcode === sCostCode) {
                                     isDuplicateEntry = true;
                                     new sap.m.MessageToast.show("Charges already exists");
                                     break;

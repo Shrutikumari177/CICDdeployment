@@ -12,6 +12,7 @@
       
          initialFocus="SearchField"
          rememberSelections="false"
+         liveChange=".onCharteringSearch"
        
         >
         <StandardListItem id="_IDGenStand"

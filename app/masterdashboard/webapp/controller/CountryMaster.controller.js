@@ -354,14 +354,15 @@ sap.ui.define(
           this.getView().byId("mainPageFooter").setVisible(true)
  
           this.getView().byId("deleteBtn").setEnabled(false);
-          let oEntryTable = this.getView().byId("entryTypeTable");
-        let items = oEntryTable.getItems();
-        for (let i = items.length - 1; i > 0; i--) {
+          this.getView().byId("entryBtn").setEnabled(false);
+          var oEntryTable = this.getView().byId("entryTypeTable");
+        var items = oEntryTable.getItems();
+        for (var i = items.length - 1; i > 0; i--) {
           oEntryTable.removeItem(items[i]);
         }
  
         // Clear input fields of the first row
-        let firstItemCells = items[0].getCells();
+        var firstItemCells = items[0].getCells();
         firstItemCells[0].setValue("");
         firstItemCells[1].setValue("");
  
@@ -392,102 +393,167 @@ sap.ui.define(
           this.getView().byId("deleteBtn").setEnabled(true);
         }
       },
+    
       onSave: function () {
-        let that = this.getView();
-        let value1 = this.getView().byId("ZfValue2").getValue();
-        let value2 = this.getView().byId("ZfDesc2").getValue();
- 
-        if (!value1 || !value2) {
-          MessageToast.show("Please enter both fields.");
-          return;
-        }
- 
-        let data = {
-          ZfValue: value1,
- 
-          ZfDesc: value2
-        };
-        const oJsonModel = new sap.ui.model.json.JSONModel(data);
-        that.setModel(oJsonModel, "oJsonModel");
-        let oModel = this.getView().getModel();
-        let oBindListSP = oModel.bindList("/CountryMasterSet");
- 
-        oBindListSP.attachCreateSent(this.onCreateSent, this);
-        oBindListSP.attachCreateCompleted(this.onCreateCompleted, this);
- 
-        oBindListSP.attachEventOnce("dataReceived", function () {
-          let existingEntries = oBindListSP.getContexts().map(function (context) {
-            return context.getProperty("ZfValue");
+        var that = this;
+        var oTable = that.byId("entryTypeTable");
+        var totalEntries = oTable.getItems().length;
+        var entriesProcessed = 0;
+        var errors = [];
+        var duplicateEntries = []; // Array to store duplicate entry codes
+
+        sap.m.MessageToast.show("Creating entries...");
+
+        oTable.getItems().forEach(function (row) {
+          var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
+          var value2 = row.getCells()[1].getValue();
+
+          if (!value1 || !value2) {
+            errors.push("Please enter both fields for all rows.");
+            entriesProcessed++;
+            checkCompletion();
+            return;
+          }
+
+          var oBindListSP = that.getView().getModel().bindList("/CountryMasterSet");
+          oBindListSP.attachEventOnce("dataReceived", function () {
+            var existingEntries = oBindListSP.getContexts().map(function (context) {
+              return context.getProperty("ZfValue"); // Convert to lowercase
+            });
+
+            if (existingEntries.includes(value1)) {
+              // Store duplicate entry code in the array
+              duplicateEntries.push(value1);
+            }
+
+            entriesProcessed++;
+            checkCompletion();
           });
- 
-          if (existingEntries.includes(value1)) {
-            MessageToast.show("Entry already exists with same code.");
-          } else {
- 
+
+          oBindListSP.getContexts();
+        });
+
+        function checkCompletion() {
+          if (entriesProcessed === totalEntries) {
+            if (errors.length === 0 && duplicateEntries.length === 0) {
+              createEntries();
+            } else {
+              var errorMessage = "Error:\n";
+              if (errors.length > 0) {
+                errorMessage += errors.join("\n") + "\n";
+              }
+              if (duplicateEntries.length > 0) {
+                errorMessage += "Duplicate entries found with the same code: " + duplicateEntries.join(", ") + "\n";
+              }
+              sap.m.MessageToast.show(errorMessage);
+            }
+          }
+        }
+
+        function createEntries() {
+          oTable.getItems().forEach(function (row) {
+            var value1 = row.getCells()[0].getValue();
+            var value2 = row.getCells()[1].getValue();
+
+            // Format Uomdes value
+            var formattedUomdes = that.formatUomdes(value2);
+
+            var oBindListSP = that.getView().getModel().bindList("/CountryMasterSet");
+
             try {
               oBindListSP.create({
                 ZfValue: value1,
-                ZfDesc: value2
+                ZfDesc: formattedUomdes
               });
-              that.getModel().refresh();
-              that.byId("ZfValue2").setValue("");
-              that.byId("ZfDesc2").setValue("");
- 
-              MessageToast.show("Data created Successfully");
- 
-              that.byId("createTypeTable").setVisible(true);
-              that.byId("createTypeTable").removeSelections();
- 
-              aSelectedIds = []
-              that.byId("entryTypeTable").setVisible(false);
-              that.byId("mainPageFooter").setVisible(false);
-              that.getView().byId("deleteBtn").setEnabled(true);
- 
- 
+              that.getView().getModel().refresh();
+              that.resetView();
             } catch (error) {
-              MessageToast.show("Error while saving data");
+              sap.m.MessageToast.show("Error while saving data");
             }
-          }
-        });
-        oBindListSP.getContexts();
+          });
+
+          sap.m.MessageToast.show("All entries saved successfully.");
+        }
       },
+      formatUomdes: function (ZfDesc) {
+        return ZfDesc.toLowerCase().replace(/\b\w/g, function (char) {
+          return char.toUpperCase();
+        });
+      },
+      
       handleValueHelpClose: function (oEvent) {
         let oSelectedItem = oEvent.getParameter("selectedItem");
-         let oInput = this.byId("ZfValue2");
-       let  oInput1 = this.byId("ZfDesc2");
-   
         if (!oSelectedItem) {
-          oInput.resetProperty("value");
-          oInput1.resetProperty("value");
-
-          let oBinding = oEvent.getSource().getBinding("items");
-
-          oBinding.filter([]);
-          
-          return;
-
+            this.oSourceSelected.resetProperty("value");
+            this.oSourceSelected.getParent().getCells()[1].resetProperty("value");
+            oEvent.getSource().getBinding("items").filter([]);
+            return;
         }
-   
-        oInput.setValue(oSelectedItem.getCells()[0].getText());
-        oInput1.setValue(oSelectedItem.getCells()[1].getText());
-
-        let oBinding = oEvent.getSource().getBinding("items");
-
-        oBinding.filter([]);
-
-
-
-        let oFilter = new sap.ui.model.Filter("land1", sap.ui.model.FilterOperator.Contains, "");
- 
+    
+        // Set the value on the correct input fields
+        let oInput11 = this.oSourceSelected;
+        let oInput12 = this.oSourceSelected.getParent().getCells()[1];
+    
+        oInput11.setValue(oSelectedItem.getCells()[0].getText());
+        oInput12.setValue(oSelectedItem.getCells()[1].getText());
+    
+        // Clear the filter
         oEvent.getSource().getBinding("items").filter([]);
-        
-        
+    },
+    
+
+      
+      onAddRow1: function () {
+        var oTable = this.byId("entryTypeTable");
+
+        // Create a new row
+        var oNewRow = new sap.m.ColumnListItem({
+          cells: [
+            // new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
+            new sap.m.Input({
+              value: "", editable: true,
+              showValueHelp: true,
+              valueHelpRequest:    this.countryValueHelp.bind(this),
+              valueHelpOnly:true
+              
+            }),
+            new sap.m.Input({
+              value: "",
+              editable:false
+            })
+
+          ]
+          
+        });
+
+        // Add the new row to the table
+        oTable.addItem(oNewRow);
       },
+
+      
+      onDeleteRow1: function () {
+        var oTable = this.byId("entryTypeTable");
+        var aSelectedItems = oTable.getSelectedItems();
+    
+
+        if (aSelectedItems.length === 0) {
+            sap.m.MessageToast.show("Please select an item");
+            return;
+        }
+        aSelectedItems.forEach(function (oSelectedItem) {
+            oTable.removeItem(oSelectedItem);
+        });
+    
+        oTable.removeSelections();
+    },
+
+
+      
       onSaveCancel: function () {
         this.onBackPress();
-        // let that = this.getView();
-        // let value1 = that.byId("ZfValue2").getValue();
-        // let value2 = that.byId("ZfDesc2").getValue();
+        // var that = this.getView();
+        // var value1 = that.byId("ZfValue2").getValue();
+        // var value2 = that.byId("ZfDesc2").getValue();
  
         // // Check if there are changes in the input fields
         // if (value1 || value2) {
@@ -503,7 +569,7 @@ sap.ui.define(
         //           that.byId("createTypeTable").setVisible(true);
         //           that.byId("entryTypeTable").setVisible(false);
         //           that.byId("mainPageFooter").setVisible(false);
-        //           let deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //           var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
         //           if (deleteBtn) {
         //             deleteBtn.setEnabled(true); // Enable delete button
         //           }
@@ -517,7 +583,7 @@ sap.ui.define(
         //   that.byId("createTypeTable").setVisible(true);
         //   that.byId("entryTypeTable").setVisible(false);
         //   that.byId("mainPageFooter").setVisible(false);
-        //   let deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
+        //   var deleteBtn = that.byId("deleteBtn"); // Store reference to delete button
         //   if (deleteBtn) {
         //     deleteBtn.setEnabled(true); // Enable delete button
         //   }
@@ -601,35 +667,31 @@ sap.ui.define(
           });
         });
       },
+      CurSearch: function(oEvent) {
 
-
-      CurSearch:function (oEvent) {
-
-        let sValue1 = oEvent.getParameter("value");
-        let sLength = sValue1.length;
-
-        let oFilter1 = new sap.ui.model.Filter("land1", sLength === 2 ? sap.ui.model.FilterOperator.EQ : sap.ui.model.FilterOperator.Contains, sValue1);
-        let oFilter2 = new sap.ui.model.Filter("landx50", sap.ui.model.FilterOperator.Contains, sValue1);
-        let andFilter = new sap.ui.model.Filter({
-          filters: [oFilter1, oFilter2],
-          and : false
-      });
-
-      oEvent.getSource().getBinding("items").filter([andFilter]);
-
+        var sValue1 = oEvent.getParameter("value");
+    
+        var oFilter1 = new sap.ui.model.Filter("land1", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oFilter2 = new sap.ui.model.Filter("landx50", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1, oFilter2]
+        });
+    
+        oEvent.getSource().getBinding("items").filter([andFilter]);
       },
+
+
+      
  
      
  
-      countryValueHelp: function () {
-        let oView = this.getView();
+      countryValueHelp: function (oEvent) {
+       this.oSourceSelected = oEvent.getSource();
+        var oView = this.getView();
         if (!this._oCurrency) {
           this._oCurrency = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.masterdashboard.fragments.CountryValueHelp", this);
           oView.addDependent(this._oCurrency);
         }
-
-
-        
         this._oCurrency.open();
       },
 

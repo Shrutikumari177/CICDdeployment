@@ -306,6 +306,40 @@
             "path": "/sap/opu/odata/nauti/VOYSTATUS_SRV"
           }
         }
+      },
+      "NAUTIUSERMAILID_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIUSERMAILID_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/USERMAILID_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/USERMAILID_SRV"
+          }
+        }
+      },
+      "NAUTICONTRACTAWARD_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTICONTRACTAWARD_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
+          }
+        }
       }
     }
   },

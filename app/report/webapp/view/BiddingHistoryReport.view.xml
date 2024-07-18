@@ -127,7 +127,7 @@
                                 <Text text="{biddingHistoryAwardModel>Bidtime}" />
                                 <Text text="{biddingHistoryAwardModel>CodeDesc}" />
                                 <Text text="{biddingHistoryAwardModel>Cvalue}" />
-                                <Text text="{biddingHistoryAwardModel>Curr}" />
+                                <Text text="{biddingHistoryAwardModel>Currkeys}" />
                                
                             
                             </cells>

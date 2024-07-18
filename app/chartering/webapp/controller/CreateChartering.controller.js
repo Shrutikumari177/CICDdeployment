@@ -402,55 +402,98 @@ sap.ui.define(
 
 
       onValueHelpSearch: function (oEvent) {
-        var sValue = oEvent.getParameter("value");
-
-        var oFilter = new Filter(
-          "Voyno",
-          FilterOperator.Contains,
-          sValue
-        );
-
-        oEvent.getSource().getBinding("items").filter([oFilter]);
+        
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
       onValueHelpSearchvendor: function (oEvent) {
-        var sValue = oEvent.getParameter("value");
-
-        var oFilter = new Filter(
-          "Lifnr",
-          FilterOperator.Contains,
-          sValue
-        );
-
-        oEvent.getSource().getBinding("items").filter([oFilter]);
+        
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Lifnr", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
       onPurchaseGroupSearch: function (oEvent) {
-        var sValue = oEvent.getParameter("value");
-   
-        var oFilter = new Filter(
-          "Ekgrp",
-          FilterOperator.Contains,
-          sValue
-        );
-   
-        oEvent.getSource().getBinding("items").filter([oFilter]);
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Ekgrp", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
    
       onPaymentTermSearch: function(oEvent){
-      var sValue = oEvent.getParameter("value");
-      var oFilter = new Filter("Paytrm",FilterOperator.Contains,
-      sValue
-   
-      );
-      oEvent.getSource().getBinding("items").filter([oFilter]);
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Paytrm", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
    
       onPurchaseOrgSearch: function(oEvent){
-        var sValue = oEvent.getParameter("value");
-        var oFilter = new Filter("Ekorg",FilterOperator.Contains,
-        sValue
-   
-        );
-        oEvent.getSource().getBinding("items").filter([oFilter]);
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Ekorg", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
         },
 
 
@@ -560,12 +603,12 @@ sap.ui.define(
             }
         };
     
-        // Create a busy dialog to indicate progress
         let oBusyDialog = new sap.m.BusyDialog();
         oBusyDialog.open();
         let checkforExistingCharteringRes = await this.checkforExistingChartering(oVoyno);
         if(checkforExistingCharteringRes.length > 0 ){
-          sap.m.MessageBox.information (`Chartering already created for the Voyage No.: ${oVoyno}`);
+          let chrnmin = checkforExistingCharteringRes[0].Chrnmin;
+          sap.m.MessageBox.warning (`${chrnmin} Chartering No. already created against Voyage : ${oVoyno}`  );
           oBusyDialog.close();
           return;
         }
@@ -575,13 +618,10 @@ sap.ui.define(
             let oModel = this.getView().getModel();
             let oListBinding = oModel.bindList("/xNAUTIxCharteringHeaderItem");
     
-            // Attach the createCompleted event handler
             oListBinding.attachEvent("createCompleted", this.onCreateCompleted, this);
     
-            // Create the entity
             let oContext = oListBinding.create(payload, false, false, false);
     
-            // Handle the created promise
             await oContext.created();
     
         } catch (oError) {
@@ -607,28 +647,40 @@ sap.ui.define(
         }
     },
 
+   
       checkforExistingChartering: async function (oVoyno) {
         let rModel = this.getOwnerComponent().getModel();
         let filters = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, oVoyno);
         let oBindList = await rModel.bindList("/xNAUTIxCharteringHeaderItem", undefined, undefined, [filters]);
-
+        
+        let getChartModelData = [];
+        
         let oBindListResp = await oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-
-          aContexts.forEach(function (oContext) {
-            getChartModelData.push(oContext.getObject());
-          });
+            aContexts.forEach(function (oContext) {
+                let oData = oContext.getObject();
+               
+                if (oData.Zdelete===false) {
+                    getChartModelData.push(oData);
+                }
+                if(oData.Zdelete===true){
+                  getChartModelData = []
+                }
+            });
         }).catch(function (error) {
-          console.error("Error while checking existing chartering:", error);
-          sap.m.MessageToast.show("Error while checking existing chartering");
+            console.error("Error while checking existing chartering:", error);
+            sap.m.MessageToast.show("Error while checking existing chartering");
         });
+        
         console.log("oBindListResp ", oBindListResp);
         console.log("getChartModelData ", getChartModelData);
+        
         return getChartModelData;
-      }
+    }
+    
+
 
     });
   })
-
 
 
 

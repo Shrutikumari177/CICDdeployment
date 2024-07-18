@@ -3,16 +3,15 @@ sap.ui.define(
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/ui/core/Fragment",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "sap/ui/model/odata/ODataMetaModel",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
     "sap/ui/model/json/JSONModel"
   ],
-  function (BaseController, History, MessageToast, JSONModel, MessageBox, ODataMetaModel, Filter, FilterOperator) {
+  function (BaseController,History,Filter,FilterOperator,MessageToast,MessageBox,ODataMetaModel,JSONModel) {
     "use strict";
-
     let aSelectedIds = [];
     let copyFlag = false;
     let editFlag = false;
@@ -83,86 +82,20 @@ sap.ui.define(
       },
 
 
-      onSearch1: function (oEvent) {
-        var sQuery = oEvent.getParameter("query");
-        var oTable = this.byId("createTypeTable");
-        var oBinding = oTable.getBinding("items");
-        var aFilters = [];
+    onSearch: function (oEvent) {
+      var sQuery = oEvent.getParameter("query");
+      var oTable = this.byId("createTypeTable");
+      var oBinding = oTable.getBinding("items");
+      var aFilters = [];
 
-        if (sQuery && sQuery.length > 0) {
-          aFilters.push(new Filter("Countryn", FilterOperator.Contains, sQuery));
-          
+      if (sQuery && sQuery.length > 0) {
+          aFilters.push(new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery));
+      }
 
+      oBinding.filter(aFilters);
+  },
 
-
-        }
-
-        oBinding.filter(aFilters);
-      },
-      onSearch:function (oEvent) {
-
-        let sValue1 = oEvent.getParameter("value");
-        let sLength = sValue1.length;
-
-        let oFilter1 = new sap.ui.model.Filter("Portc", sLength === 2 ? sap.ui.model.FilterOperator.EQ : sap.ui.model.FilterOperator.Contains, sValue1);
-        let oFilter2 = new sap.ui.model.Filter("Portn", sap.ui.model.FilterOperator.Contains, sValue1);
-        let andFilter = new sap.ui.model.Filter({
-          filters: [oFilter1, oFilter2],
-          and : false
-      });
-
-      oEvent.getSource().getBinding("items").filter([andFilter]);
-
-      },
-
-        
-
-
-      // onIndSelect: function(oEvent) {
-
-      //   var oCheckBox = oEvent.getSource();
-      //   var bSelected = oCheckBox.getSelected();
-      //   let oContext = oEvent.getSource().getBindingContext().getObject();
-
-      //   console.log(bSelected , oContext);
-      // },
-        onIndSelect1: async function(oEvent) {
-          var oCheckBox = oEvent.getSource();
-          var bSelected = oCheckBox.getSelected();
-
-          // Get the view's model assuming it's correctly configured
-          var oModel = this.getView().getModel();
-
-          // Define your bindList for xNAUTIxportmascds
-          let oBindList = oModel.bindList("/PortmasterSet");
-
-          // Get the binding context of the checkbox
-          var oContext = oCheckBox.getBindingContext();
-          if (oContext) {
-              // Get the existing entity data
-              var oEntity = oContext.getObject();
-
-              // Update the 'Ind' property of the entity
-              oEntity.Ind = bSelected;
-
-              // Update the model with the modified entity
-              try {
-                  await oModel.submitChanges(); // Submit the changes to the backend
-
-                  // Handle success
-                  console.log("Ind property updated successfully.");
-              } catch (oError) {
-                  // Handle error
-                  console.error("Error updating Ind property:", oError);
-
-                  // Rollback checkbox state if update fails
-                  oCheckBox.setSelected(!bSelected);
-              }
-          }
-
-          // Disable or enable the checkbox based on 'Ind'
-          oCheckBox.setEnabled(bSelected);
-      },
+       
 
         onIndSelect: async function (oEvent) {
         

@@ -39,7 +39,7 @@
             </Bar>
         </headerContent>
 
-        <Panel class="tablepanel">
+        <Panel id="_IDGenPanel1" class="tablepanel">
             <Bar
                 id="_IDGenBar12"
                 class="headerBar2"
@@ -92,40 +92,40 @@
                     growingThreshold="500"
                   >
                     <columns>
-                        <Column>
-                            <Label text="Country" />
+                        <Column id="_IDGenColumn1">
+                            <Label id="_IDGenLabel1" text="Country" />
                         </Column>
 
-                        <Column>
-                            <Label text="Port Code" />
+                        <Column id="_IDGenColumn2">
+                            <Label id="_IDGenLabel2" text="Port Code" />
                         </Column>
 
-                        <Column>
-                            <Label text="Port Name" />
+                        <Column id="_IDGenColumn3">
+                            <Label id="_IDGenLabel3" text="Port Name" />
                         </Column>
 
-                        <Column>
-                            <Label text="Related Anchorage" />
+                        <Column id="_IDGenColumn4" width="10rem">
+                            <Label id="_IDGenLabel4" text="Related Anchorage" />
                         </Column>
 
-                        <Column>
-                            <Label text="Latitude" />
+                        <Column id="_IDGenColumn5">
+                            <Label id="_IDGenLabel5" text="Latitude" />
                         </Column>
 
-                        <Column>
-                            <Label text="Longitude" />
+                        <Column id="_IDGenColumn6">
+                            <Label id="_IDGenLabel6" text="Longitude" />
                         </Column>
 
-                        <Column>
-                            <Label text="Country Name" />
+                        <Column id="_IDGenColumn7" width="13rem">
+                            <Label id="_IDGenLabel7" text="Country Name" />
                         </Column>
 
-                        <Column>
-                            <Label text="Location ID" />
+                        <Column id="_IDGenColumn8">
+                            <Label id="_IDGenLabel8" text="Location ID" />
                         </Column>
 
-                        <Column>
-                            <Label text="Ind" />
+                        <Column id="_IDGenColumn9">
+                            <Label id="_IDGenLabel9" text="Indicator" />
                         </Column>
                     </columns>
 
@@ -188,40 +188,40 @@
             mode="MultiSelect"
         >
             <columns>
-                <Column>
-                    <Label text="Country" />
+                <Column id="_IDGenColumn10">
+                    <Label id="_IDGenLabel10" text="Country" />
                 </Column>
 
-                <Column>
-                    <Label text="Port Code" />
+                <Column id="_IDGenColumn11">
+                    <Label id="_IDGenLabel11" text="Port Code" />
                 </Column>
 
-                <Column>
-                    <Label text="Port Name" />
+                <Column id="_IDGenColumn12">
+                    <Label id="_IDGenLabel12" text="Port Name" />
                 </Column>
 
-                <Column>
-                    <Label text="Related Anchorage" />
+                <Column id="_IDGenColumn13">
+                    <Label id="_IDGenLabel13" text="Related Anchorage" />
                 </Column>
 
-                <Column>
-                    <Label text="Latitude" />
+                <Column id="_IDGenColumn14">
+                    <Label id="_IDGenLabel14" text="Latitude" />
                 </Column>
 
-                <Column>
-                    <Label text="Longitude" />
+                <Column id="_IDGenColumn15">
+                    <Label id="_IDGenLabel15" text="Longitude" />
                 </Column>
 
-                <Column>
-                    <Label text="Country Name" />
+                <Column id="_IDGenColumn16">
+                    <Label id="_IDGenLabel16" text="Country Name" />
                 </Column>
 
-                <Column>
-                    <Label text="Location ID" />
+                <Column id="_IDGenColumn17">
+                    <Label id="_IDGenLabel17" text="Location ID" />
                 </Column>
 
-                <Column>
-                    <Label text="Ind" />
+                <Column id="_IDGenColumn18">
+                    <Label id="_IDGenLabel18" text="Ind" />
                 </Column>
             </columns>
 
@@ -258,40 +258,40 @@
             enableBusyIndicator="true"
         >
             <columns>
-                <Column>
-                    <Label text="Country" />
+                <Column id="_IDGenColumn19">
+                    <Label id="_IDGenLabel19" text="Country" />
                 </Column>
 
-                <Column>
-                    <Label text="Port Code" />
+                <Column id="_IDGenColumn20">
+                    <Label id="_IDGenLabel20" text="Port Code" />
                 </Column>
 
-                <Column>
-                    <Label text="Port Name" />
+                <Column id="_IDGenColumn21">
+                    <Label id="_IDGenLabel21" text="Port Name" />
                 </Column>
 
-                <Column>
-                    <Label text="Related Anchorage" />
+                <Column id="_IDGenColumn22">
+                    <Label id="_IDGenLabel22" text="Related Anchorage" />
                 </Column>
 
-                <Column>
-                    <Label text="Latitude" />
+                <Column id="_IDGenColumn23">
+                    <Label id="_IDGenLabel23" text="Latitude" />
                 </Column>
 
-                <Column>
-                    <Label text="Longitude" />
+                <Column id="_IDGenColumn24">
+                    <Label id="_IDGenLabel24" text="Longitude" />
                 </Column>
 
-                <Column>
-                    <Label text="Country Name" />
+                <Column id="_IDGenColumn25">
+                    <Label id="_IDGenLabel25" text="Country Name" />
                 </Column>
 
-                <Column>
-                    <Label text="Location ID" />
+                <Column id="_IDGenColumn26">
+                    <Label id="_IDGenLabel26" text="Location ID" />
                 </Column>
 
-                <Column>
-                    <Label text="Ind" />
+                <Column id="_IDGenColumn27">
+                    <Label id="_IDGenLabel27" text="Ind" />
                 </Column>
             </columns>
 

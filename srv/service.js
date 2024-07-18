@@ -5,7 +5,10 @@ const { sendMail } = require("@sap-cloud-sdk/mail-client");
 module.exports = async (srv) => {
     // Connect to services
     const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
-    
+    const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV"); 
+    srv.on('READ', 'xNAUTIxuserEmail', req => NAUTIUSERMAILID_SRV.run(req.query)); 
+    const NAUTICONTRACTAWARD_SRV = await cds.connect.to("NAUTICONTRACTAWARD_SRV"); 
+    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
 
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
@@ -223,9 +226,10 @@ module.exports = async (srv) => {
     srv.on('CREATE', "sendEmail", async (req) => {
         try {
             console.log("Triggered....", req.data);
-           
-   
+
+
             const {
+                message,
                 receiversEmails,
                 vendorsName,
                 routes,
@@ -235,41 +239,76 @@ module.exports = async (srv) => {
                 bidstartTime,
                 bidEndTime
             } = req.data;
- 
-           
-   
+
             let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
-                const mailConfig = {
-                    from: "josiah.homenick1@ethereal.email",
-                    to: receiverEmail,
-                    subject: `You are invited to submit a quotation for the following cargo size "${cargoSize}" for shipping of ship route "${routes[index]}"`,
-                    text: `
-                        Dear ${vendorsName[index]},
-       
-                        You are invited to submit a quotation for the following cargo:
-       
-                        Vendors: ${vendorsName[index]}
-                        Routes: ${routes[index]}
-                        Bid Start Date: ${new Date(bidStart).toLocaleDateString()}
-                        Bid start Time : ${bidstartTime}
-                        Bid End Date: ${new Date(bidEnd).toLocaleDateString()}
-                        Bid End Time :${bidEndTime}
-                        Cargo Size: ${cargoSize} tons
-                       
- 
-                        Best regards,
-                        Your Company
-                    `
-                };
-               
-                let res = await sendMail({ destinationName: "mailDestination" }, mailConfig);
+                let mailConfig;
+
+                if (message === "Invitation for Live Quotation") {
+                    mailConfig = {
+                        from: "josiah.homenick1@ethereal.email",
+                        to: receiverEmail,
+                        subject: `Invitation for Live Quotation`,
+                        text: `
+            Dear ${vendorsName[index]},
+   
+            You are invited to participate in a live quotation event for the following details:
+   
+            - Bid Start Date: ${new Date(bidStart).toLocaleDateString()} at ${bidstartTime}
+            - Bid End Date: ${new Date(bidEnd).toLocaleDateString()} at ${bidEndTime}
+   
+            Best regards,
+            Ingenx Technology Private Limited
+        `
+                    };
+                } else if (message === "Submit a quotation") {
+                    mailConfig = {
+                        from: "josiah.homenick1@ethereal.email",
+                        to: receiverEmail,
+                        subject: `Submit a Quotation for ${cargoSize} tons of Cargo via Route "${routes[index]}"`,
+                        text: `
+            Dear ${vendorsName[index]},
+   
+            Please submit your quotation for the following cargo details:
+   
+            - Cargo Size: ${cargoSize} tons
+            - Route: ${routes[index]}
+            - Bid Start Date: ${new Date(bidStart).toLocaleDateString()} at ${bidstartTime}
+            - Bid End Date: ${new Date(bidEnd).toLocaleDateString()} at ${bidEndTime}
+   
+            Best regards,
+            Ingenx Technology Private Limited
+        `
+                    };
+                } else {
+                    // Handle other message types or default case
+                    mailConfig = {
+                        from: "josiah.homenick1@ethereal.email",
+                        to: receiverEmail,
+                        subject: `Message: ${message}`,
+                        text: `
+            Dear ${vendorsName[index]},
+   
+            You have received a message:
+   
+            ${message}
+   
+            Best regards,
+            Ingenx Technology Private Limited
+        `
+                    };
+                }
+
+
+                let res = await sendMail({
+                    destinationName: "mailDestination"
+                }, mailConfig);
                 console.log(`Email sent to ${vendorsName[index]} (${receiverEmail}) - Response:`, res);
                 return {
                     "message": `Email sent successfully to ${vendorsName[index]}`,
                     "status": 201
                 };
             });
-   
+
             let results = await Promise.all(emailPromises);
             return results;
         } catch (error) {
@@ -306,10 +345,11 @@ module.exports = async (srv) => {
 
     // Register handlers for NAUTIMASTER_BTP_SRV entities
     registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
-        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet',
-        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet','xNAUTIxportmascds',
+        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet','xNAUTIxcury_count',
+        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet','xNAUTIxportmascds','xNAUTIxSAPUSERS',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
-        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP'
+        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP','xNAUTIxnewportcds',
+        'xNAUTIxSAPUSERS','xNAUTIxcury_count','xNAUTIxuseridassociation','xNAUTIxUIIDUSRGROUP'
     ]);
 
     // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
@@ -339,7 +379,10 @@ module.exports = async (srv) => {
         'xNAUTIxVENFBIDPOST',
         'xNAUTIxBIDHISREPORT',
         'xNAUTIxCHARTERVALUEHELP',
-        'xNAUTIxCHARTERINGVALUEHELP'
+        'xNAUTIxCHARTERINGVALUEHELP',
+        'xNAUTIxaward_value',
+        'xNAUTIxBIDHISREPORT',
+        'xNAUTIxbidhist_valuehelp'
     ]);
 };
 
@@ -572,7 +615,7 @@ function registerHandlers(srv, service, entities) {
             // };
 
             // return path;
-            // Call the custom function to handle the request
+            // // Call the custom function to handle the request
             return await getDistanceBetweenPort(req._queryOptions);
         } catch (error) {
             console.error('Error:', error);
@@ -603,7 +646,7 @@ async function getDistanceBetweenPort(routeParams) {
     });
     // Construct request headers
     const myHeaders = new Headers();
-    myHeaders.append("X-API-Key", process.env.API_KEY);
+    myHeaders.append("X-API-Key", "jUg9DrwnmfacRjTt6rlju1tNLkN6ZpAh6ZRheyCE");
 
     // Construct request options
     const requestOptions = {

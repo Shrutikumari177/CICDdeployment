@@ -41,8 +41,9 @@
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries" type="Emphasized"
+                    text="New Entries"
                     press="newEntries"
+                    type="Emphasized"
                 />
                 <!-- <Button
                     id="copyBtn"
@@ -51,14 +52,16 @@
                 /> -->
                 <Button
                     id="editBtn"
-                    text="Edit" type="Emphasized"
+                    text="Edit"
                     press="pressEdit"
+                    type="Emphasized"
                 />
 
                 <Button
                     id="deleteBtn"
-                    text="Delete" type="Emphasized"
+                    text="Delete"
                     press="onDeletePress"
+                    type="Emphasized"
                 />
                 
                 
@@ -128,7 +131,7 @@
                 <ColumnListItem>
                     <cells>
                         <Input id="Code" liveChange="onCodeLiveChange"/>
-                        <Input id="Desc"  />
+                        <Input id="Desc"  liveChange="onLiveChange"  />
                     </cells>
                 </ColumnListItem>
             </items>
@@ -142,7 +145,7 @@
             updateFinished="onTableUpdateFinished"
             selectionChange="selectedItems"
             width="100%"
-            class="mastertables"
+            class=""
             visible="false"
             enableBusyIndicator="true"
            
@@ -159,7 +162,7 @@
                 <ColumnListItem>
                     <cells>
                         <Text id="Code1"  text=""/>
-                        <Input id="Desc1"  liveChange="onLiveChange"  editable="true" />
+                        <Input id="Desc1"  liveChange="onLiveChange" editable="true"    />
                     </cells>
                 </ColumnListItem>
             </items>
@@ -180,11 +183,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             
             </OverflowToolbar>
@@ -199,11 +204,14 @@
                     id="mainPageSave12"
                     text="Update"
                     press="onUpdate"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton23"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
+                
                 />
             </OverflowToolbar>
 

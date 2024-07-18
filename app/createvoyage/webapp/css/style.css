@@ -114,3 +114,11 @@
   height: 1.75rem !important;
 background: #369cac !important;
 }
+
+
+
+/* in zoom out  */
+.sapUiBlockLayoutSizeXL:not(.sapUiBlockLayoutKeepFontSize) .sapUiBlockCellContent {
+
+  padding: 0.5rem !important;
+}

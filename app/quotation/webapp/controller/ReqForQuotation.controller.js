@@ -268,11 +268,23 @@ sap.ui.define([
 
       },
       onChartSearch: function (oEvent) {
+       
         var sValue1 = oEvent.getParameter("value");
-
-        var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
-
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
+        var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
       },
      
     
@@ -331,15 +343,13 @@ sap.ui.define([
   
       let oModel = this.getOwnerComponent().getModel();
   
-      // Create a binding to the entity set
       let oBinding = oModel.bindList("/CharteringSet");
   
-      // Filter the binding to find the specific entity
       oBinding.filter([
           new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo)
       ]);
-  
-      // Execute the read operation to get all entities matching the filter
+      let oBusyDialog = new sap.m.BusyDialog();
+      oBusyDialog.open();
       oBinding.requestContexts().then(function (aContexts) {
           let oContextToUpdate = aContexts.find(function(oContext) {
               return oContext.getProperty("Chrnmin") === oCharteringRqNo;
@@ -352,19 +362,15 @@ sap.ui.define([
               oContextToUpdate.setProperty("Chrqedate", BidEndDateFormat);
               oContextToUpdate.setProperty("Chrqetime", bidEndtime);
   
-              // Submit the changes back to the server
               oModel.submitBatch("update").then(function() {
-                  // Refresh the model to reflect the changes
                   oModel.refresh();
   
-                  // Show a success message box
                   sap.m.MessageBox.success("Data updated successfully.", {
                       onClose: function() {
-                          
-                       
                         
                       }
                   });
+                  oBusyDialog.close();
               }).catch(function(error) {
                   sap.m.MessageBox.error("Error updating data: " + error.message);
               });
@@ -535,12 +541,12 @@ sap.ui.define([
     let oModel = this.getView().getModel();
     let oListBinding = oModel.bindList("/sendEmail");
 
-    // Attach the createCompleted event to the handler function
     oListBinding.attachEvent("createCompleted", this.onCreateCompleted, this);
 
-    // Create the entity
     let oContext = oListBinding.create(oData, false, false, false);
 },
+
+
 
 
 onCreateCompleted1: function (oEvent) {
@@ -552,11 +558,19 @@ onCreateCompleted1: function (oEvent) {
       console.log("oParameters", oParameters);
       console.log("oContext", oContext.sPath);
       console.log("bSuccess", bSuccess);
-      // let charminNum = oContext.sPath.replace(/\D+/g, '');
-      sap.m.MessageBox.success(`Emails sent successfully `, {
-          onClose: () =>  this._oDialog1.close()
-          
+      
+      // Get the vendor names from the context
+      let oData = oContext.getObject();
+      let vendorsNames = oData.vendorsName.join("\n");
+      
+      sap.m.MessageBox.success(`Emails sent successfully to these companies:\n${vendorsNames}`, {
+          onClose: () => {
+              if (this._oDialog1) {
+                  this._oDialog1.close();
+              }
+          }
       });
+
       this.getView().byId("sumbit").setEnabled(false);
       this.getView().byId("Button1").setEnabled(false);
 
@@ -574,11 +588,10 @@ onCreateCompleted: function (oEvent) {
       console.log("oContext", oContext.sPath);
       console.log("bSuccess", bSuccess);
       
-      // Get the vendor names from the context
       let oData = oContext.getObject();
-      let vendorsNames = oData.vendorsName.join(", ");
+      let vendorsNames = oData.vendorsName.map((vendor, index) => `${index + 1}. ${vendor}`).join("\n");
       
-      sap.m.MessageBox.success(`Emails sent successfully to these companies: ${vendorsNames}`, {
+      sap.m.MessageBox.success(`Emails sent successfully to these companies:\n${vendorsNames}`, {
           onClose: () => {
               if (this._oDialog1) {
                   this._oDialog1.close();
@@ -592,7 +605,9 @@ onCreateCompleted: function (oEvent) {
   } else {
       sap.m.MessageBox.error(`Failed to send emails`);
   }
-}
+},
+
+
 
   
   

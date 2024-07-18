@@ -21,7 +21,7 @@ sap.ui.define(
           let oModel2 = new sap.ui.model.json.JSONModel();
           this.getView().setModel(oModel2, "dataModel2");
           let oModel4 = this.getOwnerComponent().getModel();
-          let oBindList4 = oModel4.bindList("/xNAUTIxVENFBIDPOST");
+          let oBindList4 = oModel4.bindList("/xNAUTIxawardReportFinal");
           oBindList4.requestContexts(0, Infinity).then(function (aContexts) {
             aContexts.forEach(function (oContext) {
               getModelData.push(oContext.getObject());

@@ -34,23 +34,27 @@
             <contentLeft>
                 <Button
                     id="_IDGenButton12"
-                    text="New Entries" type="Emphasized"
+                    text="New Entries"
                     press="newEntries"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton13"
-                    text="Copy As" type="Emphasized"
+                    text="Copy As"
                     press="pressCopy"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton14"
-                    text="Delete" type="Emphasized"
+                    text="Delete"
                     press="onDeletePress"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton15"
-                    text="Edit" type="Emphasized"
+                    text="Edit"
                     press="pressEdit"
+                    type="Emphasized"
                 />
             </contentLeft>
         </Bar>
@@ -236,11 +240,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
        

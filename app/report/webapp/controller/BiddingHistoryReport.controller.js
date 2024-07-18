@@ -16,20 +16,36 @@ sap.ui.define(
         let ChartNoValue;
         return BaseController.extend("com.ingenx.nauti.report.controller.BiddingHistoryReport", {
             onInit() {
-                let oModel2 = new sap.ui.model.json.JSONModel();
+                // let oModel2 = new sap.ui.model.json.JSONModel();
+                // this.getView().setModel(oModel2, "dataModel2");
+                // let oModel4 = this.getOwnerComponent().getModel();
+                // let oBindList4 = oModel4.bindList("/xNAUTIxBIDHISREPORT");
+                // oBindList4.requestContexts(0, Infinity).then(function (aContexts) {
+                //   aContexts.forEach(function (oContext) {
+                //     getModelData.push(oContext.getObject());
+                //   });
+                //   oModel2.setData(getModelData);
+                // }.bind(this))
+                this.getModelData = [];
+                this.jsonModel1 = new JSONModel();
+                this.getView().setModel(this.jsonModel1, "biddingHistoryAwardModel");
+                
+                let oModel2 = new JSONModel();
                 this.getView().setModel(oModel2, "dataModel2");
+                
                 let oModel4 = this.getOwnerComponent().getModel();
                 let oBindList4 = oModel4.bindList("/xNAUTIxBIDHISREPORT");
-                oBindList4.requestContexts(0, Infinity).then(function (aContexts) {
-                  aContexts.forEach(function (oContext) {
-                    getModelData.push(oContext.getObject());
-                  });
-                  oModel2.setData(getModelData);
-                }.bind(this))
+                
+                oBindList4.requestContexts(0, Infinity).then((aContexts) => {
+                    aContexts.forEach((oContext) => {
+                        this.getModelData.push(oContext.getObject());
+                    });
+                    oModel2.setData(this.getModelData);
+                });
                
             },
            
-            onCharteringNumber: function () {
+            onCharteringNumber1: function () {
                 if (!this._valueHelpDialog) {
                     this._valueHelpDialog = sap.ui.xmlfragment(
                         "com.ingenx.nauti.report.fragments.valueHelpBidCharteringReqNo",
@@ -40,7 +56,7 @@ sap.ui.define(
                 this._valueHelpDialog.open();
             },
 
-            onCharteringValueHelpClose: function (oEvent) {
+            onCharteringValueHelpClose1: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
         
                 oEvent.getSource().getBinding("items").filter([]);
@@ -67,6 +83,36 @@ sap.ui.define(
                
         
               },
+
+              onCharteringNumber() {
+                if (!this._valueHelpDialog) {
+                    this._valueHelpDialog = sap.ui.xmlfragment(
+                        "com.ingenx.nauti.report.fragments.valueHelpBidCharteringReqNo",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialog);
+
+                    // Set the model for the value help dialog if different from the main model
+                    this._valueHelpDialog.setModel(this.getOwnerComponent().getModel());
+                }
+                this._valueHelpDialog.open();
+            },
+
+            onCharteringValueHelpClose(oEvent) {
+                var oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+
+                if (!oSelectedItem) {
+                    return;
+                }
+
+                this.byId("CharteringRqNo").setValue(oSelectedItem.getTitle());
+                var ChartNoValue = this.byId("CharteringRqNo").getValue();
+                var filteredData = this.getModelData.filter(data => data.Chrnmin === ChartNoValue);
+                
+                this.jsonModel1.setData(filteredData);
+                
+            },
 
               onChartSearch: function (oEvent) {
                 var sValue1 = oEvent.getParameter("value");

@@ -164,68 +164,8 @@
                     id="_IDGenVBox2"
                     class="flex"
                     alignItems="End"
-                >
-                    <FlexBox
-                        id="_IDGenFlexBox9"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel8"
-                            class="sapUiTinyMarginTop"
-                            text="Bid Start Date : "
-                        />
-                        <Input
-                            id="_IDGenInput8"
-                            value="{myModel>/BidDate}"
-                            editable="false"
-                        />
-                    </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox10"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel9"
-                            class="sapUiTinyMarginTop"
-                            text="Bid  Start Time : "
-                        />
-                        <Input
-                            id="_IDGenInput9"
-                            value="{myModel>/BidTime}"
-                            editable="false"
-                        />
-                    </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox11"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel10"
-                            class="sapUiTinyMarginTop"
-                            text=" Bid End Date: "
-                        />
-                        <Input
-                            id="_IDGenInput10"
-                            value="{myModel>/Curr}"
-                            editable="false"
-                        />
-                    </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox12"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel11"
-                            class="sapUiTinyMarginTop"
-                            text=" Bid End Time: "
-                        />
-                        <Input
-                            id="_IDGenInput11"
-                            value="{myModel>/Score}"
-                            editable="false"
-                        />
-                    </FlexBox>
-
+                 >
+                    
                     <FlexBox
                         id="_IDGenFlexBox13"
                         class="headerItem"

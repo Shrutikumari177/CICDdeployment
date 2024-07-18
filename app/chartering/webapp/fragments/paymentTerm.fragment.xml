@@ -11,6 +11,7 @@
         cancel="onPaymentTermValueHelpClose"
         items="{/xNAUTIxpaymTerm}"
         initialFocus="SearchField"
+        liveChange="onPaymentTermSearch"
        
         >
         <StandardListItem id="ardLi"

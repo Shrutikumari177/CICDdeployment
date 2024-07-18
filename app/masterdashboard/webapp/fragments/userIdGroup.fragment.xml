@@ -9,6 +9,7 @@
        search="onMaintainUserSearch"
         confirm="onZgroupClose"
         cancel="onZgroupClose"
+         initialFocus="SearchField"
         items="{/xNAUTIxuseridassociation}"
        
         >

@@ -11,6 +11,7 @@
         contentHeight="400px"
         contentWidth="50%"
         initialFocus="SearchField"
+        
     >
         <Panel id="_IDGenPanel1">
             <FlexBox

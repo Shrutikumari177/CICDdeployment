@@ -56,5 +56,54 @@ sap.ui.define([], function () {
       }
       return sInput;
     },
+    timeStringToDateObj: function (timeString) {
+      if (timeString) {
+        // Split the time string into components
+        let timeParts = timeString.split(":");
+
+        // Extract hours, minutes, and seconds
+        let hours = parseInt(timeParts[0], 10);
+        let minutes = parseInt(timeParts[1], 10);
+        let seconds = parseInt(timeParts[2], 10);
+
+        // Create a new Date object with the current date
+        let date = new Date();
+        date.setHours(hours, minutes, seconds, 0); // 0 milliseconds
+
+        return date;
+      }
+      return null;
+    },
+
+    dateStringToDateObj: function (dateString) {
+      if (dateString) {
+        return new Date(dateString);
+      }
+      return null;
+    },
+    dateFormatV4: function(date) {
+      let d = new Date(date);
+      let month = '' + (d.getMonth() + 1);
+      let day = '' + d.getDate();
+      let year = d.getFullYear();
+  
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+  
+      return [year, month, day].join('-');
+    },
+    
+    timeFormatV4: function(time) {
+      let time1 = new Date( time );
+      let hours = '' + time1.getHours();
+      let minutes = '' + time1.getMinutes();
+      let seconds = '' + time1.getSeconds();
+  
+      if (hours.length < 2) hours = '0' + hours;
+      if (minutes.length < 2) minutes = '0' + minutes;
+      if (seconds.length < 2) seconds = '0' + seconds;
+  
+      return [hours, minutes, seconds].join(':');
+    }
   };
 });

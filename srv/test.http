@@ -1,7 +1,14 @@
 
 ### getting Header details
 
-# GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
+
+
+
+
+
+GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxuserEmail 
+
+### GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000034?$expand=tocostcharge,toitem
 GET  http://localhost:4004/odata/v4/nauticalservice/xNAUTIxVOYAGEHEADERTOITEM/1000000165
 
 ### getting

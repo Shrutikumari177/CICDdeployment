@@ -8,14 +8,16 @@
         search="onChartSearch"
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
-        items="{/xNAUTIxBIDHISREPORT}"
+        items="{/xNAUTIxbidhist_valuehelp}"
+        liveChange="onChartSearch"
+        initialFocus="SearchField"
         
     >
         
         <StandardListItem id="ardIte"
             
             title="{Chrnmin}"
-            description="{Voyno}"
+            description="{voyno}"
 
             iconDensityAware="false"
             iconInset="false"

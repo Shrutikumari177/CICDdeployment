@@ -12,6 +12,7 @@
         items="{/xNAUTIxCHARTERVALUEHELP}"
         multiSelect="true"
         initialFocus="SearchField"
+        liveChange="onValueHelpSearchApprove"
         >
             
         <StandardListItem id="_IDGenStandardListItem1"

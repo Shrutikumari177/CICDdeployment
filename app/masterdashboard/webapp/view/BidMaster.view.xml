@@ -31,29 +31,33 @@
             </Bar>
         </headerContent>
 
-        <Panel class="tablepanel">
+        <Panel id="_IDGenPanel1" class="tablepanel">
         <Bar id="_IDGenBar12" class="headerBar2">
             <contentLeft>
                 <Button
                     id="entryBtn"
-                    text="New Entries" type="Emphasized"
+                    text="New Entries"
                     press="newEntries"
-                />
-                <Button
-                    id="copyBtn"
-                    text="Copy As" type="Emphasized"
-                    press="pressCopy"
-                   
+                    type="Emphasized"
                 />
                 <Button
                     id= "editBtn"
-                    text="Edit" type="Emphasized"
+                    text="Edit"
                     press="pressEdit"
+                    type="Emphasized"
+                />
+                <Button
+                    id="copyBtn"
+                    text="Copy As"
+                    press="pressCopy"
+                    visible="true"
+                    type="Emphasized"
                 />
                 <Button
                     id= "deleteBtn"
-                    text="Delete" type="Emphasized"
+                    text="Delete"
                     press="onDeletePress"
+                    type="Emphasized"
                 />
                 
                
@@ -75,29 +79,29 @@
             >
 
             <columns>
-                <Column  >
-                    <Label text="User" />
+                <Column id="_IDGenColumn1"  >
+                    <Label id="_IDGenLabel1" text="User" />
                 </Column>
-                <Column >
-                    <Label text="Code" />
+                <Column id="_IDGenColumn2" >
+                    <Label id="_IDGenLabel2" text="Code" />
                 </Column>
-                <Column  >
-                    <Label text="Value" />
+                <Column id="_IDGenColumn3" width="12rem" >
+                    <Label id="_IDGenLabel3" text="Value"  />
                 </Column>
-                <Column  >
-                    <Label text="Revaluation" />
+                <Column id="_IDGenColumn4"  >
+                    <Label id="_IDGenLabel4" text="Revaluation" />
                 </Column>
-                 <Column   >
-                    <Label text="Currency" />
+                 <Column id="_IDGenColumn5"   >
+                    <Label id="_IDGenLabel5" text="Currency" />
                 </Column>
-                <Column  >
-                    <Label text="Data Type" />
+                <Column id="_IDGenColumn6"  >
+                    <Label id="_IDGenLabel6" text="Data Type" />
                 </Column>
-                <Column  >
-                    <Label text="Table Name" />
+                <Column id="_IDGenColumn7"  >
+                    <Label id="_IDGenLabel7" text="Table Name" />
                 </Column>
-                <Column >
-                    <Label text="Multiple Column" />
+                <Column id="_IDGenColumn8" >
+                    <Label id="_IDGenLabel8" text="Multiple Column" />
                 </Column>
                
             </columns>
@@ -105,7 +109,7 @@
                 <cells>
                     <Text id="_IDGenText3" text="{Bname}" />
                     <Text id="_IDGenText4"  text="{Code}" />
-                    <Text id="_IDGenText5" text="{Value}"  />
+                    <Text id="_IDGenText5" text="{Value}" />
                     <Text id="_IDGenText6" text="{Cvalue}" />
                     <Text id="_IDGenText7" text="{Cunit}"  />
                     <Text id="_IDGenText8" text="{Datatype}"  />
@@ -130,40 +134,45 @@
             mode="MultiSelect"
         >
               <columns>
-                <Column >
-                    <Label text="Code" required="true" />
+                <Column id="_IDGenColumn9" >
+                    <Label id="_IDGenLabel9" text="Code" required="true" />
                 </Column>
                 <Column id="User">
-                    <Label text="User" required="true" />
+                    <Label id="_IDGenLabel10" text="User" required="true" />
                 </Column>
-                <Column >
-                    <Label text="Value"  required="true"/>
+                <Column id="_IDGenColumn10" width="12rem" >
+                    <Label id="_IDGenLabel11" text="Value"  required="true"/>
                 </Column>
-                <Column >
-                    <Label text="Revaluation" />
+                <Column id="_IDGenColumn11" >
+                    <Label id="_IDGenLabel12" text="Revaluation" />
                 </Column>
-                 <Column  >
-                    <Label text="Currency" />
+                 <Column id="_IDGenColumn12"  >
+                    <Label id="_IDGenLabel13" text="Currency" />
                 </Column>
-                <Column >
-                    <Label text="Data Type"  required="true"/>
+                <Column id="_IDGenColumn13" >
+                    <Label id="_IDGenLabel14" text="Data Type"  required="true"/>
                 </Column>
-                <Column >
-                    <Label text="Table Name" />
+                <Column id="_IDGenColumn14" >
+                    <Label id="_IDGenLabel15" text="Table Name" />
                 </Column>
-                <Column >
-                    <Label text="Multiple Column" />
+                <Column id="_IDGenColumn15" >
+                    <Label id="_IDGenLabel16" text="Multiple Column" />
                 </Column>
                
             </columns>
             <ColumnListItem id="istItem1">
                 <cells>
                     <Input id="Code"  liveChange="onCodeLiveChange" />
-                    <Input id="Bname" liveChange="onLiveChangeUser"/>
+                    <Input id="Bname" showValueHelp="true" valueHelpRequest="onMaintaingroup" valueHelpOnly="true" />
                     <Input id="Value" liveChange="onLiveChangeValue"/>
-                    <Input id="Cvalue" liveChange="onLiveChangeCvalue" type="Number"/>
-                    <Input id="Cunit"  showValueHelp="true" valueHelpRequest="onCurrencyPress"/>
-                    <Input id="Datatype"  liveChange="onLiveChangeDatatype"/>
+                    <Input id="Cvalue" liveChange="onLiveChangeCvalue"/>
+                    <Input id="Cunit"  showValueHelp="true" valueHelpRequest="onCurrencyPress" valueHelpOnly="true"/>
+                    <!-- <Input id="Datatype"  liveChange="onLiveChangeDatatype"/> -->
+                    <Select id="Datatype" forceSelection="false" liveChange="onLiveChangeDatatype" width="30rem">
+                        <core:Item id="_IDGenItem1" key="" text="CHAR" />
+                        <core:Item id="_IDGenItem2" key="" text="CURR" />
+                        <core:Item id="_IDGenItem3" key="" text="DATE" />
+                    </Select>
                     <Input id="Tablename" liveChange="onLiveChangeTablename"/>
                     <CheckBox id="Multi_Choice"  select="onSelectChange"/>
                 </cells>
@@ -180,29 +189,29 @@
            
         >
               <columns>
-                <Column >
-                    <Label text="Code" />
+                <Column id="_IDGenColumn16" >
+                    <Label id="_IDGenLabel17" text="Code" />
                 </Column>
-                <Column >
-                    <Label text="User" />
+                <Column id="_IDGenColumn17" >
+                    <Label id="_IDGenLabel18" text="User" />
                 </Column>
-                <Column >
-                    <Label text="Value" />
+                <Column id="_IDGenColumn18" width="12rem" >
+                    <Label id="_IDGenLabel19" text="Value" />
                 </Column>
-                <Column >
-                    <Label text="Revaluation" />
+                <Column id="_IDGenColumn19" >
+                    <Label id="_IDGenLabel20" text="Revaluation" />
                 </Column>
-                 <Column  >
-                    <Label text="Currency" />
+                 <Column id="_IDGenColumn20"  >
+                    <Label id="_IDGenLabel21" text="Currency" />
                 </Column>
-                <Column >
-                    <Label text="Data Type" />
+                <Column id="_IDGenColumn21" >
+                    <Label id="_IDGenLabel22" text="Data Type" />
                 </Column>
-                <Column >
-                    <Label text="Table Name" />
+                <Column id="_IDGenColumn22" >
+                    <Label id="_IDGenLabel23" text="Table Name" />
                 </Column>
-                <Column >
-                    <Label text="Multiple Column" />
+                <Column id="_IDGenColumn23" >
+                    <Label id="_IDGenLabel24" text="Multiple Column" />
                 </Column>
                
             </columns>
@@ -212,8 +221,14 @@
                     <Text id="Bname1"  />
                     <Input id="Value1" liveChange="onLiveChangeValue"/>
                     <Input id="Cvalue1" liveChange="onLiveChangeCvalue"/>
-                    <Input id="Cunit1" showValueHelp="true" valueHelpRequest=".showValueHelpCurrency"/>
-                    <Input id="Datatype1"  liveChange="onLiveChangeDatatype"/>
+                    <Input id="Cunit1" showValueHelp="true" valueHelpRequest="onCurrencyPress" />
+
+                    <Select id="Datatype1" forceSelection="false" liveChange="onLiveChangeDatatype" width="30rem">
+                        <core:Item id="IDGenItem1" key="" text="CHAR" />
+                        <core:Item id="IDGenItem2" key="" text="CURR" />
+                        <core:Item id="IDGenItem3" key="" text="DATE" />
+				    </Select>
+                    
                     <Input id="Tablename1" liveChange="onLiveChangeTablename"/>
                     <CheckBox id="Multi_Choice1"  select="onSelectChange"/>
                 </cells>
@@ -231,11 +246,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 
@@ -250,11 +267,13 @@
                     id="mainPageSave12"
                     text="Update"
                     press="onUpdate"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton23"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 

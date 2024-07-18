@@ -6,10 +6,14 @@
         contentWidth="50%"
         contentHeight="60%"
         title="Currency Type"
-        items="{/xNAUTIxStandardCurrencyFetch}"
+        items="{/xNAUTIxcury_count}"
         cancel="handleValueHelpClose"
         confirm="handleValueHelpClose"
         search="CurSearch"
+        liveChange="CurSearch"
+        initialFocus="SearchField"
+        noDataText="Loading..."
+
         >
                 <columns>
                     <Column >
@@ -19,11 +23,15 @@
                     <Column >
                         <Text text="Currency Description"></Text>
                     </Column>
+                    <Column >
+                        <Text text="Country"></Text>
+                    </Column>
                 </columns>
                 <items>
                     <ColumnListItem >
-                        <Text text="{waers}"></Text>
-                        <Text text="{ltext}"></Text>
+                        <Text text="{Waers}"></Text>
+                        <Text text="{Ltext}"></Text>
+                        <Text text="{landx}"></Text>
                     </ColumnListItem>
                 </items> 
         </TableSelectDialog>

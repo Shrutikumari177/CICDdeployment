@@ -39,9 +39,9 @@
             class="_IDGenBar1"
          >
             <contentLeft>
-                <Button id="entryBtn"  text="New Entries" type="Emphasized" press="newEntries"/>
+                <Button id="entryBtn"  text="New Entries" press="newEntries" type="Emphasized"/>
                 <!-- <Button id="editBtn" text="Edit"  press="pressEdit"/> -->
-                <Button  id ="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+                <Button  id ="deleteBtn" text="Delete" press="onDeletePress" type="Emphasized"/>
                
                 
             </contentLeft>
@@ -182,10 +182,11 @@
                             <core:Item key="{Cardes}" text="{Carcd}" />
                         </ComboBox>
                         
-                        <Input id="Zgroup"  showValueHelp="true" valueHelpRequest="onZgroup" liveChange="onZgroupLiveChange" />
-                        <Input id="App1" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
-                        <Input id="App2" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
-                        <Input id="App3" showValueHelp="true" valueHelpRequest="onApproverSelect"  />
+                        
+                        <Input id="Zgroup"  showValueHelp="true" valueHelpRequest="onZgroup" liveChange="onZgroupLiveChange" valueHelpOnly ="true"/>
+                        <Input id="App1" showValueHelp="true" valueHelpRequest="onApproverSelect" valueHelpOnly ="true" />
+                        <Input id="App2" showValueHelp="true" valueHelpRequest="onApproverSelect" valueHelpOnly ="true" />
+                        <Input id="App3" showValueHelp="true" valueHelpRequest="onApproverSelect" valueHelpOnly ="true" />
 
                         
 
@@ -233,11 +234,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 

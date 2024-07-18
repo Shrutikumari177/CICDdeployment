@@ -6,9 +6,10 @@
         id="mySect"
         noDataText="Loading..."
         title="Select Purchase Group"
-       search="onMaintainUserSearch"
+       search="onApproverSearch"
         confirm="onApproverClose"
         cancel="onApproverClose"
+         initialFocus="SearchField"
         items="{filteredUsersModel>/}"
        
         >

@@ -6,10 +6,12 @@
         contentWidth="50%"
         contentHeight="60%"
         title="Country"
+        liveChange="CurSearch"
         items="{/xNAUTIxCountrySetFetch}"
         cancel="handleValueHelpClose"
         confirm="handleValueHelpClose"
-        liveChange="CurSearch"
+        initialFocus="SearchField"
+         search="CurSearch"
         >
      
                 <columns>

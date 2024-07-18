@@ -11,6 +11,7 @@
         cancel="onPurchaseOrgValueHelpClose"
         items="{/xNAUTIxCHARTPURCHASEITEM}"
        initialFocus="SearchField"
+       liveChange="onPurchaseOrgSearch"
         >
         <StandardListItem id="ardListItem2"
        

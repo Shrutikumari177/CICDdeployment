@@ -94,7 +94,7 @@
                         <Label
                             id="Label1"
                             text="Voyage No:"
-                            class="sapUiTinyMarginTop"
+                            class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd voylabel1txt"
                         />
                         <Input
                             id="VoyageNo"
@@ -110,7 +110,7 @@
                         <Label
                             id="Label2"
                             text="Vendor No:"
-                            class="sapUiTinyMarginTop"
+                            class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd voylabel1txt"
                         />
                         <MultiInput
                             id="VendorNo"
@@ -185,7 +185,7 @@
                                <Label
                                     id="Label"
                                     text="Purchase Org :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd purchaselabeltxt"
                                 />
                                 <Input
                                     id="PurchaseOrg"

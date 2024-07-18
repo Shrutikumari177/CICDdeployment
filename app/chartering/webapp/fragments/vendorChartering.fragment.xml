@@ -12,6 +12,7 @@
         items="{/xNAUTIxBusinessPartner1}"
         multiSelect="true"
          initialFocus="SearchField"
+         liveChange="onVendorHelpSearch"
       
         
         >

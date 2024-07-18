@@ -32,8 +32,8 @@
                             text="Created By : "
                         />
                         <Input
-                            
-                            value="{biddingHisReport1>/0/AwrdCreatedBy}"
+                        
+                            value="{biddingHisReport1>/0/createdBy}"
                             editable="false"
                         />
                     </FlexBox>

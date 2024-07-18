@@ -10,6 +10,8 @@
         confirm="onZgroupClose"
         cancel="onZgroupClose"
         items="{/xNAUTIxuseridassociation}"
+        initialFocus="SearchField"
+        liveChange="onMaintainUserSearch"
        
         >
         <StandardListItem id="_IDGenStand"

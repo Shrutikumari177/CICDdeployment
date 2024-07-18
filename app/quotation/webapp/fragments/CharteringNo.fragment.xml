@@ -6,6 +6,7 @@
         noDataText="Loading..."
         title="Select Chartering No"
         search="onChartSearch1"
+        liveChange="onChartSearch1"
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
         items="{ path: '/CharteringSet' ,  sorter: {

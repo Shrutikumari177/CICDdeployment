@@ -32,16 +32,16 @@
         </headerContent>
            
 
-    <Panel class="tablepanel">
+    <Panel id="_IDGenPanel1" class="tablepanel">
          <Bar
             id="_IDGenBar1"
             class="_IDGenBar1"
          >
             <contentLeft>
-                <Button id="entryBtn"  text="New Entries" type="Emphasized" press="newEntries"/>
+                <Button id="entryBtn"  text="New Entries" press="newEntries"  type="Emphasized"/>
                 <!-- <Button id="copyBtn" text="Copy As" press="pressCopy"/> -->
-                <Button id="editBtn" text="Edit" type="Emphasized"  press="pressEdit"/>
-                <Button  id ="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+                <Button id="editBtn" text="Edit"  press="pressEdit"  type="Emphasized"/>
+                <Button  id ="deleteBtn" text="Delete" press="onDeletePress"  type="Emphasized"/>
                
                 
             </contentLeft>
@@ -112,17 +112,17 @@
            
          >
             <columns>
-                <Column>
-                    <Text text="Event Code" />
+                <Column id="_IDGenColumn3">
+                    <Text id="_IDGenText3" text="Event Code" />
                 </Column>
-                <Column>
-                    <Text text=" Description" />
+                <Column id="_IDGenColumn4">
+                    <Text id="_IDGenText4" text=" Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
-                        <Input id="Code" liveChange="onCodeLiveChange"  />
+                        <Input id="Code" liveChange="onCodeLiveChange"  type="Text" />
                         <Input id="Desc"  liveChange="onLiveChange"/>
                     </cells>
                 </ColumnListItem>
@@ -139,18 +139,18 @@
            
          >
             <columns>
-                <Column>
-                    <Text text="Event Code" />
+                <Column id="_IDGenColumn5">
+                    <Text id="_IDGenText5" text="Event Code" />
                 </Column>
-                <Column>
-                    <Text text=" Description" />
+                <Column id="_IDGenColumn6">
+                    <Text id="_IDGenText6" text=" Description" />
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem id="_IDGenColumnListItem3">
                     <cells>
                         <Text id="Code1" text="" />
-                        <Input id="Desc1"  editable="true"  liveChange="onLiveChange"/>
+                        <Input id="Desc1"    liveChange="onLiveChange" editable="true"  />
                     </cells>
                 </ColumnListItem>
             </items>
@@ -168,11 +168,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 
@@ -187,11 +189,13 @@
                     id="mainPageSave12"
                     text="Update"
                     press="onUpdate"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton23"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
              <!--scrollbar added-->

@@ -36,10 +36,10 @@
             class="_IDGenBar1"
          >
             <contentLeft>
-                <Button id="entryBtn"  text="New Entries" type="Emphasized"  press="newEntries"/>
+                <Button id="entryBtn"  text="New Entries" press="newEntries"  type="Emphasized"/>
                 <!-- <Button id="copyBtn" text="Copy As" press="pressCopy"/> -->
-                <Button id="editBtn" text="Edit" type="Emphasized"  press="pressEdit"/>
-                <Button  id ="deleteBtn" text="Delete" type="Emphasized" press="onDeletePress"/>
+                <Button id="editBtn" text="Edit"  press="pressEdit"  type="Emphasized"/>
+                <Button  id ="deleteBtn" text="Delete" press="onDeletePress"  type="Emphasized"/>
                
                 
             </contentLeft>
@@ -132,7 +132,7 @@
             updateFinished="onTableUpdateFinished"
             selectionChange="selectedItems"
             width="100%"
-            class="mastertables"
+            class=""
             visible="false"
            
          >
@@ -148,7 +148,7 @@
                 <ColumnListItem>
                     <cells>
                         <Text id="Code1" text="" />
-                        <Input id="Desc1"  editable="true"  liveChange="onLiveChange"/>
+                        <Input id="Desc1"    liveChange="onLiveChange"  editable="true"/>
                     </cells>
                 </ColumnListItem>
             </items>
@@ -166,11 +166,13 @@
                     id="mainPageSave"
                     text="Save"
                     press="onSave"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton22"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
 
@@ -185,11 +187,13 @@
                     id="mainPageSave12"
                     text="Update"
                     press="onUpdate"
+                    type="Emphasized"
                 />
                 <Button
                     id="_IDGenButton23"
                     text="Cancel"
                     press="onCancel"
+                    type="Emphasized"
                 />
             </OverflowToolbar>
              <!--scrollbar added-->

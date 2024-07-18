@@ -175,8 +175,9 @@
                             id="Input3"
                             width="200px"
                             value="{voyHeaderModel>/0/Curr}"
-                            showValueHelp="true"
+                            showValueHelp="false"
                             valueHelpRequest=".showValueHelpDialogCurr"
+                            editable="false"
                         />
                     </HBox>
 
@@ -190,6 +191,7 @@
                             id="Input6"
                             width="200px"
                             value="{voyHeaderModel>/0/GV_CSTATUS}"
+                            editable="false"
                         />
                     </HBox>
                 </VBox>
@@ -469,7 +471,7 @@
                     </IconTabFilter>
                     <IconTabFilter
                         text="Vessel Plan/Actual"
-                        key="info"
+                        key="info1"
                     >
                         <Panel
                             id="p2"
@@ -553,7 +555,7 @@
                                         <Column id="_IDColum">
                                             <Label
                                                 id="_IDGel15"
-                                                text="LegID"
+                                                text="LegId"
                                             />
                                         </Column>
                                         <Column id="_IDGenln6">
@@ -840,12 +842,12 @@
                                 <Label text="Freight Cost" />
                                 <Input
                                     id="_friegthIdPlan2"
-                                    value=" {path :'voyItemModel1>/', formatter:'.CalcTotalFrcost'}"
+                                    value=" {path :'voyItemModel1>/', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="200px"
                                 />
 
-                                <Label text="Unit" />
+                                <Label text="Unit"  width="1rem"/>
                                 <Select
                                     id="_idFrunitPlan2"
                                     width="120px"
@@ -891,7 +893,7 @@
                                 >
                                     <columns>
                                         <Column>
-                                            <Label text="LegID" />
+                                            <Label text="LegId" />
                                         </Column>
                                         <Column>
                                             <Label text="Port Cost" />
@@ -1087,7 +1089,7 @@
                                                     forceSelection="false"
                                                     items="{
                                                 path: '/CargoUnitSet'
-                                            }"
+}"
                                                     valueStateText="Select"
                                                     selectedKey="{costdetailsModel>Costu}"
                                                 >
@@ -1643,8 +1645,8 @@
                                                 id="submitTechDetailTable"
                                                 sticky="ColumnHeaders"
                                             >
-                                                <columns>
-                                                    <Column width="42.5%">
+                                                 <columns>
+                                                    <Column width="40%">
                                                         <Text text="Heads" />
                                                     </Column>
                                                     <Column width="15%">
@@ -1652,9 +1654,14 @@
                                                             text="Relevance"
                                                         />
                                                     </Column>
-                                                    <Column width="42.5%">
+                                                    <Column width="35%">
                                                         <Text
                                                             text="Possible Value"
+                                                        />
+                                                    </Column>
+                                                     <Column width="10%">
+                                                        <Text
+                                                            text="Hint"
                                                         />
                                                     </Column>
                                                 </columns>
@@ -1692,24 +1699,26 @@
                                                             />
                                                             <CheckBox
                                                                 selected="{commercialModel>RevBid}"
-                                                                select="toggleCheckbox"
+                                                                select="toggleCheckbox2"
+                                                                editable="false"
                                                             />
                                                             <Input
                                                                 value="{commercialModel>Cunit}"
                                                                 showValueHelp="true"
-                                                                editable="{path: 'commercialModel>RevBid', formatter:'.showValueHelpBasedOnRevBid'}"
                                                                 valueHelpRequest=".showValueHelpDialogCurr"
+                                                                editable="false"
                                                             />
+                                                                <!-- editable="{path: 'commercialModel>RevBid', formatter:'.showValueHelpBasedOnRevBid'}" -->
                                                         </cells>
                                                     </ColumnListItem>
                                                 </items>
                                             </Table>
-                                            <Button
+                                            <!-- <Button
                                                 text="Save"
                                                 press=".onSaveCommercialDetail"
                                                 type="Emphasized"
                                                 class="sapUiSmallMargin"
-                                            />
+                                            /> -->
                                         </l:BlockLayoutCell>
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>
@@ -1791,12 +1800,11 @@
                                     uploadUrl="odata/v4/nautical/FileuploadSet"
                                     sendXHR="true"
                                     httpRequestMethod="Post"
-                                    uploadComplete="handleUploadComplete"
                                     change="handleValueChangeUpload"
                                     tooltip="Upload your file to the local server"
                                     buttonText="Choose File"
                                     icon="sap-icon://value-help"
-                                    fileType="[pdf]"
+                                    fileType="pdf"
                                     typeMissmatch="handleTypeMissmatch"
                                 />
                                 <Button

@@ -74,6 +74,11 @@
   },
   "sap.ui5": {
     "flexEnabled": true,
+    "services": {
+      "ShellUIService": {
+        "factoryName": "sap.ushell.ui5service.ShellUIService"
+      }
+    },
     "dependencies": {
       "minUI5Version": "1.122.1",
       "libs": {
@@ -242,7 +247,7 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "TrChangeVoyage",
-          "viewName": "TrChangeVoyage1"
+          "viewName": "TrChangeVoyage"
         },
         "TargetVoyageDashboard": {
           "viewType": "XML",

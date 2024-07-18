@@ -201,8 +201,8 @@
                 <Key>
                     <PropertyRef Name="Land1"/>
                 </Key>
-                <Property Name="Spras" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Language" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Spras" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Language" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Landx50" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="Currency" sap:content-version="1">
@@ -255,6 +255,24 @@
                 <Property Name="spras" Type="Edm.String" MaxLength="2" sap:label="Language Key"/>
                 <Property Name="landx50" Type="Edm.String" MaxLength="50" sap:label="Country Name" sap:quickinfo="Country Name (Max. 50 Characters)"/>
             </EntityType>
+            <EntityType Name="xNAUTIxcurrency_valType" sap:label="currency valuehelp tran" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Navoycur"/>
+                </Key>
+                <Property Name="Navoycur" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="UpperCase" sap:label="Currency"/>
+                <Property Name="Navoygcurdes" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Currency Description"/>
+                <Property Name="NAVOCOUNT" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="" sap:quickinfo="COUNTRY"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxcury_countType" sap:label="current with countrt" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Waers"/>
+                    <PropertyRef Name="Land1"/>
+                </Key>
+                <Property Name="Waers" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="UpperCase" sap:label="Country Key"/>
+                <Property Name="Ltext" Type="Edm.String" MaxLength="40" sap:label="Long Text"/>
+                <Property Name="landx" Type="Edm.String" MaxLength="15" sap:label="Name" sap:quickinfo="Country Name"/>
+            </EntityType>
             <EntityType Name="xNAUTIxMASBIDType" sap:label="Bidding Master" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Bname"/>
@@ -268,6 +286,20 @@
                 <Property Name="Datatype" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Datatype" sap:quickinfo="RSM Data type"/>
                 <Property Name="Tablename" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Table Name"/>
                 <Property Name="Multi_Choice" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Multiple Choice"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxnewportcdsType" sap:label="post mas new cds" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Portc"/>
+                </Key>
+                <Property Name="Portc" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Port Code" sap:quickinfo="Unified Port Code - Unique"/>
+                <Property Name="Country" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Country"/>
+                <Property Name="Portn" Type="Edm.String" MaxLength="25" sap:label="Port Name"/>
+                <Property Name="Reancho" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Related Anchorage"/>
+                <Property Name="Latitude" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="Latitude"/>
+                <Property Name="Longitude" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="Longitude"/>
+                <Property Name="Countryn" Type="Edm.String" MaxLength="25" sap:display-format="UpperCase" sap:label="Country Name"/>
+                <Property Name="Locid" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Location ID"/>
+                <Property Name="Ind" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Process indicator" sap:quickinfo="Subsequent process indicator for document base table"/>
             </EntityType>
             <EntityType Name="xNAUTIxportmascdsType" sap:label="port master cds" sap:content-version="1">
                 <Key>
@@ -510,7 +542,10 @@
                 <EntitySet Name="StandardCurrencySet" EntityType="NAUTI.MASTER_BTP_SRV.StandardCurrency" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxBusinessPartner1" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxBusinessPartner1Type" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCountrySetFetch" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxCountrySetFetchType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcurrency_val" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxcurrency_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcury_count" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxcury_countType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxMASBID" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxMASBIDType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxnewportcds" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxnewportcdsType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxportmascds" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxportmascdsType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxSAPUSERS" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxSAPUSERSType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxStandardCurrencyFetch" EntityType="NAUTI.MASTER_BTP_SRV.xNAUTIxStandardCurrencyFetchType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>

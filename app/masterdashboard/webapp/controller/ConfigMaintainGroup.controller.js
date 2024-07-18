@@ -154,7 +154,7 @@ sap.ui.define(
           sap.m.MessageToast.show("Only numeric characters are allowed.");
         }
 
-        if (sValue.length > 4) {
+        if (sValue.length > 4  ) {
 
           sValue = sValue.substring(0, 4);
 
@@ -548,11 +548,13 @@ sap.ui.define(
 
         oView.byId("deleteBtn").setEnabled(false);
         oView.byId("entryBtn").setEnabled(false);
+        oView.byId("editBtn").setEnabled(false);
       },
 
       onPatchSent: function (ev) {
 
         sap.m.MessageToast.show("Updating..")
+        this.resetView();
 
       },
       onPatchCompleted: function (ev) {
@@ -582,7 +584,11 @@ sap.ui.define(
         // Create a new row
         var oNewRow = new sap.m.ColumnListItem({
           cells: [
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this), showValueHelp: true, valueHelpRequest: this.onMaintaingroup.bind(this) }),
+            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this),
+             showValueHelp: true,
+             valueHelpRequest: this.onMaintaingroup.bind(this),
+             valueHelpOnly:true
+             }),
             new sap.m.Input({
               value: "", editable: true,
               liveChange: this.onLiveChange.bind(this)
@@ -804,7 +810,7 @@ sap.ui.define(
         }
 
         if (flagNothingtoUpdate) {
-          MessageToast.show("nothing to update ");
+          MessageToast.show("Nothing to Update ");
           return;
         }
 

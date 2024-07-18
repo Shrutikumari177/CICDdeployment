@@ -146,7 +146,7 @@
 
                                 >
                                                    <FlexBox  class="_flexCanalBox">
-                                                    <Label text="Select to exclude path :" class="sapUiTinyMargin"></Label>    
+                                                    <Label text="Select path to exclude :" class="sapUiTinyMargin"></Label>    
                                                   <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
                                                     <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
                                                     <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
@@ -160,9 +160,6 @@
 
                                                    </FlexBox>
                                                  
-
-                        
-                                
                                 
                                 </layout:BlockLayoutCell>
 
@@ -179,7 +176,10 @@
                                             selectionMode="None"
                                             rows="{oJsonModel>/portData}"
                                             visibleRowCountMode="Fixed"
-                                            visibleRowCount="4"
+                                            visibleRowCount="3"
+                                            alternateRowColors="true"
+                                            noData="Please Select Ports"
+
                                         >
                                             <ui:extension>
                                                 <OverflowToolbar>
@@ -230,6 +230,15 @@
                                                         type="Default"
                                                         press="navToFreightSim"
                                                         enabled="false"
+                                                    />
+                                                    <Button
+                                                        id="CongestionButton"
+                                                        text="Predict Congestion"
+                                                        width="11rem"
+                                                        type="Default"
+                                                        press="navToCongestion"
+                                                         enabled="false"
+                                                       
                                                     />
                                                     <Button
                                                         text="Calculate"
@@ -396,12 +405,13 @@
                                                     />
                                                     <ui:template>
                                                         <DatePicker
-                                                            dateValue="{oJsonModel>DepartureDate}"
                                                             displayFormat="dd-MM-yyyy"
-                                                            valueFormat="MM/dd/yyyy"
+                                                            valueFormat="yyyy-MM-dd"
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
+                                                            dateValue="{oJsonModel>DepartureDate}"
                                                             value="{oJsonModel>DepartureDateValue}"
+                                                            
                                                         />
                                                     </ui:template>
                                                 </ui:Column>
@@ -412,13 +422,17 @@
                                                     />
                                                     <ui:template>
                                                         <TimePicker
-                                                            dateValue="{oJsonModel>DepartureTime}"
+                                                        
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
-                                                            valueFormat="HH:mm:ss"
+                                                            valueFormat="hh:mm:ss.s"
                                                             support2400="true"
                                                             displayFormat="HH:mm:ss"
+                                                            value="{oJsonModel>DepartureTime}"
                                                         />
+                                                             <!-- dateValue="{oJsonModel>DepartureTime}" -->
+                                                             <!--  for V2 model -->
+                                                        
                                                     </ui:template>
                                                 </ui:Column>
                                             </ui:columns>
