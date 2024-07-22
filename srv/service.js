@@ -23,6 +23,11 @@ module.exports = async (srv) => {
 
     const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV");
     srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
+    srv.on('READ', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxallstatuses', req => NAUTIVOYSTATUS_SRV.run(req.query));
+    srv.on('CREATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+    srv.on('UPDATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+
 
     const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
     srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query));
@@ -431,7 +436,9 @@ module.exports = async (srv) => {
         'xNAUTIxCHARTERINGVALUEHELP',
         'xNAUTIxaward_value',
         'xNAUTIxBIDHISREPORT',
-        'xNAUTIxbidhist_valuehelp'
+        'xNAUTIxbidhist_valuehelp',
+        'xNAUTIxsubmitquafetch',
+        'xNAUTIxZSUBMITQUOUTFETCH'
     ]);
 };
 

@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="mySelectDialog1"
+        noDataText="Loading..."
+        title="Select Port"
+        search="onValueHelpSearch2"
+        liveChange="onValueHelpSearch2"
+        confirm="onValueHelpClosePort"
+        cancel="onValueHelpClosePort"
+        items="{/xNAUTIxportmascds}"
+        initialFocus="SearchField"
+         >
+        <StandardListItem id="_IDGenStandardListItem1"
+            title="{Portn}"
+            description="{Portc}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

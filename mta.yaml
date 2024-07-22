@@ -3,234 +3,270 @@ ID: nautical
 description: A simple CAP project.
 version: 1.0.0
 modules:
-- name: nautical-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: nautical-destination
-  - name: nautical-db
-  - name: nautical-auth
-  - name: nautical-connectivity
-  - name: nautical-destination-service
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-  build-parameters:
-    builder: npm
-- name: nautical-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: nautical-db
-  parameters:
-    buildpack: nodejs_buildpack
-- name: nautical-destination-content
-  type: com.sap.application.content
-  requires:
-  - name: nautical-destination-service
-    parameters:
-      content-target: true
-  - name: nautical_html_repo_host
-    parameters:
-      service-key:
-        name: nautical_html_repo_host-key
-  - name: nautical-auth
-    parameters:
-      service-key:
-        name: nautical-auth-key
-  parameters:
-    content:
-      instance:
-        destinations:
-        - Name: nauticalCloudSrv_nautical_html_repo_host
-          ServiceInstanceName: nautical-html5-app-host-service
-          ServiceKeyName: nautical_html_repo_host-key
-          sap.cloud.service: nauticalCloudSrv
-        - Authentication: OAuth2UserTokenExchange
-          Name: nauticalCloudSrv_nautical_auth
-          ServiceInstanceName: nautical-auth
-          ServiceKeyName: nautical-auth-key
-          sap.cloud.service: nauticalCloudSrv
-        existing_destinations_policy: ignore
-  build-parameters:
-    no-source: true
-- name: nautical-app-content
-  type: com.sap.application.content
-  path: .
-  requires:
-  - name: nautical_html_repo_host
-    parameters:
-      content-target: true
-  build-parameters:
-    build-result: resources
+  - name: nautical-srv
+    type: nodejs
+    path: gen/srv
     requires:
-    - artifacts:
-      - comingenxnautimasterdashboard.zip
-      name: comingenxnautimasterdashboard
-      target-path: resources/
-    - artifacts:
-      - comingenxnauticreatevoyage.zip
-      name: comingenxnauticreatevoyage
-      target-path: resources/
-    - artifacts:
-      - comingenxnautireport.zip
-      name: comingenxnautireport
-      target-path: resources/
-    - artifacts:
-      - comingenxnautibiddingcontroller.zip
-      name: comingenxnautibiddingcontroller
-      target-path: resources/
-    - artifacts:
-      - comingenxnautichartering.zip
-      name: comingenxnautichartering
-      target-path: resources/
-    - artifacts:
-      - comingenxnautiquotation.zip
-      name: comingenxnautiquotation
-      target-path: resources/
-    - artifacts:
-      - comingenxnautisubmitquotation.zip
-      name: comingenxnautisubmitquotation
-      target-path: resources/
-- name: comingenxnautimasterdashboard
-  type: html5
-  path: app/masterdashboard
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnauticreatevoyage
-  type: html5
-  path: app/createvoyage
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautireport
-  type: html5
-  path: app/report
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautibiddingcontroller
-  type: html5
-  path: app/biddingcontroller
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautichartering
-  type: html5
-  path: app/chartering
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautiquotation
-  type: html5
-  path: app/quotation
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautisubmitquotation
-  type: html5
-  path: app/submitquotation
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-resources:
-- name: nautical-destination
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: destination
-    service-plan: lite
-- name: nautical-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-- name: nautical-connectivity
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: connectivity
-    service-plan: lite
-- name: nautical-auth
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      tenant-mode: dedicated
-      xsappname: nautical-${org}-${space}
-    path: ./xs-security.json
-    service: xsuaa
-    service-plan: application
-- name: nautical-destination-service
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: true
-      init_data:
+      - name: nautical-destination
+      - name: nautical-auth
+      - name: nautical-connectivity
+      - name: nautical-destination-service
+      - name: nautical-db
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+  - name: nautical-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: nautical-destination-service
+        parameters:
+          content-target: true
+      - name: nautical_html_repo_host
+        parameters:
+          service-key:
+            name: nautical_html_repo_host-key
+      - name: nautical-auth
+        parameters:
+          service-key:
+            name: nautical-auth-key
+    parameters:
+      content:
         instance:
           destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          - Authentication: NoAuthentication
-            HTML5.DynamicDestination: true
-            HTML5.ForwardAuthToken: true
-            Name: nautical-srv-api
-            ProxyType: Internet
-            Type: HTTP
-            URL: ~{srv-api/srv-url}
-          existing_destinations_policy: update
-      version: 1.0.0
-    service: destination
-    service-name: nautical-destination-service
-    service-plan: lite
-  requires:
-  - name: srv-api
-- name: nautical_html_repo_host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-name: nautical-html5-app-host-service
-    service-plan: app-host
+            - Name: nauticalCloudSrv_nautical_html_repo_host
+              ServiceInstanceName: nautical-html5-app-host-service
+              ServiceKeyName: nautical_html_repo_host-key
+              sap.cloud.service: nauticalCloudSrv
+            - Authentication: OAuth2UserTokenExchange
+              Name: nauticalCloudSrv_nautical_auth
+              ServiceInstanceName: nautical-auth
+              ServiceKeyName: nautical-auth-key
+              sap.cloud.service: nauticalCloudSrv
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+  - name: nautical-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: nautical_html_repo_host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - comingenxnautimasterdashboard.zip
+          name: comingenxnautimasterdashboard
+          target-path: resources/
+        - artifacts:
+            - comingenxnauticreatevoyage.zip
+          name: comingenxnauticreatevoyage
+          target-path: resources/
+        - artifacts:
+            - comingenxnautireport.zip
+          name: comingenxnautireport
+          target-path: resources/
+        - artifacts:
+            - comingenxnautibiddingcontroller.zip
+          name: comingenxnautibiddingcontroller
+          target-path: resources/
+        - artifacts:
+            - comingenxnautichartering.zip
+          name: comingenxnautichartering
+          target-path: resources/
+        - artifacts:
+            - comingenxnautiquotation.zip
+          name: comingenxnautiquotation
+          target-path: resources/
+        - artifacts:
+            - comingenxnautisubmitquotation.zip
+          name: comingenxnautisubmitquotation
+          target-path: resources/
+  - name: comingenxnautimasterdashboard
+    type: html5
+    path: app/masterdashboard
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnauticreatevoyage
+    type: html5
+    path: app/createvoyage
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnautireport
+    type: html5
+    path: app/report
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnautibiddingcontroller
+    type: html5
+    path: app/biddingcontroller
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnautichartering
+    type: html5
+    path: app/chartering
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnautiquotation
+    type: html5
+    path: app/quotation
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: comingenxnautisubmitquotation
+    type: html5
+    path: app/submitquotation
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+
+  - name: nautical-mtx
+    type: nodejs
+    path: gen/mtx/sidecar
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      memory: 256M
+      disk-quota: 512M
+    provides:
+      - name: mtx-api
+        properties:
+          mtx-url: ${default-url}
+    requires:
+      - name: nautical-auth
+      - name: nautical-registry
+resources:
+  - name: nautical-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+  - name: nautical-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite
+  - name: nautical-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        tenant-mode: shared
+        xsappname: nautical-${org}-${space}
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+  - name: nautical-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                Name: nautical-srv-api
+                ProxyType: Internet
+                Type: HTTP
+                URL: ~{srv-api/srv-url}
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: nautical-destination-service
+      service-plan: lite
+    requires:
+      - name: srv-api
+  - name: nautical_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: nautical-html5-app-host-service
+      service-plan: app-host
+  - name: nautical-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: service-manager
+      service-plan: container
+  - name: nautical-registry
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: mtx-api
+    parameters:
+      service: saas-registry
+      service-plan: application
+      config:
+        xsappname: nautical-${org}-${space}
+        appName: nautical-${org}-${space}
+        displayName: nautical
+        description: A simple CAP project.
+        category: 'Category'
+        appUrls:
+          getDependencies: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/dependencies
+          onSubscription: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
+          onSubscriptionAsync: true
+          onUnSubscriptionAsync: true
+          onUpdateDependenciesAsync: true
+          callbackTimeoutMillis: 300000 # Increase if your deployments are taking longer than that
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-  - builder: custom
-    commands:
-    - npm ci
-    - npx cds build --production
-    - npx -p @sap/cds-dk cds build --production
-    - npx rimraf gen/db/src/gen/data
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+        - npx -p @sap/cds-dk cds build --production
+        - npx rimraf gen/db/src/gen/data

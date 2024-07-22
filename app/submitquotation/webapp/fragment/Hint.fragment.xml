@@ -1,0 +1,44 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		id="myPopover"
+		class="sapUiResponsivePadding--header"
+		placement="HorizontalPreferredRight"
+		contentWidth="50%"
+		showHeader="false"
+		>
+		
+		<Table items="{hintModel>/hintData}">
+		 <columns>
+		   <Column >
+		     <Text text="Value"></Text>
+		   </Column>
+		    <Column >
+		     <Text text="Good To Have"></Text>
+		   </Column>
+		    <Column >
+		     <Text text="Mandatory"></Text>
+		   </Column>
+		     <Column >
+		     <Text text="Must Not have"></Text>
+		   </Column>
+		     <Column >
+		     <Text text="Min Score"></Text>
+		   </Column>
+		    <Column >
+		     <Text text="Max Score"></Text>
+		   </Column>
+		 </columns>
+		 <ColumnListItem >
+		    <Text text="{hintModel>Value}"></Text>
+			<CheckBox editable="false" selected="{path : 'hintModel>Good', formatter:'.booleanFormatter'}"></CheckBox>
+			<CheckBox editable="false" selected="{path : 'hintModel>Mand', formatter:'.booleanFormatter'}"></CheckBox>
+			<CheckBox editable="false" selected="{path : 'hintModel>Must', formatter:'.booleanFormatter'}"></CheckBox>
+		    <Text text="{hintModel>Zmin}"></Text>
+		    <Text text="{hintModel>Zmax}"></Text>
+		 </ColumnListItem>
+		
+		</Table>
+	</Popover>
+</core:FragmentDefinition>

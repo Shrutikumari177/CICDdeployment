@@ -19,6 +19,21 @@ using NAUTIZNAUTIFILEUPL_VOY_SRV from './external/NAUTIZNAUTIFILEUPL_VOY_SRV.cds
 
 
 service nauticalservice {
+     entity newallstatusesSet as projection on NAUTIVOYSTATUS_SRV.newallstatusesSet
+    {        Status, key Voyage, Vdate, Vtime     }    
+;
+    
+ 
+    entity xNAUTIxallstatuses as projection on NAUTIVOYSTATUS_SRV.xNAUTIxallstatuses
+    {        key Voyage, Status, Vdate, Vtime     }    
+;
+entity xNAUTIxZSUBMITQUOUTFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH
+    {        key Voyno, key Lifnr, key Chrnmin, Vimono, Vname, Biddate, Bidtime     }    
+;
+    
+    entity xNAUTIxsubmitquafetch as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxsubmitquafetch
+    {        key Lifnr, key Chrnmin, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo, Voyno, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, zstat, Zaction     }    
+;
      entity FileuploadSet as projection on NAUTIZNAUTIFILEUPL_VOY_SRV.FileuploadSet
     {        Fileid, key Voyageno, Creaby, Creadate, Creatime, key Filename, Filetype, Filecont, Del     }    
 ;
@@ -61,6 +76,8 @@ service nauticalservice {
     {        key SmtpAddr, Persnumber, username, Uflag     }    
 ;
    
+
+
     entity xNAUTIxAPPROVEDCHAT          as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT {
             key Creqno,
@@ -293,6 +310,9 @@ service nauticalservice {
         };
 
     entity sendEmail                    as projection on nauticalschema.sendEmail;
+    entity quotations                    as projection on nauticalschema.quotations;
+
+
 
     entity RefrenceDocumentSet          as
         projection on NAUTIMASTER_BTP_SRV.RefrenceDocumentSet {

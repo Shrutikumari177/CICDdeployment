@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="mySelectDialog2"
+        noDataText="Loading..."
+        title="Select Country"
+        search="onValueHelpSearch"
+        liveChange="onValueHelpSearch"
+        confirm="onValueHelpClosevoy"
+        cancel="onValueHelpClosevoy"
+        items="{/xNAUTIxCountrySetFetch}"   
+        initialFocus="SearchField">
+        <StandardListItem 
+            id="IDGenStandardListItem"
+            title="{landx50}"
+            description="{land1}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

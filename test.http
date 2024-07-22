@@ -7,3 +7,17 @@ Content-Type: application/json
     "voyno": "100000057",
     "quotationPrice": "1000.00"
 }
+#####
+
+GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxallstatuses
+
+
+####
+POST  http://localhost:4004/odata/v4/nauticalservice/newallstatusesSet
+Content-Type: application/json
+
+     {
+      "Voyage": "1000000009",
+      "Status": "Voyage Appr Pend"
+     
+    }

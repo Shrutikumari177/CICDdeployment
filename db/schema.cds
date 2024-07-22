@@ -67,29 +67,22 @@ type emails : String;
 type vendorsName : String;
 type routes : String;
 
-entity c : managed {
-  key Lifnr  : String(10);
-  key Voyno  : String(10);
-  key Chrnmin: String(10);
-  Vimono     : String;
-  Vname      : String;
-  Biddate    : Date;
-  Bidtime    : Time;
-  
-  to_quote_item : Composition of many QuoteItem on to_quote_item.Lifnr = Lifnr
-                                   and to_quote_item.Voyno = Voyno
-                                   and to_quote_item.Chrnmin = Chrnmin;
-}
-
-entity QuoteItem : managed {
-  
-  key Lifnr   : String(10);
-  key Voyno   : String(10);
-  key Chrnmin : String(10);
-  Zcode   : String(10);
-  CodeDesc : String;
-  Cunit    : String;
-  Cvalue   : Decimal;
-  Value    : String;
-  Zcom     : String;
-}
+entity quotations : managed {
+    key Lifnr : String;
+    key Voyno : String;
+    key Chrnmin :String;
+    Vimono : String;
+    Vname :String;
+    Biddate : Date;
+    Bidtime : Time;
+    to_quote_item : array of quotationsItems;
+};
+ 
+type quotationsItems {
+    Zcode  : String;
+    CodeDesc   : String;
+    Cunit      : String;
+    Cvalue     : String;
+    Value      : String;
+    Zcom       : String;
+};

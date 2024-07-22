@@ -358,8 +358,8 @@
             "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
           }
         }
-        
-      }
+      },
+      "db": "hana"
     }
   },
   "sapux": [

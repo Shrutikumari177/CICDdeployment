@@ -2,11 +2,11 @@ using NAUTIBTP_NAUTICAL_TRANSACTIO_SRV from './external/NAUTIBTP_NAUTICAL_TRANSA
 
 service NAUTIBTP_NAUTICAL_TRANSACTIO_SRVSampleService {
     
-    entity xNAUTIxBIDHISREPORT as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORT
-    {        key Chrnmin, key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Voynm, Currkeys, Voyty, Carty, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, Rank, createdBy, Award     }    
+    entity xNAUTIxZSUBMITQUOUTFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH
+    {        key Voyno, key Lifnr, key Chrnmin, Vimono, Vname, Biddate, Bidtime     }    
 ;
     
-    entity xNAUTIxbidhist_valuehelp as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxbidhist_valuehelp
-    {        key voyno, Chrnmin     }    
+    entity xNAUTIxsubmitquafetch as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxsubmitquafetch
+    {        key Lifnr, key Chrnmin, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo, Voyno, Chrnmex, Chrcdate, Chrctime, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, Chrqdate, zstat, Zaction     }    
 ;
 }
