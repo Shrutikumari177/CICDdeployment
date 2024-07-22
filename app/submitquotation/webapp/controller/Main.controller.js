@@ -49,7 +49,7 @@ sap.ui.define([
                 };
   
                 this.getBidData = [];
-                this.staticData = "2100000001";
+                this.staticData = "2100000002";
   
                 var oModel = this.getOwnerComponent().getModel();
   

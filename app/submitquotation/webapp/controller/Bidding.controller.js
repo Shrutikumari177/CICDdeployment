@@ -673,7 +673,7 @@ sap.ui.define([
             },
             
             // submit technical and commercial details data
-            onSubmitBid: function () {
+            onSubmitBid: async function () {
                 debugger
                 var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();
@@ -694,12 +694,12 @@ sap.ui.define([
                 let vendorNo = infoModel.getProperty("/vendorNo")
                 let voyageNo = infoModel.getProperty("/voyageNo")
                 const oView = this.getView();
-                const coorValue = aData[0].InputValue;
-                const lastCleaningDate = aData[4].DateValue;
-                const lastPortvalue = aData[2].InputValue;
-                const demurrageInput = aData[3].InputValue;
+                const coorValue = aData[1].InputValue;
+                const lastCleaningDate = aData[3].DateValue;
+                const lastPortvalue = aData[4].InputValue;
+                const demurrageInput = aData[2].InputValue;
                 const freightValue = oView.byId("fCost2").getValue();
-                const classValue = aData[1].InputValue;
+                const classValue = aData[0].InputValue;
                 const sVNameInput = this.byId("vesselName").getValue();
                 const sVIMONo = this.byId("vesselIMONo").getValue();
                 const dateObject = new Date(lastCleaningDate);
@@ -720,6 +720,7 @@ sap.ui.define([
 
 
                 let payload = {
+                        "createdBy" : "A.SHARMA",
                         "Lifnr": vendorNo,
                         "Voyno": voyageNo,
                         "Chrnmin": charterNo,
@@ -779,25 +780,19 @@ sap.ui.define([
                         ]
                 };
                 console.log("payload for submit Quoation :", payload);
-                const oModel = this.getOwnerComponent().getModel("modelV2");
-                let that = this
-                oModel.create('/quotations', payload, {
-                    success: function (oData) {
-                        let result = oData;
-                        console.log("results", result);
-                        new sap.m.MessageBox.success("Successfully Submitted");
-                        that.onClearField()
-                    },
-                    error: function (err) {
-                        console.log("Error occured", err);
-                        if(JSON.parse(err.responseText).error.message.value.includes("Entity already exists")){
-                            new sap.m.MessageBox.error(`Quotation already submitted for the chartering no.: ${charterNo}`)
-                        }
-                        else{
-                            new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value)
-                        }
-                    }
-                })
+                try{
+                let oBindList = this.getView().getModel().bindList("/quotations");
+                let response = await  oBindList.create(payload)
+                console.log("response", response);
+                MessageBox.success(`Data sumbitted successfully`);
+
+                }
+                catch(oError){
+                    MessageBox.error(`Data entry already exist`);
+                }
+
+
+                
             },
 
             //    country of origin value help code             

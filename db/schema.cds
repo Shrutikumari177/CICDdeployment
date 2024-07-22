@@ -71,6 +71,7 @@ entity quotations : managed {
     key Lifnr : String;
     key Voyno : String;
     key Chrnmin :String;
+    createdBy : String;
     Vimono : String;
     Vname :String;
     Biddate : Date;

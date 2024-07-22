@@ -147,14 +147,13 @@ sap.ui.define(
                 });
             },
             _fetchData: function (oValue) {
-                return new Promise((resolve, reject) => {
+                return new Promise(async (resolve, reject) => {
                     voyItemModel.refresh();
                     console.log("on port days change ", voyItemModel.getData())
 
                     // CALLING OnCalc FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
-                    this.onCalc();
-                    let updatedTotalDays = this.totalSeaDaysCalc(voyItemModel.getData());
-                    this.byId('_totalDays').setValue(updatedTotalDays);
+                    await this.onCalc();
+
                     resolve();
                 });
             },
@@ -1417,7 +1416,7 @@ sap.ui.define(
 
                 let value = oInput.getValue();
                 let zMinValue = oEvent.getSource().getParent().getCells()[4].getValue();
-                if( zMinValue == ""){
+                if (zMinValue == "") {
                     sap.m.MessageBox.warning("Please choose min value");
                     return;
                 }
@@ -1569,17 +1568,16 @@ sap.ui.define(
                 this.byId('_totalDays').setValue(updatedTotalDays);
             },
             onCalc: function () {
+
                 let selectedPorts = voyItemModel.getData();
                 let GvSpeed = selectedPorts[0].Vspeed;
 
-                let that = this;
-
                 let ZCalcNav = [];
                 for (let i = 0; i < selectedPorts.length; i++) {
-                    if (!selectedPorts[i].Weather) {
+                    if (!selectedPorts[i].Vwead) {
                         // new sap.ui.m.MessageBox.error("Please enter Weather ");
                         // return false;
-                        selectedPorts[i].Weather = "0";
+                        selectedPorts[i].Vwead = "0";
                     }
                     if (!selectedPorts[i].Cargs) {
                         new sap.ui.m.MessageBox.error("Please enter CargoSize ");
@@ -1603,6 +1601,8 @@ sap.ui.define(
                     new sap.ui.m.MessageBox.error("Please select Departure Date and Time");
                     return false;
                 }
+                let that = this;
+                sap.m.MessageToast.show("Performing calculation  ...", { duration: 800 })
                 ZCalcNav.push({
                     Portc: selectedPorts[0].Portc,
                     Portn: selectedPorts[0].Portn,
@@ -1612,8 +1612,8 @@ sap.ui.define(
                     Ppdays: selectedPorts[0].Ppdays,
                     // Vsdays: selectedPorts[0].SeaDays,
                     // Vetdd: selectedPorts[0].DepartureDate, // Bad JS Date Value - DDMMYYYY 00:00:00 Timezone
-                    Vetdd: new Date(selectedPorts[0].Vetdd), // DepartureDateValue must be in MM/DD/YYYY format for this to work
-                    Vetdt: formatter.timeFormat(that.time2Format(selectedPorts[0].Vetdt)),
+                    Vetdd: selectedPorts[0].Vetdd, // DepartureDateValue must be in MM/DD/YYYY format for this to work
+                    Vetdt: selectedPorts[0].Vetdt,
                     Vwead: selectedPorts[0].Vwead,
                 });
                 for (let i = 1; i < selectedPorts.length; i++) {
@@ -1640,34 +1640,48 @@ sap.ui.define(
                 oBindList.attachCreateCompleted(function (p) {
                     let p1 = p.getParameters();
 
-                    let oData = p1.context.getObject();
-                    console.table(oData.ZCalcNav);
+                    if (p1.success) {
 
-                    //   console.log(oData.ZCalcNav[0].Vetad, oData.ZCalcNav[0].Vetat, oData.ZCalcNav[0].Vetdd, oData.ZCalcNav[0].Vetdt, oData.ZCalcNav[1].Vetad, oData.ZCalcNav[1].Vetat, oData.ZCalcNav[1].Vetdd, oData.ZCalcNav[1].Vetdt);
 
-                    let totalDays = 0;
+                        let oData = p1.context.getObject();
+                        console.table(oData.ZCalcNav);
 
-                    oData.ZCalcNav.forEach((data, index) => {
-                        selectedPorts[index].Vsdayss = data.Vsdays;
-                        selectedPorts[index].Vspeed = GvSpeed;
-                        selectedPorts[index].Vwead = data.Vwead;
-                        selectedPorts[index].Vetad = formatter.dateStringToDateObj(data.Vetad);
-                        selectedPorts[index].Vetat = formatter.timeStringToDateObj(data.Vetat);
-                        selectedPorts[index].Vetdd = formatter.dateStringToDateObj(data.Vetdd);
-                        selectedPorts[index].Vetdt = data.Vetdt;
 
-                        totalDays += Number(selectedPorts[index].Vsdays) + Number(selectedPorts[index].Ppdays);
+                        //   console.log(oData.ZCalcNav[0].Vetad, oData.ZCalcNav[0].Vetat, oData.ZCalcNav[0].Vetdd, oData.ZCalcNav[0].Vetdt, oData.ZCalcNav[1].Vetad, oData.ZCalcNav[1].Vetat, oData.ZCalcNav[1].Vetdd, oData.ZCalcNav[1].Vetdt);
+
+                        let totalDays = 0;
+
+                        oData.ZCalcNav.forEach((data, index) => {
+                            selectedPorts[index].Vsdays = data.Vsdays;
+                            selectedPorts[index].Vspeed = GvSpeed;
+                            selectedPorts[index].Vwead = data.Vwead;
+                            selectedPorts[index].Vetad = data.Vetad;
+                            selectedPorts[index].Vetat = data.Vetat;
+                            selectedPorts[index].Vetdd = data.Vetdd;
+                            selectedPorts[index].Vetdt = data.Vetdt;
+
+                            totalDays += Number(selectedPorts[index].Vsdays) + Number(selectedPorts[index].Ppdays);
+                            that.byId('_totalDays').setValue(totalDays.toFixed(1));
+
+                        });
                         voyItemModel.refresh();
-                    });
+                    } else {
+                        sap.m.MessageBox.error("Error occurred in calculation")
+                        console.log(p1.context.oModel.mMessages);
+                    }
                 })
 
+
             },
+
             onAddPortRow1: function (oEvent) {
+
                 let oTableItemModel = voyItemModel;
                 let oTableData = oTableItemModel.getData();
                 // let itemLength = oTableData.length  + 1;
                 // console.log(itemLength);
                 let lastEntry = oTableData[oTableData.length - 1];
+
                 if (lastEntry.Vlegn && lastEntry.Pdist && lastEntry.Portn && lastEntry.Portc) {
                     console.log("valid row");
                     oTableData.push({
@@ -1711,6 +1725,9 @@ sap.ui.define(
                 if (path == "/0" && voyItemModel.getData().length === 2) {
                     voyItemModel.getData()[1].Cargs = formatedValue;
                     voyItemModel.refresh();
+                    this.liveFrCostChange();
+                } else {
+                    this.liveFrCostChange()
                 }
             },
 

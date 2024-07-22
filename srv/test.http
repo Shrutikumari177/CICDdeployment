@@ -1,4 +1,37 @@
 
+POST http://localhost:4004/odata/v4/nauticalservice/quotations
+Content-Type: application/json
+
+{
+  "Lifnr": "LIFNR001",
+  "Voyno": "VOYNO001",
+  "Chrnmin": "CHRNMN001",
+  "Vimono": "VIMONO001",
+  "Vname": "VNAME001",
+  "Biddate": "2022-01-01",
+  "Bidtime": "10:00:00",
+  "to_quote_item": [
+    {
+      "Zcode": "ZCODE001",
+      "CodeDesc": "Code Description 1",
+      "Cunit": "CUNIT001",
+      "Cvalue": "CVALUE001",
+      "Value": "VALUE001",
+      "Zcom": "ZCOM001"
+    },
+    {
+      "Zcode": "ZCODE002",
+      "CodeDesc": "Code Description 2",
+      "Cunit": "CUNIT002",
+      "Cvalue": "CVALUE002",
+      "Value": "VALUE002",
+      "Zcom": "ZCOM002"
+    }
+  ]
+} 
+
+
+
 ### getting Header details
 
 
