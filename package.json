@@ -340,6 +340,25 @@
             "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
           }
         }
+      },
+      "NAUTIZNAUTIFILEUPL_VOY_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIZNAUTIFILEUPL_VOY_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
+          }
+        },
+        "[devlopment]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
+          }
+        }
+        
       }
     }
   },

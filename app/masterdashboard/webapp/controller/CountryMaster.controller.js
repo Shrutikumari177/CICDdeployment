@@ -400,13 +400,20 @@ sap.ui.define(
         var totalEntries = oTable.getItems().length;
         var entriesProcessed = 0;
         var errors = [];
-        var duplicateEntries = []; // Array to store duplicate entry codes
+        let tempCodesArray = [];
+        var duplicateEntries = []; 
 
         sap.m.MessageToast.show("Creating entries...");
 
         oTable.getItems().forEach(function (row) {
           var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
           var value2 = row.getCells()[1].getValue();
+
+          if (tempCodesArray.length && tempCodesArray.includes(value1)) {
+            duplicateEntries.push(value1);
+          } else {
+              tempCodesArray.push(value1);
+          }
 
           if (!value1 || !value2) {
             errors.push("Please enter both fields for all rows.");

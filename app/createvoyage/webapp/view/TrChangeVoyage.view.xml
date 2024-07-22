@@ -686,7 +686,8 @@
                                                 <Input
                                                     width="7rem"
                                                     value="{voyItemModel>Portc}"
-                                                    showValueHelp="true"
+                                                    showValueHelp="false"
+                                                    editable="false"
                                                     valueHelpRequest=".onPortValueHelpRequest"
                                                     valueHelpOnly=""
                                                 />

@@ -5,10 +5,10 @@ const { sendMail } = require("@sap-cloud-sdk/mail-client");
 module.exports = async (srv) => {
     // Connect to services
     const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
-    const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV"); 
-    srv.on('READ', 'xNAUTIxuserEmail', req => NAUTIUSERMAILID_SRV.run(req.query)); 
-    const NAUTICONTRACTAWARD_SRV = await cds.connect.to("NAUTICONTRACTAWARD_SRV"); 
-    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV");
+    srv.on('READ', 'xNAUTIxuserEmail', req => NAUTIUSERMAILID_SRV.run(req.query));
+    const NAUTICONTRACTAWARD_SRV = await cds.connect.to("NAUTICONTRACTAWARD_SRV");
+    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query));
 
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
@@ -21,29 +21,35 @@ module.exports = async (srv) => {
     const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
     const NAUTICOMP_QUOT_SRV = await cds.connect.to("NAUTICOMP_QUOT_SRV");
 
-    const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV"); 
-      srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+    const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV");
+    srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
 
-    const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV"); 
-      srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query)); 
+    const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
+    srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query));
     // srv.on('READ', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     // srv.on('CREATE', 'xNAUTIxfinalbid', req => NAUTICOMP_QUOT_SRV.run(req.query));
 
-    const NAUTIINVITECOMPARE_SRV = await cds.connect.to("NAUTIINVITECOMPARE_SRV"); 
-    srv.on('READ', 'headerinvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
-    srv.on('READ', 'iteminvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
-    
-    srv.on('CREATE', 'headerinvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
-    srv.on('CREATE', 'iteminvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
+    const NAUTIINVITECOMPARE_SRV = await cds.connect.to("NAUTIINVITECOMPARE_SRV");
+    srv.on('READ', 'headerinvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query));
+    srv.on('READ', 'iteminvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query));
+
+    srv.on('CREATE', 'headerinvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query));
+    srv.on('CREATE', 'iteminvSet', req => NAUTIINVITECOMPARE_SRV.run(req.query));
 
     srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
-    srv.on('READ', 'xNAUTIxvendbid_val', req => NAUTIINVITECOMPARE_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxvendbid_val', req => NAUTIINVITECOMPARE_SRV.run(req.query));
+    const NAUTIZNAUTIFILEUPL_VOY_SRV = await cds.connect.to("NAUTIZNAUTIFILEUPL_VOY_SRV");
+    srv.on('READ', 'FileuploadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
+    srv.on('READ', 'downloadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
+    srv.on('CREATE', 'FileuploadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
+    srv.on('CREATE', 'downloadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
+
 
 
     // srv.on('CREATE', 'ControllerLiveBidDetails', async (req) => {
 
-      
+
     //     // Now you can use the maxIdValue for creating a new instance
     //     const newData = {...req.data, ID: 1 };
     //     try {
@@ -87,8 +93,8 @@ module.exports = async (srv) => {
 
         return rankedVendors;
     });
-    const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV"); 
-      srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query)); 
+    const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
+    srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
 
     // const { 'cds.xt.DeploymentService': ds } = cds.services
     // const { 'cds.xt.SaasProvisioningService': sp } = cds.services
@@ -262,7 +268,7 @@ module.exports = async (srv) => {
             Ingenx Technology Private Limited
         `
                     };
-                } else if (message === "Submit a quotation") {
+                } else {
                     mailConfig = {
                         from: "josiah.homenick1@ethereal.email",
                         to: receiverEmail,
@@ -281,26 +287,7 @@ module.exports = async (srv) => {
             Ingenx Technology Private Limited
         `
                     };
-                } else {
-                    // Handle other message types or default case
-                    mailConfig = {
-                        from: "josiah.homenick1@ethereal.email",
-                        to: receiverEmail,
-                        subject: `Message: ${message}`,
-                        text: `
-            Dear ${vendorsName[index]},
-   
-            You have received a message:
-   
-            ${message}
-   
-            Best regards,
-            Ingenx Technology Private Limited
-        `
-                    };
                 }
-
-
                 let res = await sendMail({
                     destinationName: "mailDestination"
                 }, mailConfig);
@@ -321,7 +308,67 @@ module.exports = async (srv) => {
             }];
         }
     });
-    
+    srv.on('CREATE', "sendEmail", async (req) => {
+        try {
+            console.log("Triggered....", req.data);
+           
+   
+            const {
+                receiversEmails,
+                vendorsName,
+                routes,
+                bidStart,
+                bidEnd,
+                cargoSize,
+                bidstartTime,
+                bidEndTime
+            } = req.data;
+ 
+           
+   
+            let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
+                const mailConfig = {
+                    from: "josiah.homenick1@ethereal.email",
+                    to: receiverEmail,
+                    subject: `You are invited to submit a quotation for the following cargo size "${cargoSize}" for shipping of ship route "${routes[index]}"`,
+                    text: `
+                        Dear ${vendorsName[index]},
+       
+                        You are invited to submit a quotation for the following cargo:
+       
+                        Vendors: ${vendorsName[index]}
+                        Routes: ${routes[index]}
+                        Bid Start Date: ${new Date(bidStart).toLocaleDateString()}
+                        Bid start Time : ${bidstartTime}
+                        Bid End Date: ${new Date(bidEnd).toLocaleDateString()}
+                        Bid End Time :${bidEndTime}
+                        Cargo Size: ${cargoSize} tons
+                       
+ 
+                        Best regards,
+                        Your Company
+                    `
+                };
+               
+                let res = await sendMail({ destinationName: "mailDestination" }, mailConfig);
+                console.log(`Email sent to ${vendorsName[index]} (${receiverEmail}) - Response:`, res);
+                return {
+                    "message": `Email sent successfully to ${vendorsName[index]}`,
+                    "status": 201
+                };
+            });
+   
+            let results = await Promise.all(emailPromises);
+            return results;
+        } catch (error) {
+            console.log(error);
+            return [{
+                "message": "Failed to send email",
+                "status": 500
+            }];
+        }
+    });
+
     registerHandlers(srv, NAUTICHASTATUS_SRV, [
         'cha_statusSet'])
     registerHandlers(srv, NAUTICOMP_QUOT_SRV, [
@@ -347,11 +394,11 @@ module.exports = async (srv) => {
 
     // Register handlers for NAUTIMASTER_BTP_SRV entities
     registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
-        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet','xNAUTIxcury_count',
-        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet','xNAUTIxportmascds','xNAUTIxSAPUSERS',
+        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet', 'xNAUTIxcury_count',
+        'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet', 'xNAUTIxportmascds', 'xNAUTIxSAPUSERS',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
-        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp','RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP','xNAUTIxnewportcds',
-        'xNAUTIxSAPUSERS','xNAUTIxcury_count','xNAUTIxuseridassociation','xNAUTIxUIIDUSRGROUP'
+        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',
+        'xNAUTIxSAPUSERS', 'xNAUTIxcury_count', 'xNAUTIxuseridassociation', 'xNAUTIxUIIDUSRGROUP'
     ]);
 
     // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
@@ -396,7 +443,7 @@ function registerHandlers(srv, service, entities) {
         srv.on('DELETE', entity, req => service.run(req.query));
     });
 
-    
+
 
 
     // Handle 'getRoute' entity
@@ -629,8 +676,8 @@ function registerHandlers(srv, service, entities) {
 
 
 async function getDistanceBetweenPort(routeParams) {
-   
-    const {startLatitude, startLongitude, endLatitude, endLongitude} = routeParams;
+
+    const { startLatitude, startLongitude, endLatitude, endLongitude } = routeParams;
 
     // Construct the URL with parameters
     let url = `https://distances.dataloy.com/route/route?point=${startLatitude},${startLongitude}&point=${endLatitude},${endLongitude}&avoid_eca_factor=1&avoid_hra_factor=1&avoid_ice_factor=1`;

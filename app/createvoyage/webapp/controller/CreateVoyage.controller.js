@@ -39,12 +39,25 @@ sap.ui.define(
     let selectedPort = undefined
     let startPort;
     let endPort;
- 
+
 
     return Controller.extend("com.ingenx.nauti.createvoyage.controller.CreateVoyage", {
       formatter: formatter,
       helperFunctions: helperFunctions,
+
+
       onInit: function () {
+
+        // var aDatePickers = this.getView().findAggregatedObjects(true, function (oControl) {
+        //   return oControl.isA("sap.m.DatePicker");
+        // });
+
+        // aDatePickers.forEach(function (oDatePicker) {
+        //   oDatePicker.attachBrowserEvent("click", function () {
+        //     oDatePicker.openBy();
+        //   });
+        // });
+        
 
         this._BusyDialog = new sap.m.BusyDialog({
           title: "Loading...",
@@ -86,39 +99,28 @@ sap.ui.define(
         this.getOwnerComponent().setModel(oJsonModel, "oJsonModel");
         window.that = this;
 
-        // let odataa = this.getOwnerComponent().getModel();
-        // let pl = {
-        //   "GvSpeed": "55",
-        //   "ZCalcNav": [
-        //     {
-        //       "Medst": "NM",
-        //       "Pdist": "00000",
-        //       "Portc": "INBOM",
-        //       "Portn": "MUMBAI",
-        //       "Ppdays": "5",
-        //       "Vetdd": "2024-04-05T05:30:00.000+06:30",
-        //       "Vetdt": "17:48:45",
-        //       "Vspeed": "55",
-        //       "Vwead": "0"
-        //     },
-        //     {
-        //       "Medst": "NM",
-        //       "Pdist": "1971",
-        //       "Portc": "INPRT",
-        //       "Portn": "PARADIP",
-        //       "Ppdays": "2",
-        //       "Vspeed": "55",
-        //       "Vwead": "0"
-        //     }
-        //   ]
-        // }
 
-        // let abc = odataa.bindList("/ZCalculateSet")
-        // abc.create(pl)
-        // abc.attachCreateCompleted((oEvent) => {
-        //   console.log("oEVent after create completed ",oEvent)
-        // })
       },
+      attachDatePickerHandlers : function (oView) {
+        
+        var aDatePickers = oView.findAggregatedObjects(true, function(oControl) {
+            return oControl instanceof sap.m.DatePicker;
+        });
+    
+        aDatePickers.forEach(function(oControl) {
+            oControl.addEventDelegate({
+                onAfterRendering: function() {
+                    var $input = oControl.$().find("input");
+                    $input.prop("readonly", true);
+                }
+            });
+        });
+    },
+      onAfterRendering: function() {
+        let oView = this.getView();
+        this.attachDatePickerHandlers(oView);
+    },
+      // fn to make DatePicker readonly
       setDatePickerInputReadonly: function (oDatePicker) {
         var $input = oDatePicker.$().find("input");
         $input.prop("readonly", true);
@@ -323,8 +325,7 @@ sap.ui.define(
         oJsonModel.refresh();
         var portLng = oJsonModel.getData().portData.length;
         var that = window.that;
-        //  that.byId("blockRow2").setVisible(true);
-        //   that.byId("blockRow3").setVisible(true);
+
         if (portLng < 2) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
@@ -358,10 +359,10 @@ sap.ui.define(
 
           // addding new vairable for port conjestion
           startPort = IvFromPort;
-          console.log("start Port ",startPort);
- 
+          console.log("start Port ", startPort);
+
           endPort = IvToPort;
-          console.log("End Port ",endPort);
+          console.log("End Port ", endPort);
 
           const esModel = new JSONModel({
             sEsRoutePathData: [],
@@ -486,13 +487,13 @@ sap.ui.define(
       // congestion dialog close function
       oncancell: function () {
         this._voyageValueHelpDialog.close();
-    },
-       // Predict button press function
+      },
+      // Predict button press function
       navToCongestion: function (oEvent) {
         let oView = this.getView();
         let oBusyDialog = new sap.m.BusyDialog();
         oBusyDialog.open();
- 
+
         let rawDataINBOM = [
           { Date: "June 1 2024", MedianDelay: 2.0 },
           { Date: "June 5 2024", MedianDelay: 1.5 },
@@ -501,7 +502,7 @@ sap.ui.define(
           { Date: "June 20 2024", MedianDelay: 1.0 },
           { Date: "June 25 2024", MedianDelay: 1.5 },
           { Date: "June 30 2024", MedianDelay: 2.5 },
- 
+
           { MedianDelay: 3.5, Port: "Hazira" },
           { MedianDelay: 2.5, Port: "KAKINADA" },
           { MedianDelay: 3.2, Port: "Mormugao" }
@@ -515,12 +516,12 @@ sap.ui.define(
           { Date: "June 25 2024", MedianDelay: 1.5 },
           { Date: "June 30 2024", MedianDelay: 2.5 },
           { MedianDelay: 3.2, Port: "KOCHI" },
- 
+
           { MedianDelay: 3.2, Port: "Krishnapatnam" },
           { MedianDelay: 3.2, Port: "Chennai" },
- 
+
         ];
- 
+
         let rawDataINVTZ = [
           { Date: "June 1 2024", MedianDelay: 1.0 },
           { Date: "June 5 2024", MedianDelay: 1.2 },
@@ -534,9 +535,9 @@ sap.ui.define(
           { MedianDelay: 3.2, Port: "Krishnapatnam" },
           { MedianDelay: 3.2, Port: "Chennai" },
           { MedianDelay: 1.2, Port: "Vishakhapatnam" },
- 
+
         ];
- 
+
         let rawDataINPRT = [
           { Date: "June 1 2024", MedianDelay: 2.0 },
           { Date: "June 5 2024", MedianDelay: 3.5 },
@@ -548,22 +549,22 @@ sap.ui.define(
           { MedianDelay: 1.0, Port: "Chennai" },
           { MedianDelay: 3.2, Port: "Kolkata" },
           { MedianDelay: 3.2, Port: "Paradeep" }
- 
+
         ];
- 
+
         let oModel = this.getOwnerComponent().getModel();
         let oEndPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${endPort}')`);
         let oStartPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${startPort}')`);
- 
+
         // Fetching end port name
         oEndPortBinding.requestObject().then((oEndPortContext) => {
           console.log("endport name", oEndPortContext);
           let endPortName = oEndPortContext.Portn; // Assuming 'Portn' is the property holding the port name
- 
+
           oStartPortBinding.requestObject().then((oStartPortContext) => {
             console.log("startport name", oStartPortContext);
             let startPortName = oStartPortContext.Portn; // Assuming 'Portn' is the property holding the port name
- 
+
             let rawData;
             switch (endPort) {
               case "INBOM":
@@ -575,26 +576,26 @@ sap.ui.define(
               case "INPRT":
                 rawData = rawDataINPRT;
                 break;
-                case "KOCHI":
+              case "KOCHI":
                 rawData = rawDataKOCHI;
                 break;
               default:
                 rawData = rawDataINBOM;
                 break;
             }
- 
+
             let dateMedianDelayData = rawData.filter(item => item.Date).map(item => ({ Date: item.Date, MedianDelay: item.MedianDelay }));
             let portMedianDelayData = rawData.filter(item => item.Port).map(item => ({ Port: item.Port, MedianDelay: item.MedianDelay }));
- 
+
             let oData = {
               ChartDataDate: dateMedianDelayData,
               ChartDataPort: portMedianDelayData,
               StartPort: startPortName,
               EndPort: endPortName,
             };
- 
+
             let oChartModel = new sap.ui.model.json.JSONModel(oData);
- 
+
             if (!this._voyageValueHelpDialog) {
               Fragment.load({
                 id: oView.getId(),
@@ -617,24 +618,24 @@ sap.ui.define(
         oBusyDialog.close();
       },
 
-_setChartTitles: function() {
-  let oVizFrame1 = this.byId("vizFrame");
-  let oVizFrame2 = this.byId("vizFrame2");
+      _setChartTitles: function () {
+        let oVizFrame1 = this.byId("vizFrame");
+        let oVizFrame2 = this.byId("vizFrame2");
 
-  oVizFrame1.setVizProperties({
-      title: {
-          visible: true,
-          text: "Median Delay Over Time "
-      }
-  });
+        oVizFrame1.setVizProperties({
+          title: {
+            visible: true,
+            text: "Median Delay Over Time "
+          }
+        });
 
-  oVizFrame2.setVizProperties({
-      title: {
-          visible: true,
-          text: "Median Delay by Port"
-      }
-  });
-},
+        oVizFrame2.setVizProperties({
+          title: {
+            visible: true,
+            text: "Median Delay by Port"
+          }
+        });
+      },
 
 
       onClear: function (oEvent) {
@@ -652,8 +653,7 @@ _setChartTitles: function() {
         this.byId("headerCarty").setValue("");
         this.byId("headerCurr").setValue("");
         this.byId("headerBidty").setValue("");
-        // this.byId("blockRow2").setVisible(false);
-        this.byId("blockRow3").setVisible(false);
+
       },
 
       onCalc: function (oEvent) {
@@ -743,10 +743,10 @@ _setChartTitles: function() {
         oBindList.create(oPayload, true).created(x => { console.log(x); });
         oBindList.attachCreateCompleted(function (p) {
           let p1 = p.getParameters();
-      
+
           let oData = p1.context.getObject();
           console.table(oData.ZCalcNav);
-          
+
 
           let totalDays = 0;
           console.log(oData.ZCalcNav[0].Vetad, oData.ZCalcNav[0].Vetat, oData.ZCalcNav[0].Vetdd, oData.ZCalcNav[0].Vetdt, oData.ZCalcNav[1].Vetad, oData.ZCalcNav[1].Vetat, oData.ZCalcNav[1].Vetdd, oData.ZCalcNav[1].Vetdt);
@@ -794,9 +794,16 @@ _setChartTitles: function() {
 
       onVoyageCreate: function (oEvent) {
         that = window.that;
+        // sap.ui.getCore().getEventBus().publish("VoyageChannel", "VoyageCreated", {
+        //   voyageNo: "1000000221"
+        // });
+        // let oRouter = this.getOwnerComponent().getRouter();
+        // oRouter.navTo("RouteChangeVoyage");
+
+        // return
 
 
-        const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
+        // const oDataModelV2 = that.getOwnerComponent().getModel("modelV2");
         let headerData = this.getView().getModel("planmodel").getData();
         let selectedPorts = oJsonModel.getData().portData;
         let GvSpeed = selectedPorts[0].Speed;
@@ -852,31 +859,6 @@ _setChartTitles: function() {
 
         let ZCreatePlanNav = [];
 
-        // for (let i = 0; i < selectedPorts.length; i++) {
-        //   ZCreatePlanNav.push({
-        //     Vlegn: selectedPorts[i].LegId,
-        //     Portn: selectedPorts[i].PortName,
-        //     Portc: selectedPorts[i].PortId,
-        //     Pdist: selectedPorts[i].Distance,
-        //     Medst: "NM",
-        //     Vspeed: selectedPorts[i].Speed,
-
-        //     Ppdays: selectedPorts[i].PortDays,
-        //     Vsdays: selectedPorts[i].SeaDays,
-        //     Vetad: selectedPorts[i].ArrivalDate,
-        //     Vetat: formatter.timeFormat(selectedPorts[i].ArrivalTime),
-        //     Vetdd: selectedPorts[i].DepartureDate,
-        //     Vetdt: formatter.timeFormat(selectedPorts[i].DepartureTime),
-        //     Vwead: selectedPorts[i].Weather,
-        //     Cargs: selectedPorts[i].CargoSize,
-        //     Cargu: selectedPorts[i].CargoUnit,
-        //   });
-        //   if (i) {
-        //     totalCargoSize += +selectedPorts[i].CargoSize;
-        //   }
-        // }
-
-        //  oData v4  model changes temporary
 
         for (let i = 0; i < selectedPorts.length; i++) {
           ZCreatePlanNav.push({
@@ -915,7 +897,14 @@ _setChartTitles: function() {
           });
           return;
         }
+        if (totalCargoSize < legOneCargoSize) {
+          sap.m.MessageBox.error("Source cargo size not properly distributed", {
+            title: "Cargo Size not utilized",
+          });
+          return;
+        }
         console.log("payload for create:", oPayload);
+        
 
 
         // oData V4 model Create method
@@ -928,11 +917,16 @@ _setChartTitles: function() {
 
         oBindList.attachCreateCompleted(function (p) {
           let p1 = p.getParameters();
-          
+
           let oContext = p1.context;
           let oData = oContext.getObject();
           if (p1.success) {
             console.log(oData);
+
+            // Publish the event with the voyage number
+            sap.ui.getCore().getEventBus().publish("VoyageChannel", "VoyageCreated", {
+              voyageNo: oData.Voyno
+            });
 
             MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
               title: "Voyage Created",
@@ -952,30 +946,8 @@ _setChartTitles: function() {
             console.log("error messages : ", oContext.getMessages());
           }
         });
-        return
-        oDataModelV2.create("/ZCreatePlanSet", oPayload, {
-          success: function (oData) {
-            // console.log(oData);
 
-            MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
-              title: "Voyage Created",
-              onClose: function () {
 
-                console.log("sent voyage no. :", oData.Voyno)
-
-                oRouter.navTo("RouteTrChangeVoyage", {
-                  "VOYAGE_NO": oData.Voyno
-                });
-
-              }
-            });
-          },
-          error: function (oResponse) {
-            let errObject = JSON.parse(oResponse.responseText);
-            console.log(errObject);
-            new sap.m.MessageBox.error(errObject.error.message.value);
-          },
-        });
       },
 
       navToFreightSim1: function (oEvent) {
@@ -1009,7 +981,7 @@ _setChartTitles: function() {
         let totalCargoSize = oJsonModel.getData().portData.reduce((acc, item, index) => {
           return (acc = +acc + (index > 0 ? +item.CargoSize : 0));
         }, 0);
-        
+
         let oRouter = this.getOwnerComponent().getRouter();
         if (totalCargoSize > legOneCargoSize) {
           sap.m.MessageBox.error("The sum of Leg 2 (and onwards) Cargo Size must be less than Leg One Cargo Size", {

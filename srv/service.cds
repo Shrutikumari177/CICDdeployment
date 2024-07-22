@@ -15,9 +15,17 @@ using NAUTIINVITECOMPARE_SRV from './external/NAUTIINVITECOMPARE_SRV.cds';
 using NAUTIVOYSTATUS_SRV from './external/NAUTIVOYSTATUS_SRV.cds';
 using NAUTIUSERMAILID_SRV from './external/NAUTIUSERMAILID_SRV.cds';
 using NAUTICONTRACTAWARD_SRV from './external/NAUTICONTRACTAWARD_SRV.cds';
+using NAUTIZNAUTIFILEUPL_VOY_SRV from './external/NAUTIZNAUTIFILEUPL_VOY_SRV.cds';
 
 
 service nauticalservice {
+     entity FileuploadSet as projection on NAUTIZNAUTIFILEUPL_VOY_SRV.FileuploadSet
+    {        Fileid, key Voyageno, Creaby, Creadate, Creatime, key Filename, Filetype, Filecont, Del     }    
+;
+    
+    entity downloadSet as projection on NAUTIZNAUTIFILEUPL_VOY_SRV.downloadSet
+    {        Fileid, key Voyageno, Creaby, Creadate, Creatime, key Filename, Filetype, Filecont, Del     }    
+;
      entity xNAUTIxvendbid_val as projection on NAUTIINVITECOMPARE_SRV.xNAUTIxvendbid_val
     {        key Voyno, Chrnmin     }    
 ;

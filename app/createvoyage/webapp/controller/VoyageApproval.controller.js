@@ -582,6 +582,7 @@ sap.ui.define(
       onTableSelectionChange: function (oEvent) {
         let oTable = oEvent.getSource();
         let aSelectedItems = oTable.getSelectedItems();
+        
 
         aSelectedItems.forEach(selectedItem => {
           let oText = selectedItem.getCells()[5].getText();

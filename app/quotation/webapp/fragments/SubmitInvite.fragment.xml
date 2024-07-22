@@ -10,13 +10,13 @@
     <VBox  alignItems="End" class="flex">
   <FlexBox   class="headerItem">
      <Label  text="Bidding Start Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}" change="onselectBSD" />
-     
+     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}"  displayFormat="dd-MM-yyyy" change="onselectBSD" />
+
     </FlexBox>
      <FlexBox  class="headerItem">
 
      <Label  text="Bidding End Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" change="onselectBED" />
+     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" displayFormat="dd-MM-yyyy" change="onselectBED" />
      
     </FlexBox>
 <FlexBox  class="headerItem" >

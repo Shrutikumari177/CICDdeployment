@@ -194,6 +194,7 @@
                             id="Input6"
                             width="200px"
                             value="{voyHeaderModel>/0/GV_CSTATUS}"
+                            editable="false"
                         />
                     </HBox>
                 </VBox>
@@ -690,7 +691,8 @@
                                                 <Input
                                                     width="7rem"
                                                     value="{voyItemModel>Portc}"
-                                                    showValueHelp="true"
+                                                    showValueHelp="false"
+                                                    editable="false"
                                                     valueHelpRequest=".onPortValueHelpRequest"
                                                     valueHelpOnly=""
                                                 />
@@ -1716,12 +1718,12 @@
                                                 </items>
                                             </Table>
 
-                                            <Button
+                                            <!-- <Button
                                                 text="Save"
                                                 press=".onSaveCommercialDetail"
                                                 type="Emphasized"
                                                 class="sapUiSmallMargin"
-                                            />
+                                            /> -->
                                         </l:BlockLayoutCell>
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>

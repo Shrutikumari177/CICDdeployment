@@ -18,7 +18,7 @@
                     <FlexBox  class="headerItem">
                         <Label
                             class="sapUiTinyMarginTop"
-                            text="Done By Ve:"
+                            text="Done By Vendor :"
                         />
                         <Input
                             value="{biddingHisReport1>/0/DoneBy}"

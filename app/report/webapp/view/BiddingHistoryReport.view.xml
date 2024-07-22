@@ -44,6 +44,7 @@
                 tabDensityMode="Compact"
             
                 class="icontabfilter"
+                visible="false"
             
             
             >
@@ -64,7 +65,7 @@
                             <Text text="Vendor" />
                         </Column>
                         <Column width="130px">
-                            <Text text="Charter No" />
+                            <Text text="Chartering No" />
                         </Column>
                         <Column width="130px">
                             <Text text="Code" />

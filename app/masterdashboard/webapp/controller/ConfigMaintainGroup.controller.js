@@ -73,9 +73,26 @@ sap.ui.define(
       onMaintainUserSearch: function (oEvent) {
         var sValue1 = oEvent.getParameter("value");
 
-        var oFilter1 = new Filter("bname", FilterOperator.Contains, sValue1);
+        var oFilter1 = new sap.ui.model .Filter("bname", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1]
+        });
 
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+        oBinding.filter([andFilter]);
+ 
+        oBinding.attachEventOnce("dataReceived", function() {
+          var aItems = oBinding.getCurrentContexts();
+ 
+          if (aItems.length === 0) {
+              oSelectDialog.setNoDataText("No data found");
+          } else {
+              oSelectDialog.setNoDataText("Loading");
+          }
+      });
+
+        // oEvent.getSource().getBinding("items").filter([oFilter1]);
       },
 
       onCodeLiveChange: function (oEvent) {

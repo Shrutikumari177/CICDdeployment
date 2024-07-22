@@ -8,8 +8,7 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/ui/model/odata/ODataMetaModel"
-
-
+    
   ],
   function (Controller, History, Fragment, MessageToast, MessageBox, ODataMetaModel) {
     "use strict";
@@ -225,20 +224,34 @@ sap.ui.define(
        
         
       },
-      CurSearch: function(oEvent) {
+     
 
+      CurSearch: function(oEvent) {
+ 
         var sValue1 = oEvent.getParameter("value");
-    
+   
         var oFilter1 = new sap.ui.model.Filter("Waers", sap.ui.model.FilterOperator.Contains, sValue1);
         var oFilter2 = new sap.ui.model.Filter("Ltext", sap.ui.model.FilterOperator.Contains, sValue1);
         var oFilter3 = new sap.ui.model.Filter("landx", sap.ui.model.FilterOperator.Contains, sValue1);
         var andFilter = new sap.ui.model.Filter({
           filters: [oFilter1, oFilter2, oFilter3]
         });
-    
-        oEvent.getSource().getBinding("items").filter([andFilter]);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+        oBinding.filter([andFilter]);
+ 
+        oBinding.attachEventOnce("dataReceived", function() {
+          var aItems = oBinding.getCurrentContexts();
+ 
+          if (aItems.length === 0) {
+              oSelectDialog.setNoDataText("No data found");
+          } else {
+              oSelectDialog.setNoDataText("Loading");
+          }
+      });
+   
+        // oEvent.getSource().getBinding("items").filter([andFilter]);
       },
-
 
       onBackPress: function () {
         const that = this;
@@ -731,12 +744,10 @@ sap.ui.define(
             let value2 = items[i].getCells()[1].getValue();
             let value3 = items[i].getCells()[2].getValue();
             let value4 = items[i].getCells()[3].getValue();
-            let value5 = items[i].getCells()[4].getValue();
             let value6 = items[i].getCells()[5].getSelectedKey();
-            let value7 = items[i].getCells()[6].getValue();
     
-            if (!value1 || !value2 || !value3 || !value4 || !value5  || !value7) {
-                sap.m.MessageToast.show("Please enter all fields before adding a new row");
+            if (!value1 || !value2 || !value3  ) {
+                sap.m.MessageToast.show("Please enter fields before adding a new row");
                 return;
             }
         }
@@ -754,7 +765,7 @@ sap.ui.define(
                     liveChange: this.onLiveChangeDatatype.bind(this),
                     width: "30rem",
                     items: [
-                        new sap.ui.core.Item({ id: "_IDGenItem1", key: "CHAR", text: "CHAR" }),
+                        new sap.ui.core.Item({ id: "charType", key: "CHAR", text: "CHAR" }),
                         new sap.ui.core.Item({ id: "_IDGenItem2", key: "CURR", text: "CURR" }),
                         new sap.ui.core.Item({ id: "_IDGenItem3", key: "DATE", text: "DATE" })
                     ]
@@ -769,31 +780,21 @@ sap.ui.define(
     
     
 
-    onDeleteRow1: function () {
-      var oTable = this.byId("entryTypeTable");
-      var aSelectedItems = oTable.getSelectedItems();
-      var aItems = oTable.getItems();
-      var oCreateTypeTable = this.byId("createTypeTable");
+      onDeleteRow1: function () {
+        var oTable = this.byId("entryTypeTable");
+        var aSelectedItems = oTable.getSelectedItems();
+    
 
-      if (aItems.length <= 1) {
-        sap.m.MessageToast.show("The table must have at least one row.");
-        oCreateTypeTable.removeSelections();
-        return;
-      }
-
-
-      if (aSelectedItems.length === 0) {
-        sap.m.MessageToast.show("Please select an item");
-        oCreateTypeTable.removeSelections();
-        return;
-      }
-      aSelectedItems.forEach(function (oSelectedItem) {
-        oTable.removeItem(oSelectedItem);
-      });
-
-      oTable.removeSelections();
-      oCreateTypeTable.removeSelections();
-    },
+        if (aSelectedItems.length === 0) {
+            sap.m.MessageToast.show("Please select an item");
+            return;
+        }
+        aSelectedItems.forEach(function (oSelectedItem) {
+            oTable.removeItem(oSelectedItem);
+        });
+    
+        oTable.removeSelections();
+      },
 
       validateAllRows: function () {
         var oTable = this.byId("entryTypeTable");
@@ -807,7 +808,7 @@ sap.ui.define(
           let value5 = items[i].getCells()[4].getValue();
           let value6 = items[i].getCells()[5].getSelectedKey();
           let value7 = items[i].getCells()[6].getValue();
-            if (!value1 || !value2 || !value3 || !value4 || !value5  || !value7) {
+            if (!value1 || !value2 || !value3) {
                 sap.m.MessageToast.show("Please enter all fields for all rows.");
                 return false;
             }
@@ -1023,14 +1024,32 @@ sap.ui.define(
         }
         this._oInputField.setValue(oSelectedItem.getTitle());
       },
+
       onMaintainUserSearch: function (oEvent) {
         var sValue1 = oEvent.getParameter("value");
 
         var oFilter1 = new sap.ui.model .Filter("bname", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1]
+        });
 
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+        oBinding.filter([andFilter]);
+ 
+        oBinding.attachEventOnce("dataReceived", function() {
+          var aItems = oBinding.getCurrentContexts();
+ 
+          if (aItems.length === 0) {
+              oSelectDialog.setNoDataText("No data found");
+          } else {
+              oSelectDialog.setNoDataText("Loading");
+          }
+      });
+
+        // oEvent.getSource().getBinding("items").filter([oFilter1]);
       },
-
+ 
       onCancelCopy: function () {
 
         var oTable = this.byId("entryTypeTable"); // Assuming you have the table reference
@@ -1325,45 +1344,25 @@ sap.ui.define(
 
       },
 
-     deleteSelectedItems: function(aItems) {
-        let deleteMsg = aItems.length === 1 ? "Record" : "Records";
-        let that = this; // Keep reference to the controller context
-   
-        aItems.forEach(function(oItem) {
-            const oContext = oItem.getBindingContext();
-            oContext.delete().then(function() {
-                // Successful deletion
-                MessageToast.show(`${deleteMsg} deleted successfully`);
-                console.log("Successfully Deleted");
-            }).catch(function(oError) {
-                // Handle deletion error
-                console.error("Error deleting item: " + oError.message);
-                if (oError.responseText) {
-                    let sErrorMessage = JSON.parse(oError.responseText).error.message.value;
-                    if (sErrorMessage.includes("Code exists in voyage")) {
-                        // Handle specific error condition if needed
-                    }
-                } else {
-                    // Display error message with MessageBox and remove selection on OK
-                    sap.ui.require(["sap/m/MessageBox"], function(MessageBox) {
-                        MessageBox.error(
-                            "Error deleting item: " + oError.message, {
-                                title: "Error",
-                                onClose: function(oAction) {
-                                    if (oAction === MessageBox.Action.OK) {
-                                        that.byId("createTypeTable").removeSelections();
-                                    }
-                                },
-                                actions: [MessageBox.Action.OK],
-                                styleClass: "sapUiSizeCompact"
-                            }
-                        );
-                    });
-                }
-            });
+     
+    deleteSelectedItems: function (aItems) {
+      let slength = aItems.length;
+      let deleteMsg = slength === 1 ? "Record" : "Records"
+      aItems.forEach(function (oItem) {
+        const oContext = oItem.getBindingContext();
+        oContext.delete().then(function () {
+          // Successful deletion
+          MessageToast.show(`${deleteMsg} deleted sucessfully`);
+
+          console.log("Succesfully Deleted");
+          aSelectedIds = []
+        }).catch(function (oError) {
+          // Handle deletion error
+          MessageBox.error("Error deleting item: " + oError.message);
         });
+      });
     },
-    
+        
     
     
     

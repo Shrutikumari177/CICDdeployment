@@ -8,7 +8,7 @@
         search="onChartSearch"
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
-        items="{/xNAUTIxbidhist_valuehelp}"
+        items="{/xNAUTIxaward_value}"
         liveChange="onChartSearch"
         initialFocus="SearchField"
         

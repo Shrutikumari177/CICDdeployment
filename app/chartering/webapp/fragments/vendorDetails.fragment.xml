@@ -21,7 +21,7 @@
                     </FlexBox>
                     <FlexBox class="headerItem">
                         <Label class="sapUiTinyMarginTop" text="Telephone : " />
-                        <Input value="{vendorDetail>/Telf1}" editable="false" />
+                        <Input value="{vendorDetail>/Telf2}" editable="false" />
                     </FlexBox>
                     <FlexBox class="headerItem">
                         <Label class="sapUiTinyMarginTop" text="Fax No. : " />

@@ -44,6 +44,7 @@
                 tabDensityMode="Compact"
             
                 class="icontabfilter"
+                visible="false"
             
             
             >
@@ -58,7 +59,7 @@
                 <Table id="myTableId"  width="auto" visible="true" items="{contractAwardModel>/}" >
                     <columns>
                         <Column width="130px">
-                            <Text text="Charter No."  />
+                            <Text text="Chartering No"  />
                         </Column>
                         <Column width="130px">
                             <Text text="Voyage Number" />

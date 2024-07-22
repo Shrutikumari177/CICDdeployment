@@ -87,13 +87,10 @@ sap.ui.define([
         var oStartDate = oStartDatePicker.getDateValue();
  
         if (oStartDate) {
-            // Set the minimum date for the end date picker to the start date plus 30 minutes
             var oMinEndDate = new Date(oStartDate.getTime() + 30 * 60000); // Add 30 minutes (30 * 60000 milliseconds)
  
-            // Get the current date and time for comparison
             var oNow = new Date();
  
-            // If the start date is today, ensure the end time is greater than the current time
             if (oStartDate.toDateString() === oNow.toDateString()) {
                 if (oMinEndDate <= oNow) {
                     oMinEndDate = new Date(oNow.getTime() + 30 * 60000); // Add 30 minutes to the current time
@@ -290,7 +287,7 @@ sap.ui.define([
     
     
      
-    onSave: function () {
+    onSave1: function () {
       console.log("buttonclicked");
 
       
@@ -340,6 +337,8 @@ sap.ui.define([
   
       let BidStartDateFormat = exchangedatevalidto.format(new Date(bidStartdate));
       let BidEndDateFormat = exchangedatevalidto.format(new Date(bidEndtdate));
+
+      console.log("startdatea",BidStartDateFormat);
   
       let oModel = this.getOwnerComponent().getModel();
   
@@ -382,6 +381,99 @@ sap.ui.define([
       });
       this.getView().byId("sumbit").setEnabled(true);
   },
+  onSave: function () {
+    console.log("buttonclicked");
+
+    let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
+    let obidStartD = this.byId("bidStartD").getValue();
+    console.log("hii", obidStartD);
+    let selectedDate = new Date(obidStartD);
+     bidStartdate = selectedDate.toISOString().split('T')[0];
+    let hours = selectedDate.getHours().toString().padStart(2, '0');
+    let minutes = selectedDate.getMinutes().toString().padStart(2, '0');
+    let seconds = selectedDate.getSeconds().toString().padStart(2, '0');
+    let bidStarttime = `${hours}:${minutes}:${seconds}`;
+
+    console.log("Date:", bidStartdate);
+    console.log("StartTime:", bidStarttime);
+
+    let obidEndD = this.byId("bidEndD").getValue();
+    let selectedDate2 = new Date(obidEndD);
+     bidEndtdate = selectedDate2.toISOString().split('T')[0];
+    let hour = selectedDate2.getHours().toString().padStart(2, '0');
+    let minute = selectedDate2.getMinutes().toString().padStart(2, '0');
+    let second = selectedDate2.getSeconds().toString().padStart(2, '0');
+    let bidEndtime = `${hour}:${minute}:${second}`;
+    console.log("Date:", bidEndtdate);
+    console.log("EndTime:", bidEndtime);
+
+    if (!oCharteringRqNo) {
+        sap.m.MessageBox.error("Please fill chartering No.");
+        return;
+    }
+    if (!obidStartD) {
+        sap.m.MessageBox.error("Please fill Bid Start Date and Time");
+        return;
+    }
+    if (!obidEndD) {
+        sap.m.MessageBox.error("Please fill Bid End Date and Time");
+        return;
+    }
+
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
+        pattern: "yyyy-MM-dd'T00:00:00Z'",
+    });
+
+    let BidStartDateFormat = exchangedatevalidto.format(new Date(bidStartdate));
+    let BidEndDateFormat = exchangedatevalidto.format(new Date(bidEndtdate));
+
+    console.log("startdatea", BidStartDateFormat);
+
+    let oModel = this.getOwnerComponent().getModel();
+
+    let oBinding = oModel.bindList("/CharteringSet");
+
+    oBinding.filter([
+        new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo)
+    ]);
+    let oBusyDialog = new sap.m.BusyDialog();
+    oBusyDialog.open();
+    oBinding.requestContexts().then(function (aContexts) {
+        let oContextToUpdate = aContexts.find(function (oContext) {
+            return oContext.getProperty("Chrnmin") === oCharteringRqNo;
+        });
+
+        if (oContextToUpdate) {
+            // Update the fields with new values
+            oContextToUpdate.setProperty("Chrqsdate", BidStartDateFormat);
+            oContextToUpdate.setProperty("Chrqstime", bidStarttime);
+            oContextToUpdate.setProperty("Chrqedate", BidEndDateFormat);
+            oContextToUpdate.setProperty("Chrqetime", bidEndtime);
+
+            oModel.submitBatch("update").then(function () {
+                oModel.refresh();
+
+                sap.m.MessageBox.success("Data updated successfully.", {
+                    onClose: function () {
+
+                    }
+                });
+                oBusyDialog.close();
+            }).catch(function (error) {
+                sap.m.MessageBox.error("Error updating data: " + error.message);
+            });
+        } else {
+            sap.m.MessageBox.error("Entity not found.");
+        }
+    }).catch(function (error) {
+        sap.m.MessageBox.error("Error fetching entities: " + error.message);
+    });
+    this.getView().byId("sumbit").setEnabled(true);
+},
+
   
     
     
@@ -469,7 +561,7 @@ sap.ui.define([
       },
  
     
-    onSendEmail1: function () {
+    onSendEmail: function () {
       let RecieverEmails = smtpAddresses;
       let RecieverNames = vendorNames;
   
@@ -507,7 +599,7 @@ sap.ui.define([
       oListBinding.create(oData );
 
   },
-  onSendEmail: function () {
+  onSendEmail1: function () {
     let RecieverEmails = smtpAddresses;
     let RecieverNames = vendorNames;
 
@@ -545,6 +637,8 @@ sap.ui.define([
 
     let oContext = oListBinding.create(oData, false, false, false);
 },
+
+
 
 
 

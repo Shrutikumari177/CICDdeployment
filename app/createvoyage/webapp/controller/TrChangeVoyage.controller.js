@@ -1520,7 +1520,7 @@ sap.ui.define(
                 console.log(formattedDate);
                 return formattedDate;
             },
-            //  FUNCTION: TO FORMAT TIME WHILE PUSH BACK TO MODEL AFTER FETCHING RESPONSE FROM API
+            //  FUNCTION: TO FORMAT TIME WHILE PUSH BACK TO MODEL AFTER FETCHING RESPONSE FROM API V2 oData
             timeformat1: function (date) {
 
                 const hours = date.getHours();
@@ -2583,11 +2583,13 @@ sap.ui.define(
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} created successfully`);
+                            oBusyDialog.close();
                         } else {
                             sap.m.MessageBox.error("Error: Approval not found after creation");
                         }
                     }).catch(function (error) {
                         console.error("Error while requesting contexts:", error);
+                        oBusyDialog.close();
                         throw error
 
                     });

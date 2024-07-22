@@ -82,7 +82,7 @@ sap.ui.define(
       },
 
 
-    onSearch: function (oEvent) {
+    onSearch1: function (oEvent) {
       var sQuery = oEvent.getParameter("query");
       var oTable = this.byId("createTypeTable");
       var oBinding = oTable.getBinding("items");
@@ -94,6 +94,35 @@ sap.ui.define(
 
       oBinding.filter(aFilters);
   },
+ 
+onSearch: function(oEvent) {
+    var oTable = this.byId("createTypeTable");
+    var oBinding = oTable.getBinding("items");
+    var sQuery = oEvent.getParameter("query");
+ 
+    var oFilter1 = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.Contains, sQuery);
+    var oFilter2 = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.Contains, sQuery);
+    var oFilter3 = new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery);
+    var andFilter = new sap.ui.model.Filter({
+      filters: [oFilter1, oFilter2, oFilter3]
+    });
+  
+   
+    var oSelectDialog = oEvent.getSource();
+    oBinding.filter([andFilter]);
+ 
+    oBinding.attachEventOnce("dataReceived", function() {
+      var aItems = oBinding.getCurrentContexts();
+ 
+      if (aItems.length === 0) {
+          oSelectDialog.setNoDataText("No data found");
+      } else {
+          oSelectDialog.setNoDataText("Loading");
+      }
+  });
+ 
+  },
+ 
 
        
 

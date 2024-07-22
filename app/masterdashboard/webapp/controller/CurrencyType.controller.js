@@ -402,6 +402,7 @@ sap.ui.define(
         var totalEntries = oTable.getItems().length;
         var entriesProcessed = 0;
         var errors = [];
+        let tempCodesArray = [];
         var duplicateEntries = []; // Array to store duplicate entry codes
 
         sap.m.MessageToast.show("Creating entries...");
@@ -409,6 +410,12 @@ sap.ui.define(
         oTable.getItems().forEach(function (row) {
           var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
           var value2 = row.getCells()[1].getValue();
+
+          if (tempCodesArray.length && tempCodesArray.includes(value1)) {
+            duplicateEntries.push(value1);
+        } else {
+            tempCodesArray.push(value1);
+        }
 
           if (!value1 || !value2) {
             errors.push("Please enter both fields for all rows.");
@@ -540,28 +547,18 @@ sap.ui.define(
       onDeleteRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var aSelectedItems = oTable.getSelectedItems();
-        var aItems = oTable.getItems();
-        var oCreateTypeTable = this.byId("createTypeTable");
-
-        if (aItems.length <= 1) {
-          sap.m.MessageToast.show("The table must have at least one row.");
-          oCreateTypeTable.removeSelections();
-          return;
-        }
-
+    
 
         if (aSelectedItems.length === 0) {
-          sap.m.MessageToast.show("Please select an item");
-          oCreateTypeTable.removeSelections();
-          return;
+            sap.m.MessageToast.show("Please select an item");
+            return;
         }
         aSelectedItems.forEach(function (oSelectedItem) {
-          oTable.removeItem(oSelectedItem);
+            oTable.removeItem(oSelectedItem);
         });
-
+    
         oTable.removeSelections();
-        oCreateTypeTable.removeSelections();
-      },
+    },
 
 
       
@@ -685,7 +682,7 @@ sap.ui.define(
       },
 
 
-      CurSearch: function(oEvent) {
+      CurSearch12: function(oEvent) {
 
         var sValue1 = oEvent.getParameter("value");
     
@@ -695,20 +692,34 @@ sap.ui.define(
         var andFilter = new sap.ui.model.Filter({
           filters: [oFilter1, oFilter2, oFilter3]
         });
+    
+        oEvent.getSource().getBinding("items").filter([andFilter]);
+      },
+
+      CurSearch: function(oEvent) {
+ 
+        var sValue1 = oEvent.getParameter("value");
+   
+        var oFilter1 = new sap.ui.model.Filter("Waers", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oFilter2 = new sap.ui.model.Filter("Ltext", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oFilter3 = new sap.ui.model.Filter("landx", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1, oFilter2, oFilter3]
+        });
         var oBinding = oEvent.getSource().getBinding("items");
         var oSelectDialog = oEvent.getSource();
         oBinding.filter([andFilter]);
-
+ 
         oBinding.attachEventOnce("dataReceived", function() {
           var aItems = oBinding.getCurrentContexts();
-  
+ 
           if (aItems.length === 0) {
               oSelectDialog.setNoDataText("No data found");
           } else {
               oSelectDialog.setNoDataText("Loading");
           }
       });
-    
+   
         // oEvent.getSource().getBinding("items").filter([andFilter]);
       },
  

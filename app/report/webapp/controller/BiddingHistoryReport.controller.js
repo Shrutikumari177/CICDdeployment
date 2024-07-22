@@ -97,7 +97,6 @@ sap.ui.define(
                 }
                 this._valueHelpDialog.open();
             },
-
             onCharteringValueHelpClose(oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
                 oEvent.getSource().getBinding("items").filter([]);
@@ -112,14 +111,28 @@ sap.ui.define(
                 
                 this.jsonModel1.setData(filteredData);
                 
+                // Set IconTabBar to be visible
+                this.byId("IconTabBar").setVisible(true); // Show the IconTabBar
             },
+
 
               onChartSearch: function (oEvent) {
                 var sValue1 = oEvent.getParameter("value");
-        
-                var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
-        
-                oEvent.getSource().getBinding("items").filter([oFilter1]);
+                var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+                var oBinding = oEvent.getSource().getBinding("items");
+                var oSelectDialog = oEvent.getSource();
+            
+                oBinding.filter([oFilter1]);
+            
+                oBinding.attachEventOnce("dataReceived", function() {
+                    var aItems = oBinding.getCurrentContexts();
+            
+                    if (aItems.length === 0) {
+                        oSelectDialog.setNoDataText("No data found");
+                    } else {
+                        oSelectDialog.setNoDataText("Loading");
+                    }
+                });
               },
 
               onNavigateDetails: function(oEvent) {

@@ -53,38 +53,56 @@ sap.ui.define(
           this._ocharting.open();
   
         },
-        onCharteringValueHelpClose: function (oEvent) {
+        onCharteringValueHelpClose(oEvent) {
           var oSelectedItem = oEvent.getParameter("selectedItem");
-  
           oEvent.getSource().getBinding("items").filter([]);
-  
+      
           if (!oSelectedItem) {
-            return;
+              return;
           }
+          
           this.byId("CharteringRqNo").setValue(oSelectedItem.getTitle());
           var ChartNo = this.getView().byId("CharteringRqNo");
           ChartNoValue = ChartNo.getValue();
-  
+      
+          // Filter data based on selected Chartering Request Number
           var filter = getModelData.filter(function (data) {
-            return data.Chrnmin === ChartNoValue
-          })
-          var VoyNamedata = filter[0].Voyno
+              return data.Chrnmin === ChartNoValue;
+          });
+          
           var chartObject = structuredClone(filter[0]);
           jsonModel1 = new sap.ui.model.json.JSONModel();
-          this.getView().setModel(jsonModel1, "contractAwardModel")
+          this.getView().setModel(jsonModel1, "contractAwardModel");
           jsonModel1.setData([chartObject]);
-          console.log("ghkdg",this.getView().getModel('contractAwardModel').getData());
-          
-          
-         
-  
+      
+          console.log("contractAwardModel data", this.getView().getModel('contractAwardModel').getData());
+      
+          // Set IconTabBar to be visible
+          var oIconTabBar = this.byId("IconTabBar");
+          oIconTabBar.setVisible(true); 
+          oIconTabBar.setSelectedKey("info"); 
         },
+      
+
+
+
         onChartSearch: function (oEvent) {
-          var sValue1 = oEvent.getParameter("value");
-  
-          var oFilter1 = new Filter("Chrnmin", FilterOperator.Contains, sValue1);
-  
-          oEvent.getSource().getBinding("items").filter([oFilter1]);
+        var sValue1 = oEvent.getParameter("value");
+        var oFilter1 = new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.Contains, sValue1);
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+    
+        oBinding.filter([oFilter1]);
+    
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText("Loading");
+            }
+        });
         },
         onNavigateDetails: function(oEvent) {
           

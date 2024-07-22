@@ -23,6 +23,7 @@ sap.ui.define([
     let ocharteringNo;
     let portName =[];
     var isBidStartDateSelected = false;
+    var flag = false;
 var isBidStartTimeSelected = false;
 var isBidEndDateSelected = false;
 var isBidEndTimeSelected = false;
@@ -340,13 +341,6 @@ var isBidEndTimeSelected = false;
                 if (oUnitInput) {
                     oUnitInput.setValue(extractUnitData);
                 }
-        
-                // Set value for the "FreightUnit" input field in the second fragment
-                var oFreightUnitInput = sap.ui.getCore().byId("FreightUnit");
-                if (oFreightUnitInput) {
-                    oFreightUnitInput.setValue(extractUnitData);
-                }
-        
             }.bind(this)).catch(function (oError) {
                 console.error("Error fetching data:", oError);
             });
@@ -772,20 +766,14 @@ var isBidEndTimeSelected = false;
             this.createDynamicForm();
         },
         createDynamicForm: function() {
-            var oModel = this.getView().getModel("ChartingFilterModel");
+            var oView = this.getView();
+            var oModel = oView.getModel("ChartingFilterModel");
             var bidDetails = oModel.getProperty("/bidDetails");
         
-            // Define static fields based on vendor data
-            var staticFields = [
-                { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
-                { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
-                { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
-                { label: "Total Score", value: "{ChartingFilterModel>/score}" },
-                { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" },
-                { label: "Freight Unit", value: "", id: "FreightUnit" } // Added Freight Unit with empty initial value
-            ];
+            // Define consistent width for input fields
+            var inputWidth = "200px"; // Set the desired width here
         
-            // Prepare containers for each part of the form
+            // Create containers for Technical and Commercial details
             var oTechnicalContainer = new sap.ui.layout.form.FormContainer({
                 title: new sap.ui.core.Title({ text: "Technical Details" })
             });
@@ -794,56 +782,73 @@ var isBidEndTimeSelected = false;
                 title: new sap.ui.core.Title({ text: "Commercial Details" })
             });
         
-            // Add static fields to the technical container
+            // Create a container for static fields
+            var oStaticContainer = new sap.ui.layout.form.FormContainer({
+                title: new sap.ui.core.Title({ text: "Static Details" })
+            });
+        
+            // Define static fields based on vendor data
+            var staticFields = [
+                { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
+                { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
+                { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
+                { label: "Total Score", value: "{ChartingFilterModel>/score}" },
+                { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" },
+                { label: "Freight Unit", value: "",} // Added Freight Unit with empty initial value
+            ];
+        
+            // Add static fields to the Static container
             staticFields.forEach(function(field) {
                 var oFormElement = new sap.ui.layout.form.FormElement({
-                    label: new sap.m.Label({ text: field.label }),
-                    fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
+                    label: new sap.m.Label({ text: field.label, class: "customLabel" }),
+                    fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null, class: "customInput",width:"500px" })]
                 });
-                oTechnicalContainer.addFormElement(oFormElement);
+                oStaticContainer.addFormElement(oFormElement);
             });
         
             // Add dynamic fields from bidDetails to the appropriate containers
             bidDetails.forEach(function(detail) {
                 var oFormElement = new sap.ui.layout.form.FormElement({
-                    label: new sap.m.Label({ text: detail.CodeDesc }),
+                    label: new sap.m.Label({ text: detail.CodeDesc, class: "customLabel" }),
                     fields: [
                         new sap.m.Input({
                             value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
-                            editable: false
+                            editable: false,
+                            class: "customInput",
+                            width: inputWidth // Set width for consistency
                         })
                     ]
                 });
         
                 // Add fScore field if defined
                 if (detail.fScore !== undefined) {
-                    // Add a label for the second input (fScore)
-                    var oScoreLabel = new sap.m.Label({ text: "Score-" + detail.CodeDesc });
+                    var oScoreLabel = new sap.m.Label({ text: "Score-" + detail.CodeDesc, class: "customLabel" });
                     var oScoreInput = new sap.m.Input({
                         value: detail.fScore,
-                        editable: false
+                        editable: false,
+                        class: "customInput",
+                        width: inputWidth // Set width for consistency
                     });
                     var oFlexBox = new sap.m.FlexBox({
                         alignItems: "Center",
-                        items: [ oScoreInput]
+                        items: [oScoreInput]
                     });
         
-                    // Add the fScore field to both Technical and Commercial containers
                     var oScoreFormElement = new sap.ui.layout.form.FormElement({
-                        label: new sap.m.Label({ text: "Score-" + detail.CodeDesc }),
+                        label: new sap.m.Label({ text: "Score-" + detail.CodeDesc, class: "customLabel" }),
                         fields: [oFlexBox]
                     });
         
                     oTechnicalContainer.addFormElement(oScoreFormElement);
                     oCommercialContainer.addFormElement(oFormElement);
                 } else {
-                    // Only one input field if fScore is not defined
                     oFormElement.addField(new sap.m.Input({
                         value: detail.Value || detail.Cvalue,
-                        editable: false
+                        editable: false,
+                        class: "customInput",
+                        width: inputWidth // Set width for consistency
                     }));
         
-                    // Add the regular field to the appropriate container
                     if (detail.Type === "Technical") {
                         oTechnicalContainer.addFormElement(oFormElement);
                     } else if (detail.Type === "Commercial") {
@@ -852,7 +857,7 @@ var isBidEndTimeSelected = false;
                 }
             });
         
-            // Create forms for technical and commercial details
+            // Create forms for Technical and Commercial details
             var oTechnicalForm = new sap.ui.layout.form.Form({
                 layout: new sap.ui.layout.form.ResponsiveGridLayout(),
                 formContainers: [oTechnicalContainer]
@@ -863,153 +868,32 @@ var isBidEndTimeSelected = false;
                 formContainers: [oCommercialContainer]
             });
         
-            // Use a HorizontalLayout to display forms side by side
-            var oHorizontalLayout = new sap.ui.layout.HorizontalLayout({
+            // Create a layout for the static fields and forms
+            var oStaticForm = new sap.ui.layout.form.Form({
+                layout: new sap.ui.layout.form.ResponsiveGridLayout(),
+                formContainers: [oStaticContainer]
+            });
+        
+            // Use a HorizontalLayout to display Technical and Commercial forms side by side
+            var oSideBySideLayout = new sap.ui.layout.HorizontalLayout({
                 content: [oTechnicalForm, oCommercialForm]
             });
         
-            // Display the forms in a dialog or any other container as per your requirement
+            // Combine static fields and side-by-side forms in a VerticalLayout
+            var oVerticalLayout = new sap.ui.layout.VerticalLayout({
+                content: [oStaticForm, oSideBySideLayout]
+            });
+        
+            // Display the combined layout in a dialog or any other container as per your requirement
             var oDialog = this._oDialog1;
-            oDialog.removeAllContent();
-            oDialog.addContent(oHorizontalLayout);
+            oDialog.removeAllContent(); // Clear existing content
+            oDialog.addContent(oVerticalLayout); // Add new content
+        
+            // Refresh the view to ensure it displays the updated form
+            oView.rerender();
         },
         
-        
-        
-        
-        
-        
-      
-        
-        // createDynamicForm: function() {
-        //     var oModel = this.getView().getModel("ChartingFilterModel");
-        //     var bidDetails = oModel.getProperty("/bidDetails");
-            
-        //     var oFormContainer = new sap.ui.layout.form.FormContainer();
-            
-        //     // Define static fields based on vendor data
-        //     var staticFields = [
-        //         { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
-        //         { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
-        //         { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
-        //         { label: "Total Score", value: "{ChartingFilterModel>/score}" },
-        //         { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" },
-        //         { label: "Freight Unit", value: "", id: "FreightUnit" }, // Added Freight Unit with empty initial value
-        //     ];
-            
-        //     // Add static fields to the form
-        //     staticFields.forEach(function(field) {
-        //         var oFormElement = new sap.ui.layout.form.FormElement({
-        //             label: new sap.m.Label({ text: field.label }),
-        //             fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
-        //         });
-        //         oFormContainer.addFormElement(oFormElement);
-        //     });
-            
-        //     // Add dynamic fields from bidDetails
-        //     bidDetails.forEach(function(detail) {
-        //         var oFormElement = new sap.ui.layout.form.FormElement({
-        //             label: new sap.m.Label({ text: detail.CodeDesc }),
-        //             fields: [
-        //                 new sap.m.Input({
-        //                     value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
-        //                     editable: false
-                            
-        //                 })
-        //             ]
-        //         });
-                
-        //         // Add fScore field if defined
-        //         if (detail.fScore !== undefined) {
-        //             // Add a label for the second input (fScore)
-        //             var oScoreLabel = new sap.m.Label({ text: "Score-" + detail.CodeDesc });
-        //             var oScoreInput = new sap.m.Input({
-        //                 value: detail.fScore,
-        //                 editable: false
-        //             });
-        //             var oFlexBox = new sap.m.FlexBox({
-        //                 alignItems: "Center",
-        //                 items: [oScoreLabel, oScoreInput]
-        //             });
-        //             oFormElement.addField(oFlexBox);
-        //         } else {
-        //             // Only one input field if fScore is not defined
-        //             oFormElement.addField(new sap.m.Input({
-        //                 value: detail.Value || detail.Cvalue,
-        //                 editable: false
-        //             }));
-        //         }
-                
-        //         oFormContainer.addFormElement(oFormElement);
-        //     });
-            
-        //     var oForm = new sap.ui.layout.form.Form({
-        //         layout: new sap.ui.layout.form.ResponsiveGridLayout(),
-        //         formContainers: [oFormContainer]
-        //     });
-            
-        //     var oDialog = this._oDialog1;
-        //     oDialog.removeAllContent();
-        //     oDialog.addContent(oForm);
-        // },
-        
-        
-      
-        
-        // createDynamicForm: function() {
-        //     var oModel = this.getView().getModel("ChartingFilterModel");
-        //     var bidDetails = oModel.getProperty("/bidDetails");
-        
-        //     var oFormContainer = new sap.ui.layout.form.FormContainer();
-        
-        //     // Define static fields based on vendor data
-        //     var staticFields = [
-        //         { label: "Vendor", value: "{ChartingFilterModel>/vendorId}" },
-        //         { label: "Eligibility", value: "{ChartingFilterModel>/eligible}" },
-        //         { label: "Technical Ranking", value: "{ChartingFilterModel>/Trank}" },
-        //         { label: "Total Score", value: "{ChartingFilterModel>/score}" },
-        //         { label: "Commercial Ranking", value: "{ChartingFilterModel>/Crank}" }
-        //     ];
-        
-        //     // Add static fields to the form
-        //     staticFields.forEach(function(field) {
-        //         var oFormElement = new sap.ui.layout.form.FormElement({
-        //             label: new sap.m.Label({ text: field.label }),
-        //             fields: [new sap.m.Input({ value: field.value, editable: false, id: field.id ? field.id : null })]
-        //         });
-        //         oFormContainer.addFormElement(oFormElement);
-        //     });
-        
-        //     // Add dynamic fields from bidDetails
-        //     bidDetails.forEach(function(detail) {
-        //         var oFormElement = new sap.ui.layout.form.FormElement({
-        //             label: new sap.m.Label({ text: detail.CodeDesc }),
-        //             fields: [
-        //                 new sap.m.Input({
-        //                     value: detail.Value || detail.Cvalue, // Handle both Value and Cvalue
-        //                     editable: false
-        //                 })
-        //             ]
-        //         });
-        //         oFormContainer.addFormElement(oFormElement);
-        //     });
-        
-        //     var oForm = new sap.ui.layout.form.Form({
-        //         layout: new sap.ui.layout.form.ResponsiveGridLayout(),
-        //         formContainers: [oFormContainer]
-        //     });
-        
-        //     var oDialog = this._oDialog1;
-        //     oDialog.removeAllContent();
-        //     oDialog.addContent(oForm);
-        // }
-        
-// ,        
-        
-        
-        
-        
-      
+
         oncancell: function () {
             this._oDialog1.close();
         },
@@ -1137,182 +1021,198 @@ var isBidEndTimeSelected = false;
                 });
             }
         },
-
-
-validateTime: function (startDateTime, endDateTime) {
-    var oThirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
-    var timeDifference = endDateTime - startDateTime;
-    return timeDifference >= oThirtyMinutes;
-},
-
-// Function to handle Bid Start Date selection
-onselectBSD: function (oEvent) {
-    var oDatePicker = oEvent.getSource();
-    var oSelectedDate1 = oDatePicker.getDateValue();
-    var oCurrentDate = new Date();
-    oCurrentDate.setHours(0, 0, 0, 0);
-
-    if (oSelectedDate1 < oCurrentDate) {
-        oDatePicker.setValue("");
-        // oDatePicker.setValueState("Error");
-        MessageBox.error("Past dates are not allowed. Please select a current or future date.");
-        isBidStartDateSelected = false;
-    } else {
-        oDatePicker.setValueState("None");
-        isBidStartDateSelected = true;
-
-        // Clear other fields and reset their states
-        var oBiddingEndDatePicker = sap.ui.getCore().byId("date2");
-        var oBiddingStartTimePicker = sap.ui.getCore().byId("BidSTime");
-        var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
-
-        oBiddingEndDatePicker.setValue("");
-        oBiddingEndDatePicker.setValueState("None");
-        oBiddingStartTimePicker.setValue("");
-        oBiddingStartTimePicker.setValueState("None");
-        oBiddingEndTimePicker.setValue("");
-        oBiddingEndTimePicker.setValueState("None");
-
-        isBidEndDateSelected = false;
-        isBidStartTimeSelected = false;
-        isBidEndTimeSelected = false;
-    }
-},
-
-// Function to handle Bid End Date selection
-onselectBED: function (oEvent) {
-    if (!isBidStartDateSelected) {
-        MessageBox.error("Please select the Bid Start Date first.");
-        var oDatePicker = oEvent.getSource();
-        oDatePicker.setValue("");
-        // oDatePicker.setValueState("Error");
-        return;
-    }
-
-    var oDatePicker = oEvent.getSource();
-    var oSelectedDate = oDatePicker.getDateValue();
-    var oCurrentDate = new Date();
-    oCurrentDate.setHours(0, 0, 0, 0);
-
-    // Get the Bidding Start Date value
-    var oBiddingStartDatePicker = sap.ui.getCore().byId("date1");
-    var oBiddingStartDate = oBiddingStartDatePicker.getDateValue();
-
-    if (oSelectedDate < oCurrentDate) {
-        oDatePicker.setValue("");
-        // oDatePicker.setValueState("Error");
-        MessageBox.error("Past dates are not allowed. Please select a current or future date.");
-        isBidEndDateSelected = false;
-    } else if (oBiddingStartDate && oSelectedDate < oBiddingStartDate) {
-        oDatePicker.setValue("");
-        // oDatePicker.setValueState("Error");
-        MessageBox.error("Bidding End Date cannot be before Bidding Start Date. Please select a valid date.");
-        isBidEndDateSelected = false;
-    } else {
-        oDatePicker.setValueState("None");
-        isBidEndDateSelected = true;
-
-        // Clear other fields and reset their states
-        var oBiddingStartTimePicker = sap.ui.getCore().byId("BidSTime");
-        var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
-
-        oBiddingStartTimePicker.setValue("");
-        oBiddingStartTimePicker.setValueState("None");
-        oBiddingEndTimePicker.setValue("");
-        oBiddingEndTimePicker.setValueState("None");
-
-        isBidStartTimeSelected = false;
-        isBidEndTimeSelected = false;
-    }
-},
-
-// Function to handle Bid Start Time selection
-onselectBSTime: function (oEvent) {
-    if (!isBidStartDateSelected || !isBidEndDateSelected) {
-        MessageBox.error("Please select the Bid Start Date and Bid End Date first.");
-        var oTimePicker = oEvent.getSource();
-        oTimePicker.setValue("");
-        // oTimePicker.setValueState("Error");
-        return;
-    }
-
-
-    var oTimePicker = oEvent.getSource();
-    var oSelectedTime = oTimePicker.getDateValue(); // Using getDateValue() to get the time in Date format
-    var oBiddingStartDate = sap.ui.getCore().byId("date1").getDateValue();
-    var oBiddingEndDate = sap.ui.getCore().byId("date2").getDateValue();
-    var oBiddingEndTime = sap.ui.getCore().byId("BidETime").getDateValue(); // Using getDateValue() to get the time in Date format
-
-    if (oBiddingEndDate && oBiddingEndDate.toDateString() === oBiddingStartDate.toDateString() && oBiddingEndTime) {
-        var startDateTime = new Date(oBiddingStartDate);
-        startDateTime.setHours(oSelectedTime.getHours(), oSelectedTime.getMinutes(), 0, 0);
-        var endDateTime = new Date(oBiddingEndDate);
-        endDateTime.setHours(oBiddingEndTime.getHours(), oBiddingEndTime.getMinutes(), 0, 0);
-
-        if (!this.validateTime(startDateTime, endDateTime)) {
-            oTimePicker.setValue("");
-            // oTimePicker.setValueState("Error");
-            MessageBox.error("Bidding Start Time must be at least 30 minutes before Bidding End Time.");
+        validateTime: function (startDateTime, endDateTime) {
+            var oThirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
+            var timeDifference = endDateTime - startDateTime;
+            return timeDifference >= oThirtyMinutes;
+        },
+        
+        onselectBSD: function (oEvent) {
+            var oDatePicker = oEvent.getSource();
+            var oSelectedDate1 = oDatePicker.getDateValue();
+            var oCurrentDate = new Date();
+            oCurrentDate.setHours(0, 0, 0, 0);
+        
+            if (oSelectedDate1 < oCurrentDate) {
+                oDatePicker.setValue("");
+                MessageBox.error("Past dates are not allowed. Please select a current or future date.");
+                isBidStartDateSelected = false;
+            } else {
+                oDatePicker.setValueState("None");
+                isBidStartDateSelected = true;
+        
+                // Clear other fields and reset their states
+                var oBiddingEndDatePicker = sap.ui.getCore().byId("date2");
+                var oBiddingStartTimePicker = sap.ui.getCore().byId("BidSTime");
+                var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
+        
+                oBiddingEndDatePicker.setValue("");
+                oBiddingEndDatePicker.setValueState("None");
+                oBiddingStartTimePicker.setValue("");
+                oBiddingStartTimePicker.setValueState("None");
+                oBiddingEndTimePicker.setValue("");
+                oBiddingEndTimePicker.setValueState("None");
+        
+                isBidEndDateSelected = false;
+                isBidStartTimeSelected = false;
+                isBidEndTimeSelected = false;
+            }
+        },
+        
+        onselectBED: function (oEvent) {
+            if (!isBidStartDateSelected) {
+                MessageBox.error("Please select the Bid Start Date first.");
+                var oDatePicker = oEvent.getSource();
+                oDatePicker.setValue("");
+                return;
+            }
+        
+            var oDatePicker = oEvent.getSource();
+            var oSelectedDate = oDatePicker.getDateValue();
+            var oCurrentDate = new Date();
+            oCurrentDate.setHours(0, 0, 0, 0);
+        
+            var oBiddingStartDatePicker = sap.ui.getCore().byId("date1");
+            var oBiddingStartDate = oBiddingStartDatePicker.getDateValue();
+        
+            if (oSelectedDate < oCurrentDate) {
+                oDatePicker.setValue("");
+                MessageBox.error("Past dates are not allowed. Please select a current or future date.");
+                isBidEndDateSelected = false;
+            } else if (oBiddingStartDate && oSelectedDate < oBiddingStartDate) {
+                oDatePicker.setValue("");
+                MessageBox.error("Bidding End Date cannot be before Bidding Start Date. Please select a valid date.");
+                isBidEndDateSelected = false;
+            } else {
+                oDatePicker.setValueState("None");
+                isBidEndDateSelected = true;
+                if(flag = false){
+                // Clear other fields and reset their states
+                var oBiddingStartTimePicker = sap.ui.getCore().byId("BidSTime");
+                var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
+        
+                oBiddingStartTimePicker.setValue("");
+                oBiddingStartTimePicker.setValueState("None");
+                oBiddingEndTimePicker.setValue("");
+                oBiddingEndTimePicker.setValueState("None");
+        
+                isBidStartTimeSelected = false;
+                isBidEndTimeSelected = false;
+                }
+            }
+        },
+        
+        onselectBSTime: function (oEvent) {
+            if (!isBidStartDateSelected ) {
+                MessageBox.error("Please select the Bid Start Date ");
+                var oTimePicker = oEvent.getSource();
+                oTimePicker.setValue("");
+                return;
+            }
+        
+            var oTimePicker = oEvent.getSource();
+            var oSelectedTime = oTimePicker.getDateValue();
+            var oBiddingStartDate = sap.ui.getCore().byId("date1").getDateValue();
+            var oBiddingEndDate = sap.ui.getCore().byId("date2").getDateValue();
+            var oBiddingEndTime = sap.ui.getCore().byId("BidETime").getDateValue();
+        
+            var oCurrentDate = new Date();
+            var oCurrentTimeIST = new Date(oCurrentDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+        
+            var oCurrentTime = new Date(oBiddingStartDate);
+            oCurrentTime.setHours(oCurrentTimeIST.getHours(), oCurrentTimeIST.getMinutes(), 0, 0);
+        
+            var oSelectedDateTime = new Date(oBiddingStartDate);
+            oSelectedDateTime.setHours(oSelectedTime.getHours(), oSelectedTime.getMinutes(), 0, 0);
+        
+            if (oBiddingStartDate.toDateString() === oCurrentTimeIST.toDateString() && oSelectedDateTime < oCurrentTime) {
+                oTimePicker.setValue("");
+                MessageBox.error("Bidding Start Time cannot be less than the current time.");
+                isBidStartTimeSelected = false;
+                return;
+            }
+        
+            if (oBiddingEndDate && oBiddingEndDate.toDateString() === oBiddingStartDate.toDateString() && oBiddingEndTime) {
+                var startDateTime = new Date(oBiddingStartDate);
+                startDateTime.setHours(oSelectedTime.getHours(), oSelectedTime.getMinutes(), 0, 0);
+                var endDateTime = new Date(oBiddingEndDate);
+                endDateTime.setHours(oBiddingEndTime.getHours(), oBiddingEndTime.getMinutes(), 0, 0);
+        
+                if (!this.validateTime(startDateTime, endDateTime)) {
+                    oTimePicker.setValue("");
+                    MessageBox.error("Bidding Start Time must be at least 30 minutes before Bidding End Time.");
+                    isBidStartTimeSelected = false;
+                    return;
+                }
+            }
+        
+            oTimePicker.setValueState("None");
+            isBidStartTimeSelected = true;
+        
+            var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
+            oBiddingEndTimePicker.setValue("");
+            oBiddingEndTimePicker.setValueState("None");
+        
+            isBidEndTimeSelected = false;
+            flag = true;
+        },
+        
+        onselectBETime: function (oEvent) {
+            if (!isBidStartDateSelected || !isBidStartTimeSelected || !isBidEndDateSelected) {
+                MessageBox.error("Please select the Bid Start Date, Bid Start Time, and Bid End Date first.");
+                var oTimePicker = oEvent.getSource();
+                oTimePicker.setValue("");
+                return;
+            }
+        
+            var oTimePicker = oEvent.getSource();
+            var oSelectedTime = oTimePicker.getDateValue();
+            var oBiddingStartDate = sap.ui.getCore().byId("date1").getDateValue();
+            var oBiddingStartTime = sap.ui.getCore().byId("BidSTime").getDateValue();
+            var oBiddingEndDate = sap.ui.getCore().byId("date2").getDateValue();
+        
+            if (oBiddingStartDate && oBiddingEndDate && oBiddingStartDate.toDateString() === oBiddingEndDate.toDateString() && oBiddingStartTime) {
+                var startDateTime = new Date(oBiddingStartDate);
+                startDateTime.setHours(oBiddingStartTime.getHours(), oBiddingStartTime.getMinutes(), 0, 0);
+                var endDateTime = new Date(oBiddingEndDate);
+                endDateTime.setHours(oSelectedTime.getHours(), oSelectedTime.getMinutes(), 0, 0);
+        
+                if (endDateTime <= startDateTime) {
+                    oTimePicker.setValue("");
+                    MessageBox.error("Bidding End Time cannot be less than or equal to Bidding Start Time.");
+                    isBidEndTimeSelected = false;
+                    return;
+                }
+        
+                if (!this.validateTime(startDateTime, endDateTime)) {
+                    oTimePicker.setValue("");
+                    MessageBox.error("Bidding End Time must be at least 30 minutes after Bidding Start Time.");
+                    isBidEndTimeSelected = false;
+                    return;
+                }
+            }
+        
+            oTimePicker.setValueState("None");
+            isBidEndTimeSelected = true;
+        },
+        
+        resetTimeFields: function() {
+            var oBiddingStartTimePicker = sap.ui.getCore().byId("BidSTime");
+            var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
+        
+            oBiddingStartTimePicker.setValue("");
+            oBiddingStartTimePicker.setValueState("None");
+            oBiddingEndTimePicker.setValue("");
+            oBiddingEndTimePicker.setValueState("None");
+        
             isBidStartTimeSelected = false;
-            return;
-        }
-    }
-
-    oTimePicker.setValueState("None");
-    isBidStartTimeSelected = true;
-
-    // Clear other fields and reset their states
-    var oBiddingEndTimePicker = sap.ui.getCore().byId("BidETime");
-    oBiddingEndTimePicker.setValue("");
-    oBiddingEndTimePicker.setValueState("None");
-
-    isBidEndTimeSelected = false;
-},
-
-// Function to handle Bid End Time selection
-onselectBETime: function (oEvent) {
-    if (!isBidStartDateSelected || !isBidStartTimeSelected || !isBidEndDateSelected) {
-        MessageBox.error("Please select the Bid Start Date, Bid Start Time, and Bid End Date first.");
-        var oTimePicker = oEvent.getSource();
-        oTimePicker.setValue("");
-        // oTimePicker.setValueState("Error");
-        return;
-    }
-
-    var oTimePicker = oEvent.getSource();
-    var oSelectedTime = oTimePicker.getDateValue(); // Using getDateValue() to get the time in Date format
-    var oBiddingStartDate = sap.ui.getCore().byId("date1").getDateValue();
-    var oBiddingStartTime = sap.ui.getCore().byId("BidSTime").getDateValue(); // Using getDateValue() to get the time in Date format
-    var oBiddingEndDate = sap.ui.getCore().byId("date2").getDateValue();
-
-    if (oBiddingStartDate && oBiddingEndDate && oBiddingStartDate.toDateString() === oBiddingEndDate.toDateString() && oBiddingStartTime) {
-        var startDateTime = new Date(oBiddingStartDate);
-        startDateTime.setHours(oBiddingStartTime.getHours(), oBiddingStartTime.getMinutes(), 0, 0);
-        var endDateTime = new Date(oBiddingEndDate);
-        endDateTime.setHours(oSelectedTime.getHours(), oSelectedTime.getMinutes(), 0, 0);
-
-        if (endDateTime <= startDateTime) {
-            oTimePicker.setValue("");
-            // oTimePicker.setValueState("Error");
-            MessageBox.error("Bidding End Time cannot be less than or equal to Bidding Start Time.");
             isBidEndTimeSelected = false;
-            return;
+        },
+        
+        onChangeDate: function(oEvent) {
+            // Reset time fields when date changes
+            this.resetTimeFields();
         }
-
-        if (!this.validateTime(startDateTime, endDateTime)) {
-            oTimePicker.setValue("");
-            // oTimePicker.setValueState("Error");
-            MessageBox.error("Bidding End Time must be at least 30 minutes after Bidding Start Time.");
-            isBidEndTimeSelected = false;
-            return;
-        }
-    }
-
-    oTimePicker.setValueState("None");
-    isBidEndTimeSelected = true;
-}
-
-
         
         
         

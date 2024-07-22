@@ -30,11 +30,12 @@
                 </contentLeft>
                 <contentRight>
                     <SearchField
-                        id="searchField"
-                        width="300px"
-                        search="onSearch"
-                        placeholder="Search..."
-                    />
+        id="searchField"
+        width="300px"
+        search="onSearch"
+        placeholder="Search..."
+       
+    />
                 </contentRight>
             </Bar>
         </headerContent>

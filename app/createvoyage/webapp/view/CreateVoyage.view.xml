@@ -411,6 +411,8 @@
                                                             required="true"
                                                             dateValue="{oJsonModel>DepartureDate}"
                                                             value="{oJsonModel>DepartureDateValue}"
+
+
                                                             
                                                         />
                                                     </ui:template>
