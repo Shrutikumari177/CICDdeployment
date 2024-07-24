@@ -287,101 +287,7 @@ sap.ui.define([
     
     
      
-    onSave1: function () {
-      console.log("buttonclicked");
-
-      
-      let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
-      let obidStartD = this.byId("bidStartD").getValue();
-      console.log("hii", obidStartD);
-      let selectedDate = new Date(obidStartD);
-       bidStartdate = selectedDate.toLocaleDateString();
-      let hours = selectedDate.getHours().toString().padStart(2, '0');
-      let minutes = selectedDate.getMinutes().toString().padStart(2, '0');
-      let seconds = selectedDate.getSeconds().toString().padStart(2, '0');
-       bidStarttime = `${hours}:${minutes}:${seconds}`;
-  
-      console.log("Date:", bidStartdate);
-      console.log("StartTime:", bidStarttime);
-  
-      let obidEndD = this.byId("bidEndD").getValue();
-      let selectedDate2 = new Date(obidEndD);
-       bidEndtdate = selectedDate2.toLocaleDateString();
-      let hour = selectedDate2.getHours().toString().padStart(2, '0');
-      let minute = selectedDate2.getMinutes().toString().padStart(2, '0');
-      let second = selectedDate2.getSeconds().toString().padStart(2, '0');
-       bidEndtime = `${hour}:${minute}:${second}`;
-      console.log("Date:", bidEndtdate);
-      console.log("EndTime:", bidEndtime);
-  
-      if (!oCharteringRqNo) {
-          sap.m.MessageBox.error("Please fill chartering No.");
-          return;
-      }
-      if (!obidStartD) {
-          sap.m.MessageBox.error("Please fill Bid Start Date and Time");
-          return;
-      }
-      if (!obidEndD) {
-          sap.m.MessageBox.error("Please fill Bid End Date and Time");
-          return;
-      }
-    
-  
-      var currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-  
-      var exchangedatevalidto = sap.ui.core.format.DateFormat.getDateInstance({
-          pattern: "yyyy-MM-dd" + "'T00:00:00Z'",
-      });
-  
-      let BidStartDateFormat = exchangedatevalidto.format(new Date(bidStartdate));
-      let BidEndDateFormat = exchangedatevalidto.format(new Date(bidEndtdate));
-
-      console.log("startdatea",BidStartDateFormat);
-  
-      let oModel = this.getOwnerComponent().getModel();
-  
-      let oBinding = oModel.bindList("/CharteringSet");
-  
-      oBinding.filter([
-          new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, oCharteringRqNo)
-      ]);
-      let oBusyDialog = new sap.m.BusyDialog();
-      oBusyDialog.open();
-      oBinding.requestContexts().then(function (aContexts) {
-          let oContextToUpdate = aContexts.find(function(oContext) {
-              return oContext.getProperty("Chrnmin") === oCharteringRqNo;
-          });
-  
-          if (oContextToUpdate) {
-              // Update the fields with new values
-              oContextToUpdate.setProperty("Chrqsdate", BidStartDateFormat);
-              oContextToUpdate.setProperty("Chrqstime", bidStarttime);
-              oContextToUpdate.setProperty("Chrqedate", BidEndDateFormat);
-              oContextToUpdate.setProperty("Chrqetime", bidEndtime);
-  
-              oModel.submitBatch("update").then(function() {
-                  oModel.refresh();
-  
-                  sap.m.MessageBox.success("Data updated successfully.", {
-                      onClose: function() {
-                        
-                      }
-                  });
-                  oBusyDialog.close();
-              }).catch(function(error) {
-                  sap.m.MessageBox.error("Error updating data: " + error.message);
-              });
-          } else {
-              sap.m.MessageBox.error("Entity not found.");
-          }
-      }).catch(function (error) {
-          sap.m.MessageBox.error("Error fetching entities: " + error.message);
-      });
-      this.getView().byId("sumbit").setEnabled(true);
-  },
-  onSave: function () {
+    onSave: function () {
     console.log("buttonclicked");
 
     let oCharteringRqNo = this.byId("CharteringRqNo").getValue();
@@ -392,7 +298,7 @@ sap.ui.define([
     let hours = selectedDate.getHours().toString().padStart(2, '0');
     let minutes = selectedDate.getMinutes().toString().padStart(2, '0');
     let seconds = selectedDate.getSeconds().toString().padStart(2, '0');
-    let bidStarttime = `${hours}:${minutes}:${seconds}`;
+     bidStarttime = `${hours}:${minutes}:${seconds}`;
 
     console.log("Date:", bidStartdate);
     console.log("StartTime:", bidStarttime);
@@ -403,7 +309,7 @@ sap.ui.define([
     let hour = selectedDate2.getHours().toString().padStart(2, '0');
     let minute = selectedDate2.getMinutes().toString().padStart(2, '0');
     let second = selectedDate2.getSeconds().toString().padStart(2, '0');
-    let bidEndtime = `${hour}:${minute}:${second}`;
+     bidEndtime = `${hour}:${minute}:${second}`;
     console.log("Date:", bidEndtdate);
     console.log("EndTime:", bidEndtime);
 
@@ -473,13 +379,6 @@ sap.ui.define([
     });
     this.getView().byId("sumbit").setEnabled(true);
 },
-
-  
-    
-    
-     
-   
-    
 
       onSubmitQuotation: function () {
         var that = this;
@@ -561,45 +460,8 @@ sap.ui.define([
       },
  
     
-    onSendEmail: function () {
-      let RecieverEmails = smtpAddresses;
-      let RecieverNames = vendorNames;
-  
-      let StartPort = dataToStore.startPort[0];
-      let EndPort = dataToStore.midPort[0];
-      
-      let CargoSize = Number(dataToStore.cargoSize);
-  
-      let routes = [StartPort, EndPort]; 
-  
-      let bidStartdateObj = new Date(bidStartdate);
-      let bidEndtdateObj = new Date(bidEndtdate);
-  
-      let formattedBidStartdate = bidStartdateObj.toISOString().split('T')[0];
-      let formattedBidEndtdate = bidEndtdateObj.toISOString().split('T')[0];
-  
-      console.log("maildata", RecieverEmails, RecieverNames, routes, CargoSize);
-      console.log("Date:", formattedBidStartdate, formattedBidEndtdate);
-     
-      
-      let oData = {
-          vendorsName: RecieverNames,
-          receiversEmails: RecieverEmails,
-          routes: routes, 
-          cargoSize: CargoSize, 
-          bidStart: formattedBidStartdate,
-          bidEnd: formattedBidEndtdate,
-          bidstartTime:bidStarttime,
-          bidEndTime:bidEndtime
-      };
-  
-      let oModel = this.getView().getModel();
-      let oListBinding = oModel.bindList("/sendEmail");
-  
-      oListBinding.create(oData );
-
-  },
-  onSendEmail1: function () {
+   
+  onSendEmail: function () {
     let RecieverEmails = smtpAddresses;
     let RecieverNames = vendorNames;
 
@@ -639,39 +501,6 @@ sap.ui.define([
 },
 
 
-
-
-
-
-onCreateCompleted1: function (oEvent) {
-  let oParameters = oEvent.getParameters();
-  let oContext = oParameters.context;
-  let bSuccess = oParameters.success;
-
-  if (bSuccess) {
-      console.log("oParameters", oParameters);
-      console.log("oContext", oContext.sPath);
-      console.log("bSuccess", bSuccess);
-      
-      // Get the vendor names from the context
-      let oData = oContext.getObject();
-      let vendorsNames = oData.vendorsName.join("\n");
-      
-      sap.m.MessageBox.success(`Emails sent successfully to these companies:\n${vendorsNames}`, {
-          onClose: () => {
-              if (this._oDialog1) {
-                  this._oDialog1.close();
-              }
-          }
-      });
-
-      this.getView().byId("sumbit").setEnabled(false);
-      this.getView().byId("Button1").setEnabled(false);
-
-  } else {
-      sap.m.MessageBox.error(`Failed to send emails`);
-  }
-},
 onCreateCompleted: function (oEvent) {
   let oParameters = oEvent.getParameters();
   let oContext = oParameters.context;
@@ -700,11 +529,6 @@ onCreateCompleted: function (oEvent) {
       sap.m.MessageBox.error(`Failed to send emails`);
   }
 },
-
-
-
-  
-  
 
     });
 

@@ -405,13 +405,15 @@
                                                     />
                                                     <ui:template>
                                                         <DatePicker
+                                                            
                                                             displayFormat="dd-MM-yyyy"
                                                             valueFormat="yyyy-MM-dd"
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
                                                             dateValue="{oJsonModel>DepartureDate}"
                                                             value="{oJsonModel>DepartureDateValue}"
-
+                                                            change="handleDateChange"
+                                                            
 
                                                             
                                                         />

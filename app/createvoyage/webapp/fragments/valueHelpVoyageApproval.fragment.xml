@@ -4,11 +4,17 @@
     <SelectDialog
         id="mySelect"
         noDataText="Loading..."
-        title=""
+        title="Select Voyage"
         search="onVoyageSearch1"
         confirm=".VoyageValueHelpClose"
         cancel=".VoyageValueHelpClose"
-        items="{/xNAUTIxgetvoyapproval}"
+        items="{
+        path: '/xNAUTIxgetvoyapproval',
+        sorter: {
+            path: 'Voyno',
+            descending: true
+        }
+        }"
         multiSelect="false"
         liveChange="onVoyageSearch1"
         initialFocus="SearchField"

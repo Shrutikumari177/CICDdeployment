@@ -86,7 +86,8 @@ sap.ui.define(
                     console.log("userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                    userEmail = undefined;
+                    // userEmail = undefined ;
+                    userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
             debounce: function (func, wait) {
@@ -174,7 +175,7 @@ sap.ui.define(
                 console.log("myVoyno  received:", myVOYNO);
                 that.byId('_voyageInput1').setValue(myVOYNO);
                 let iconTab = this.byId("_idIconTabBar");
-                iconTab.setSelectedKey('info1');
+                iconTab.setSelectedKey('info');
 
 
                 await that.getBidDetails(myVOYNO);
@@ -926,144 +927,7 @@ sap.ui.define(
                     row.getCells()[3].setGroupName(groupName);
                 }
             },
-            // onSaveBidDetails : function ( oEvent ){
-            //     let oModel1 = this.getOwnerComponent().getModel("modelV2");
-
-            //     // above payload is  not working as Stringtype  value required instead of number or deciam and Vetad conversion error
-            //     let payload = {
-            //         Voyno: "1000000034",
-            //         Voynm: "Test Voyage 9/11",
-            //         Vnomtk: "",
-            //         Refdoc: "",
-            //         Docind: "",
-            //         Vessn: "",
-            //         Vimo: "",
-            //         Chtyp: "",
-            //         Chpno: "",
-            //         Currkeys: "",
-            //         Frtco: "0",
-            //         Vstat: "",
-            //         Voyty: "1000",
-            //         Carty: "1000",
-            //         Curr: "INR",
-            //         Freght: "150000",
-            //         Party: "",
-            //         Bidtype: "SB",
-            //         Frcost: "60000",
-            //         Frtu: "L/S",
-            //         Frcost_Act: "0",
-            //         Frtu_Act: "",
-            //         Ref_Voyno: "",
-            //         GV_CSTATUS: "Voyage Created",
-            //         tocostcharge:[],
-            //         toitem:[],
-            //         tobiditem: bidPayload
-
-            //       }
-            //       /*
-            //       tobiditem:[
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "CLASS",
-            //               Value: "A",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "CLASS OF VESSEL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "4",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "CLASS",
-            //               Value: "B",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "CLASS OF VESSEL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "2",
-            //               Zmax: "3"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "PORT",
-            //               Value: "INBOM",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST PORT OF CALL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "0",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "COOR",
-            //               Value: "IN",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "COUNTRY OF ORIGIN",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "0",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "DAT1",
-            //               Value: "20.09.2023",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST CLEANING DATE",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "3",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "PORT",
-            //               Value: "INBOM",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST PORT OF CALL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "3",
-            //               Zmax: "5"
-            //           }
-            //         ]
-            //         */
-
-            //     console.table( payload);
-
-
-            //     // return;
-            //     oModel1.create('/xNAUTIxVOYAGEHEADERTOITEM', payload,{
-            //         success : function ( oData ){
-            //             console.log(oData);
-            //             oModel1.refresh();
-            //         }, 
-            //         error : function (oResponse) {
-            //             console.log(oResponse);
-            //         }
-            //     })
-
-            // },
+         
             formatZminEditable: function (sGood, sMand, sMust) {
                 return sGood === "X";
             },
@@ -1616,6 +1480,7 @@ sap.ui.define(
                 // let itemLength = oTableData.length  + 1;
                 // console.log(itemLength);
                 let lastEntry = oTableData[oTableData.length - 1];
+                
                 if (lastEntry.Vlegn && lastEntry.Pdist && lastEntry.Portn && lastEntry.Portc) {
                     console.log("valid row");
                     oTableData.push({
@@ -1658,11 +1523,11 @@ sap.ui.define(
                 voyItemModel.setProperty(path + "/Cargs", formatedValue);
                 if (path == "/0" && voyItemModel.getData().length === 2) {
                     voyItemModel.getData()[1].Cargs = formatedValue;
-                    voyItemModel.refresh();
                     this.liveFrCostChange();
                 }else {
                     this.liveFrCostChange()
                 }
+                voyItemModel.refresh();
             },
 
             onDeletePort: function () {
@@ -1738,7 +1603,7 @@ sap.ui.define(
                     })
                     // console.log("total Totco cost: ", totalCost);
                     this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
-                    return totalCost;
+                    return formatter.numberFormat(totalCost);
                 }
 
 
@@ -2234,8 +2099,7 @@ sap.ui.define(
 
             // forselection in select control for cost charge unit to be emplty for new entry 
             formatForceSelection: function (legId) {
-                // You might need to adjust this logic based on your data structure
-                // For example, if legId determines forceSelection, adjust this accordingly
+                
                 return legId ? true : false;
             },
 
@@ -2321,7 +2185,14 @@ sap.ui.define(
                     if (p1.success) {
                         console.log(oData);
 
-                        MessageBox.success(`Successfully saved `);
+                        // MessageBox.success(`Successfully saved `);
+                        MessageBox.success(`Successfully saved changes`, {
+                            title: "Voyage updated",
+                            onClose: function () {
+              
+                                   
+                            }
+                          });
 
                     } else {
                         sap.m.MessageBox.error(p1.context.oModel.mMessages[""][0].message);
@@ -2330,23 +2201,7 @@ sap.ui.define(
 
 
                 });
-                return
-                oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
-                    success: function (oData) {
-                        console.log("result :", oData);
-                        new sap.m.MessageBox.success("Changes saved Succcesfully.");
-                        that.getOwnerComponent().getModel().refresh();
-
-
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        let errMsg = JSON.parse(err.responseText).error.message.value;
-                        console.log(errMsg);
-                        new sap.m.MessageBox.error(errMsg)
-
-                    }
-                })
+            
             },
             /*
             [
@@ -2415,7 +2270,7 @@ sap.ui.define(
                 voyItemModel.refresh();
                 costdetailsModel.refresh();
                 bidItemModel.refresh();
-                this.toggleEnable(false);
+                
 
             },
             sendApproval: async function () {
@@ -2499,11 +2354,12 @@ sap.ui.define(
                     let saveddata = oBindListSP.create({
                         "Vreqno": "",
                         "Voyno": myVOYNO,
-                        "Zemail": "sarath.venkateswara@ingenxtec.com"
+                        "Zemail": userEmail
                     });
                     console.log("saving data:", saveddata);
                     let oBusyDialog = new sap.m.BusyDialog();
                     oBusyDialog.open();
+                    oBusyDialog = null;
 
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
@@ -2518,12 +2374,14 @@ sap.ui.define(
                     }).catch(function (error) {
                         console.error("Error while requesting contexts:", error);
                         oBusyDialog.close();
+                        
                         throw error
 
                     });
                 } catch (error) {
                     console.error("Error while saving data:", error);
                     oBusyDialog.close();
+            
                     sap.m.MessageBox.error("Error while saving data");
                 }
             },

@@ -9,8 +9,13 @@
         search="onChartSearch"
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
-        items="{/xNAUTIxCharteringHeaderItem}"
-        liveChange="onChartSearch"
+items="{
+        path: '/xNAUTIxCharteringHeaderItem',
+        sorter: {
+            path: 'Chrnmin',
+            descending: true
+        }
+        }"         liveChange="onChartSearch"
         initialFocus="SearchField"
         
     >

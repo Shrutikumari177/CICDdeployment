@@ -6,7 +6,7 @@
 }
 
 .cellFixedHeight .sapUiBlockCellContent {
-  height: 30vh;
+  height: fit-content;
 }
 
 .voyTitleBold {

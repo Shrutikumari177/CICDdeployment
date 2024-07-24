@@ -9,7 +9,15 @@
         search="onValueHelpSearch"
         confirm="onValueHelpClosevoy"
         cancel="onValueHelpClosevoy"
-        items="{/xNAUTIxvoy_valuehelp}"
+        
+        items="{
+        path: '/xNAUTIxvoy_valuehelp',
+        sorter: {
+            path: 'Voyno',
+            descending: true
+        }
+        }"
+
         initialFocus="SearchField"
         liveChange="onValueHelpSearch"
   

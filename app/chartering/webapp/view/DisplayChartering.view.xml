@@ -185,7 +185,7 @@
                                <Label
                                     id="Label"
                                     text="Purchase Org :"
-                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd purchaselabeltxt"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd purchaseorglabel"
                                 />
                                 <Input
                                     id="PurchaseOrg"
@@ -203,7 +203,7 @@
                                <Label
                                     id="Labe"
                                     text="Purchase Group :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd"
                                 />
                                 <Input
                                     id="PurchaseGroup"
@@ -220,7 +220,7 @@
                         <Label
                                     id="PaymentLabel"
                                     text="Payment Terms :"
-                                    class="sapUiTinyMarginTop"
+                                    class="sapUiTinyMarginTop sapUiTinyMarginBeginEnd paylabeltxt"
                                 />
                                 <Input
                                     id="PaymentTerm"

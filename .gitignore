@@ -36,3 +36,7 @@ mta_archives/
 dist/
 resources/
 app/*/package-lock.json
+# auto generated wildcard
+.env
+# auto generated wildcard
+db/.env

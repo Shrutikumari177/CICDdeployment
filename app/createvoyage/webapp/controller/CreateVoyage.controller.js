@@ -47,16 +47,19 @@ sap.ui.define(
 
 
       onInit: function () {
+         // Add a data change listener to the table's binding
+         var oTable = this.byId("idPortTab");
+        //  oTable.getBinding("rows").attachChange(this.onTableDataChanged.bind(this));
 
-        // var aDatePickers = this.getView().findAggregatedObjects(true, function (oControl) {
-        //   return oControl.isA("sap.m.DatePicker");
-        // });
+        var aDatePickers = this.getView().findAggregatedObjects(true, function(oControl) {
+          return oControl.isA("sap.m.DatePicker");
+      });
 
-        // aDatePickers.forEach(function (oDatePicker) {
-        //   oDatePicker.attachBrowserEvent("click", function () {
-        //     oDatePicker.openBy();
-        //   });
-        // });
+      aDatePickers.forEach(function(oDatePicker) {
+          oDatePicker.attachBrowserEvent("click", function () {
+              oDatePicker.openBy();
+          });
+      });
         
 
         this._BusyDialog = new sap.m.BusyDialog({
@@ -99,8 +102,25 @@ sap.ui.define(
         this.getOwnerComponent().setModel(oJsonModel, "oJsonModel");
         window.that = this;
 
-
       },
+     
+      handleDateChange: function (oEvent) {
+      var oDatePicker = oEvent.getSource();
+      var sValue = oEvent.getParameter("value");
+      var oSelectedDate = new Date(sValue);
+      var oMinDate = new Date(); // Today's date
+
+      // Check if the selected date is before today's date
+      if (oSelectedDate < oMinDate) {
+          // Set ValueState to Error and clear the date value
+          oDatePicker.setValueState("Error");
+          oDatePicker.setValueStateText("Selected date cannot be back date.");
+          oDatePicker.setDateValue(null);
+      } else {
+          // Reset ValueState to None if the date is valid
+          oDatePicker.setValueState("None");
+      }
+  },
       attachDatePickerHandlers : function (oView) {
         
         var aDatePickers = oView.findAggregatedObjects(true, function(oControl) {
@@ -690,21 +710,6 @@ sap.ui.define(
           return false;
         }
 
-        //  for oData V2 model
-        // ZCalcNav.push({
-        //   Portc: selectedPorts[0].PortId,
-        //   Portn: selectedPorts[0].PortName,
-        //   Pdist: selectedPorts[0].Distance,
-        //   Medst: "NM",
-        //   Vspeed: GvSpeed,
-        //   Ppdays: selectedPorts[0].PortDays,
-        //   // Vsdays: selectedPorts[0].SeaDays,
-        //   // Vetdd: selectedPorts[0].DepartureDate, // Bad JS Date Value - DDMMYYYY 00:00:00 Timezone
-        //   Vetdd: new Date(dayjs.utc(selectedPorts[0].DepartureDateValue)), // DepartureDateValue must be in MM/DD/YYYY format for this to work
-        //   Vetdt: formatter.timeFormat(selectedPorts[0].DepartureTime),
-        //   Vwead: selectedPorts[0].Weather,
-        // });
-
         //   for oData v4 model
         ZCalcNav.push({
           Portc: selectedPorts[0].PortId,
@@ -735,7 +740,7 @@ sap.ui.define(
         };
         console.log(oPayload);
 
-        const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
+        // const oDataModelV2 = this.getOwnerComponent().getModel("modelV2");
         // testing  oData v4
         const oDataModelV4 = this.getOwnerComponent().getModel();
         let oBindList = oDataModelV4.bindList("/ZCalculateSet", true);
@@ -767,29 +772,7 @@ sap.ui.define(
           that.byId("daysInput").setValue(totalDays.toFixed(1));
         });
 
-        return
-        oDataModelV2.create("/ZCalculateSet", oPayload, {
-          success: function (oData) {
-            console.log(oData);
-            let totalDays = 0;
-            oData.ZCalcNav.results.forEach((data, index) => {
-              selectedPorts[index].SeaDays = data.Vsdays;
-              selectedPorts[index].Speed = GvSpeed;
-              selectedPorts[index].Weather = data.Vwead;
-              selectedPorts[index].ArrivalDate = data.Vetad;
-              selectedPorts[index].ArrivalTime = new Date(formatter.timestampToUtc(data.Vetat.ms));
-              selectedPorts[index].DepartureDate = data.Vetdd;
-              selectedPorts[index].DepartureTime = new Date(formatter.timestampToUtc(data.Vetdt.ms));
-              totalDays += Number(selectedPorts[index].SeaDays) + Number(selectedPorts[index].PortDays);
-              oJsonModel.refresh();
-            });
-            that.byId("daysInput").setValue(totalDays.toFixed(1));
-          },
-          error: function (oResponse) {
-            console.log(oResponse);
-            new sap.m.MessageBox.error(JSON.parse(oResponse.responseText).error.message.value)
-          },
-        });
+      
       },
 
       onVoyageCreate: function (oEvent) {

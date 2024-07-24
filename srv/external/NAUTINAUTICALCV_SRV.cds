@@ -1,4 +1,4 @@
-/* checksum : c6f0e5dcf794dcd6032b45146e177c33 */
+/* checksum : 176c194b0fe46136996c050bb3f3a1a8 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.supported.formats : 'atom json xlsx'
@@ -91,6 +91,13 @@ entity NAUTINAUTICALCV_SRV.CurTypeSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   key Navoycur : String(3) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'COUNTRY'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Navoycountry : String(15) not null;
   @sap.unicode : 'false'
   @sap.label : 'Currency Description'
   @sap.creatable : 'false'

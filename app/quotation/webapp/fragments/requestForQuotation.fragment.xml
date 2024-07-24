@@ -9,7 +9,14 @@
         confirm="onValueHelpCloseChartering"
         cancel="onValueHelpCloseChartering"
         liveChange="onChartSearch"
-        items="{/xNAUTIxAPPROVEDCHAT}"> 
+items="{
+        path: '/xNAUTIxAPPROVEDCHAT',
+        sorter: {
+            path: 'Chrnmin',
+            descending: true
+        }
+        }"         
+        > 
         <StandardListItem id="_IDGenStandardListItem1"
             title="{Chrnmin}"
             

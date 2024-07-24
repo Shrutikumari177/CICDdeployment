@@ -1,262 +1,73 @@
-<core:FragmentDefinition
-    xmlns="sap.m"
-    xmlns:form="sap.ui.layout.form"
-    xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout"
->
-    <Dialog
-        id="_IDDialog"
-        title=" Vendor Details"
-        class="sapUiSmallMargin"
-        contentHeight="400px"
-        contentWidth="50%"
-    >
-        <Panel id="_IDGenPanel1">
-            <FlexBox
-                id="_IDGenFlexBox1"
-                class="flex"
-            >
-                <VBox
-                    id="_IDGenVBox1"
-                    class="flex"
-                    alignItems="End"
-                >
-                    <FlexBox
-                        id="_IDGenFlexBox2"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel1"
-                            class="sapUiTinyMarginTop"
-                            text="Vendor No :"
-                        />
-                        <Input
-                            id="_IDGenInput1"
-                            value="{myModel>/0/Lifnr}"
-                            editable="false"
-                        />
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog title="Vendor Details" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%">
+        <Panel>
+            <FlexBox class="flex">
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Vendor No :" />
+                        <Input class="inputStyle" value="{myModel>/0/Lifnr}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox3"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel2"
-                            class="sapUiTinyMarginTop"
-                            text="Title : "
-                        />
-                        <Input
-                            id="_IDGenInput2"
-                            value="{myModel>/0/Anred}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Title :" />
+                        <Input class="inputStyle" value="{myModel>/0/Anred}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox4"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel3"
-                            class="sapUiTinyMarginTop"
-                            text="Address : "
-                        />
-                        <Input
-                            id="_IDGenInput3"
-                            value="{myModel>/0/Adrnr}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Name1 :" />
+                        <Input class="inputStyle" value="{myModel>/0/Name1}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox5"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel4"
-                            class="sapUiTinyMarginTop"
-                            text="Name 1 :"
-                        />
-                        <Input
-                            id="_IDGenInput4"
-                            value="{myModel>/0/Name1}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Name2 :" />
+                        <Input class="inputStyle" value="{myModel>/0/Name2}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox6"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel5"
-                            class="sapUiTinyMarginTop"
-                            text="Name 2 : "
-                        />
-                        <Input
-                            id="_IDGenInput5"
-                            value="{myModel>/0/Name2}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Telephone :" />
+                        <Input class="inputStyle" value="{myModel>/0/Telf2}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox7"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel6"
-                            class="sapUiTinyMarginTop"
-                            text="Street : "
-                        />
-                        <Input
-                            id="_IDGenInput6"
-                            value="{myModel>/0/Stras}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Fax No:" />
+                        <Input class="inputStyle" value="{myModel>/0/Telfx}" editable="false" />
                     </FlexBox>
-                    <FlexBox
-                        id="_IDGenFlexBox8"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel7"
-                            class="sapUiTinyMarginTop"
-                            text="Postal Code :"
-                        />
-                        <Input
-                            id="_IDGenInput7"
-                            value="{myModel>/0/Pstlz}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Language :" />
+                        <Input class="inputStyle" value="{myModel>/0/Spras}" editable="false" />
                     </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox833"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel73"
-                            class="sapUiTinyMarginTop"
-                            text="Country:"
-                        />
-                        <Input
-                            id="_IDGenInput337"
-                            value="{myModel>/0/Land1}"
-                            editable="false"
-                        />
-                    </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox83"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel37"
-                            class="sapUiTinyMarginTop"
-                            text="Region :"
-                        />
-                        <Input
-                            id="_IDGenInput37"
-                            value="{myModel>/0/Regio}"
-                            editable="false"
-                        />
-                    </FlexBox>
+                    <!-- Add other FlexBoxes and Inputs here -->
                 </VBox>
 
-                <VBox
-                    id="_IDGenVBox2"
-                    class="flex"
-                    alignItems="End"
-                 >
-                    
-                    <FlexBox
-                        id="_IDGenFlexBox13"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel12"
-                            class="sapUiTinyMarginTop"
-                            text="City : "
-                        />
-                        <Input
-                            id="_IDGenInput12"
-                            value="{myModel>/0/Ort01}"
-                            editable="false"
-                        />
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Address :" />
+                        <Input class="inputStyle" value="{myModel>/0/Adrnr}" editable="false" />
                     </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox133"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel132"
-                            class="sapUiTinyMarginTop"
-                            text="Telephone  : "
-                        />
-                        <Input
-                            id="_IDGenInput132"
-                            value="{myModel>/0/Telf2}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Street :" />
+                        <Input class="inputStyle" value="{myModel>/0/Stras}" editable="false" />
                     </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox1333"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel1332"
-                            class="sapUiTinyMarginTop"
-                            text="Fax No: "
-                        />
-                        <Input
-                            id="_IDGenInput1332"
-                            value="{myModel>/0/Telfx}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="City :" />
+                        <Input class="inputStyle" value="{myModel>/0/Ort01}" editable="false" />
                     </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox13433"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel13342"
-                            class="sapUiTinyMarginTop"
-                            text="Creation Date : "
-                        />
-                        <Input
-                            id="_IDGenInput13342"
-                            value="{myModel>/0/Erdat}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Country :" />
+                        <Input class="inputStyle" value="{myModel>/0/Land1}" editable="false" />
                     </FlexBox>
-
-                    <FlexBox
-                        id="_IDGenFlexBox134343"
-                        class="headerItem"
-                    >
-                        <Label
-                            id="_IDGenLabel133442"
-                            class="sapUiTinyMarginTop"
-                            text="Language: "
-                        />
-                        <Input
-                            id="_IDGenInput133442"
-                            value="{myModel>/0/Spras}"
-                            editable="false"
-                        />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Postal Code:" />
+                        <Input class="inputStyle" value="{myModel>/0/Pstlz}" editable="false" />
                     </FlexBox>
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Region :" />
+                        <Input class="inputStyle" value="{myModel>/0/Regio}" editable="false" />
+                    </FlexBox>
+                    <!-- Add other FlexBoxes and Inputs here -->
                 </VBox>
             </FlexBox>
         </Panel>
 
         <footer>
-            <OverflowToolbar id="_IDGenOverflowToolbar2">
-                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
-                <Button
-                    id="_IDGenButto"
-                    text="Close"
-                    press="oncancell"
-                />
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button text="Close" press="oncancell" />
             </OverflowToolbar>
         </footer>
     </Dialog>

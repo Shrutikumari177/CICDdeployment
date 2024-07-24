@@ -330,7 +330,10 @@ sap.ui.define(
             let cells = oSelectedItem.getCells();
             console.log(cells);
  
-            return [oSelectedItem.getBindingContext().getProperty("Navoycur"), oSelectedItem.getBindingContext().getProperty("Navoygcurdes")]
+            return [oSelectedItem.getBindingContext().getProperty("Navoycur"),
+             oSelectedItem.getBindingContext().getProperty("Navoygcurdes"),
+             oSelectedItem.getBindingContext().getProperty("Navoycountry")
+            ]
  
           } else {
  
@@ -364,6 +367,7 @@ sap.ui.define(
         var firstItemCells = items[0].getCells();
         firstItemCells[0].setValue("");
         firstItemCells[1].setValue("");
+        firstItemCells[2].setValue("");
  
  
  
@@ -408,8 +412,9 @@ sap.ui.define(
         sap.m.MessageToast.show("Creating entries...");
 
         oTable.getItems().forEach(function (row) {
-          var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
-          var value2 = row.getCells()[1].getValue();
+        var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
+        var value2 = row.getCells()[1].getValue();
+        var value3 = row.getCells()[2].getValue();
 
           if (tempCodesArray.length && tempCodesArray.includes(value1)) {
             duplicateEntries.push(value1);
@@ -417,7 +422,7 @@ sap.ui.define(
             tempCodesArray.push(value1);
         }
 
-          if (!value1 || !value2) {
+          if (!value1 || !value2 || !value3) {
             errors.push("Please enter both fields for all rows.");
             entriesProcessed++;
             checkCompletion();
@@ -463,6 +468,7 @@ sap.ui.define(
           oTable.getItems().forEach(function (row) {
             var value1 = row.getCells()[0].getValue();
             var value2 = row.getCells()[1].getValue();
+            var value3 = row.getCells()[2].getValue();
 
             // Format Uomdes value
             var formattedDes = that.formatDes(value2);
@@ -472,7 +478,8 @@ sap.ui.define(
             try {
               oBindListSP.create({
                 Navoycur: value1,
-                Navoygcurdes: formattedDes
+                Navoygcurdes: formattedDes,
+                Navoycountry: value3
               });
               that.getView().getModel().refresh();
               that.resetView();
@@ -506,23 +513,23 @@ sap.ui.define(
         // Set the value on the correct input fields
         let oInput11 = this.oSourceSelected;
         let oInput12 = this.oSourceSelected.getParent().getCells()[1];
+        let oInput13 = this.oSourceSelected.getParent().getCells()[2];
     
         oInput11.setValue(oSelectedItem.getCells()[0].getText());
         oInput12.setValue(oSelectedItem.getCells()[1].getText());
+        oInput13.setValue(oSelectedItem.getCells()[2].getText());
     
         // Clear the filter
         oEvent.getSource().getBinding("items").filter([]);
-    },
+      },
     
 
       
       onAddRow1: function () {
         var oTable = this.byId("entryTypeTable");
 
-        // Create a new row
         var oNewRow = new sap.m.ColumnListItem({
           cells: [
-            // new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
             new sap.m.Input({
               value: "", editable: true,
               showValueHelp: true,
@@ -533,13 +540,16 @@ sap.ui.define(
             new sap.m.Input({
               value: "",
               editable: false
+            }),
+            new sap.m.Input({
+              value: "",
+              editable: false
             })
+
 
           ]
           
         });
-
-        // Add the new row to the table
         oTable.addItem(oNewRow);
       },
 
@@ -547,8 +557,14 @@ sap.ui.define(
       onDeleteRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var aSelectedItems = oTable.getSelectedItems();
+        var aItems = oTable.getItems();
     
-
+        if (aItems.length <= 1) {
+          sap.m.MessageToast.show("The table must have at least one row.");
+          oCreateTypeTable.removeSelections();
+          return;
+        }
+        
         if (aSelectedItems.length === 0) {
             sap.m.MessageToast.show("Please select an item");
             return;
@@ -610,7 +626,6 @@ sap.ui.define(
  
  
       resetView: function () {
-        // Reset view to initial state
         // this.getView().byId("updateTypeTable").setVisible(false);
         this.getView().byId("entryTypeTable").setVisible(false);
         this.getView().byId("mainPageFooter").setVisible(false);
@@ -623,6 +638,7 @@ sap.ui.define(
         this.getView().byId("createTypeTable").setVisible(true).removeSelections();
         this.getView().byId("NAVOYCUR1").setText("");
         this.getView().byId("NAVOYGCURDES1").setValue("");
+        
         // this.getView().byId("Navoycur2").setValue("");
         // this.getView().byId("Navoycur").setValue("");
         // this.getView().byId("editBtn").setEnabled(true);

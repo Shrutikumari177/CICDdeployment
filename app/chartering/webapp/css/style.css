@@ -16,8 +16,9 @@
  
  
 }
-.headerItem{
-    gap :10px;
+.headerItem1{
+  width: 100%;
+  
    
 }
 .charteringItem{
@@ -37,11 +38,15 @@
         margin-right: 74px !important;
     }
    .purchaselabeltxt{
-    margin-right: 20px !important;
+    margin-right: 23px !important;
    }
-   purchaselabel1txt{
+   .purchaselabel1txt{
     margin-right: 22px !important;
    }
+   .purchaseorglabel{
+    margin-right: 23px !important;
+   }
+
    .paylabeltxt{
     margin-right: 13px !important;
    }
@@ -91,3 +96,17 @@
  .chartlabeltxt{
     margin-right: 113px !important;
  }  
+
+
+
+ 
+.labelStyle {
+    width: 100%;
+    text-align: right;
+    margin-top: 10%;
+}
+ 
+.inputStyle {
+    width: 60%;
+    height: auto;
+}

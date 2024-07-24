@@ -265,24 +265,23 @@
                 class="icontab1"
             >
                 <items>
-                    <IconTabFilter
+                     <IconTabFilter
                         text="Vessel Details"
                         key="info"
-                        visible="false"
+                        visible="true"
                     >
                         <Panel
                             id="p1"
                             height="600px"
                             width="100%"
-                            visible="false"
+                            visible="true"
                         >
                             <FlexBox
                                 id="vdsection1"
                                 class="vdsection"
-                                alignContent="Start"
-                                alignItems="Start"
+                              
                             >
-                                <HBox alignItems="Start">
+                                <HBox >
                                     <Label
                                         id="_IDGenLabel1"
                                         text="Vessel Name:"
@@ -291,11 +290,12 @@
                                     <Input
                                         id="_IDGenInput1"
                                         width="150px"
+                                        value="{voyHeaderModel>/0/Vessn}"
+                                        editable="false"
                                     />
                                 </HBox>
                                 <HBox
-                                    alignContent="Center"
-                                    alignItems="Center"
+                                   
                                 >
                                     <Label
                                         id="_IDGenLabel3"
@@ -305,9 +305,11 @@
                                     <Input
                                         id="_IDGenInput3"
                                         width="150px"
+                                        value="{voyHeaderModel>/0/Party}"
+                                         editable="false"
                                     />
                                 </HBox>
-                                <HBox alignItems="Center">
+                                <HBox alignItems="Start">
                                     <Label
                                         id="_IDGenLabel2"
                                         text="Vessel IMO No:"
@@ -316,6 +318,8 @@
                                     <Input
                                         id="_IDGenInput2"
                                         width="170px"
+                                        value="{voyHeaderModel>/0/Vimo}"
+                                         editable="false"
                                     />
                                 </HBox>
                             </FlexBox>
@@ -331,16 +335,18 @@
                             />
                             <Table
                                 id="_IDGenTable3"
-                                width="60%"
+                                width="50%" 
                                 fixedLayout="false"
                                 mode="SingleSelectLeft"
                                 class="table"
-                                items="{voyHeaderModel>/}"
+
+                    
                             >
                                 <columns>
                                     <Column
                                         id="_IDGenColumn2"
-                                        width="30%"
+                                        width="50%"
+                                        
                                     >
                                         <Label
                                             id="_IDGenLabel5"
@@ -356,15 +362,7 @@
                                             text="Reference Docuement No"
                                         />
                                     </Column>
-                                    <Column
-                                        id="_IDGenColumn31"
-                                        width="20%"
-                                    >
-                                        <Label
-                                            id="_IDGenLabel41"
-                                            text=" "
-                                        />
-                                    </Column>
+                                    
                                 </columns>
                                 <items>
                                     <ColumnListItem id="_IDGenColumnListItem1">
@@ -397,6 +395,7 @@
                                                     />
                                                 </items>
                                             </Select>
+                                            <Input />
                                         </cells>
                                     </ColumnListItem>
                                     <ColumnListItem id="_IDGenColumnListItem12">
@@ -429,6 +428,7 @@
                                                     />
                                                 </items>
                                             </Select>
+                                            <Input />
                                         </cells>
                                     </ColumnListItem>
                                     <ColumnListItem id="_IDGenlumnListItem12">
@@ -461,6 +461,7 @@
                                                     />
                                                 </items>
                                             </Select>
+                                            <Input />
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -469,12 +470,13 @@
                                 id="DocButton"
                                 icon="sap-icon://sys-minus"
                                 class="buttonSpacing"
+                                visible="false"
                             />
                         </Panel>
                     </IconTabFilter>
                     <IconTabFilter
                         text="Vessel Plan/Actual"
-                        key="info"
+                        key="info1"
                     >
                         <Panel
                             id="p2"
@@ -500,7 +502,7 @@
                                     id="_friegthIdPlan"
                                      value=" {path :'voyHeaderModel>/0/Frcost', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
-                                    width="200px"
+                                    width="160px"
                                 
                                 />
 
@@ -523,7 +525,7 @@
 
                                 <Label text="Total Cost" />
                                 <Input
-                                    width="12rem"
+                                    width="11rem"
                                     id="_totalCostPlId"
                                     value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
                                 />
@@ -532,7 +534,7 @@
                                 <Input
                                     value=" {path :'voyItemModel>/', formatter:'.totalDistanceCalc'}"
                                     editable="false"
-                                    width="120px"
+                                    width="90px"
                                 />
 
                                 <Label text="Total Days" />
@@ -743,8 +745,9 @@
                                                 />
                                                 <Input
                                                     value="{voyItemModel>Ppdays}"
-                                                    liveChange=".onPortDaysChange"
+                                                    change=".onPortDaysChange"
                                                 />
+                                                    <!-- liveChange=".onPortDaysChange" -->
                                                 <Input
                                                     value="{voyItemModel>Vwead}"
                                                 />
@@ -851,7 +854,7 @@
                                     id="_friegthIdPlan2"
                                     value=" {path :'voyItemModel1>/', formatter:'.CalcTotalFrcost'}"
                                     liveChange=".liveFrCostChange"
-                                    width="200px"
+                                    width="160px"
                                 />
 
                                 <Label text="Unit" />
@@ -871,14 +874,14 @@
 
                                 <Label text="Total Cost" />
                                 <Input
-                                    width="12rem"
+                                    width="11rem"
                                     id="_totalCostPlId2"
                                     value=" {path :'voyItemModel1>/', formatter:'.calctotalCost'}"
                                 />
 
-                                <Label text="Total Dist" />
+                                <Label text="Total Distance" />
                                 <Input
-                                    value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
+                                    width="90px" value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
                                 />
 
                                 <Label text="Total Days" />

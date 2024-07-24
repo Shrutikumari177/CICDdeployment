@@ -13,60 +13,63 @@
     >
         <Panel >
             <FlexBox  class="flex" >
-                <VBox  class="flex" alignItems="End" >
+                <VBox  class="flex" alignItems="Start" >
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Done By Vendor :"
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/DoneBy}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem">
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Created By : "
                         />
                         <Input
-                        
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/createdBy}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem" >
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Status : "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Stat}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Type(Auto):"
                         />
                         <Input
-                    
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Zmode}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem" >
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Comments: "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Zcom}"
                             editable="false"
                         />
@@ -74,58 +77,63 @@
                     
                 </VBox>
 
-                <VBox class="flex" alignItems="End">
-                    <FlexBox class="headerItem" >
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="AwardInfo: "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Award}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Voyage Type : "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Voyty}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox  class="headerItem" >
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
     
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text=" Cargo Type: "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Carty}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem">
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text=" Voyage Name: "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Voynm}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Vessel Name : "
                         />
                         <Input
+                            class="inputStyle"
                             value="{biddingHisReport1>/0/Vessn}"
                             editable="false"
                         />

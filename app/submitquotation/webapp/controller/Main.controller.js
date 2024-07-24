@@ -49,7 +49,7 @@ sap.ui.define([
                 };
   
                 this.getBidData = [];
-                this.staticData = "2100000002";
+                this.staticData = "2100000001";
   
                 var oModel = this.getOwnerComponent().getModel();
   
@@ -91,7 +91,7 @@ sap.ui.define([
                 }.bind(this));
             },
                 
-          _getCharterListData: function () {
+          etCharterListData: function () {
               debugger;
               let charteringData = this.getView().getModel("charteringRequestModel").getData();
               let current = `${this.dateFormat(new Date())}T${this.formatTime()}`;
@@ -111,13 +111,12 @@ sap.ui.define([
                       element.zstat = statusLevel.YETTOSTART;
                       counts.Open++;
                   } else if (current > end) {
-                      element.zstat = statusLevel.CLOSED;
+                      element.zstat = statusLevel.OPEN;
                       counts.Closed++;
                   } else {
                       element.zstat = statusLevel.OPEN; 
                       counts.Open++;
                   }
-          
               });
           
               this.getView().getModel("charteringRequestModel").refresh();
@@ -127,6 +126,45 @@ sap.ui.define([
               bidTileModel.setProperty("/Closed", counts.Closed);
               bidTileModel.setProperty("/All", counts.All);
           },
+  
+          _getCharterListData: function () {
+              // debugger;
+              let charteringData = this.getView().getModel("charteringRequestModel").getData();
+              let current = new Date();
+              
+              let counts = {
+                  Open: 0,
+                  Closed: 0,
+                  YETTOSTART: 0,
+                  All: charteringData.length
+              };
+          
+              charteringData.forEach((element) => {
+                  let start = new Date(`${element.Chrqsdate}T${element.Chrqstime}`);
+                  let end = new Date(`${element.Chrqedate}T${element.Chrqetime}`);
+                  
+                  if (current >= start && current <= end) {
+                      element.zstat = statusLevel.YETTOSTART;
+                      counts.Open++;
+                  } else if (current < start) {
+                      element.zstat = statusLevel.OPEN;
+                      counts.Open++;
+                  } else if (current > end) {
+                      element.zstat = statusLevel.CLOSED;
+                      counts.Closed++;
+                  }
+              });
+          
+              this.getView().getModel("charteringRequestModel").refresh();
+          
+              let bidTileModel = this.getView().getModel("bidtilemodel");
+              bidTileModel.setProperty("/Open", counts.Open);
+              bidTileModel.setProperty("/Closed", counts.Closed);
+              bidTileModel.setProperty("/YETTOSTART", counts.YETTOSTART);
+              bidTileModel.setProperty("/All", counts.All);
+          },
+          
+          
           
           
   
@@ -276,6 +314,7 @@ sap.ui.define([
             },
   
             // Inside the toBiddingDetail function
+  
   // toBiddingDetail: function (oEvent) {
   //     const oContext = oEvent.getSource().getBindingContext("charteringRequestModel");
   //     const rowData = oContext.getObject();
@@ -312,9 +351,7 @@ sap.ui.define([
               const oSource = oEvent.getSource();
               const oBindingContext = oSource.getBindingContext("charteringRequestModel");
               const rowData = oBindingContext.getObject();
-          
               sessionStorage.setItem("biddingData", JSON.stringify(rowData));
-          
               this.getOwnerComponent().getRouter().navTo("RouteBidding");
           }
         });

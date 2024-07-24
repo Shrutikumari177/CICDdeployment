@@ -93,7 +93,7 @@
                                     iconVisible="true"
                                     statusText="Active"
                                     subtitle="Bids: {bidtilemodel>/Open}"
-                                    title="Open / Yet to Start"
+                                    title="Open / Ongoing"
                                     titleMaxLines="30"
                                     press="pressOpen"
                                 />

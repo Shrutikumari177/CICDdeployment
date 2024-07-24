@@ -32,6 +32,7 @@
                     <PropertyRef Name="Navoycur"/>
                 </Key>
                 <Property Name="Navoycur" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Navoycountry" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="COUNTRY" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Navoygcurdes" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Currency Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="VoyType" sap:content-version="1">

@@ -326,7 +326,7 @@
                                 <IconTabFilter
                                     id="_IDGenIconTabFilter4"
                                     text="Submit Vessel Details"
-                                    visible="{= ${vData>/status} === 'Open' }"
+                                    visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }"
                                 >
                                     <form:SimpleForm
                                         id="_IDGenSimpleForm6"
@@ -505,7 +505,7 @@
                                 <IconTabFilter
                                     id="GenIconTabFilter6"
                                     text="Submit Bid"
-                                    visible="{= ${vData>/status} === 'Open' }"
+                                    visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }"
                                 >
                                     <l:BlockLayout
                                         id="_IDGenBlockLayout3"

@@ -1,7 +1,22 @@
-/* Enter your custom styles here */
 .flex{
     margin-left: 29px;
 }
 .headerItem{
     gap :10px;
+}
+.headerItem {
+    width: 100%;
+}
+ 
+.labelStyle {
+    width: 100%;
+    text-align: right;
+    margin-top: 10%;
+}
+
+
+ 
+.inputStyle {
+    width: 60%;
+    height: auto;
 }

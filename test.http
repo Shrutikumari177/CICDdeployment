@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 #####
 
-GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxallstatuses
+GET http://localhost:4004/odata/v4/nauticalservice/quotations?$filter=Chrnmin eq '4000000601'
 
 
 ####
@@ -21,3 +21,70 @@ Content-Type: application/json
       "Status": "Voyage Appr Pend"
      
     }
+
+
+###
+
+PUT http://localhost:4004/odata/v4/nauticalservice/quotations(Lifnr='4000000601',Voyno='1000000197',Chrnmin='4000000601')
+Content-Type: application/json
+
+{
+  "modifiedBy":"A.SHARMA",
+  "Lifnr": "2100000002",
+  "Voyno": "1000000197",
+  "Chrnmin": "4000000601",
+  "Vimono": "ESSAR123",
+  "Vname": "ESS87690",
+  "Biddate": "2024-07-23",
+  "Bidtime": "00:41:16",
+  "to_quote_item": [
+    {
+    "Zcode": "COOR",
+    "CodeDesc": "COUNTRY OF ORIGIN",
+    "Cunit": "",
+    "Cvalue": "0.000",
+    "Value": "IN",
+    "Zcom": ""
+    },
+    {
+    "Zcode": "DAT1",
+    "CodeDesc": "LAST CLEANING DATE",
+    "Cunit": "",
+    "Cvalue": "0.000",
+    "Value": "2024-05-03",
+    "Zcom": ""
+    },
+    {
+    "Zcode": "PORT",
+    "CodeDesc": "LAST PORT OF CALL",
+    "Cunit": "",
+    "Cvalue": "0.000",
+    "Value": "MUMBAI",
+    "Zcom": ""
+    },
+    {
+    "Zcode": "CLASS",
+    "CodeDesc": "CLASS OF VESSEL",
+    "Cunit": "",
+    "Cvalue": "0.000",
+    "Value": "A",
+    "Zcom": ""
+    },
+    {
+    "Zcode": "DEMURRAGE",
+    "CodeDesc": "DEMURRAGE",
+    "Cunit": "INR",
+    "Cvalue": "0.000",
+    "Value": "120000",
+    "Zcom": ""
+    },
+    {
+    "Zcode": "FREIG",
+    "CodeDesc": "FREIGHT",
+    "Cunit": "INR",
+    "Cvalue": "0.000",
+    "Value": "3000000",
+    "Zcom": ""
+    }
+  ]
+}

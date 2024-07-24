@@ -9,7 +9,7 @@
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
         initialFocus="SearchField"
-        items="{ path: '/xNAUTIxvendbid_val' ,  sorter: {
+        items="{ path: '/xNAUTIxAPPROVEDCHAT' ,  sorter: {
                 path: 'Chrnmin',
                 descending: true
             }}">

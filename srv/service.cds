@@ -310,6 +310,12 @@ entity xNAUTIxZSUBMITQUOUTFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SR
         };
 
     entity sendEmail                    as projection on nauticalschema.sendEmail;
+    @Capabilities : {Updatable,DeepInsertSupport : {
+        $Type : 'Capabilities.DeepInsertSupportType',
+        
+    },Insertable,Readable,Deletable,FilterFunctions : [
+        '',
+    ],}
     entity quotations                    as projection on nauticalschema.quotations;
 
 
@@ -442,11 +448,9 @@ entity xNAUTIxZSUBMITQUOUTFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SR
                 Uomdes
         };
 
-    entity CurTypeSet                   as
-        projection on NAUTINAUTICALCV_SRV.CurTypeSet {
-            key Navoycur,
-                Navoygcurdes
-        };
+     entity CurTypeSet as projection on NAUTINAUTICALCV_SRV.CurTypeSet
+    {        key Navoycur, Navoycountry, Navoygcurdes     }    
+;
 
     entity GtTabSet                     as
         projection on NAUTINAUTICALCV_SRV.GtTabSet

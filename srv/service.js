@@ -1,8 +1,12 @@
 const cds = require('@sap/cds');
 const xsenv = require("@sap/xsenv");
 const axios = require('axios');
-const { sendMail } = require("@sap-cloud-sdk/mail-client");
+const {
+    sendMail
+} = require("@sap-cloud-sdk/mail-client");
+
 module.exports = async (srv) => {
+
     // Connect to services
     const NAUTINAUTICALCV_SRV = await cds.connect.to("NAUTINAUTICALCV_SRV");
     const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV");
@@ -23,10 +27,10 @@ module.exports = async (srv) => {
 
     const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV");
     srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
-    srv.on('READ', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+    srv.on('READ', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxallstatuses', req => NAUTIVOYSTATUS_SRV.run(req.query));
-    srv.on('CREATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
-    srv.on('UPDATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query)); 
+    srv.on('CREATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
+    srv.on('UPDATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
 
 
     const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
@@ -50,29 +54,71 @@ module.exports = async (srv) => {
     srv.on('CREATE', 'FileuploadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
     srv.on('CREATE', 'downloadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
 
+    const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
+    srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
 
 
-    // srv.on('CREATE', 'ControllerLiveBidDetails', async (req) => {
+    srv.on('READ', 'quotations', async function (req) {
+        let response = await SELECT.from('nauticalservice.quotations');
+        console.log("response", response);
 
+        return response;
+    });
+    
+    srv.on('UPDATE', 'quotations', async (req) => {
+        try {
+            // Extract key parameters from the request URL
+            const { Lifnr, Voyno, Chrnmin } = req.params[0];
 
-    //     // Now you can use the maxIdValue for creating a new instance
-    //     const newData = {...req.data, ID: 1 };
-    //     try {
-    //       const newBidDetails = await cds.create('ControllerLiveBidDetails').entries(newData);
-    //       req.reply(newBidDetails);
-    //     } catch (error) {
-    //       req.error(500, `Error creating ControllerLiveBidDetails: ${error.message}`);
-    //     }
-    //   });
+            // Log the extracted key parameters
+            console.log("Key Parameters:", { Lifnr, Voyno, Chrnmin });
+
+            // Create the where condition object
+            const whereCondition = { Lifnr, Voyno, Chrnmin };
+
+            // Extract and log the values to be updated from the request body
+            const updateData = req.data;
+            console.log("Update Data:", updateData);
+
+            // Perform the update operation
+            const affectedRows = await cds.transaction(req).run(
+                UPDATE('nauticalservice.quotations')
+                    .set(updateData)
+                    .where(whereCondition)
+            );
+
+            // Log and return the number of affected rows
+            console.log("Number of rows affected:", affectedRows);
+
+            return affectedRows;
+        } catch (error) {
+            console.error("Error during update:", error);
+            req.error({ code: 500, message: "Internal server error during update operation" });
+        }
+    });
+
 
 
     srv.on('READ', 'calculateRankings', async (req) => {
-        console.log("values", req._queryOptions.$filter);
+        console.log("Triggered....", req.data)
+        console.log("valuesgfhjkl", req._queryOptions.$filter);
 
         let Chrnmin = req._queryOptions.$filter.split(' ')[2];
         Chrnmin = Chrnmin.replace(/'/g, '');
+        let charminData = undefined;
+        if (!Chrnmin) {
+            charminData = await SELECT.from('nauticalservice.quotations');
+        } else {
+            charminData = await SELECT.from('nauticalservice.quotations').where({
+                Chrnmin
+            });
+        }
+        console.log("Chrnmin", Chrnmin);
 
-        const charminData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxvenBid').where({ Chrnmin }));
+
+        console.log("quotationsData", charminData);
+
+
 
         if (!charminData || charminData.length === 0) {
             console.error(`No data found for Chrnmin: ${Chrnmin}`);
@@ -80,14 +126,16 @@ module.exports = async (srv) => {
         }
 
         let Voyno = charminData[0].Voyno;
-
+        console.log("Voyno from Charmin", Voyno);
         if (!Voyno) {
             console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
             return [];
         }
 
-        const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({ Voyno }));
-
+        const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({
+            Voyno
+        }));
+        console.log("voyageData", voyageData);
         if (!voyageData || voyageData.length === 0) {
             console.error(`No voyage data found for Voyno: ${Voyno}`);
             return [];
@@ -98,26 +146,6 @@ module.exports = async (srv) => {
 
         return rankedVendors;
     });
-    const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
-    srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
-
-    // const { 'cds.xt.DeploymentService': ds } = cds.services
-    // const { 'cds.xt.SaasProvisioningService': sp } = cds.services
-
-    // sp.before('dependencies', async (_, Req) => {
-
-    //     const services = xsenv.getServices({
-    //         // html5Runtime: { tag: 'html5-apps-repo-rt' },
-    //         destination: { tag: 'destination' },
-    //         connectivity: { tag: "connectivity" }
-    //     });
-
-    //     cds.env.requires["cds.xt.SaasProvisioningService"].dependencies = [];
-    //     // cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.html5Runtime.uaa.xsappname);
-    //     cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.destination.xsappname);
-    //     cds.env.requires["cds.xt.SaasProvisioningService"].dependencies.push(services.connectivity.xsappname);
-
-    // });
 
     function calculateAndRank(voyageData, charminData) {
         const vendorScores = calculateScores(voyageData, charminData);
@@ -131,7 +159,7 @@ module.exports = async (srv) => {
 
     function calculateScores(voyageData, charminData) {
         const vendorScores = {};
-
+    
         charminData.forEach(vendor => {
             if (!vendorScores[vendor.Lifnr]) {
                 vendorScores[vendor.Lifnr] = {
@@ -139,34 +167,36 @@ module.exports = async (srv) => {
                     Chrnmin: vendor.Chrnmin,
                     score: 0,
                     eligible: "Yes",
-                    Cvalue: vendor.Cvalue,
+                    Cvalue: vendor.to_quote_item.map(item => item.Cvalue),
                     bidDetails: []
                 };
             }
-
-            const expected = voyageData.find(v => v.Zcode === vendor.Zcode && v.Voyno === vendor.Voyno);
-            if (expected) {
-                let fScore;
-                if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== vendor.Value) {
-                    vendorScores[vendor.Lifnr].eligible = "No";
-                    fScore = 0;
-                } else {
-                    const score = expected.Value === vendor.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
-                    vendorScores[vendor.Lifnr].score += score;
-                    fScore = score;
+    
+            vendor.to_quote_item.forEach(quoteItem => {
+                const expected = voyageData.find(v => v.Zcode === quoteItem.Zcode && v.Voyno === vendor.Voyno);
+                if (expected) {
+                    let fScore;
+                    if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== quoteItem.Value) {
+                        vendorScores[vendor.Lifnr].eligible = "No";
+                        fScore = 0;
+                    } else {
+                        const score = expected.Value === quoteItem.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
+                        vendorScores[vendor.Lifnr].score += score;
+                        fScore = score;
+                    }
+                    vendorScores[vendor.Lifnr].bidDetails.push({
+                        CodeDesc: expected.CodeDesc,
+                        Value: quoteItem.Value,
+                        Cvalue: quoteItem.Cvalue,
+                        fScore: fScore
+                    });
                 }
-                vendorScores[vendor.Lifnr].bidDetails.push({
-                    CodeDesc: expected.CodeDesc,
-                    Value: vendor.Value,
-                    Cvalue: vendor.Cvalue,
-                    fScore: fScore
-                });
-            }
+            });
         });
-
+    
         return vendorScores;
     }
-
+    
     function rankVendors(vendorScores, charminData) {
         const rankedVendors = Object.keys(vendorScores)
             .map(vendor => ({
@@ -179,7 +209,7 @@ module.exports = async (srv) => {
                 bidDetails: vendorScores[vendor].bidDetails
             }))
             .sort((a, b) => b.score - a.score);
-
+    
         let rankCounter = {};
         rankedVendors.forEach(vendor => {
             const key = `${vendor.Voyno}-${vendor.Chrnmin}`;
@@ -188,9 +218,10 @@ module.exports = async (srv) => {
             }
             vendor.Trank = `T${rankCounter[key]++}`;
         });
-
+    
         return rankedVendors;
     }
+    
 
     function calculateCommercialRank(rankedVendors) {
         const groupedByChrnmin = rankedVendors.reduce((acc, vendor) => {
@@ -275,7 +306,7 @@ module.exports = async (srv) => {
                     };
                 } else {
                     mailConfig = {
-                        from: "josiah.homenick1@ethereal.email",
+                        from: "nikki51@ethereal.email",
                         to: receiverEmail,
                         subject: `Submit a Quotation for ${cargoSize} tons of Cargo via Route "${routes[index]}"`,
                         text: `
@@ -316,8 +347,8 @@ module.exports = async (srv) => {
     srv.on('CREATE', "sendEmail", async (req) => {
         try {
             console.log("Triggered....", req.data);
-           
-   
+
+
             const {
                 receiversEmails,
                 vendorsName,
@@ -328,9 +359,9 @@ module.exports = async (srv) => {
                 bidstartTime,
                 bidEndTime
             } = req.data;
- 
-           
-   
+
+
+
             let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
                 const mailConfig = {
                     from: "josiah.homenick1@ethereal.email",
@@ -354,15 +385,17 @@ module.exports = async (srv) => {
                         Your Company
                     `
                 };
-               
-                let res = await sendMail({ destinationName: "mailDestination" }, mailConfig);
+
+                let res = await sendMail({
+                    destinationName: "mailDestination"
+                }, mailConfig);
                 console.log(`Email sent to ${vendorsName[index]} (${receiverEmail}) - Response:`, res);
                 return {
                     "message": `Email sent successfully to ${vendorsName[index]}`,
                     "status": 201
                 };
             });
-   
+
             let results = await Promise.all(emailPromises);
             return results;
         } catch (error) {
@@ -375,9 +408,11 @@ module.exports = async (srv) => {
     });
 
     registerHandlers(srv, NAUTICHASTATUS_SRV, [
-        'cha_statusSet'])
+        'cha_statusSet'
+    ])
     registerHandlers(srv, NAUTICOMP_QUOT_SRV, [
-        'xNAUTIxcomp_quot', 'xNAUTIxfinalbid', 'xNAUTIxitemBid', 'xNAUTIxvenBid'])
+        'xNAUTIxcomp_quot', 'xNAUTIxfinalbid', 'xNAUTIxitemBid', 'xNAUTIxvenBid'
+    ])
 
     registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, ['xNAUTIxchaApp1', 'chartapprSet']);
 
@@ -455,7 +490,12 @@ function registerHandlers(srv, service, entities) {
 
     // Handle 'getRoute' entity
     srv.on('READ', 'getRoute', async (req) => {
-        const { startLatitude, startLongitude, endLatitude, endLongitude } = req._queryOptions;
+        const {
+            startLatitude,
+            startLongitude,
+            endLatitude,
+            endLongitude
+        } = req._queryOptions;
         console.log('End Longitude:', req._queryOptions);
         console.log('Start Latitude:', startLatitude);
         console.log('Start Longitude:', startLongitude);
@@ -465,214 +505,216 @@ function registerHandlers(srv, service, entities) {
 
         try {
 
-            // let distances = {
-            //     "info": {
-            //         "copyrights": [
-            //             "Viku AS"
-            //         ],
-            //         "took": 57
-            //     },
-            //     "paths": [
-            //         {
-            //             "distance": 1933.9091252699784,
-            //             "bbox": [
-            //                 72.695488,
-            //                 5.701832,
-            //                 86.691673,
-            //                 20.261633
-            //             ],
-            //             "points": {
-            //                 "coordinates": [
-            //                     [
-            //                         72.857384,
-            //                         18.937828
-            //                     ],
-            //                     [
-            //                         72.844163,
-            //                         18.928939
-            //                     ],
-            //                     [
-            //                         72.844985,
-            //                         18.927786
-            //                     ],
-            //                     [
-            //                         72.845178,
-            //                         18.92605
-            //                     ],
-            //                     [
-            //                         72.831252,
-            //                         18.836152
-            //                     ],
-            //                     [
-            //                         72.831252,
-            //                         18.836152
-            //                     ],
-            //                     [
-            //                         72.761484,
-            //                         18.701623
-            //                     ],
-            //                     [
-            //                         72.695488,
-            //                         18.137755
-            //                     ],
-            //                     [
-            //                         73.021381,
-            //                         17.0
-            //                     ],
-            //                     [
-            //                         73.664793,
-            //                         15.113611
-            //                     ],
-            //                     [
-            //                         76.069337,
-            //                         9.5
-            //                     ],
-            //                     [
-            //                         77.076083,
-            //                         8.0
-            //                     ],
-            //                     [
-            //                         79.848519,
-            //                         6.062151
-            //                     ],
-            //                     [
-            //                         80.701832,
-            //                         5.701832
-            //                     ],
-            //                     [
-            //                         81.133712,
-            //                         5.866288
-            //                     ],
-            //                     [
-            //                         81.916943,
-            //                         6.369229
-            //                     ],
-            //                     [
-            //                         81.916943,
-            //                         6.369229
-            //                     ],
-            //                     [
-            //                         82.0,
-            //                         6.547532
-            //                     ],
-            //                     [
-            //                         82.060496,
-            //                         6.677404
-            //                     ],
-            //                     [
-            //                         86.5,
-            //                         19.743236
-            //                     ],
-            //                     [
-            //                         86.679843,
-            //                         20.218589
-            //                     ],
-            //                     [
-            //                         86.682551,
-            //                         20.258739
-            //                     ],
-            //                     [
-            //                         86.681727,
-            //                         20.260229
-            //                     ],
-            //                     [
-            //                         86.679039,
-            //                         20.261633
-            //                     ],
-            //                     [
-            //                         86.684842,
-            //                         20.261261
-            //                     ],
-            //                     [
-            //                         86.691673,
-            //                         20.260869
-            //                     ]
-            //                 ]
-            //             },
-            //             "details": {
-            //                 "eca_distance": [
-            //                     [
-            //                         0,
-            //                         25,
-            //                         {
-            //                             "in_eca": false,
-            //                             "name": "",
-            //                             "distance": 1933.9091198704104,
-            //                             "from": [
-            //                                 72.857384,
-            //                                 18.937828
-            //                             ],
-            //                             "to": [
-            //                                 86.691673,
-            //                                 20.260869
-            //                             ]
-            //                         }
-            //                     ]
-            //                 ],
-            //                 "hra_distance": [
-            //                     [
-            //                         0,
-            //                         25,
-            //                         {
-            //                             "in_hra": false,
-            //                             "distance": 1933.9091198704104,
-            //                             "from": [
-            //                                 72.857384,
-            //                                 18.937828
-            //                             ],
-            //                             "to": [
-            //                                 86.691673,
-            //                                 20.260869
-            //                             ]
-            //                         }
-            //                     ]
-            //                 ],
-            //                 "name": [
-            //                     [
-            //                         0,
-            //                         31,
-            //                         ""
-            //                     ]
-            //                 ],
-            //                 "snapped_points": {
-            //                     "coordinates": [
-            //                         [
-            //                             72.857384,
-            //                             18.937828
-            //                         ],
-            //                         [
-            //                             86.691673,
-            //                             20.260869
-            //                         ]
-            //                     ]
-            //                 }
-            //             }
-            //         }
-            //     ]
-            // };
+            let distances = {
+                "info": {
+                    "copyrights": [
+                        "Viku AS"
+                    ],
+                    "took": 57
+                },
+                "paths": [{
+                    "distance": 1933.9091252699784,
+                    "bbox": [
+                        72.695488,
+                        5.701832,
+                        86.691673,
+                        20.261633
+                    ],
+                    "points": {
+                        "coordinates": [
+                            [
+                                72.857384,
+                                18.937828
+                            ],
+                            [
+                                72.844163,
+                                18.928939
+                            ],
+                            [
+                                72.844985,
+                                18.927786
+                            ],
+                            [
+                                72.845178,
+                                18.92605
+                            ],
+                            [
+                                72.831252,
+                                18.836152
+                            ],
+                            [
+                                72.831252,
+                                18.836152
+                            ],
+                            [
+                                72.761484,
+                                18.701623
+                            ],
+                            [
+                                72.695488,
+                                18.137755
+                            ],
+                            [
+                                73.021381,
+                                17.0
+                            ],
+                            [
+                                73.664793,
+                                15.113611
+                            ],
+                            [
+                                76.069337,
+                                9.5
+                            ],
+                            [
+                                77.076083,
+                                8.0
+                            ],
+                            [
+                                79.848519,
+                                6.062151
+                            ],
+                            [
+                                80.701832,
+                                5.701832
+                            ],
+                            [
+                                81.133712,
+                                5.866288
+                            ],
+                            [
+                                81.916943,
+                                6.369229
+                            ],
+                            [
+                                81.916943,
+                                6.369229
+                            ],
+                            [
+                                82.0,
+                                6.547532
+                            ],
+                            [
+                                82.060496,
+                                6.677404
+                            ],
+                            [
+                                86.5,
+                                19.743236
+                            ],
+                            [
+                                86.679843,
+                                20.218589
+                            ],
+                            [
+                                86.682551,
+                                20.258739
+                            ],
+                            [
+                                86.681727,
+                                20.260229
+                            ],
+                            [
+                                86.679039,
+                                20.261633
+                            ],
+                            [
+                                86.684842,
+                                20.261261
+                            ],
+                            [
+                                86.691673,
+                                20.260869
+                            ]
+                        ]
+                    },
+                    "details": {
+                        "eca_distance": [
+                            [
+                                0,
+                                25,
+                                {
+                                    "in_eca": false,
+                                    "name": "",
+                                    "distance": 1933.9091198704104,
+                                    "from": [
+                                        72.857384,
+                                        18.937828
+                                    ],
+                                    "to": [
+                                        86.691673,
+                                        20.260869
+                                    ]
+                                }
+                            ]
+                        ],
+                        "hra_distance": [
+                            [
+                                0,
+                                25,
+                                {
+                                    "in_hra": false,
+                                    "distance": 1933.9091198704104,
+                                    "from": [
+                                        72.857384,
+                                        18.937828
+                                    ],
+                                    "to": [
+                                        86.691673,
+                                        20.260869
+                                    ]
+                                }
+                            ]
+                        ],
+                        "name": [
+                            [
+                                0,
+                                31,
+                                ""
+                            ]
+                        ],
+                        "snapped_points": {
+                            "coordinates": [
+                                [
+                                    72.857384,
+                                    18.937828
+                                ],
+                                [
+                                    86.691673,
+                                    20.260869
+                                ]
+                            ]
+                        }
+                    }
+                }]
+            };
 
-            // const firstPath = distances.paths[0];
+            const firstPath = distances.paths[0];
 
-            // // Extracting distance
-            // const distance = firstPath.distance;
+            // Extracting distance
+            const distance = firstPath.distance;
 
-            // // Extracting coordinates
-            // const coordinates = firstPath.points.coordinates;
+            // Extracting coordinates
+            const coordinates = firstPath.points.coordinates;
 
-            // // Mapping coordinates to an array of objects with lat and lng properties
-            // const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
+            // Mapping coordinates to an array of objects with lat and lng properties
+            const mappedCoordinates = coordinates.map(coord => ({
+                PathId: 1,
+                Latitude: coord[1],
+                Longitude: coord[0]
+            }));
 
-            // // Constructing responseData
-            // const path = {
-            //     seaDistance: distance,
-            //     route: mappedCoordinates,
-            //     code: 200,
-            //     message: "SUCCESS"
-            // };
+            // Constructing responseData
+            const path = {
+                seaDistance: distance,
+                route: mappedCoordinates,
+                code: 200,
+                message: "SUCCESS"
+            };
 
-            // return path;
+            return path;
             // // Call the custom function to handle the request
-            return await getDistanceBetweenPort(req._queryOptions);
+            // return await getDistanceBetweenPort(req._queryOptions);
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Error fetching data');
@@ -684,7 +726,12 @@ function registerHandlers(srv, service, entities) {
 
 async function getDistanceBetweenPort(routeParams) {
 
-    const { startLatitude, startLongitude, endLatitude, endLongitude } = routeParams;
+    const {
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude
+    } = routeParams;
 
     // Construct the URL with parameters
     let url = `https://distances.dataloy.com/route/route?point=${startLatitude},${startLongitude}&point=${endLatitude},${endLongitude}&avoid_eca_factor=1&avoid_hra_factor=1&avoid_ice_factor=1`;
@@ -726,7 +773,11 @@ async function getDistanceBetweenPort(routeParams) {
         const coordinates = firstPath.points.coordinates;
 
         // Mapping coordinates to an array of objects with lat and lng properties
-        const mappedCoordinates = coordinates.map(coord => ({ PathId: 1, Latitude: coord[1], Longitude: coord[0] }));
+        const mappedCoordinates = coordinates.map(coord => ({
+            PathId: 1,
+            Latitude: coord[1],
+            Longitude: coord[0]
+        }));
 
         // Constructing responseData
         const path = {

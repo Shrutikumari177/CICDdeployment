@@ -1,63 +1,63 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
-    <Dialog title=" Vendor Details" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog title="Vendor Details" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%">
         <Panel>
             <FlexBox class="flex">
-                <VBox class="flex" alignItems="End">
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Vendor No :" />
-                        <Input value="{vendorDetail>/Lifnr}" editable="false" />
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Vendor No :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Lifnr}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Title : " />
-                        <Input value="{vendorDetail>/Anred}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Title :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Anred}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Name1 : " />
-                        <Input value="{vendorDetail>/Name1}"  editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Name1 :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Name1}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Name2 : " />
-                        <Input value="{vendorDetail>/Name2}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Name2 :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Name2}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Telephone : " />
-                        <Input value="{vendorDetail>/Telf2}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Telephone :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Telf2}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Fax No. : " />
-                        <Input value="{vendorDetail>/Telfx}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Fax No:" />
+                        <Input class="inputStyle" value="{vendorDetail>/Telfx}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Language : " />
-                        <Input value="{vendorDetail>/Spras}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Language :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Spras}" editable="false" />
                     </FlexBox>
                     <!-- Add other FlexBoxes and Inputs here -->
                 </VBox>
 
-                <VBox class="flex" alignItems="End">
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Address :" />
-                        <Input value="{vendorDetail>/Adrnr}" editable="false" />
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Address :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Adrnr}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Street :" />
-                        <Input value="{vendorDetail>/Stras}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Street :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Stras}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="City :" />
-                        <Input value="{vendorDetail>/Ort01}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="City :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Ort01}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Country :" />
-                        <Input value="{vendorDetail>/Land1}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Country :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Land1}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Postal Code  :" />
-                        <Input value="{vendorDetail>/Pstlz}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Postal Code:" />
+                        <Input class="inputStyle" value="{vendorDetail>/Pstlz}" editable="false" />
                     </FlexBox>
-                    <FlexBox class="headerItem">
-                        <Label class="sapUiTinyMarginTop" text="Region :" />
-                        <Input value="{vendorDetail>/Regio}" editable="false" />
+                    <FlexBox class="headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Region :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Regio}" editable="false" />
                     </FlexBox>
                     <!-- Add other FlexBoxes and Inputs here -->
                 </VBox>

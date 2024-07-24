@@ -2,59 +2,59 @@
     xmlns:core="sap.ui.core"
     xmlns:m="sap.m.Dialog"
     xmlns:l="sap.ui.layout">
-    <Dialog id="_IDDialog"  title="Contract Award Detail" class="sapUiSmallMargin" contentHeight="35%" contentWidth="50%" >
+    <Dialog id="_IDDialog"  title="Contract Award Detail" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%" >
 
          <Panel >
             <FlexBox  class="flex" >
-                <VBox  class="flex" alignItems="End" >
+                <VBox  class="flex" alignItems="Start" >
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                          
-                            class="sapUiTinyMarginTop"
-                            text="Done By Ve:"
+                            class="labelStyle"
+                            text="Done By Vendor:"
                         />
                         <Input
-                            
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/DoneBy}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox  class="headerItem">
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Created By : "
                         />
                         <Input
-                            
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/Lifnr}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem" >
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Status : "
                         />
                         <Input
-                            
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/Stat}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox class="headerItem">
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Type(Auto):"
                         />
                         <Input
-                            
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/Zmode}"
                             editable="false"
                         />
@@ -64,53 +64,53 @@
                     
                 </VBox>
 
-                <VBox id="_IDGenVBox2" class="flex" alignItems="End">
-                 <FlexBox id="_IDGenFlexBox6" class="headerItem" >
+                <VBox id="_IDGenVBox2" class="flex" alignItems="Start">
+                 <FlexBox id="_IDGenFlexBox6" class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
-                            id="_IDGenLabel5"
-                            class="sapUiTinyMarginTop"
+                            
+                            class="labelStyle"
                             text="Comments: "
                         />
                         <Input
-                            id="_IDGenInput5"
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/Zcom}"
                             editable="false"
                         />
                     </FlexBox>
-                    <FlexBox id="_IDGenFlexBox9" class="headerItem" >
+                    <FlexBox id="_IDGenFlexBox9" class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             id="_IDGenLabel8"
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Award Created By: "
                         />
                         <Input
-                            id="_IDGenInput8"
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/AwrdCreatedBy}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox id="_IDGenFlexBox10" class="headerItem">
+                    <FlexBox id="_IDGenFlexBox10" class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             id="_IDGenLabel9"
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Award Created At: "
                         />
                         <Input
-                            id="_IDGenInput9"
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/AwrdCreatedAt}"
                             editable="false"
                         />
                     </FlexBox>
 
-                    <FlexBox id="_IDGenFlexBox11" class="headerItem" >
+                    <FlexBox id="_IDGenFlexBox11" class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             id="_IDGenLabel10"
-                            class="sapUiTinyMarginTop"
+                            class="labelStyle"
                             text="Award Created On: "
                         />
                         <Input
-                            id="_IDGenInput10"
+                            class="inputStyle"
                             value="{contractAwardReport1>/0/AwrdCreatedOn}"
                             editable="false"
                         />

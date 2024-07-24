@@ -8,8 +8,13 @@
         search="onChartSearch"
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
-        items="{/xNAUTIxaward_value}"
-        liveChange="onChartSearch"
+items="{
+        path: '/xNAUTIxaward_value',
+        sorter: {
+            path: 'Chrnmin',
+            descending: true
+        }
+        }"         liveChange="onChartSearch"
         initialFocus="SearchField"
         
     >

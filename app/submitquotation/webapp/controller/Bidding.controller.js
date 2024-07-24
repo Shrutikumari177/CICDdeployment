@@ -31,7 +31,11 @@ sap.ui.define([
                     "voyageNo": "",
                     "charteringNo": "",
                     "vendorNo": "",
-                    "status": ""
+                    "status": "",
+                    "startDate": "",
+                    "startTime": "",
+                    "endDate": "",
+                    "endTime": ""
                 });
                 this.getView().setModel(this.infoModel, "vData");
                 console.log("Initial vData", this.getView().getModel("vData").getData());
@@ -67,7 +71,7 @@ sap.ui.define([
 
 
             _onObjectMatched: async function (oEvent) {
-                // this.resetFormFields();
+                this.resetFormFields();
                 this.byId("_IDGenIconTabBar1").setSelectedKey("tab1");
                 this._oBusyDialog.open();
                 this._clearModels();
@@ -87,6 +91,10 @@ sap.ui.define([
                     vInfo.setProperty("/charteringNo", biddingData.Chrnmin);
                     vInfo.setProperty("/vendorNo", biddingData.Lifnr);
                     vInfo.setProperty("/status", biddingData.zstat);
+                    vInfo.setProperty("/startDate", biddingData.Chrqsdate);
+                    vInfo.setProperty("/startTime", biddingData.Chrqstime);
+                    vInfo.setProperty("/endDate", biddingData.Chrqedate);
+                    vInfo.setProperty("/endTime", biddingData.Chrqetime);
                     console.log("Updated vData", vInfo.getData());
 
                     await this.getHeaderDetails(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime);
@@ -173,7 +181,7 @@ sap.ui.define([
             },
 
             readBidTemplateData: function (oData, detailType) {
-              debugger;
+            //   debugger;
                 let index = "Not Found";
                 let freightValue = sap.ui.getCore().byId("");
                 return new Promise(async (resolve, reject) => {
@@ -321,63 +329,65 @@ sap.ui.define([
             },
 
             _setBidTemplate: function (templateData, oTable) {
-                // debugger;
                 let oView = this.getView();
                 let that = this;
                 oTable.removeAllItems();
             
-                templateData.forEach((el) => {
+                // Remove duplicates based on CodeDesc property
+                let uniqueData = templateData.filter((value, index, self) => 
+                    index === self.findIndex((t) => (
+                        t.CodeDesc === value.CodeDesc
+                    ))
+                );
+            
+                uniqueData.forEach((el) => {
                     let oItem;
                     let oCells = [];
-                    oCells.push(new sap.m.Text({ text: el.CodeDesc}));
-
-                    if(el.Code === "COOR" || el.Zcode === "COOR"){
+                    oCells.push(new sap.m.Text({ text: el.CodeDesc }));
+            
+                    if (el.Code === "COOR" || el.Zcode === "COOR") {
                         oCells.push(
                             new sap.m.Input({
                                 showValueHelp: true,
-                                editable: true, 
+                                editable: true,
                                 valueHelpOnly: true,
                                 valueHelpRequest: this.onCoorValueHelpRequest.bind(this)
                             })
                         );
-                    }
-                    else if(el.Code === "PORT" || el.Zcode === "PORT"){
+                    } else if (el.Code === "PORT" || el.Zcode === "PORT") {
                         oCells.push(
                             new sap.m.Input({
                                 showValueHelp: true,
-                                editable: true, 
+                                editable: true,
                                 valueHelpOnly: true,
                                 valueHelpRequest: this.onPortValueHelpRequest.bind(this)
                             })
                         );
-                    }
-                    else if(el.Code === "DAT1" || el.Zcode === "DAT1"){
+                    } else if (el.Code === "DAT1" || el.Zcode === "DAT1") {
                         oCells.push(
                             new sap.m.DatePicker({
                                 valueFormat: "yyyy-MM-dd",
                                 displayFormat: "dd/MM/yyyy",
-                                placeholder: "Select date",
+                                editable: true,
+                                maxDate: new Date()
+                            })
+                        );
+                    } else if (el.Code === "DEMURRAGE" || el.Zcode === "DEMURRAGE") {
+                        oCells.push(
+                            new sap.m.Input({
+                                editable: true,
+                                value: "{totalCalculateModel>/demurrage}",
+                                liveChange: this.onFCostChange.bind(this)
+                            })
+                        );
+                    } else {
+                        oCells.push(
+                            new sap.m.Input({
                                 editable: true
                             })
                         );
                     }
-                    else if(el.Code === "DEMURRAGE" || el.Zcode === "DEMURRAGE"){
-                        oCells.push(
-                            new sap.m.Input({
-                                editable: true, 
-                                value : "{totalCalculateModel>/demurrage}",
-                                liveChange : this.onFCostChange.bind(this)
-                            })
-                        );
-                    }
-                    else{
-                        oCells.push(
-                            new sap.m.Input({
-                                editable: true, 
-                            })
-                        );
-                    }
-                    
+            
                     oCells.push(new sap.m.Button({
                         icon: "sap-icon://hint",
                         press: function (oEvent) {
@@ -391,6 +401,7 @@ sap.ui.define([
                     oTable.addItem(oItem);
                 });
             },
+            
 
             handlePopoverPress: function (oEvent, that) {
                 let oButton = oEvent.getSource();
@@ -673,10 +684,11 @@ sap.ui.define([
             },
             
             // submit technical and commercial details data
-            onSubmitBid: async function () {
-                debugger
+            onSubmitBid: function () {
+                debugger;
                 var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();
+                var aData = [];
                 aItems.forEach(function (oItem) {
                     var aCells = oItem.getCells();
                     var oData = {};
@@ -694,14 +706,20 @@ sap.ui.define([
                 let vendorNo = infoModel.getProperty("/vendorNo")
                 let voyageNo = infoModel.getProperty("/voyageNo")
                 const oView = this.getView();
-                const coorValue = aData[1].InputValue;
-                const lastCleaningDate = aData[3].DateValue;
-                const lastPortvalue = aData[4].InputValue;
-                const demurrageInput = aData[2].InputValue;
                 const freightValue = oView.byId("fCost2").getValue();
-                const classValue = aData[0].InputValue;
                 const sVNameInput = this.byId("vesselName").getValue();
                 const sVIMONo = this.byId("vesselIMONo").getValue();
+
+                function findValueByZcode(Zcode) {
+                    let item = aData.find(data => data.Value === Zcode);
+                    return item ? (item.InputValue || item.DateValue || "") : "";
+                }
+
+                const coorValue = findValueByZcode("COUNTRY OF ORIGIN");
+                const lastCleaningDate = findValueByZcode("LAST CLEANING DATE");
+                const lastPortvalue = findValueByZcode("LAST PORT OF CALL");
+                const demurrageInput = findValueByZcode("DEMURRAGE");
+                const classValue = findValueByZcode("CLASS OF VESSEL");
                 const dateObject = new Date(lastCleaningDate);
                 const formatLastCleaningDate = dateObject.toISOString().split('T')[0];
                 let date = new Date();
@@ -720,7 +738,6 @@ sap.ui.define([
 
 
                 let payload = {
-                        "createdBy" : "A.SHARMA",
                         "Lifnr": vendorNo,
                         "Voyno": voyageNo,
                         "Chrnmin": charterNo,
@@ -734,7 +751,7 @@ sap.ui.define([
                             "CodeDesc": "COUNTRY OF ORIGIN",
                             "Cunit": "",
                             "Cvalue": "0.000",
-                            "Value": coorValue,
+                            "Value": coorValue || "",
                             "Zcom": ""
                           },
                           {
@@ -742,7 +759,7 @@ sap.ui.define([
                             "CodeDesc": "LAST CLEANING DATE",
                             "Cunit": "",
                             "Cvalue": "0.000",
-                            "Value": formatLastCleaningDate,
+                            "Value": formatLastCleaningDate || "",
                             "Zcom": ""
                           },
                           {
@@ -750,12 +767,12 @@ sap.ui.define([
                             "CodeDesc": "LAST PORT OF CALL",
                             "Cunit": "",
                             "Cvalue": "0.000",
-                            "Value": lastPortvalue,
+                            "Value": lastPortvalue  || "",
                             "Zcom": ""
                           },
                           {
                             "Zcode": "CLASS",
-                            "CodeDesc": "CLASS OF VESSEL",
+                            "CodeDesc": "CLASS OF VESSEL" || "",
                             "Cunit": "",
                             "Cvalue": "0.000",
                             "Value": classValue,
@@ -763,7 +780,7 @@ sap.ui.define([
                           },
                           {
                             "Zcode": "DEMURRAGE",
-                            "CodeDesc": "DEMURRAGE",
+                            "CodeDesc": "DEMURRAGE" || 0,
                             "Cunit": "INR",
                             "Cvalue": "0.000",
                             "Value": demurrageInput,
@@ -774,25 +791,35 @@ sap.ui.define([
                             "CodeDesc": "FREIGHT",
                             "Cunit": "INR",
                             "Cvalue": "0.000",
-                            "Value": freightValue,
+                            "Value": freightValue || 0,
                             "Zcom": ""
                           }
                         ]
                 };
                 console.log("payload for submit Quoation :", payload);
-                try{
-                let oBindList = this.getView().getModel().bindList("/quotations");
-                let response = await  oBindList.create(payload)
-                console.log("response", response);
-                MessageBox.success(`Data sumbitted successfully`);
-
-                }
-                catch(oError){
-                    MessageBox.error(`Data entry already exist`);
-                }
-
-
-                
+                const oModel = this.getOwnerComponent().getModel("modelV2");
+                let that = this
+                oModel.create('/quotations', payload, {
+                    success: function (oData) {
+                        let result = oData;
+                        console.log("results", result);
+                        // const endDate = new Date(`${infoModel.getProperty("/endDate")}T${infoModel.getProperty("/endTime")}`);
+                        // if (date <= endDate) {
+                        // infoModel.setProperty("/status", statusLevel.SUBMIT);
+                        //   }
+                        new sap.m.MessageBox.success("Successfully Submitted");
+                        that.onClearField()
+                    },
+                    error: function (err) {
+                        console.log("Error occured", err);
+                        if(JSON.parse(err.responseText).error.message.value.includes("Entity already exists")){
+                            new sap.m.MessageBox.error(`Quotation already submitted for the chartering no.: ${charterNo}`)
+                        }
+                        else{
+                            new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value)
+                        }
+                    }
+                })
             },
 
             //    country of origin value help code             
@@ -932,11 +959,7 @@ sap.ui.define([
                 // debugger;
                 this.byId("vesselName").setValue("");
                 this.byId("vesselIMONo").setValue("");
-                this.byId("coorBidInput").setValue("");
-                this.byId("lastCleanDateBidInput").setValue("");
-                this.byId("lastPortBidInput").setValue("");
-                this.byId("demurrageInput").setValue("");
-                this.byId("classOfVesselInput").setValue("");
+                this.byId("fCost2").setValue("");
                 this.byId("fCost2").setValue("");
             },
 
@@ -951,7 +974,7 @@ sap.ui.define([
                 var sFieldId = oSource.getId();
                 if (sFieldId.includes("fCost2")) {
                     oModel.setProperty("/fCost2", sNewValue);
-                } else if (sFieldId.includes("__input3")) {
+                } else if (sFieldId.includes("__input2")) {
                     oModel.setProperty("/demurrage", sNewValue);
                 }
             

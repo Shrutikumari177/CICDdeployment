@@ -78,6 +78,14 @@
                         text=" Description"
                     />
                 </Column>
+                <Column id="_IDGnColumn3">
+                    <Text
+                        id="_IDGnText3"
+                        text=" Country"
+                    />
+                </Column>
+                
+                
             </columns>
             <items>
                 <ColumnListItem id="_IDGenColumnListItem1" >
@@ -88,20 +96,17 @@
                             text="{Navoycur}"
                        
                         />
-                        <HBox id="_IDGenHBox1" >
-                        <Input
+                        <Text
                             id="DescInput"
-                            value="{Navoygcurdes}"
-                            editable="false"
-                             maxLength="30"
-                             width="400px"
-                             
-                           
+                            text="{Navoygcurdes}"
                         />
+                        
+                       <Text
+                            id="country"
+                            text="{Navoycountry}"
                        
- 
- 
-                        </HBox>
+                        />
+                      
                        
                     </cells>
                 </ColumnListItem>
@@ -127,12 +132,16 @@
                 <Column id="_IDGenColumn4">
                     <Text id="_IDGenText4" text="Currency Description" />
                 </Column>
+                <Column id="_IDGnColumn5">
+                    <Text id="_IDGenText45" text="Country" />
+                </Column>
             </columns>
             <items>
                 <ColumnListItem id="_IDGenColumnListItem2">
                     <cells>
                         <Input id="NAVOYCUR2" maxLength="3" showValueHelp="true" valueHelpRequest="currencyValueHelp" valueHelpOnly="true"/>
                         <Input id="NAVOYGCURDES2" editable="false" />
+                        <Input id="NAVOYGCOUNTRY2" editable="false" />
                     </cells>
                 </ColumnListItem>
             </items>

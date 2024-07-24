@@ -9,8 +9,13 @@
         confirm="onValueHelpClose1"
         cancel="onValueHelpClose1"
         liveChange="onChartSearch1"
-        items="{/CharteringSet}"> 
-        <StandardListItem id="_IDGenStandardListItem11"
+items="{
+        path: '/CharteringSet',
+        sorter: {
+            path: 'Chrnmin',
+            descending: true
+        }
+        }"         <StandardListItem id="_IDGenStandardListItem11"
             title="{Chrnmin}"
             iconDensityAware="false"
             iconInset="false"

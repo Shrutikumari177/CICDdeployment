@@ -39,6 +39,7 @@ sap.ui.define(
         var myVOYNO;
         var oCommercialModel;
         var costDetailsData;
+        let userEmail;
 
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.changeVoyage", {
@@ -47,12 +48,11 @@ sap.ui.define(
 
 
             onInit: async function () {
-                sap.ui.getCore().getEventBus().subscribe("VoyageChannel", "VoyageCreated", this.onVoyageCreated, this);
-
-
-
+                
+                await this.getLoggedInUserInfo();
 
                 this.toggleEnable(false);
+                 
                 this.byId("_idIconTabBar").setVisible(false);
                 let model = this.getOwnerComponent().getModel();
                 let oBindList = model.bindList("/PortMasterSet");
@@ -89,23 +89,33 @@ sap.ui.define(
                 that.debouncedOnPortDaysChange = that.debounce(this._onPortDaysChange.bind(this), 300);
                 that._initBidTemplate();
 
-
-
             },
-            onVoyageCreated: function (channel, event, data) {
-                // Handle the event and use the voyage number
-                let voyageNo = data.voyageNo;
-                console.log("Received voyage no.:", voyageNo);
-
-                this.onVoyageValueHelpClose(undefined, voyageNo);
+            
+            getLoggedInUserInfo: async function () {
+                try {
+                    let User = await sap.ushell.Container.getService("UserInfo");
+                    let userID = User.getId();
+                    userEmail = User.getEmail();
+                    let userFullName = User.getFullName();
+                    console.log("userEmail", userEmail);
+                    console.log("userFullName", userFullName);
+                    console.log("userID", userID);
+                } catch (error) {
+                    // userEmail = undefined ;
+                    userEmail = "sarath.venkateswara@ingenxtec.com";
+                }
             },
+       
             onObjectMatched: function () {
                 console.log("page navigated");
                 this.onRefresh();
 
             },
             toggleEnable: function (boolean) {
-
+                
+                let iconTab = this.byId("_idIconTabBar");
+                iconTab.setVisible(boolean);
+                iconTab.setSelectedKey('info');
 
                 this.byId('_submitBtn').setEnabled(boolean);
                 this.byId('_approvalBtn').setEnabled(boolean);
@@ -229,6 +239,7 @@ sap.ui.define(
                         voyageNoArr.push(data.getObject().Voyno);
                     });
                     console.log("Fetched data in temp Arr data", tempDataArr);
+                    console.table(tempDataArr);
 
                     // Set models only once
                     if (!that.voyHeaderModel) {
@@ -291,16 +302,13 @@ sap.ui.define(
                 that._busyDialog.open();
 
                 try {
-                    that.byId("_idIconTabBar");
-                    let iconTab = this.byId("_idIconTabBar");
-                    iconTab.setVisible(true);
-                    iconTab.setSelectedKey('info1');
+                    
+            
+                 
                     that.toggleEnable(true);
                     that.byId("_voyageInput1").setValue(oSelectedItem.getTitle());
                     let voyageInputObj = that.getView().byId("_voyageInput1");
                     myVOYNO = voyageInputObj.getProperty("value");
-
-
 
                     console.log("Selected Voyage No.", myVOYNO);
 
@@ -488,37 +496,6 @@ sap.ui.define(
                         sap.m.MessageBox.error(`${err.name} : ${err.message}`);
                     }
 
-                    // oModel.read(`/MasBidTemplateSet`, {
-                    //     success: (oData) => {
-                    //         oData.results.sort((a, b) => {
-                    //             if (a.Datatype.toLocaleLowerCase() < b.Datatype.toLocaleLowerCase()) {
-                    //                 return -1;
-                    //             }
-                    //             if (a.Datatype.toLocaleLowerCase() > b.Datatype.toLocaleLowerCase()) {
-                    //                 return 1;
-                    //             }
-                    //             return 0;
-                    //         });
-                    //         for (let i = oData.results.length - 1; i >= 0; i--) {
-                    //             let el = oData.results[i];
-
-                    //             delete el.__metadata;
-
-                    //             if (detailType === "technical") {
-                    //                 if (el.Code === "FREIG" || el.Code === "DEMURRAGE") {
-                    //                     oData.results.splice(i, 1);
-                    //                 }
-                    //             } else if (detailType === "commercial") {
-                    //                 if (el.Code !== "FREIG" && el.Code !== "DEMURRAGE") {
-                    //                     oData.results.splice(i, 1);
-                    //                 }
-                    //             }
-                    //         };
-                    //         resolve(oData.results);
-                    //     },
-                    //     error: (oResponse) => {
-                    //         reject(oResponse);
-                    //     },
                 });
 
             },
@@ -1015,144 +992,7 @@ sap.ui.define(
                     row.getCells()[3].setGroupName(groupName);
                 }
             },
-            // onSaveBidDetails : function ( oEvent ){
-            //     let oModel1 = this.getOwnerComponent().getModel("modelV2");
-
-            //     // above payload is  not working as Stringtype  value required instead of number or deciam and Vetad conversion error
-            //     let payload = {
-            //         Voyno: "1000000034",
-            //         Voynm: "Test Voyage 9/11",
-            //         Vnomtk: "",
-            //         Refdoc: "",
-            //         Docind: "",
-            //         Vessn: "",
-            //         Vimo: "",
-            //         Chtyp: "",
-            //         Chpno: "",
-            //         Currkeys: "",
-            //         Frtco: "0",
-            //         Vstat: "",
-            //         Voyty: "1000",
-            //         Carty: "1000",
-            //         Curr: "INR",
-            //         Freght: "150000",
-            //         Party: "",
-            //         Bidtype: "SB",
-            //         Frcost: "60000",
-            //         Frtu: "L/S",
-            //         Frcost_Act: "0",
-            //         Frtu_Act: "",
-            //         Ref_Voyno: "",
-            //         GV_CSTATUS: "Voyage Created",
-            //         tocostcharge:[],
-            //         toitem:[],
-            //         tobiditem: bidPayload
-
-            //       }
-            //       /*
-            //       tobiditem:[
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "CLASS",
-            //               Value: "A",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "CLASS OF VESSEL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "4",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "CLASS",
-            //               Value: "B",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "CLASS OF VESSEL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "2",
-            //               Zmax: "3"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "PORT",
-            //               Value: "INBOM",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST PORT OF CALL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "0",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "COOR",
-            //               Value: "IN",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "COUNTRY OF ORIGIN",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "0",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "DAT1",
-            //               Value: "20.09.2023",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST CLEANING DATE",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "3",
-            //               Zmax: "5"
-            //           },
-            //           {
-            //               Voyno: "1000000034",
-            //               Zcode: "PORT",
-            //               Value: "INBOM",
-            //               Cvalue: "0.000",
-            //               Cunit: "",
-            //               CodeDesc: "LAST PORT OF CALL",
-            //               RevBid: false,
-            //               Good: "X",
-            //               Mand: "",
-            //               Must: "",
-            //               Zmin: "3",
-            //               Zmax: "5"
-            //           }
-            //         ]
-            //         */
-
-            //     console.table( payload);
-
-
-            //     // return;
-            //     oModel1.create('/xNAUTIxVOYAGEHEADERTOITEM', payload,{
-            //         success : function ( oData ){
-            //             console.log(oData);
-            //             oModel1.refresh();
-            //         }, 
-            //         error : function (oResponse) {
-            //             console.log(oResponse);
-            //         }
-            //     })
-
-            // },
+        
             formatZminEditable: function (sGood, sMand, sMust) {
                 return sGood === "X";
             },
@@ -2133,6 +1973,15 @@ sap.ui.define(
                             duration: 800
                         });
                         oInput.setValue("");
+
+
+                    } else {
+                        // Set the input value with the integer value
+                        oInput.setValue(oVlegn);
+
+                        // Update the model with the integer value for Vlegn
+                        let path = oInput.getBindingContext("costdetailsModel").getPath();
+                        costdetailsModel.setProperty(path + "/Vlegn", oVlegn);
                     }
                 }
             },
@@ -2311,7 +2160,7 @@ sap.ui.define(
                     }
                 });
                 console.table(bidPayload);
-                sap.m.MessageToast.show("Data Saved");
+                // sap.m.MessageToast.show("Data Saved");
             },
             onSaveVoyage: function () {
                 let oModel = this.getOwnerComponent().getModel();
@@ -2323,11 +2172,13 @@ sap.ui.define(
 
                 let frcostPlValue = this.byId("_friegthIdPlan").getValue();
                 let frUnitPl = this.byId("_idFrunitPlan").getSelectedKey();
-                let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
+
+                // let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
                 let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
+
                 // let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
 
-                let commerDetailPayload = this.getView().getModel("commercialModel").getData().myData;
+    
                 if (itemDetails.length < 2) {
                     new sap.m.MessageBox.warning("Minimum two ports are mandatory");
 
@@ -2395,7 +2246,15 @@ sap.ui.define(
                     if (p1.success) {
                         console.log(oData);
 
-                        MessageBox.success(`Successfully saved `);
+                        // MessageBox.success(`Successfully saved `);
+                        MessageBox.success(`Successfully saved `, {
+                            title: "Voyage updated",
+                            onClose: function () {
+              
+                                that.onRefresh();
+                                   
+                            }
+                          });
 
                     } else {
                         sap.m.MessageBox.error(p1.context.oModel.mMessages[""][0].message);
@@ -2404,101 +2263,10 @@ sap.ui.define(
 
 
                 });
-                return
-                oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
-                    success: function (oData) {
-                        console.log("result :", oData);
-                        new sap.m.MessageBox.success("Changes saved Succcesfully.");
-                        that.getOwnerComponent().getModel().refresh();
-
-
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        let errMsg = JSON.parse(err.responseText).error.message.value;
-                        console.log(errMsg);
-                        new sap.m.MessageBox.error(errMsg)
-
-                    }
-                })
+               
             },
 
-            onSaveVoyage1: function () {
-                try {
-                    let oModel = this.getOwnerComponent().getModel('modelV2');
-                    let headerDetail = voyHeaderModel.getData();
-                    let itemDetails = voyItemModel.getData();
-                    let costData = costdetailsModel.getData();
-
-                    let frcostPlValue = this.byId("_friegthIdPlan").getValue();
-                    let frUnitPl = this.byId("_idFrunitPlan").getSelectedKey();
-                    // let totalcostPlvalue = this.byId("_totalCostPlId").getValue(); // currently no use
-                    let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
-
-
-                    if (itemDetails.length < 2) {
-                        new sap.m.MessageBox.warning("Minimum two ports are mandatory");
-                        return;
-                    }
-                    // saving commercial Details to bidPayload;
-                    this.onSaveCommercialDetail();
-
-                    let payload = {
-                        Bidtype: headerDetail[0].Bidtype,
-                        Carty: headerDetail[0].Carty,
-                        Chpno: headerDetail[0].Chpno,
-                        Chtyp: headerDetail[0].Chtyp,
-                        Curr: headerDetail[0].Curr,
-                        Currkeys: headerDetail[0].Currkeys,
-                        Docind: headerDetail[0].Docind,
-                        Frcost: frCostPlanformatted,
-                        Frcost_Act: headerDetail[0].Frcost_Act,
-                        Freght: headerDetail[0].Freght,
-                        Frtco: headerDetail[0].Frtco,
-                        Frtu: frUnitPl,
-                        Frtu_Act: headerDetail[0].Frtu_Act,
-                        GV_CSTATUS: "Voyage Created",
-                        Party: "",
-                        Ref_Voyno: "",
-                        Refdoc: "",
-                        Vessn: "",
-                        Vimo: "",
-                        Vnomtk: "",
-                        Voynm: headerDetail[0].Voynm,
-                        Voyno: headerDetail[0].Voyno,
-                        Voyty: headerDetail[0].Voyty,
-                        Vstat: "",
-                        toitem: itemDetails,
-                        tocostcharge: costData,
-                        tobiditem: [...bidPayload],
-                    };
-
-                    let that = this;
-                    console.log("voyage payload:", payload);
-                    console.table(bidPayload);
-                    // return;
-                    new sap.m.MessageToast.show("Saving voyage data ...");
-                    // return
-                    oModel.create('/xNAUTIxVOYAGEHEADERTOITEM', payload, {
-                        success: function (oData) {
-                            console.log("result:", oData);
-                            new sap.m.MessageBox.success("Changes saved successfully.");
-                            that.getOwnerComponent().getModel().refresh();
-                            that.onRefresh();
-
-                        },
-                        error: function (err) {
-                            console.log(err);
-                            let errMsg = JSON.parse(err.responseText).error.message.value;
-                            console.log(errMsg);
-                            new sap.m.MessageBox.error(errMsg);
-                        }
-                    });
-                } catch (error) {
-                    console.error("An error occurred:", error);
-                    new sap.m.MessageBox.error("An unexpected error occurred. Please try again later.");
-                }
-            },
+           
             /*
             [
                         {
@@ -2574,13 +2342,13 @@ sap.ui.define(
                     voyHeaderModel.setData([]);
                     voyItemModel.setData([]);
                     costdetailsModel.setData([]);
-                    bidItemModel.setData([]);
+                    // bidItemModel.setData([]);
 
                     voyHeaderModel.refresh();
                     console.log(voyHeaderModel.getData());
                     voyItemModel.refresh();
                     costdetailsModel.refresh();
-                    bidItemModel.refresh();
+                    // bidItemModel.refresh();
 
                     that.toggleEnable(false);
 
@@ -2609,6 +2377,7 @@ sap.ui.define(
                 let oModel = this.getOwnerComponent().getModel();
                 let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
                 let eligibleforApproval = false;
+
                 await oBinding.requestObject().then((oContext) => {
                     console.log(oContext);
 
@@ -2619,8 +2388,6 @@ sap.ui.define(
 
                         if (Zaction === "REJ") {
                             eligibleforApproval = true;
-
-
 
                         } else if (Zaction.toUpperCase() === "APPR") {
                             sap.m.MessageBox.warning("Already sent for approval , status:Approved ");
@@ -2636,17 +2403,34 @@ sap.ui.define(
                     if (error.message.includes("No record found in voyage status") || error.error.message.includes("No record found in voyage status")) {
                         eligibleforApproval = true
                     }
+                    console.error("Error while fething contetxs : ", error)
                 });
                 const that = this;
                 if (eligibleforApproval) {
                     that.onSendForApprovalCreate();
                 }
 
+            },
+            checkforValidUser: async function () {
+                try {
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBinding = oModel.bindContext(`/xNAUTIxuserEmail(SmtpAddr='${userEmail}')`);
+                    await oBinding.requestObject().then((oContext) => {
+                        console.log(oContext);
+                        userEmail = oContext.SmtpAddr;
+                        console.log("hii", userEmail);
+                    }).catch((error) => {
+                        throw error
+                    });
 
-
+                } catch (error) {
+                    userEmail = undefined
+                    sap.m.MessageBox.error("User is not allowed to send for approval");
+                    console.log("User Not Found", error.message);
+                }
             },
 
-            onSendForApprovalCreate: function () {
+            onSendForApprovalCreate: async function () {
 
 
                 if (!myVOYNO) {
@@ -2654,15 +2438,21 @@ sap.ui.define(
                     return;
                 }
 
+                await this.checkforValidUser();
+                if (!userEmail) {
+                    return;
+                }
                 let oBindListSP = this.getView().getModel().bindList("/voyapprovalSet");
 
                 try {
                     let saveddata = oBindListSP.create({
                         "Vreqno": "",
                         "Voyno": myVOYNO,
-                        "Zemail": "sarath.venkateswara@ingenxtec.com"
-                    }, true);
+                        "Zemail": userEmail
+                    });
                     console.log("saving data:", saveddata);
+                    let oBusyDialog = new sap.m.BusyDialog();
+                    oBusyDialog.open();
 
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
@@ -2670,15 +2460,20 @@ sap.ui.define(
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} created successfully`);
+                            oBusyDialog.close();
                         } else {
                             sap.m.MessageBox.error("Error: Approval not found after creation");
                         }
                     }).catch(function (error) {
                         console.error("Error while requesting contexts:", error);
-                        // sap.m.MessageBox.error("Duplicate Entry: Already sent for approval");
+                        oBusyDialog.close();
+                    
+                        throw error
+
                     });
                 } catch (error) {
                     console.error("Error while saving data:", error);
+                    oBusyDialog.close();
                     sap.m.MessageBox.error("Error while saving data");
                 }
             },
@@ -2813,6 +2608,7 @@ sap.ui.define(
                     let isSuccess = params.success;
 
                     that._busyDialog.close();
+                    that._busyDialog = null;
                     if (isSuccess) {
                         new sap.m.MessageBox.success("File sucessfully uploaded");
                         oFileUploader.setValue("");

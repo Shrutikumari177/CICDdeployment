@@ -8,7 +8,13 @@
         search=".onCharteringSearch"
         confirm=".ChartingValueHelpClose"
         cancel=".ChartingValueHelpCancel"
-        items="{/xNAUTIxCHARTERVALUEHELP}"
+      items="{
+        path: '/xNAUTIxCHARTERVALUEHELP',
+        sorter: {
+            path: 'Chrnmin',
+            descending: true
+        }
+        }" 
       
          initialFocus="SearchField"
          rememberSelections="false"
