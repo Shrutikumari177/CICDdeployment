@@ -44,7 +44,7 @@
         <HBox >
                         <Label
                             id="Lbel1"
-                            text="Chartering Request No  : "
+                            text="Chartering Request Number : "
                             class="sapUiTinyMarginTop"
                         />
                         <Input

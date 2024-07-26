@@ -608,7 +608,7 @@ sap.ui.define(
         let checkforExistingCharteringRes = await this.checkforExistingChartering(oVoyno);
         if(checkforExistingCharteringRes.length > 0 ){
           let chrnmin = checkforExistingCharteringRes[0].Chrnmin;
-          sap.m.MessageBox.warning (`${chrnmin} Chartering No. already created against Voyage : ${oVoyno}`  );
+          sap.m.MessageBox.warning (`${chrnmin} Chartering No already created against Voyage : ${oVoyno}`  );
           oBusyDialog.close();
           return;
         }
@@ -641,7 +641,7 @@ sap.ui.define(
           console.log("oParameters", oParameters);
           console.log("oContext", oContext.sPath);
           console.log("bSuccess", bSuccess);
-        	MessageBox.success(`Chartering created successfully with Charmin No.: ${charminNum}`);
+        	MessageBox.success(`Chartering created successfully with Charmin No: ${charminNum}`);
         } else {
           MessageBox.error(`Failed to create chartering`);
         }

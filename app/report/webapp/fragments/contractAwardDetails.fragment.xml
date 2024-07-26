@@ -12,7 +12,7 @@
                         <Label
                          
                             class="labelStyle"
-                            text="Done By Vendor:"
+                            text="Done By Ve:"
                         />
                         <Input
                             class="inputStyle"

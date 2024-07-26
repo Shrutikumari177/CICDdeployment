@@ -115,7 +115,7 @@ sap.ui.define(
                 
                 let iconTab = this.byId("_idIconTabBar");
                 iconTab.setVisible(boolean);
-                iconTab.setSelectedKey('info');
+                iconTab.setSelectedKey('info1');
 
                 this.byId('_submitBtn').setEnabled(boolean);
                 this.byId('_approvalBtn').setEnabled(boolean);
@@ -178,7 +178,7 @@ sap.ui.define(
                 that._busyDialog.open();
                 try {
                     let bidItemModel = new sap.ui.model.json.JSONModel();
-                    let oModel = this.getOwnerComponent().getModel();
+                    let oModel = that.getOwnerComponent().getModel();
                     let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
                         $filter: `Voyno eq '${VoyageNo}'`
                     });
@@ -197,8 +197,12 @@ sap.ui.define(
                     let templateData = await that._getBidTemplate(oModel, "technical");
                     bidPayload = [...data];
                     that._setBidTemplate(templateData, that.byId("submitTechDetailTable"));
+                    that._busyDialog.close();
+
                 } catch (error) {
                     console.error("Error loading bid details:", error);
+                    that._busyDialog.close();
+
                 } finally {
                     if (that._busyDialog) {
                         that._busyDialog.close();

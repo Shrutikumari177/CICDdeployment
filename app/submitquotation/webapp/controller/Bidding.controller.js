@@ -1,27 +1,27 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/core/Fragment",
-    "sap/m/BusyDialog",
-    "sap/m/MessageToast",
-    "sap/ui/comp/library",
-    "sap/ui/comp/valuehelpdialog/ValueHelpDialog",
-    "sap/m/SelectDialog",
-    "sap/m/StandardListItem",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
-    "sap/m/Dialog",
-    "com/ingenx/nauti/submitquotation/utils/helperFunctions"
-],
+        "sap/ui/core/mvc/Controller",
+        "sap/ui/model/json/JSONModel",
+        "sap/ui/core/Fragment",
+        "sap/m/BusyDialog",
+        "sap/m/MessageToast",
+        "sap/ui/comp/library",
+        "sap/ui/comp/valuehelpdialog/ValueHelpDialog",
+        "sap/m/SelectDialog",
+        "sap/m/StandardListItem",
+        "sap/ui/model/Filter",
+        "sap/ui/model/FilterOperator",
+        "sap/m/Dialog",
+        "com/ingenx/nauti/submitquotation/utils/helperFunctions"
+    ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      * @param {typeof sap/ui/model/json/JSONModel} JSONModel
      * @param {typeof sap/m/BusyDialog} BusyDialog
      */
-    function (Controller, JSONModel,Fragment, BusyDialog, MessageToast, library, ValueHelpDialog, SelectDialog, StandardListItem, Filter, FilterOperator, Dialog,helperFunctions) {
+    function (Controller, JSONModel, Fragment, BusyDialog, MessageToast, library, ValueHelpDialog, SelectDialog, StandardListItem, Filter, FilterOperator, Dialog, helperFunctions) {
         let bidPayload = [];
         var aData = [];
-        var readPayload=[]
+        var readPayload = []
         "use strict";
         return Controller.extend("com.ingenx.nauti.submitquotation.controller.Bidding", {
 
@@ -66,9 +66,6 @@ sap.ui.define([
                 });
 
             },
-
-
-
 
             _onObjectMatched: async function (oEvent) {
                 this.resetFormFields();
@@ -125,63 +122,67 @@ sap.ui.define([
 
             getBidDetails: async function (VoyageNo) {
                 let that = this;
-            
+
                 try {
                     let bidItemModel = new sap.ui.model.json.JSONModel();
-            
+
                     let oModel = this.getOwnerComponent().getModel();
                     let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
                         $filter: `Voyno eq '${VoyageNo}'`
                     });
-            
+
                     let oContexts = await oBindList.requestContexts(0, Infinity);
-            
+
                     let data = [];
                     oContexts.forEach(oContext => {
                         data.push(oContext.getObject());
                     });
                     console.log("Bid details data:", data);
-            
+
                     bidItemModel.setData(data);
                     that.getView().setModel(bidItemModel, "bidItemModel");
                     that.getView().getModel("bidItemModel").refresh();
                     console.table(that.getView().getModel("bidItemModel").getData());
                     let templateData = await that._getBidTemplate(oModel, "technical");
                     bidPayload = [...data];
-                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable")); 
+                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable"));
                 } catch (error) {
                     console.error("Error loading bid details:", error);
-                } finally {
-                }
-            },  
+                } finally {}
+            },
 
-            readBidDetailData: async function(cherterNo) {
+            readBidDetailData: async function (charterNo) {
+                // debugger;
                 let that = this;
                 try {
                     let getDataForBidDetail = new JSONModel();
                     let oModel = this.getOwnerComponent().getModel();
-                    let oBindListData = oModel.bindList("/quotations",undefined,undefined,undefined,{ 
-                            $filter: `Chrnmin eq '${cherterNo}'`
-                        });
+                    let oBindListData = oModel.bindList("/quotations", undefined, undefined, undefined, {
+                        $filter: `Chrnmin eq '${charterNo}'`
+                    });
                     let oContext = await oBindListData.requestContexts(0, Infinity);
                     let bidData = [];
                     oContext.forEach(oContext => {
                         bidData.push(oContext.getObject());
                     });
-                    getDataForBidDetail.setData(bidData);
+                    readPayload = bidData.filter(item => item.Chrnmin === charterNo);
+                    if (readPayload.length < 1) {
+                        var message = `Bid details or vessel details not found for Chartering No: ${charterNo}`;
+                        MessageToast.show(message);
+                    }
+                    getDataForBidDetail.setData(readPayload);
                     that.getView().setModel(getDataForBidDetail, "readBidData");
                     that.getView().getModel("readBidData").refresh();
                     console.log("read data ye hai", that.getView().getModel("readBidData").getData());
-                    readPayload = bidData;
-                    await that.readBidTemplateData(readPayload[0].to_quote_item,"technical");
-                    await that.setBidTable(readPayload[0].to_quote_item,that.byId("TechDetailTable"))
+                    await that.readBidTemplateData(readPayload[0].to_quote_item, "technical");
+                    await that.setBidTable(readPayload[0].to_quote_item, that.byId("TechDetailTable"))
                 } catch (error) {
                     console.log("read error:", error);
                 }
             },
 
             readBidTemplateData: function (oData, detailType) {
-            //   debugger;
+                //   debugger;
                 let index = "Not Found";
                 let freightValue = sap.ui.getCore().byId("");
                 return new Promise(async (resolve, reject) => {
@@ -222,13 +223,13 @@ sap.ui.define([
                 return new Promise(async (resolve, reject) => {
                     try {
                         let oView = this.getView();
-                        let bidItemModel = oView.getModel("bidItemModel"); 
+                        let bidItemModel = oView.getModel("bidItemModel");
                         let oData = bidItemModel.getData();
-            
+
                         oData.sort((a, b) => {
                             let aCodeDesc = a.CodeDesc ? a.CodeDesc.toLocaleLowerCase() : "";
                             let bCodeDesc = b.CodeDesc ? b.CodeDesc.toLocaleLowerCase() : "";
-            
+
                             if (aCodeDesc < bCodeDesc) {
                                 return -1;
                             }
@@ -237,16 +238,16 @@ sap.ui.define([
                             }
                             return 0;
                         });
-            
+
                         for (let i = oData.length - 1; i >= 0; i--) {
                             let el = oData[i];
                             delete el.__metadata;
-            
+
                             if (detailType === "technical" && el.Zcode === "FREIG") {
                                 oData.splice(i, 1);
                             }
                         }
-            
+
                         resolve(oData);
                     } catch (err) {
                         console.log(err);
@@ -255,12 +256,12 @@ sap.ui.define([
                     }
                 });
             },
-            
-            
-            
+
+
+
 
             _getBidTemplate1: function (oModel, detailType) {
-                console.log("hello sir",this.getView().getModel("bidItemModel").getData())
+                console.log("hello sir", this.getView().getModel("bidItemModel").getData())
                 let index = "Not Found";
                 return new Promise(async (resolve, reject) => {
                     try {
@@ -294,33 +295,33 @@ sap.ui.define([
                 });
 
             },
-           
-            setBidTable:function(templateData, oTable){
+
+            setBidTable: function (templateData, oTable) {
                 let oView = this.getView();
                 let that = this;
                 oTable.removeAllItems();
                 // debugger;
-            
+
                 templateData.forEach((el) => {
                     let oItem;
                     let oCells = [];
                     oCells.push(new sap.m.Text({
-                         text: el.CodeDesc 
-                        }));
+                        text: el.CodeDesc
+                    }));
 
-                        oCells.push(
-                            new sap.m.Text({
-                                text : el.Value
-                            })
-                        );   
-                    
+                    oCells.push(
+                        new sap.m.Text({
+                            text: el.Value
+                        })
+                    );
+
                     oCells.push(new sap.m.Button({
                         icon: "sap-icon://hint",
                         press: function (oEvent) {
                             that.handlePopoverPress(oEvent, that);
                         }
                     }));
-            
+
                     oItem = new sap.m.ColumnListItem({
                         cells: oCells,
                     });
@@ -332,19 +333,21 @@ sap.ui.define([
                 let oView = this.getView();
                 let that = this;
                 oTable.removeAllItems();
-            
+
                 // Remove duplicates based on CodeDesc property
-                let uniqueData = templateData.filter((value, index, self) => 
+                let uniqueData = templateData.filter((value, index, self) =>
                     index === self.findIndex((t) => (
                         t.CodeDesc === value.CodeDesc
                     ))
                 );
-            
+
                 uniqueData.forEach((el) => {
                     let oItem;
                     let oCells = [];
-                    oCells.push(new sap.m.Text({ text: el.CodeDesc }));
-            
+                    oCells.push(new sap.m.Text({
+                        text: el.CodeDesc
+                    }));
+
                     if (el.Code === "COOR" || el.Zcode === "COOR") {
                         oCells.push(
                             new sap.m.Input({
@@ -387,21 +390,21 @@ sap.ui.define([
                             })
                         );
                     }
-            
+
                     oCells.push(new sap.m.Button({
                         icon: "sap-icon://hint",
                         press: function (oEvent) {
                             that.handlePopoverPress(oEvent, that);
                         }
                     }));
-            
+
                     oItem = new sap.m.ColumnListItem({
                         cells: oCells,
                     });
                     oTable.addItem(oItem);
                 });
             },
-            
+
 
             handlePopoverPress: function (oEvent, that) {
                 let oButton = oEvent.getSource();
@@ -424,7 +427,6 @@ sap.ui.define([
                         controller: that
                     }).then(function (oPopover) {
                         oView.addDependent(oPopover);
-                        // oPopover.bindElement("hintModel>/");
 
                         return oPopover;
                     });
@@ -437,7 +439,7 @@ sap.ui.define([
             },
 
             getBidDetailsData: async function (status) {
-                // debugger;
+
                 if (status === "Closed") {
                     try {
                         var infoModel = this.getView().getModel("vData");
@@ -495,25 +497,23 @@ sap.ui.define([
             tabShoworNot: function (status) {
                 debugger;
             },
-            onBeforeRendering: function() {
+            onBeforeRendering: function () {
                 // Modify view before rendering
                 console.log("onBeforeRendering called");
-              },
-          
-              // Called after the View has been rendered
-              onAfterRendering: function() {
-                // Perform post-rendering manipulations of the DOM
+            },
+
+            onAfterRendering: function () {
                 console.log("onAfterRendering called");
-              },
+            },
 
             getHeaderDetails: async function (bidPath, startDate, startTime, endDate, endTime) {
                 const dCharter = {
                     voyageType: "",
                     vesselType: "",
-                    bStartDate: startDate ?? null,
-                    bStartTime: startTime ?? null,
-                    bEndDate: endDate ?? null,
-                    bEndTime: endTime ?? null,
+                    bStartDate: startDate ? ? null,
+                    bStartTime: startTime ? ? null,
+                    bEndDate: endDate ? ? null,
+                    bEndTime: endTime ? ? null,
                     biddingType: "",
                     Currency: ""
                 };
@@ -613,9 +613,12 @@ sap.ui.define([
                         console.log("Hint data:", extractData);
 
                         if (extractData.length === 0) {
-                            sap.m.MessageToast.show("No matching data found.");
+                            let message = `Preferred Requirements data not found for Voyage No: ${voyageNo}`
+                            sap.m.MessageToast.show(message);
                         } else {
-                            var dummyModel = new sap.ui.model.json.JSONModel({items:extractData});
+                            var dummyModel = new sap.ui.model.json.JSONModel({
+                                items: extractData
+                            });
                             this.getView().setModel(dummyModel, "hintDataModel");
                         }
                     }
@@ -625,7 +628,6 @@ sap.ui.define([
                 }
             },
 
-            // display hint table popover code
             onHintPress: function (oEvent) {
                 var oButton = oEvent.getSource();
                 var sKey = oButton.getCustomData().find(data => data.getKey() === "key").getValue();
@@ -636,7 +638,7 @@ sap.ui.define([
                     var oMatchedItem = aItems.filter(function (item) {
                         return item.CodeDesc === sKey;
                     });
-                    console.log("pop up data itna hi",oMatchedItem);
+                    console.log("pop up data itna hi", oMatchedItem);
 
                     if (oMatchedItem) {
                         var oPopoverModel = new sap.ui.model.json.JSONModel(oMatchedItem);
@@ -682,10 +684,14 @@ sap.ui.define([
                 }
                 return "N/A"
             },
-            
+
             // submit technical and commercial details data
             onSubmitBid: function () {
-                debugger;
+
+                // debugger;
+                let bidItemModelData = this.getView().getModel("bidItemModel");
+                let bidItemsData = bidItemModelData.getData();
+                console.log("bidItemsData", bidItemsData);
                 var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();
                 var aData = [];
@@ -724,77 +730,88 @@ sap.ui.define([
                 const formatLastCleaningDate = dateObject.toISOString().split('T')[0];
                 let date = new Date();
                 let currentDate = date.getFullYear() + '-' +
-                ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + date.getDate()).slice(-2);
+                    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' + date.getDate()).slice(-2);
 
                 let currentTime = ('0' + date.getHours()).slice(-2) + ':' +
                     ('0' + date.getMinutes()).slice(-2) + ':' +
                     ('0' + date.getSeconds()).slice(-2);
 
-                    if(!coorValue || !lastCleaningDate || !lastPortvalue || !demurrageInput || !sVIMONo || !sVNameInput ||!freightValue){
-                        sap.m.MessageBox.error("Please enter all valid fields !!")
-                        return
-                    }
+                if (!coorValue || !lastCleaningDate || !lastPortvalue || !demurrageInput || !sVIMONo || !sVNameInput || !freightValue) {
+                    sap.m.MessageBox.error("Please enter all valid fields !!")
+                    return
+                }
+                let quotationsitems = {
+                    "Zcode": "",
+                    "CodeDesc": "",
+                    "Cunit": "",
+                    "Cvalue": "",
+                    "Value": "",
+                    "Zcom": ""
+                };
+                let  to_quote_item = [];
 
-
+                for(let i = 0; i < bidItemsData.length; i++){
+                    let CodeDesc = bidItemsData[i].CodeDesc;
+                    
+                }
                 let payload = {
-                        "Lifnr": vendorNo,
-                        "Voyno": voyageNo,
-                        "Chrnmin": charterNo,
-                        "Vimono": sVNameInput,
-                        "Vname": sVIMONo,
-                        "Biddate": currentDate,
-                        "Bidtime": currentTime,
-                        "to_quote_item": [
-                          {
+                    "Lifnr": vendorNo,
+                    "Voyno": voyageNo,
+                    "Chrnmin": charterNo,
+                    "Vimono": sVNameInput,
+                    "Vname": sVIMONo,
+                    "Biddate": currentDate,
+                    "Bidtime": currentTime,
+                    "to_quote_item": [{
                             "Zcode": "COOR",
                             "CodeDesc": "COUNTRY OF ORIGIN",
                             "Cunit": "",
                             "Cvalue": "0.000",
                             "Value": coorValue || "",
                             "Zcom": ""
-                          },
-                          {
+                        },
+                        {
                             "Zcode": "DAT1",
                             "CodeDesc": "LAST CLEANING DATE",
                             "Cunit": "",
                             "Cvalue": "0.000",
                             "Value": formatLastCleaningDate || "",
                             "Zcom": ""
-                          },
-                          {
+                        },
+                        {
                             "Zcode": "PORT",
                             "CodeDesc": "LAST PORT OF CALL",
                             "Cunit": "",
                             "Cvalue": "0.000",
-                            "Value": lastPortvalue  || "",
+                            "Value": lastPortvalue || "",
                             "Zcom": ""
-                          },
-                          {
+                        },
+                        {
                             "Zcode": "CLASS",
                             "CodeDesc": "CLASS OF VESSEL" || "",
                             "Cunit": "",
                             "Cvalue": "0.000",
                             "Value": classValue,
                             "Zcom": ""
-                          },
-                          {
+                        },
+                        {
                             "Zcode": "DEMURRAGE",
                             "CodeDesc": "DEMURRAGE" || 0,
                             "Cunit": "INR",
                             "Cvalue": "0.000",
                             "Value": demurrageInput,
                             "Zcom": ""
-                          },
-                          {
+                        },
+                        {
                             "Zcode": "FREIG",
                             "CodeDesc": "FREIGHT",
                             "Cunit": "INR",
                             "Cvalue": "0.000",
                             "Value": freightValue || 0,
                             "Zcom": ""
-                          }
-                        ]
+                        }
+                    ]
                 };
                 console.log("payload for submit Quoation :", payload);
                 const oModel = this.getOwnerComponent().getModel("modelV2");
@@ -803,19 +820,14 @@ sap.ui.define([
                     success: function (oData) {
                         let result = oData;
                         console.log("results", result);
-                        // const endDate = new Date(`${infoModel.getProperty("/endDate")}T${infoModel.getProperty("/endTime")}`);
-                        // if (date <= endDate) {
-                        // infoModel.setProperty("/status", statusLevel.SUBMIT);
-                        //   }
                         new sap.m.MessageBox.success("Successfully Submitted");
                         that.onClearField()
                     },
                     error: function (err) {
                         console.log("Error occured", err);
-                        if(JSON.parse(err.responseText).error.message.value.includes("Entity already exists")){
+                        if (JSON.parse(err.responseText).error.message.value.includes("Entity already exists")) {
                             new sap.m.MessageBox.error(`Quotation already submitted for the chartering no.: ${charterNo}`)
-                        }
-                        else{
+                        } else {
                             new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value)
                         }
                     }
@@ -825,31 +837,31 @@ sap.ui.define([
             //    country of origin value help code             
             onCoorValueHelpRequest: function (oEvent) {
                 var oView = this.getView();
-                this._oInputField = oEvent.getSource(); 
-            
+                this._oInputField = oEvent.getSource();
+
                 if (!this.countryOfOrigin) {
                     this.countryOfOrigin = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.submitquotation.fragment.Coor", this);
                     oView.addDependent(this.countryOfOrigin);
                 }
-            
+
                 // Clear the model data and refresh the binding before opening the dialog
                 this._clearAndRefreshDialogData().then(() => {
                     this.countryOfOrigin.open();
                 });
             },
-            
+
             _clearAndRefreshDialogData: function () {
                 return new Promise((resolve, reject) => {
                     try {
                         var oBinding = this.countryOfOrigin.getBinding("items");
-            
+
                         if (oBinding) {
                             oBinding.filter([]);
                             oBinding.refresh();
-                            
+
                             setTimeout(() => {
                                 resolve();
-                            }, 500); 
+                            }, 500);
                         } else {
                             reject("Binding not found");
                         }
@@ -858,7 +870,7 @@ sap.ui.define([
                     }
                 });
             },
-            
+
             onValueHelpClosevoy: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
                 if (oSelectedItem) {
@@ -869,7 +881,7 @@ sap.ui.define([
                     this.countryOfOrigin.close();
                 }
             },
-            
+
             onValueHelpSearch: function (oEvent) {
                 var sValue = oEvent.getParameter("value");
                 var aFilters = [];
@@ -883,19 +895,19 @@ sap.ui.define([
                     and: false
                 }));
             },
-            
+
 
 
             //   port value help code
             onPortValueHelpRequest: function (oEvent) {
                 var oView = this.getView();
                 this._portInput = oEvent.getSource();
-            
+
                 if (!this.portMaster) {
                     this.portMaster = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.submitquotation.fragment.Port", this);
                     oView.addDependent(this.portMaster);
                 }
-            
+
                 // Clear the model data and refresh the binding before opening the dialog
                 this._clearAndRefreshPortData().then(() => {
                     this.portMaster.open();
@@ -903,17 +915,17 @@ sap.ui.define([
                     console.error("Failed to refresh port data:", err);
                 });
             },
-            
+
             _clearAndRefreshPortData: function () {
                 return new Promise((resolve, reject) => {
                     try {
                         var oBinding = this.portMaster.getBinding("items");
-            
+
                         // Ensure the binding is available
                         if (oBinding) {
                             // Clear previous filters
                             oBinding.filter([]);
-                            
+
                             // Detach and reattach the binding to force a refresh
                             var oList = this.portMaster.getItems();
                             oList.forEach(item => oBinding.detachChange(item));
@@ -929,7 +941,7 @@ sap.ui.define([
                     }
                 });
             },
-            
+
             onValueHelpClosePort: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
                 if (oSelectedItem) {
@@ -940,7 +952,7 @@ sap.ui.define([
                     this.portMaster.close();
                 }
             },
-            
+
             onValueHelpSearch2: function (oEvent) {
                 var sValue = oEvent.getParameter("value");
                 var aFilters = [];
@@ -953,7 +965,7 @@ sap.ui.define([
                     filters: aFilters,
                     and: false
                 }));
-            },            
+            },
 
             resetFormFields: function () {
                 // debugger;
@@ -967,23 +979,23 @@ sap.ui.define([
             onFCostChange: function (oEvent) {
                 // debugger;
                 var oModel = this.getView().getModel("totalCalculateModel");
-                var oSource = oEvent.getSource(); 
-            
+                var oSource = oEvent.getSource();
+
                 var sNewValue = oEvent.getParameter("value");
-            
+
                 var sFieldId = oSource.getId();
                 if (sFieldId.includes("fCost2")) {
                     oModel.setProperty("/fCost2", sNewValue);
                 } else if (sFieldId.includes("__input2")) {
                     oModel.setProperty("/demurrage", sNewValue);
                 }
-            
+
                 var oData = oModel.getData();
                 var demurrage = parseFloat(oData.demurrage) || 0;
                 var fCost2 = parseFloat(oData.fCost2) || 0;
-            
+
                 var totalCost = demurrage + fCost2;
-            
+
                 var oNumberFormat = sap.ui.core.format.NumberFormat.getFloatInstance({
                     maxFractionDigits: 2,
                     minFractionDigits: 2,
@@ -992,13 +1004,13 @@ sap.ui.define([
                     decimalSeparator: "."
                 });
                 var sFormattedTotalCost = oNumberFormat.format(totalCost);
-            
+
                 oModel.setProperty("/totalCost", sFormattedTotalCost);
             },
-                              
+
 
             onClearField: function () {
-                debugger
+                // debugger
                 var vName = this.getView().byId("vesselName")
                 vName.setValue(" ")
                 var vImo = this.getView().byId("vesselIMONo")
@@ -1007,7 +1019,7 @@ sap.ui.define([
                 fCost.setValue(" ")
                 var tCost = this.getView().byId("totalCost")
                 tCost.setValue(" ")
-                var oTable = this.byId("submitTechDetailTable"); 
+                var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();
                 aItems.forEach(function (oItem) {
                     var aCells = oItem.getCells();
@@ -1024,5 +1036,3 @@ sap.ui.define([
 
         });
     });
-
-

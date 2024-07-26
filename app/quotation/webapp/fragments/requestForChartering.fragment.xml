@@ -15,7 +15,7 @@ items="{
             path: 'Chrnmin',
             descending: true
         }
-        }"         <StandardListItem id="_IDGenStandardListItem11"
+        }"  >       <StandardListItem id="_IDGenStandardListItem11"
             title="{Chrnmin}"
             iconDensityAware="false"
             iconInset="false"

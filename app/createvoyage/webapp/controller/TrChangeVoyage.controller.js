@@ -175,7 +175,7 @@ sap.ui.define(
                 console.log("myVoyno  received:", myVOYNO);
                 that.byId('_voyageInput1').setValue(myVOYNO);
                 let iconTab = this.byId("_idIconTabBar");
-                iconTab.setSelectedKey('info');
+                iconTab.setSelectedKey('info1');
 
 
                 await that.getBidDetails(myVOYNO);
@@ -2359,8 +2359,7 @@ sap.ui.define(
                     console.log("saving data:", saveddata);
                     let oBusyDialog = new sap.m.BusyDialog();
                     oBusyDialog.open();
-                    oBusyDialog = null;
-
+                    let that = this;
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
                         if (ApprovalNo.length > 0) {

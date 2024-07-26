@@ -1,632 +1,225 @@
-<mvc:View
-    xmlns:form="sap.ui.layout.form"
-    xmlns:table="sap.ui.table"
-    controllerName="com.ingenx.nauti.submitquotation.controller.Bidding"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout"
-    displayBlock="true"
-    height="100%"
-    busyIndicatorDelay="0"
-
->
-    <Page
-        id="_IDGenPage1"
-        showHeader="false"
-    >
-        <l:VerticalLayout
-            id="_IDGenVerticalLayout1"
-            width="100%"
-            class="sapUiContentPadding"
-        >
-            <l:BlockLayout
-                id="_IDGenBlockLayout1"
-                background="Dashboard"
-            >
+<mvc:View xmlns:form="sap.ui.layout.form" xmlns:table="sap.ui.table" controllerName="com.ingenx.nauti.submitquotation.controller.Bidding" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" displayBlock="true" height="100%" busyIndicatorDelay="0">
+    <Page id="_IDGenPage1" showHeader="false">
+        <l:VerticalLayout id="_IDGenVerticalLayout1" width="100%" class="sapUiContentPadding">
+            <l:BlockLayout id="_IDGenBlockLayout1" background="Dashboard">
                 <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
-                    <l:BlockLayoutCell
-                        id="_IDGenBlockLayoutCell1"
-                    >
-                          <Toolbar id="t5">
-					            <Title id="closed_title3" class="h_text" level="H6" text="Details for Charter: {vData>/charteringNo}" />
-				          </Toolbar>
+                    <l:BlockLayoutCell id="_IDGenBlockLayoutCell1">
+                        <Toolbar id="t5">
+                            <Title id="closed_title3" class="h_text" level="H6" text="Details for Charter: {vData>/charteringNo}"/>
+                        </Toolbar>
                         <l:HorizontalLayout
-                            id="_IDGenHorizontalLayout1"
-                            allowWrapping="false"
-                        >
-                        <!-- chartering data detail's header box -->
-                            <form:SimpleForm
-                                id="_IDGenSimpleForm1"
-                                editable="false"
-                                backgroundDesign="Transparent"
-                                layout="ColumnLayout"
-                            >
-                                <Label
-                                    id="_IDGenLabel1"
-                                    text="Voyage Type"
-                                    labelFor="voyageType"
-                                    design="Bold"
-                                />
-                                <Text
-                                    text="{headerDetailModel>/voyageType}"
-                                    id="voyageType"
-                                />
-                                <Label
-                                    id="_IDGenLabel2"
-                                    text="Vessel Type"
-                                    labelFor="vesselType"
-                                    design="Bold"
-                                />
-                                <Text
-                                    text="{headerDetailModel>/vesselType}"
-                                    id="vesselType"
-                                />
+                            id="_IDGenHorizontalLayout1" allowWrapping="false">
+                            <!-- chartering data detail's header box -->
+                            <form:SimpleForm id="_IDGenSimpleForm1" editable="false" backgroundDesign="Transparent" layout="ColumnLayout">
+                                <Label id="_IDGenLabel1" text="Voyage Type" labelFor="voyageType" design="Bold"/>
+                                <Text text="{headerDetailModel>/voyageType}" id="voyageType"/>
+                                <Label id="_IDGenLabel2" text="Vessel Type" labelFor="vesselType" design="Bold"/>
+                                <Text text="{headerDetailModel>/vesselType}" id="vesselType"/>
                             </form:SimpleForm>
-                            <form:SimpleForm
-                                id="_IDGenSimpleForm2"
-                                editable="false"
-                                backgroundDesign="Transparent"
-                                layout="ColumnLayout"
-                            >
-                                <Label
-                                    id="_IDGenLabel3"
-                                    text="Bid Start"
-                                    labelFor="bidStart"
-                                    design="Bold"
-                                />
-                                <Text
-                                text="{parts: [{path: 'headerDetailModel>/bStartDate'}, {path: 'headerDetailModel>/bStartTime'}], formatter: '.formatter.formatDateTime'}"
-                                 id="bidStart"
-                                />
-                                <Label
-                                    id="_IDGenLabel4"
-                                    text="Bid End"
-                                    labelFor="bidEnd"
-                                    design="Bold"
-                                />
-                                <Text
-                                    text="{parts: [{path: 'headerDetailModel>/bEndDate'}, {path: 'headerDetailModel>/bEndTime'}], formatter: '.formatter.formatDateTime'}"
-                                    id="bidEnd"
-                                />
+                            <form:SimpleForm id="_IDGenSimpleForm2" editable="false" backgroundDesign="Transparent" layout="ColumnLayout">
+                                <Label id="_IDGenLabel3" text="Bid Start" labelFor="bidStart" design="Bold"/>
+                                <Text text="{parts: [{path: 'headerDetailModel>/bStartDate'}, {path: 'headerDetailModel>/bStartTime'}], formatter: '.formatter.formatDateTime'}" id="bidStart"/>
+                                <Label id="_IDGenLabel4" text="Bid End" labelFor="bidEnd" design="Bold"/>
+                                <Text text="{parts: [{path: 'headerDetailModel>/bEndDate'}, {path: 'headerDetailModel>/bEndTime'}], formatter: '.formatter.formatDateTime'}" id="bidEnd"/>
                             </form:SimpleForm>
-                            <form:SimpleForm
-                                id="_IDGenSimpleForm3"
-                                editable="false"
-                                backgroundDesign="Transparent"
-                                layout="ColumnLayout"
-                            >
-                                <Label
-                                    id="_IDGenLabel5"
-                                    text="Bidding Type"
-                                    labelFor="biddingType"
-                                    design="Bold"
-                                />
-                                <Text
-                                    text="{headerDetailModel>/biddingType}"
-                                    id="biddingType"
-                                />
-                                <Label
-                                    id="_IDGenLabel6"
-                                    text="Currency"
-                                    labelFor="currency"
-                                    design="Bold"
-                                />
-                                <Text
-                                     text="{headerDetailModel>/Currency}"
-                                    id="currency"
-                                />
+                            <form:SimpleForm id="_IDGenSimpleForm3" editable="false" backgroundDesign="Transparent" layout="ColumnLayout">
+                                <Label id="_IDGenLabel5" text="Bidding Type" labelFor="biddingType" design="Bold"/>
+                                <Text text="{headerDetailModel>/biddingType}" id="biddingType"/>
+                                <Label id="_IDGenLabel6" text="Currency" labelFor="currency" design="Bold"/>
+                                <Text text="{headerDetailModel>/Currency}" id="currency"/>
                             </form:SimpleForm>
                         </l:HorizontalLayout>
                     </l:BlockLayoutCell>
                 </l:BlockLayoutRow>
                 <l:BlockLayoutRow id="_IDGenBlockLayoutRow2">
                     <l:BlockLayoutCell id="_IDGenBlockLayoutCell2">
-                        <IconTabBar
-                            id="_IDGenIconTabBar1"
-                            expanded="true"
-                            expandable="false"
-                            tabDensityMode="Compact"
-                            backgroundDesign="Transparent"
-                        >
+                        <IconTabBar id="_IDGenIconTabBar1" expanded="true" expandable="false" tabDensityMode="Compact" backgroundDesign="Transparent">
                             <items>
                                 <IconTabFilter
-                                    id="_IDGenIconTabFilter1"
-                                    text="Voyage Details"
-                                    key="tab1"
-                                >
-                                <!-- Voyage detail's table code-->
-                                    <table:Table
-                                        id="idPortTab"
-                                        selectionMode="None"
-                                        rows="{voyageDetailsModel>/}"
-                                        visibleRowCountMode="Auto"
-                                    >
+                                    id="_IDGenIconTabFilter1" text="Voyage Details" key="tab1">
+                                    <!-- Voyage detail's table code-->
+                                    <table:Table id="idPortTab" selectionMode="None" rows="{voyageDetailsModel>/}" visibleRowCountMode="Auto">
                                         <table:extension>
-                                            <OverflowToolbar
-                                                id="_IDGenOverflowToolbar1"
-                                                class="sapUiSmallMarginBeginEnd"
-                                            />
+                                            <OverflowToolbar id="_IDGenOverflowToolbar1" class="sapUiSmallMarginBeginEnd"/>
                                         </table:extension>
                                         <table:columns>
-                                            <table:Column
-                                                id="_IDGenColumn1"
-                                                width="3.5rem"
-                                                hAlign="Center"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel7"
-                                                    text="LegID"
-                                                />
+                                            <table:Column id="_IDGenColumn1" width="3.5rem" hAlign="Center">
+                                                <Label id="_IDGenLabel7" text="LegID"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput1"
-                                                        value="{voyageDetailsModel>Vlegn}"
-                                                        editable="false"
-                                                        textAlign="Center"
-                                                    />
+                                                    <Input id="_IDGenInput1" value="{voyageDetailsModel>Vlegn}" editable="false" textAlign="Center"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn2"
-                                                width="auto"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel8"
-                                                    text="Port Code"
-                                                />
+                                            <table:Column id="_IDGenColumn2" width="auto">
+                                                <Label id="_IDGenLabel8" text="Port Code"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput2"
-                                                        value="{voyageDetailsModel>Portc}"
-                                                        editable="false"
-                                                    />
+                                                    <Input id="_IDGenInput2" value="{voyageDetailsModel>Portc}" editable="false"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn3"
-                                                width="auto"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel9"
-                                                    text="Port Name"
-                                                />
+                                            <table:Column id="_IDGenColumn3" width="auto">
+                                                <Label id="_IDGenLabel9" text="Port Name"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput3"
-                                                        value="{voyageDetailsModel>Portn}"
-                                                        editable="false"
-                                                    />
+                                                    <Input id="_IDGenInput3" value="{voyageDetailsModel>Portn}" editable="false"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn4"
-                                                width="auto"
-                                                hAlign="Right"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel10"
-                                                    text="Cargo Size"
-                                                />
+                                            <table:Column id="_IDGenColumn4" width="auto" hAlign="Right">
+                                                <Label id="_IDGenLabel10" text="Cargo Size"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput4"
-                                                        value="{voyageDetailsModel>Cargs}"
-                                                        editable="false"
-                                                        textAlign="Right"
-                                                    />
+                                                    <Input id="_IDGenInput4" value="{voyageDetailsModel>Cargs}" editable="false" textAlign="Right"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn5"
-                                                width="3.5rem"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel11"
-                                                    text="Unit"
-                                                />
+                                            <table:Column id="_IDGenColumn5" width="3.5rem">
+                                                <Label id="_IDGenLabel11" text="Unit"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput5"
-                                                        value="{voyageDetailsModel>Cargu}"
-                                                        editable="false"
-                                                    />
+                                                    <Input id="_IDGenInput5" value="{voyageDetailsModel>Cargu}" editable="false"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn6"
-                                                width="auto"
-                                                hAlign="Right"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel12"
-                                                    text="Distance(NM)"
-                                                />
+                                            <table:Column id="_IDGenColumn6" width="auto" hAlign="Right">
+                                                <Label id="_IDGenLabel12" text="Distance(NM)"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput6"
-                                                        value="{voyageDetailsModel>Medst}"
-                                                        editable="false"
-                                                        textAlign="Right"
-                                                    />
+                                                    <Input id="_IDGenInput6" value="{voyageDetailsModel>Medst}" editable="false" textAlign="Right"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn7"
-                                                width="auto"
-                                                hAlign="Right"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel13"
-                                                    text="Arrival Date"
-                                                />
+                                            <table:Column id="_IDGenColumn7" width="auto" hAlign="Right">
+                                                <Label id="_IDGenLabel13" text="Arrival Date"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenDatePicker1"
-                                                        value="{voyageDetailsModel>Vetad}"
-                                                        editable="false"
-                                                        textAlign="Right"
-                                                    />
+                                                    <Input id="_IDGenDatePicker1" value="{voyageDetailsModel>Vetad}" editable="false" textAlign="Right"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn8"
-                                                width="auto"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel14"
-                                                    text="Arrival Time"
-                                                />
+                                            <table:Column id="_IDGenColumn8" width="auto">
+                                                <Label id="_IDGenLabel14" text="Arrival Time"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput7"
-                                                        value="{voyageDetailsModel>Vetat}"
-                                                        editable="false"
-                                                    />
+                                                    <Input id="_IDGenInput7" value="{voyageDetailsModel>Vetat}" editable="false"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn9"
-                                                width="auto"
-                                                hAlign="Right"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel15"
-                                                    text="Departure Date"
-                                                />
+                                            <table:Column id="_IDGenColumn9" width="auto" hAlign="Right">
+                                                <Label id="_IDGenLabel15" text="Departure Date"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenDatePicker2"
-                                                        value="{voyageDetailsModel>Vetdd}"
-                                                        editable="false"
-                                                        textAlign="Right"
-                                                    />
+                                                    <Input id="_IDGenDatePicker2" value="{voyageDetailsModel>Vetdd}" editable="false" textAlign="Right"/>
                                                 </table:template>
                                             </table:Column>
-                                            <table:Column
-                                                id="_IDGenColumn10"
-                                                width="auto"
-                                            >
-                                                <Label
-                                                    id="_IDGenLabel16"
-                                                    text="Departure Time"
-                                                />
+                                            <table:Column id="_IDGenColumn10" width="auto">
+                                                <Label id="_IDGenLabel16" text="Departure Time"/>
                                                 <table:template>
-                                                    <Input
-                                                        id="_IDGenInput8"
-                                                        value="{voyageDetailsModel>Vetdt}"
-                                                        editable="false"
-                                                    />
+                                                    <Input id="_IDGenInput8" value="{voyageDetailsModel>Vetdt}" editable="false"/>
                                                 </table:template>
                                             </table:Column>
                                         </table:columns>
                                     </table:Table>
                                 </IconTabFilter>
-                              
-                                <IconTabFilter
-                                    id="_IDGenIconTabFilter4"
-                                    text="Submit Vessel Details"
-                                    visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }"
-                                >
-                                    <form:SimpleForm
-                                        id="_IDGenSimpleForm6"
-                                        editable="true"
-                                        backgroundDesign="Transparent"
-                                        width="120%"
-                                    >
-                                        <Label
-                                            id="_IDGenLabel22"
-                                            text="Vessel Name"
-                                            labelFor="vesselName"
-                                        />
-                                        <Input
-                                            id="vesselName"
-                                            width="10rem"
-                                        />
-                                        <Label
-                                            id="_IDGenLabel23"
-                                            text="Vessel IMO No"
-                                            labelFor="vesselIMONo"
-                                        />
-                                        <Input
-                                            id="vesselIMONo"
-                                            width="10rem"
-                                        />
+
+                                <IconTabFilter id="_IDGenIconTabFilter4" text="Submit Vessel Details" visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }">
+                                    <form:SimpleForm id="_IDGenSimpleForm6" editable="true" backgroundDesign="Transparent" width="120%">
+                                        <Label id="_IDGenLabel22" text="Vessel Name" labelFor="vesselName"/>
+                                        <Input id="vesselName" width="10rem"/>
+                                        <Label id="_IDGenLabel23" text="Vessel IMO No" labelFor="vesselIMONo"/>
+                                        <Input id="vesselIMONo" width="10rem"/>
                                     </form:SimpleForm>
                                 </IconTabFilter>
-                                <IconTabFilter
-                                    id="icontabFilter3"
-									text="Vessel Details"
-									visible="{= ${vData>/status} === 'Closed' }"
-								>
-									<form:SimpleForm
-                                        id="vesselDetailsForm"
-										editable="false"
-										backgroundDesign="Transparent"
-										width="100%"
-									>
-										<Label text="Vessel Name" id="vname"/>
-										<Text
-                                            id="vnameText"
-											width="10rem"
-											text="{readBidData>/0/Vname}"
-										/>
-										<Label text="Vessel IMO No" id="imono"/>
-										<Text
-                                            id="imotext"
-											width="10rem"
-											text="{readBidData>/0/Vimono}"
-										/>
-									</form:SimpleForm>
-								</IconTabFilter>
+                                <IconTabFilter id="icontabFilter3" text="Vessel Details" visible="{= ${vData>/status} === 'Closed' }">
+                                    <form:SimpleForm id="vesselDetailsForm" editable="false" backgroundDesign="Transparent" width="100%">
+                                        <Label text="Vessel Name" id="vname"/>
+                                        <Text id="vnameText" width="10rem" text="{readBidData>/0/Vname}"/>
+                                        <Label text="Vessel IMO No" id="imono"/>
+                                        <Text id="imotext" width="10rem" text="{readBidData>/0/Vimono}"/>
+                                    </form:SimpleForm>
+                                </IconTabFilter>
 
-                                 <IconTabFilter
-                                    id="GenIconTabFilter5"
-                                    text="Bid Details"
-                                    visible="{= ${vData>/status} === 'Closed' }"
-                                >
-                                    <l:BlockLayout
-                                        id="GenBlockLayout3"
-                                        background="Dashboard"
-                                    >
-                                        <l:BlockLayoutRow
-                                            id="GenBlockLayoutRow4"
-                                        >
-                                            <l:BlockLayoutCell
-                                                id="GenBlockLayoutCell5"
-                                            >
-                                             <Toolbar id="t1">
-					                            <Title id="closed_title1" level="H3" text="Enter Technical Details" />
-				                             </Toolbar>
-                                                <Table
-                                                    alternateRowColors="true"
-                                                    id="TechDetailTable"
-                                                    sticky="ColumnHeaders"
-                                                    modeAnimationOn="true"
-                                                >
+                                <IconTabFilter id="GenIconTabFilter5" text="Bid Details" visible="{= ${vData>/status} === 'Closed' }">
+                                    <l:BlockLayout id="GenBlockLayout3" background="Dashboard">
+                                        <l:BlockLayoutRow id="GenBlockLayoutRow4">
+                                            <l:BlockLayoutCell id="GenBlockLayoutCell5">
+                                                <Toolbar id="t1">
+                                                    <Title id="closed_title1" level="H3" text="Enter Technical Details"/>
+                                                </Toolbar>
+                                                <Table alternateRowColors="true" id="TechDetailTable" sticky="ColumnHeaders" modeAnimationOn="true">
                                                     <columns>
-                                                        <Column
-                                                            id="GenColumn14"
-                                                            width="40%"
-                                                        >
-                                                            <Text
-                                                                id="GenText8"
-                                                                text="Technical Details"
-                                                            />
+                                                        <Column id="GenColumn14" width="40%">
+                                                            <Text id="GenText8" text="Technical Details"/>
                                                         </Column>
-                                                        <Column
-                                                            id="GenColumn15"
-                                                            width="40%"
-                                                            class="table_value"
-                                                        >
-                                                            <Text
-                                                                id="GenText9"
-                                                                text="Value"
-                                                            />
+                                                        <Column id="GenColumn15" width="40%" class="table_value">
+                                                            <Text id="GenText9" text="Value"/>
                                                         </Column>
-                                                        <Column
-                                                            id="GenColumn16"
-                                                            width="20%"
-                                                            class="sapUiMediumMarginBegin"
-                                                        >
-                                                            <Text
-                                                                id="GenText10"
-                                                                text="Pref. Req."
-                                                                tooltip="Preferred Requirements"
-                                                            />
+                                                        <Column id="GenColumn16" width="20%" class="sapUiMediumMarginBegin">
+                                                            <Text id="GenText10" text="Pref. Req." tooltip="Preferred Requirements"/>
                                                         </Column>
                                                     </columns>
 
-                                                   
+
                                                 </Table>
                                             </l:BlockLayoutCell>
 
-                                            <l:BlockLayoutCell
-                                                id="GenBlockLayoutCell6"
-                                            >
+                                            <l:BlockLayoutCell id="GenBlockLayoutCell6">
 
-                                             <Toolbar id="t2">
-					                            <Title id="closed_title2" level="H3" text="Enter Commercial Details" />
-				                             </Toolbar>
-                                                <form:SimpleForm
-                                                    id="GenSimpleForm7"
-                                                    editable="true"
-                                                    backgroundDesign="Transparent"
-                                                    width="50%"
-                                                >
+                                                <Toolbar id="t2">
+                                                    <Title id="closed_title2" level="H3" text="Enter Commercial Details"/>
+                                                </Toolbar>
+                                                <form:SimpleForm id="GenSimpleForm7" editable="true" backgroundDesign="Transparent" width="50%">
                                                     <Label
-                                                        id="GenLabel24"
-                                                        text="Freight Cost ({voyageDetailsModel>/0/Cargu})"
-                                                        labelFor="fCost2"
-                                                        
-                                                    />
+                                                    id="GenLabel24" text="Freight Cost ({voyageDetailsModel>/0/Cargu})" labelFor="fCost2"/>
                                                     <!-- <Input
-                                                        id="fCost"
-                                                        type="Number"
-                                                        editable="false"
-                                                        value="{charteringRequestModel>/0/filteredTovenditem/5/Cvalue}"
-                                                    />
-                                                    <Label
-                                                        id="GenLabel25"
-                                                        text="Total Cost"
-                                                        labelFor="totalCost2"
-                                                    /> -->
-                                                    <l:HorizontalLayout
-                                                        id="GenHorizontalLayout3"
-                                                        allowWrapping="false"
-                                                    >
-                                                        <Input
-                                                            id="totalCostDetails"
-                                                            editable="false"
-                                                            width="100%"
-                                                            value="{readBidData>/0/to_quote_item/5/Value}"
-                                                        />
-                                                        <Label
-                                                            id="GenLabel26"
-                                                            text="{headerDetailModel>/Currency}"
-                                                            design="Bold"
-                                                            labelFor="totalCost2"
-                                                            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
-                                                        />
+                                                                                                            id="fCost"
+                                                                                                            type="Number"
+                                                                                                            editable="false"
+                                                                                                            value="{charteringRequestModel>/0/filteredTovenditem/5/Cvalue}"
+                                                                                                        />
+                                                                                                        <Label
+                                                                                                            id="GenLabel25"
+                                                                                                            text="Total Cost"
+                                                                                                            labelFor="totalCost2"
+                                                                                                        /> -->
+                                                    <l:HorizontalLayout id="GenHorizontalLayout3" allowWrapping="false">
+                                                        <Input id="totalCostDetails" editable="false" width="100%" value="{readBidData>/0/to_quote_item/5/Value}"/>
+                                                        <Label id="GenLabel26" text="{headerDetailModel>/Currency}" design="Bold" labelFor="totalCost2" class="sapUiTinyMarginBegin sapUiTinyMarginTop"/>
                                                     </l:HorizontalLayout>
                                                 </form:SimpleForm>
-                                                <FlexBox
-                                                    id="GenFlexBox1"
-                                                    justifyContent="End"
-                                                >
-                                                
-                                                </FlexBox>
+                                                <FlexBox id="GenFlexBox1" justifyContent="End"></FlexBox>
                                             </l:BlockLayoutCell>
                                         </l:BlockLayoutRow>
                                     </l:BlockLayout>
                                 </IconTabFilter>
-                                
 
-                                <IconTabFilter
-                                    id="GenIconTabFilter6"
-                                    text="Submit Bid"
-                                    visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }"
-                                >
-                                    <l:BlockLayout
-                                        id="_IDGenBlockLayout3"
-                                        background="Dashboard"
-                                    >
-                                        <l:BlockLayoutRow
-                                            id="_IDGenBlockLayoutRow4"
-                                        >
-                                            <l:BlockLayoutCell
-                                                id="_IDGenBlockLayoutCell5"
-                                                titleAlignment="Center"
-                                                titleLevel="Auto"
-                                                width="1"
-                                            >
-                                            <Toolbar id="t3">
-					                            <Title id="open_title" level="H3" text="Enter Technical Details" />
-				                             </Toolbar>
-                                                <Table
-                                                    alternateRowColors="true"
-                                                    id="submitTechDetailTable"
-                                                    sticky="ColumnHeaders"
-                                                >
+
+                                <IconTabFilter id="GenIconTabFilter6" text="Submit Bid" visible="{= ${vData>/status} === 'Open' || ${vData>/status} === 'Ongoing' }">
+                                    <l:BlockLayout id="_IDGenBlockLayout3" background="Dashboard">
+                                        <l:BlockLayoutRow id="_IDGenBlockLayoutRow4">
+                                            <l:BlockLayoutCell id="_IDGenBlockLayoutCell5" titleAlignment="Center" titleLevel="Auto" width="1">
+                                                <Toolbar id="t3">
+                                                    <Title id="open_title" level="H3" text="Enter Technical Details"/>
+                                                </Toolbar>
+                                                <Table alternateRowColors="true" id="submitTechDetailTable" sticky="ColumnHeaders">
                                                     <columns>
-                                                        <Column
-                                                            id="_IDGenColumn14"
-                                                            width="30%"
-                                                        >
-                                                            <Text
-                                                                id="_IDGenText8"
-                                                                text="Technical Details"
-                                                            />
+                                                        <Column id="_IDGenColumn14" width="30%">
+                                                            <Text id="_IDGenText8" text="Technical Details"/>
                                                         </Column>
-                                                        <Column
-                                                            id="_IDGenColumn15"
-                                                            width="45%"
-                                                        >
-                                                            <Text
-                                                                id="_IDGenText9"
-                                                                text="Value"
-																textAlign="Center"
-                                                            />
+                                                        <Column id="_IDGenColumn15" width="45%">
+                                                            <Text id="_IDGenText9" text="Value" textAlign="Center"/>
                                                         </Column>
-                                                        <Column
-                                                            id="_IDGenColumn16"
-                                                            width="20%"
-                                                        >
-                                                            <Text
-                                                                id="_IDGenText10"
-                                                                text="Pref. Req."
-                                                                tooltip="Preferred Requirements"
-                                                            />
+                                                        <Column id="_IDGenColumn16" width="20%">
+                                                            <Text id="_IDGenText10" text="Pref. Req." tooltip="Preferred Requirements"/>
                                                         </Column>
                                                     </columns>
                                                 </Table>
                                             </l:BlockLayoutCell>
 
-                                            <l:BlockLayoutCell
-                                                id="_IDGenBlockLayoutCell6"
-                                                titleLevel="Auto"
-                                                width="1"
-                                            >
-                                            <Toolbar id="t4">
-					                            <Title id="open_title1" level="H3" text="Enter Commercial Details" />
-				                             </Toolbar>
+                                            <l:BlockLayoutCell id="_IDGenBlockLayoutCell6" titleLevel="Auto" width="1">
+                                                <Toolbar id="t4">
+                                                    <Title id="open_title1" level="H3" text="Enter Commercial Details"/>
+                                                </Toolbar>
 
-                                             <form:SimpleForm
-                                                    id="_IDGenSimpleForm7"
-                                                    editable="true"
-                                                    backgroundDesign="Transparent"
-                                                    width="50%"
-                                                >
-                                                    <Label
-                                                        id="_IDGenLabel24"
-                                                        text="Freight Cost ({voyageDetailsModel>/0/Cargu})"
-                                                        labelFor="fCost2"
-                                                        
-                                                    />
-                                                    <Input
-                                                        id="fCost2"
-                                                        liveChange="onFCostChange"
-                                                        type="Number"
-                                                        value="{totalCalculateModel>/fCost2}"
-                                                    />
-                                                    <Label
-                                                        id="_IDGenLabel25"
-                                                        text="Total Cost"
-                                                        labelFor="totalCost2"
-                                                    />
-                                                    <l:HorizontalLayout
-                                                        id="_IDGenHorizontalLayout3"
-                                                        allowWrapping="false"
-                                                    >
-                                                        <Input
-                                                            id="totalCost"
-                                                            editable="false"
-                                                            width="100%"
-                                                            value="{totalCalculateModel>/totalCost}"
-                                                        />
-                                                        <Label
-                                                            id="_IDGenLabel26"
-                                                            text="INR"
-                                                            design="Bold"
-                                                            labelFor="totalCost2"
-                                                            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
-                                                        />
+                                                <form:SimpleForm id="_IDGenSimpleForm7" editable="true" backgroundDesign="Transparent" width="50%">
+                                                    <Label id="_IDGenLabel24" text="Freight Cost ({voyageDetailsModel>/0/Cargu})" labelFor="fCost2"/>
+                                                    <Input id="fCost2" liveChange="onFCostChange" type="Number" value="{totalCalculateModel>/fCost2}"/>
+                                                    <Label id="_IDGenLabel25" text="Total Cost" labelFor="totalCost2"/>
+                                                    <l:HorizontalLayout id="_IDGenHorizontalLayout3" allowWrapping="false">
+                                                        <Input id="totalCost" editable="false" width="100%" value="{totalCalculateModel>/totalCost}"/>
+                                                        <Label id="_IDGenLabel26" text="INR" design="Bold" labelFor="totalCost2" class="sapUiTinyMarginBegin sapUiTinyMarginTop"/>
                                                     </l:HorizontalLayout>
                                                 </form:SimpleForm>
 
-                                               
-                                                <FlexBox
-                                                    id="_IDGenFlexBox1"
-                                                    justifyContent="Start"
-                                                >
+
+                                                <FlexBox id="_IDGenFlexBox1" justifyContent="Start">
                                                     <items>
-                                                        <Button
-                                                            id="submitBidButton"
-                                                            text="Submit Details"
-                                                            type="Accept"
-                                                            press="onSubmitBid"
-                                                            class="sapUiSmallMarginBegin"
-                                                        />
+                                                        <Button id="submitBidButton" text="Submit Details" type="Accept" press="onSubmitBid" class="sapUiSmallMarginBegin"/>
                                                     </items>
                                                 </FlexBox>
                                             </l:BlockLayoutCell>

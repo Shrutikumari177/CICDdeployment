@@ -174,13 +174,13 @@
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Input id="Rels" liveChange="onCodeLiveChange"  />
-                         <ComboBox id="Voyty" items="{/VoyTypeSet}">
-                            <core:Item key="{Voydes}" text="{Voycd}" />
-                        </ComboBox>
-                        <ComboBox id="Carty" items="{/CarTypeSet}">
-                            <core:Item key="{Cardes}" text="{Carcd}" />
-                        </ComboBox>
+                           <Input id="Rels" liveChange="onCodeLiveChange"  />
+                         <Select id="Voyty" forceSelection="false" items="{/VoyTypeSet}" width="100%">
+                            <core:Item id="_IDGenItem1" key="{Voydes}" text="{Voycd}" />
+                        </Select>
+                        <Select id="Carty" forceSelection="false" items="{/CarTypeSet}" width="100%">
+                            <core:Item id="_IDGenItem2" key="{Cardes}" text="{Carcd}" />
+                        </Select>
                         
                         
                         <Input id="Zgroup"  showValueHelp="true" valueHelpRequest="onZgroup" liveChange="onZgroupLiveChange" valueHelpOnly ="true"/>

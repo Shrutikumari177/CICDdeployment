@@ -49,7 +49,7 @@ sap.ui.define(
         },
         onBusinessPartnerPress: function () {
           const oRouter = this.getOwnerComponent().getRouter();
-          oRouter.navTo("RouteBusinessPartnerDashboard");
+          oRouter.navTo("RouteBusinessPartner");
           
         },
        

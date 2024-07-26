@@ -28,15 +28,15 @@ xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
         <form:SimpleForm  editable="true" backgroundDesign="Translucent">
         <core:Title  text="Bidding Details"></core:Title>
            
-            <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
+            <Label id="_IDGenLabel1" required="true" text="Chartering Request Number" class="labelStyle"/>
             <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest=" requestForQuatation" />
 
-           <Label id="_IDGenLabel2" text="Bidding Start Date and Time"  required="true"  ></Label>
+           <Label id="_IDGenLabel2" text="Bidding Start Date and Time"  required="true"   ></Label>
             <DateTimePicker id="bidStartD" width="300px" placeholder="MM:DD:YY" change="onStartDateChange"  />
  
            
  
-            <Label id="_IDGenLabel4" text="Bidding End Date and Time"  required="true"  ></Label>
+            <Label id="_IDGenLabel4" text="Bidding  End Date and Time"  required="true"  ></Label>
             <DateTimePicker id="bidEndD" width="300px" placeholder="MM:DD:YY" change="onEndDateChange"  />
 
                    

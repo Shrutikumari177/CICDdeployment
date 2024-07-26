@@ -34,7 +34,7 @@
             
                     <form:SimpleForm editable="true">
                         
-                    <Label id="_IDGenLabel1" required="true" text="Chartering Request No"/>
+                    <Label id="_IDGenLabel1" required="true" text="Chartering Request Number"/>
                     <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest="onCharteringNumber" />
 
                     </form:SimpleForm>

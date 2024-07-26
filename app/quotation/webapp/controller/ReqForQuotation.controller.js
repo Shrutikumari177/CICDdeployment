@@ -87,13 +87,13 @@ sap.ui.define([
         var oStartDate = oStartDatePicker.getDateValue();
  
         if (oStartDate) {
-            var oMinEndDate = new Date(oStartDate.getTime() + 30 * 60000); // Add 30 minutes (30 * 60000 milliseconds)
+            var oMinEndDate = new Date(oStartDate.getTime() + 30 * 60000); 
  
             var oNow = new Date();
  
             if (oStartDate.toDateString() === oNow.toDateString()) {
                 if (oMinEndDate <= oNow) {
-                    oMinEndDate = new Date(oNow.getTime() + 30 * 60000); // Add 30 minutes to the current time
+                    oMinEndDate = new Date(oNow.getTime() + 30 * 60000); 
                 }
             }
  
@@ -113,7 +113,7 @@ sap.ui.define([
  
             if (oEndDate < oMinEndDate) {
                 sap.m.MessageToast.show("End date and time must be at least 30 minutes greater than start date and time.");
-                oEndDatePicker.setDateValue(null); // Clear invalid end date
+                oEndDatePicker.setDateValue(null); 
             }
         }
     },
@@ -413,7 +413,6 @@ sap.ui.define([
         var oSelectedDate = new Date(sValue);
         var oToday = new Date();
 
-        // Reset the time part of both dates to compare only the date part
         oSelectedDate.setHours(0, 0, 0, 0);
         oToday.setHours(0, 0, 0, 0);
 

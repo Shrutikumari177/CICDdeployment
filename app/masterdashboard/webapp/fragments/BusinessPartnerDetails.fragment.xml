@@ -1,0 +1,322 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDDialog"
+      title="Business Partner Details"
+       class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%" >
+
+        <!-- <Panel >
+            <FlexBox  class="flex" >
+                <VBox  class="flex" alignItems="Start" >
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="HouseNum1:" />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/HouseNum1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Stras: " />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Stras}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            
+                            class="labelStyle"
+                            text="Pstlz : "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Pstlz}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            
+                            class="labelStyle"
+                            text="Ort01:"
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Ort01}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox id="_IDGenFlexBox6" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            
+                            class="labelStyle"
+                            text="Land1: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Land1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox id="_IDGenFlexBox9" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel8"
+                            class="labelStyle"
+                            text="Regio: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Regio}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                   
+                    
+                </VBox>
+
+                <VBox id="_IDGenVBox2" class="flex" alignItems="Start">
+                 
+                    <FlexBox id="_IDGenFlexBox10" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel9"
+                            class="labelStyle"
+                            text="Spras: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Spras}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox id="_IDGenFlexBox11" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel10"
+                            class="labelStyle"
+                            text="Telf1: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Telf1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    <FlexBox id="_IDGenFlexBox12" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel11"
+                            class="labelStyle"
+                            text="Telf2: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Telf2}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    <FlexBox id="_IDGenFlexBox13" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel12"
+                            class="labelStyle"
+                            text="Telfx: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Telfx}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    <FlexBox id="_IDGenFlexBox14" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel13"
+                            class="labelStyle"
+                            text="SmtpAddr: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/SmtpAddr}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                     <FlexBox id="_IDGenFlexBox15" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel14"
+                            class="labelStyle"
+                            text="Erdat: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Erdat}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                     <FlexBox id="_IDGenFlexBox16" class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel15"
+                            class="labelStyle"
+                            text="DateTo: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/DateTo}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                   
+ 
+                </VBox>
+            </FlexBox>
+        </Panel> -->
+          <Panel >
+            <FlexBox  class="flex" >
+                <VBox  class="flex" alignItems="Start" >
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="HouseNum1:"
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/HouseNum1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Stras: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Stras}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Pstlz: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Pstlz}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Ort01:"
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Ort01}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Land1: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Land1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+                    
+                </VBox>
+
+                <VBox class="flex" alignItems="Start">
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Regio: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Regio}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Spras: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Spras}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+    
+                            class="labelStyle"
+                            text=" Telf1 "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Telf1}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text=" Telf2 "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Telf2}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Vessel Name : "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{biddingHisReport1>/0/Vessn}"
+                            editable="false"
+                        />
+                    </FlexBox>
+ 
+                </VBox>
+            </FlexBox>
+        </Panel>
+       
+
+        <footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar2">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                <Button id="_IDGenButto" text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

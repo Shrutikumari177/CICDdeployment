@@ -268,7 +268,7 @@
                      <IconTabFilter
                         text="Vessel Details"
                         key="info"
-                        visible="true"
+                        visible="false"
                     >
                         <Panel
                             id="p1"
