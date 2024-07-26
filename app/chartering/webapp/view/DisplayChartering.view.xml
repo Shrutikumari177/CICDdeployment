@@ -308,7 +308,7 @@
                                         <!-- <Column id="_IDGenColumn12" minScreenWidth="Tablet" >
                                             <Text id="_IDGenText13" text="fax No" />
                                         </Column> -->
-                                        <Column id="_IDGenColumn13" width="100px" minScreenWidth="Tablet" >
+                                        <Column id="_IDGenColumn13" width="150px" minScreenWidth="Tablet" >
                                             <Text id="_IDGenText14" text="Creation Date" />
                                         </Column>
                                         <!-- <Column id="_IDGenColumn14" width="80px" minScreenWidth="Tablet" >

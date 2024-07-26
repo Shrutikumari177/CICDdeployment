@@ -1,4 +1,27 @@
 
+.headerItem {
+    width: 100%;
+}
+ 
+.labelStyle {
+    width: 100%;
+    text-align: right;
+    margin-top: 10%;
+}
+.flex{
+    margin-left: 29px;
+}
+
+
+ 
+.inputStyle {
+    width: 60%;
+    height: auto;
+}s
+
+
+
+
 .footerBar{
     background-color: rgb(193, 230, 252) !important;
 }

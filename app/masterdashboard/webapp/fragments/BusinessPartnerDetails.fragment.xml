@@ -242,6 +242,19 @@
                             editable="false"
                         />
                     </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel14"
+                            class="labelStyle"
+                            text="Erdat: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/Erdat}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
                     
                 </VBox>
 
@@ -298,14 +311,27 @@
                     <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
                         <Label
                             class="labelStyle"
-                            text="Vessel Name : "
+                            text="Telfx: "
                         />
                         <Input
                             class="inputStyle"
-                            value="{biddingHisReport1>/0/Vessn}"
+                            value="{dataModel1>/0/Telfx}"
                             editable="false"
                         />
                     </FlexBox>
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            id="_IDGenLabel13"
+                            class="labelStyle"
+                            text="SmtpAddr: "
+                        />
+                        <Input
+                            class="inputStyle"
+                            value="{dataModel1>/0/SmtpAddr}"
+                            editable="false"
+                        />
+                    </FlexBox>
+
  
                 </VBox>
             </FlexBox>

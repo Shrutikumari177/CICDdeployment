@@ -749,12 +749,29 @@ sap.ui.define([
                     "Value": "",
                     "Zcom": ""
                 };
-                let  to_quote_item = [];
+                let to_quote_item = [];
 
-                for(let i = 0; i < bidItemsData.length; i++){
+                for (let i = 0; i < bidItemsData.length; i++) {
                     let CodeDesc = bidItemsData[i].CodeDesc;
-                    
+                    // Find the corresponding input value from aData
+                    let inputValueObject = aData.find(item => item.Value === CodeDesc);
+                    let inputValue = inputValueObject ? inputValueObject.InputValue : "";
+
+                    // Construct quotationsitems object
+                    let quotationsitems = {
+                        "Zcode": Zcode,
+                        "CodeDesc": CodeDesc,
+                        "Cunit": "",
+                        "Cvalue": "",
+                        "Value": inputValue,
+                        "Zcom": ""
+                    };
+
+                    // Push the quotationsitems object into the toQuoteItems array
+                    to_quote_item.push(quotationsitems);
                 }
+
+
                 let payload = {
                     "Lifnr": vendorNo,
                     "Voyno": voyageNo,
@@ -763,55 +780,7 @@ sap.ui.define([
                     "Vname": sVIMONo,
                     "Biddate": currentDate,
                     "Bidtime": currentTime,
-                    "to_quote_item": [{
-                            "Zcode": "COOR",
-                            "CodeDesc": "COUNTRY OF ORIGIN",
-                            "Cunit": "",
-                            "Cvalue": "0.000",
-                            "Value": coorValue || "",
-                            "Zcom": ""
-                        },
-                        {
-                            "Zcode": "DAT1",
-                            "CodeDesc": "LAST CLEANING DATE",
-                            "Cunit": "",
-                            "Cvalue": "0.000",
-                            "Value": formatLastCleaningDate || "",
-                            "Zcom": ""
-                        },
-                        {
-                            "Zcode": "PORT",
-                            "CodeDesc": "LAST PORT OF CALL",
-                            "Cunit": "",
-                            "Cvalue": "0.000",
-                            "Value": lastPortvalue || "",
-                            "Zcom": ""
-                        },
-                        {
-                            "Zcode": "CLASS",
-                            "CodeDesc": "CLASS OF VESSEL" || "",
-                            "Cunit": "",
-                            "Cvalue": "0.000",
-                            "Value": classValue,
-                            "Zcom": ""
-                        },
-                        {
-                            "Zcode": "DEMURRAGE",
-                            "CodeDesc": "DEMURRAGE" || 0,
-                            "Cunit": "INR",
-                            "Cvalue": "0.000",
-                            "Value": demurrageInput,
-                            "Zcom": ""
-                        },
-                        {
-                            "Zcode": "FREIG",
-                            "CodeDesc": "FREIGHT",
-                            "Cunit": "INR",
-                            "Cvalue": "0.000",
-                            "Value": freightValue || 0,
-                            "Zcom": ""
-                        }
-                    ]
+                    "to_quote_item": to_quote_item
                 };
                 console.log("payload for submit Quoation :", payload);
                 const oModel = this.getOwnerComponent().getModel("modelV2");

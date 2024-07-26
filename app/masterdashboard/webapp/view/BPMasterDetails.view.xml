@@ -1,51 +1,159 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:cards="sap.f.cards" xmlns:tnt="sap.tnt" controllerName="com.ingenx.nauti.masterdashboard.controller.BPMasterDetails"
-xmlns:html="http://www.w3.org/1999/xhtml"
-xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-xmlns="sap.m" >
-
-    <Page>
+<mvc:View
+    xmlns:core="sap.ui.core"
+    controllerName="com.ingenx.nauti.masterdashboard.controller.BPMasterDetails"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page id="page">
         <headerContent>
             <Bar id="_IDGenBar2">
                 <contentLeft>
-                    <core:Icon id="_IDGenIcon1"
-                        src="sap-icon://nav-back"
+                    <Button
+                        id="_IDGenIcon1"
+                        icon="sap-icon://nav-back"
                         press="onBackPress"
                     />
-                    <core:Icon id="_IDGenIcon2"
-                        src="sap-icon://home"
+
+                    <Button
+                        id="_IDGenIcon2"
+                        icon="sap-icon://home"
                         press="onPressHome"
                     />
-                   
-                    <Text id="_IDGenText1"
+
+                    <Text
+                        id="_IDGenText1"
                         class="text1"
-                        text="BP Master Details"
+                        text="Business Partner"
                     />
                 </contentLeft>
-                
+                <contentRight>
+                    <SearchField
+                        id="searchField"
+                        width="300px"
+                        search="onSearch"
+                        placeholder="Search..."
+                        liveChange="onSearch"
+                        
+                    />
+                </contentRight>
             </Bar>
         </headerContent>
 
-        <Bar id="_IDGenBar1" class="_IDGenBar1">
-            <contentLeft>
-                <Button id="_IDGenButton1" text="Save as Variant" press="onSaveAs"></Button>
-            </contentLeft>
-        </Bar>
-        
-        <Text id="EnterDetailsId" text="Enter Details" class="vgheading"></Text>
+        <Panel id="_IDGenPanel1" class="tablepanel" height="650px">
+          
+            <ScrollContainer
+                id="scrollContainer"
+                height="calc(100% - 50px)"
+                vertical="true"
+                class="scrollContainer"
+            >
+                <Table
+                    id="createTypeTable"
+                    width="100%"
+                    class="mastertables"
+                    items="{dataModel>/}"
+                    updateFinished="onTableUpdateFinished"
+                 
+                    sticky="ColumnHeaders"
+                    selectionChange="selectedItems"
+                    noDataText="Loading...."
+                    growing="true"
+                    growingThreshold="500"
+                    
+                  >
+                    <columns>
+                        <Column id="_IDGenColumn1">
+                            <Label id="_IDGenLabel1" text="Lifnr" />
+                        </Column>
 
-        <HBox id="_IDGenHBox1" alignItems="Center" class="BPdetailsContent">
-            <Label id="_IDGenLabel1" text="Vendor No:" required="true" class="mandatorylabel"></Label>
-            <Input id="_IDGenInput1" width="200px" required="true" showValueHelp="true"></Input>
-        </HBox>
-       
-        <footer>
-            <Bar>
-                <contentRight>
-                    <Button id="_IDGenButton11" text="Execute" icon="none" ></Button>
-                </contentRight>                
-            </Bar>
-        </footer>
+                        <Column id="_IDGenColumn2">
+                            <Label id="_IDGenLabel2" text="Partner Role" />
+                        </Column>
+
+                        <Column id="_IDGenColumn3">
+                            <Label id="_IDGenLabel3" text="Anred" />
+                        </Column>
+
+                        <Column id="_IDGenColumn4" width="10rem">
+                            <Label id="_IDGenLabel4" text="Name1" />
+                        </Column>
+
+                        <Column id="_IDGenColumn5">
+                            <Label id="_IDGenLabel5" text="Name2" />
+                        </Column>
+
+                        <Column id="_IDGenColumn6">
+                            <Label id="_IDGenLabel6" text="Name3" />
+                        </Column>
+
+                        <Column id="_IDGenColumn7" width="13rem">
+                            <Label id="_IDGenLabel7" text="Sort1" />
+                        </Column>
+
+                        <Column id="_IDGenColumn8">
+                            <Label id="_IDGenLabel8" text="StrSuppl1" />
+                        </Column>
+
+                        <Column id="_IDGenColumn9">
+                            <Label id="_IDGenLabel9" text="StrSuppl2" />
+                        </Column>
+                    </columns>
+
+                    <ColumnListItem id="_istItem1" type="Navigation" press="onNavigateDetails">
+                        <cells>
+                            <Text
+                                id="_IDGenText3"
+                                text="{dataModel>Lifnr}"
+                            />
+
+                            <Text
+                                id="_IDGenText4"
+                                text="{dataModel>PartnerRole}"
+                            />
+
+                            <Text
+                                id="_IDGenText5"
+                                text="{dataModel>Anred}"
+                            />
+
+                            <Text
+                                id="_IDGenText6"
+                                text="{dataModel>Name1}"
+                            />
+
+                            <Text
+                                id="_IDGenText7"
+                                text="{dataModel>Name2}"
+                            />
+
+                            <Text
+                                id="_IDGenText8"
+                                text="{dataModel>Name3}"
+                            />
+
+                            <Text
+                                id="_IDGenText9"
+                                text="{dataModel>Sort1}"
+                            />
+
+                            <Text
+                                id="_IDGenText10"
+                                text="{dataModel>StrSuppl1}"
+                            />
+                            <Text
+                                id="_IDGenText11"
+                                text="{dataModel>StrSuppl2}"
+                            />
+
+                        </cells>
+                    </ColumnListItem>
+                </Table>
+            </ScrollContainer>
+        </Panel>
 
     </Page>
 
+   
 </mvc:View>

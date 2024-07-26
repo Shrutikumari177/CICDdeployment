@@ -641,7 +641,7 @@ sap.ui.define(
           console.log("oParameters", oParameters);
           console.log("oContext", oContext.sPath);
           console.log("bSuccess", bSuccess);
-        	MessageBox.success(`Chartering created successfully with Charmin No: ${charminNum}`);
+        	MessageBox.success(`Chartering created successfully with Chrnmin No: ${charminNum}`);
         } else {
           MessageBox.error(`Failed to create chartering`);
         }
