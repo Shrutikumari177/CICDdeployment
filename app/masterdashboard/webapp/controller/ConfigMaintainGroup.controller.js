@@ -42,10 +42,7 @@ sap.ui.define(
 
 
       },
-      onChange: function () {
-        debugger;
-      },
-
+      
       onMaintaingroup: function (oEvent) {
         var oView = this.getView();
 
@@ -96,35 +93,26 @@ sap.ui.define(
       },
 
       onCodeLiveChange: function (oEvent) {
-        // Get the input control
         var oInput = oEvent.getSource();
 
-        // Get the current value of the input
         var sValue = oInput.getValue();
 
-        // Remove any characters that are not alphanumeric or dots
         var sNewValue = sValue.replace(/[^a-zA-Z0-9.]/g, '');
+        if (sNewValue.length > 15) {
+          sNewValue = sNewValue.substring(0, 15);
 
-        // Check if the value has changed after removing non-alphanumeric characters
-        if (sNewValue !== sValue) {
-          // Update the value of the input
           oInput.setValue(sNewValue);
 
-          // Show a message to the user
+          sap.m.MessageToast.show("Maximum length is 15 characters.");
+        }
+
+        if (sNewValue !== sValue) {
+          oInput.setValue(sNewValue);
+
           sap.m.MessageToast.show("Only alphanumeric characters and dots are allowed.");
         }
 
-        // Check if the length of the value exceeds 15
-        if (sNewValue.length > 15) {
-          // Truncate the value to keep only the first 15 characters
-          sNewValue = sNewValue.substring(0, 15);
-
-          // Update the value of the input
-          oInput.setValue(sNewValue);
-
-          // Show a message to the user
-          sap.m.MessageToast.show("Maximum length is 15 characters.");
-        }
+        
 
         // Check if the first character is a dot
         if (sNewValue.charAt(0) === '.') {
@@ -159,6 +147,14 @@ sap.ui.define(
 
         // Get the current value of the input
         var sValue = oInput.getValue();
+        if (sValue.length > 4  ) {
+
+          sValue = sValue.substring(0, 4);
+
+          oInput.setValue(sValue);
+
+          sap.m.MessageToast.show("Maximum length is 4 characters.");
+        }
 
 
         if (/[^0-9]/.test(sValue)) {
@@ -171,14 +167,7 @@ sap.ui.define(
           sap.m.MessageToast.show("Only numeric characters are allowed.");
         }
 
-        if (sValue.length > 4  ) {
-
-          sValue = sValue.substring(0, 4);
-
-          oInput.setValue(sValue);
-
-          sap.m.MessageToast.show("Maximum length is 4 characters.");
-        }
+       
       },
 
 
@@ -597,49 +586,82 @@ sap.ui.define(
       },
       onAddRow1: function () {
         var oTable = this.byId("entryTypeTable");
+        var items = oTable.getItems();
+        for (let i = 0; i < items.length; i++) {
+            let value1 = items[i].getCells()[0].getValue();
+            let value2 = items[i].getCells()[1].getValue();
+            if (!value1 || !value2) {
+                sap.m.MessageToast.show("Please enter both fields before adding a new row ");
+                return;
+            }
+        }
 
-        // Create a new row
         var oNewRow = new sap.m.ColumnListItem({
-          cells: [
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this),
-             showValueHelp: true,
-             valueHelpRequest: this.onMaintaingroup.bind(this),
-             valueHelpOnly:true
-             }),
-            new sap.m.Input({
-              value: "", editable: true,
-              liveChange: this.onLiveChange.bind(this)
-            })
-          ]
+            cells: [
+                new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
+                new sap.m.Input({ value: "", editable: true, liveChange: this.onLiveChange.bind(this) })
+            ]
         });
 
         oTable.addItem(oNewRow);
-      },
+    },
       onDeleteRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var aSelectedItems = oTable.getSelectedItems();
-        var aItems = oTable.getItems();
-        var oCreateTypeTable = this.byId("createTypeTable");
-
-        if (aItems.length <= 1) {
-          sap.m.MessageToast.show("The table must have at least one row.");
-          oCreateTypeTable.removeSelections();
-          return;
-        }
-
-
+    
         if (aSelectedItems.length === 0) {
-          sap.m.MessageToast.show("Please select an item");
-          oCreateTypeTable.removeSelections();
-          return;
+            sap.m.MessageToast.show("Please select an item");
+            return;
         }
-        aSelectedItems.forEach(function (oSelectedItem) {
-          oTable.removeItem(oSelectedItem);
+    
+        var oFirstItem = oTable.getItems()[0];
+        var aFirstItemCells = oFirstItem.getCells();
+        var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
+            return oCell.getValue && oCell.getValue() === "";
         });
-
-        oTable.removeSelections();
-        oCreateTypeTable.removeSelections();
-      },
+    
+        // If the first row is empty and selected, prevent its deletion
+        if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
+            sap.m.MessageToast.show("The first empty row cannot be deleted.");
+            oTable.removeSelections();
+            return;
+        }
+    
+        sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
+            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+            onClose: function (oAction) {
+                if (oAction === sap.m.MessageBox.Action.YES) {
+                    var aItems = oTable.getItems();
+                    var bAllSelected = aSelectedItems.length === aItems.length;
+    
+                    if (bAllSelected) {
+                        // If all items are selected
+                        aItems.forEach(function (oItem) {
+                            if (oItem !== oFirstItem) {
+                                oTable.removeItem(oItem);
+                            }
+                        });
+    
+                        // Clear the values of the first row
+                        aFirstItemCells.forEach(function (oCell) {
+                            if (oCell.setValue) {
+                                oCell.setValue("");
+                            }
+                        });
+                    } else {
+                        // If not all items are selected, delete only selected items
+                        aSelectedItems.forEach(function (oSelectedItem) {
+                            oTable.removeItem(oSelectedItem);
+                        });
+                    }
+    
+                    oTable.removeSelections();
+                } else {
+                    oTable.removeSelections();
+                }
+            }
+        });
+    },
       onSave: function () {
         var that = this;
         var oTable = that.byId("entryTypeTable");
@@ -1035,6 +1057,9 @@ sap.ui.define(
             MessageBox.error("Error deleting item: " + oError.message);
           });
         });
+        let oTable = this.byId("createTypeTable");
+        oTable.removeSelections();
+
       },
     });
 

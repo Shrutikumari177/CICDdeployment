@@ -12,6 +12,7 @@
         confirm="handleValueHelpClose"
         initialFocus="SearchField"
          search="CurSearch"
+         noDataText="Loading..."
         >
      
                 <columns>

@@ -10,7 +10,7 @@ sap.ui.define(
     "sap/ui/model/odata/ODataMetaModel",
     "sap/ui/model/json/JSONModel"
   ],
-  function (BaseController,History,Filter,FilterOperator,MessageToast,MessageBox,ODataMetaModel,JSONModel) {
+  function (BaseController, History, Filter, FilterOperator, MessageToast, MessageBox, ODataMetaModel, JSONModel) {
     "use strict";
     let aSelectedIds = [];
     let copyFlag = false;
@@ -32,9 +32,9 @@ sap.ui.define(
     // let cancelObj = {}
 
     return BaseController.extend("com.ingenx.nauti.masterdashboard.controller.PortLocMaster", {
-     async onInit( )  {
+      async onInit() {
 
-        await  this.loadportdata();
+        await this.loadportdata();
 
 
         // let oModel = new sap.ui.model.json.JSONModel();
@@ -64,7 +64,7 @@ sap.ui.define(
 
 
       },
-      loadportdata: async function(){
+      loadportdata: async function () {
         let oModel = new sap.ui.model.json.JSONModel();
         this.getView().setModel(oModel, "dataModel");
         let oModel3 = this.getOwnerComponent().getModel();
@@ -77,143 +77,132 @@ sap.ui.define(
           this.getView().getModel("dataModel").refresh();
           // this.getView().setModel(oModel,"Model");
         }.bind(this))
-        console.log("mydata", getModelData.length,getModelData)
+        console.log("mydata", getModelData.length, getModelData)
 
       },
 
 
-    onSearch1: function (oEvent) {
-      var sQuery = oEvent.getParameter("query");
-      var oTable = this.byId("createTypeTable");
-      var oBinding = oTable.getBinding("items");
-      var aFilters = [];
 
-      if (sQuery && sQuery.length > 0) {
-          aFilters.push(new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery));
-      }
 
-      oBinding.filter(aFilters);
-  },
- 
-onSearch: function(oEvent) {
-    var oTable = this.byId("createTypeTable");
-    var oBinding = oTable.getBinding("items");
-    var sQuery = oEvent.getParameter("query");
- 
-    var oFilter1 = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.Contains, sQuery);
-    var oFilter2 = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.Contains, sQuery);
-    var oFilter3 = new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery);
-    var andFilter = new sap.ui.model.Filter({
-      filters: [oFilter1, oFilter2, oFilter3]
-    });
-  
-   
-    var oSelectDialog = oEvent.getSource();
-    oBinding.filter([andFilter]);
- 
-    oBinding.attachEventOnce("dataReceived", function() {
-      var aItems = oBinding.getCurrentContexts();
- 
-      if (aItems.length === 0) {
-          oSelectDialog.setNoDataText("No data found");
-      } else {
-          oSelectDialog.setNoDataText("Loading");
-      }
-  });
- 
-  },
- 
+      onSearch: function (oEvent) {
+        var oTable = this.byId("createTypeTable");
+        var oBinding = oTable.getBinding("items");
+        var sQuery = oEvent.getParameter("query");
 
-       
+        var oFilter1 = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.Contains, sQuery);
+        var oFilter2 = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.Contains, sQuery);
+        var oFilter3 = new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1, oFilter2, oFilter3]
+        });
 
-        onIndSelect: async function (oEvent) {
-        
-          var oSource = oEvent.getSource();
-          var bSelected = oSource.getSelected();
-          console.log(bSelected);
-          console.log(typeof(bSelected));
 
-          // Convert bSelected to boolean explicitly (in case it's a string or number)
-          bSelected = !!bSelected;
-          
-       
-          var oContext = oEvent.getSource().getParent().getBindingContext("dataModel")
-          console.log(oContext);
-          if (oContext) {
-              var sPath = oContext.getPath() + "/Ind";
-              let data = oContext.getObject();
-              console.log("hii", data);
-          
-        
-              let fCountry = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.EQ, data.Country);
-              let fPortc = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.EQ, data.Portc);
-      
-            
-              // Bind to the entity set with the filter
-    
-      
-              // Request the contexts that match the filter
-              let that = this;
-              // sap.ui.core.BusyIndicator.show(0);
-              try {
-                let oModel = this.getOwnerComponent().getModel();
-                let oBindList = oModel.bindList("/xNAUTIxportmascds", undefined, undefined, [fCountry, fPortc]);
-      
-                await oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                  console.log(aContexts);
-                  let filterContext = aContexts.filter((x, i) => x.getProperty('Country') === data.Country && x.getProperty('Portc') === data.Portc)
-                  filterContext[0].setProperty("Ind", bSelected);
-            
-                  sap.m.MessageToast.show("succesfully updated .. " );
-                  this.loadportdata();
-      
-                 
-      
-      
-      
-                })
-              } catch (error) {
-                console.log("Errro in updating status");
-              }
-      
+        var oSelectDialog = oEvent.getSource();
+        oBinding.filter([andFilter]);
 
-           }
+        oBinding.attachEventOnce("dataReceived", function () {
+          var aItems = oBinding.getCurrentContexts();
+
+          if (aItems.length === 0) {
+            oSelectDialog.setNoDataText("No data found");
+          } else {
+            oSelectDialog.setNoDataText("Loading");
+          }
+        });
+
+      },
+
+
+
+
+      onIndSelect: async function (oEvent) {
+
+        var oSource = oEvent.getSource();
+        var bSelected = oSource.getSelected();
+        console.log(bSelected);
+        console.log(typeof (bSelected));
+
+        // Convert bSelected to boolean explicitly (in case it's a string or number)
+        bSelected = !!bSelected;
+
+
+        var oContext = oEvent.getSource().getParent().getBindingContext("dataModel")
+        console.log(oContext);
+        if (oContext) {
+          var sPath = oContext.getPath() + "/Ind";
+          let data = oContext.getObject();
+          console.log("hii", data);
+
+
+          let fCountry = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.EQ, data.Country);
+          let fPortc = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.EQ, data.Portc);
+
+
+          // Bind to the entity set with the filter
+
+
+          // Request the contexts that match the filter
+          let that = this;
+          // sap.ui.core.BusyIndicator.show(0);
+          try {
+            let oModel = this.getOwnerComponent().getModel();
+            let oBindList = oModel.bindList("/xNAUTIxportmascds", undefined, undefined, [fCountry, fPortc]);
+
+            await oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+              console.log(aContexts);
+              let filterContext = aContexts.filter((x, i) => x.getProperty('Country') === data.Country && x.getProperty('Portc') === data.Portc)
+              filterContext[0].setProperty("Ind", bSelected);
+
+              sap.m.MessageToast.show("succesfully updated .. ");
+              this.loadportdata();
+
+
+
+
+
+            })
+          } catch (error) {
+            console.log("Errro in updating status");
+          }
+
+
+        }
       },
       // onIndSelect: async function (oEvent) {
       //   var oSource = oEvent.getSource();
       //   var bSelected = oSource.getSelected();
       //   console.log(bSelected);
       //   console.log(typeof(bSelected));
-    
+
       //   // Convert bSelected to boolean explicitly (in case it's a string or number)
       //   bSelected = !!bSelected;
-    
+
       //   var oContext = oSource.getBindingContext();
       //   console.log(oContext);
       //   let data = oContext.getObject();
       //   console.log("hii", data);
       //           },
-    
-    
-    
-    
 
-//     onIndSelect: function (oEvent) {
-   
-//     let bSelected = oEvent.getParameter("selected");
-//     console.log("Checkbox selected state:", bSelected);
 
-//     SelectedVal = bSelected ? "X" : "";
-//     console.log("Selected value:", SelectedVal);
 
-//     let oBindingContext = oEvent.getSource().getBindingContext();
-//     console.log("Binding context path:", oBindingContext.getPath());
 
-    
-// }
 
-    
-    
+      //     onIndSelect: function (oEvent) {
+
+      //     let bSelected = oEvent.getParameter("selected");
+      //     console.log("Checkbox selected state:", bSelected);
+
+      //     SelectedVal = bSelected ? "X" : "";
+      //     console.log("Selected value:", SelectedVal);
+
+      //     let oBindingContext = oEvent.getSource().getBindingContext();
+      //     console.log("Binding context path:", oBindingContext.getPath());
+
+
+      // }
+
+
+
 
 
 
@@ -315,13 +304,11 @@ onSearch: function(oEvent) {
 
           // If no items have been selected, navigate to "RouteMasterDashboard"
           oRouter.navTo("RouteMasterDashboard");
-        }
-        else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
+        } else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
           oRouter.navTo("RouteMasterDashboard");
           this.byId('createTypeTable').removeSelections();
 
-        }
-        else if (copyFlag) {
+        } else if (copyFlag) {
           var oTable = this.byId("entryTypeTable"); // Assuming you have the table reference
           var aItems = oTable.getItems();
           let flag = false;
@@ -352,10 +339,7 @@ onSearch: function(oEvent) {
             this.resetView();
 
           }
-        }
-
-
-        else if (newEntryFlag) {
+        } else if (newEntryFlag) {
           let Country = this.getView().byId("COUNTRY").getValue();
           let Portc = this.getView().byId("PORTC").getValue();
           let Portn = this.getView().byId("PORTN").getValue();
@@ -391,43 +375,41 @@ onSearch: function(oEvent) {
             sap.m.MessageBox.confirm(
               "Do you want to discard the changes?", {
 
-              title: "Confirmation",
-              onClose: function (oAction) {
+                title: "Confirmation",
+                onClose: function (oAction) {
 
-                if (oAction === sap.m.MessageBox.Action.OK) {
+                  if (oAction === sap.m.MessageBox.Action.OK) {
 
-                  oEntryTable.setVisible(false);
-                  // Clear input fields of the first row
-                  oEntryTable.getItems()[0].getCells()[0].setValue("");
-                  oEntryTable.getItems()[0].getCells()[1].setValue("");
-                  oEntryTable.getItems()[0].getCells()[2].setValue("");
-                  oEntryTable.getItems()[0].getCells()[3].setValue("");
-                  oEntryTable.getItems()[0].getCells()[4].setValue("");
-                  oEntryTable.getItems()[0].getCells()[5].setValue("");
-                  oEntryTable.getItems()[0].getCells()[6].setValue("");
-                  oEntryTable.getItems()[0].getCells()[7].setValue("");
-                  oEntryTable.getItems()[0].getCells()[8].setValue("");
+                    oEntryTable.setVisible(false);
+                    // Clear input fields of the first row
+                    oEntryTable.getItems()[0].getCells()[0].setValue("");
+                    oEntryTable.getItems()[0].getCells()[1].setValue("");
+                    oEntryTable.getItems()[0].getCells()[2].setValue("");
+                    oEntryTable.getItems()[0].getCells()[3].setValue("");
+                    oEntryTable.getItems()[0].getCells()[4].setValue("");
+                    oEntryTable.getItems()[0].getCells()[5].setValue("");
+                    oEntryTable.getItems()[0].getCells()[6].setValue("");
+                    oEntryTable.getItems()[0].getCells()[7].setValue("");
+                    oEntryTable.getItems()[0].getCells()[8].setValue("");
 
 
 
-                  // Remove items except the first row
-                  var items = oEntryTable.getItems();
-                  for (var i = items.length - 1; i > 0; i--) {
-                    oEntryTable.removeItem(items[i]);
+                    // Remove items except the first row
+                    var items = oEntryTable.getItems();
+                    for (var i = items.length - 1; i > 0; i--) {
+                      oEntryTable.removeItem(items[i]);
+                    }
+                    // If user clicks OK, reset the view to its initial state
+                    that.resetView();
+                  } else {
+                    // If user clicks Cancel, do nothing
                   }
-                  // If user clicks OK, reset the view to its initial state
-                  that.resetView();
-                } else {
-                  // If user clicks Cancel, do nothing
                 }
               }
-            }
             );
 
           }
-        }
-
-        else if (editFlag) {
+        } else if (editFlag) {
 
           this.onCancelEdit();
 
@@ -460,8 +442,7 @@ onSearch: function(oEvent) {
           const oRouter = this.getOwnerComponent().getRouter();
           oRouter.navTo("RouteHome");
 
-        }
-        else if (copyFlag) {
+        } else if (copyFlag) {
           var oTable = this.byId("entryTypeTable"); // Assuming you have the table reference
           var aItems = oTable.getItems();
           let flag = false;
@@ -500,13 +481,10 @@ onSearch: function(oEvent) {
             }, 1600);
 
           }
-        }
-
-        else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
+        } else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
           oRouter.navTo("RouteHome");
           this.byId("createTypeTable").removeSelections();
-        }
-        else if (newEntryFlag) {
+        } else if (newEntryFlag) {
           // let voyCode = this.getView().byId("Code").getValue();
           // let voyCodeDesc = this.getView().byId("Desc").getValue();
           let Country = this.getView().byId("COUNTRY").getValue();
@@ -548,47 +526,44 @@ onSearch: function(oEvent) {
           } else {
             sap.m.MessageBox.confirm(
               "Do you want to discard the changes?", {
-              title: "Confirmation",
-              onClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                  // If user clicks OK, reset the view to its initial state
-                  const oRouter = that.getOwnerComponent().getRouter();
-                  oRouter.navTo("RouteHome");
-                  setTimeout(() => {
-                    oEntryTable.setVisible(false);
-                    // Clear input fields of the first row
-                    oEntryTable.getItems()[0].getCells()[0].setValue("");
-                    oEntryTable.getItems()[0].getCells()[1].setValue("");
-                    oEntryTable.getItems()[0].getCells()[2].setValue("");
-                    oEntryTable.getItems()[0].getCells()[3].setValue("");
-                    oEntryTable.getItems()[0].getCells()[4].setValue("");
-                    oEntryTable.getItems()[0].getCells()[5].setValue("");
-                    oEntryTable.getItems()[0].getCells()[6].setValue("");
-                    oEntryTable.getItems()[0].getCells()[7].setValue("");
-                    oEntryTable.getItems()[0].getCells()[8].setValue("");
+                title: "Confirmation",
+                onClose: function (oAction) {
+                  if (oAction === sap.m.MessageBox.Action.OK) {
+                    // If user clicks OK, reset the view to its initial state
+                    const oRouter = that.getOwnerComponent().getRouter();
+                    oRouter.navTo("RouteHome");
+                    setTimeout(() => {
+                      oEntryTable.setVisible(false);
+                      // Clear input fields of the first row
+                      oEntryTable.getItems()[0].getCells()[0].setValue("");
+                      oEntryTable.getItems()[0].getCells()[1].setValue("");
+                      oEntryTable.getItems()[0].getCells()[2].setValue("");
+                      oEntryTable.getItems()[0].getCells()[3].setValue("");
+                      oEntryTable.getItems()[0].getCells()[4].setValue("");
+                      oEntryTable.getItems()[0].getCells()[5].setValue("");
+                      oEntryTable.getItems()[0].getCells()[6].setValue("");
+                      oEntryTable.getItems()[0].getCells()[7].setValue("");
+                      oEntryTable.getItems()[0].getCells()[8].setValue("");
 
 
 
-                    // Remove items except the first row
-                    var items = oEntryTable.getItems();
-                    for (var i = items.length - 1; i > 0; i--) {
-                      oEntryTable.removeItem(items[i]);
-                    }
-                    that.resetView();
-                  }, 1500);
-                } else {
-                  // If user clicks Cancel, do nothing
+                      // Remove items except the first row
+                      var items = oEntryTable.getItems();
+                      for (var i = items.length - 1; i > 0; i--) {
+                        oEntryTable.removeItem(items[i]);
+                      }
+                      that.resetView();
+                    }, 1500);
+                  } else {
+                    // If user clicks Cancel, do nothing
+                  }
                 }
               }
-            }
             );
 
           }
 
-        }
-
-
-        else if (editFlag) {
+        } else if (editFlag) {
 
           this.onCancelEdit();
 
@@ -644,8 +619,7 @@ onSearch: function(oEvent) {
               oSelectedItem.getBindingContext().getProperty("Locid"),
               oSelectedItem.getBindingContext().getProperty("Ind"),
             ]
-          } else {
-          }
+          } else {}
 
         });
         console.log(aSelectedIds);
@@ -738,15 +712,34 @@ onSearch: function(oEvent) {
 
           let oColumnListItem = new sap.m.ColumnListItem({
             cells: [
-              new sap.m.Text({ text: sCountry }),
-              new sap.m.Text({ text: sPortc }),
-              new sap.m.Text({ text: sPortn }),
-              new sap.m.Text({ text: sReancho }),
-              new sap.m.Text({ text: sLatitude }),
-              new sap.m.Text({ text: sLongitude }),
-              new sap.m.Text({ text: sCountryn }),
-              new sap.m.Text({ text: sLocid }),
-              new sap.m.Input({ value: sInd, editable: true })
+              new sap.m.Text({
+                text: sCountry
+              }),
+              new sap.m.Text({
+                text: sPortc
+              }),
+              new sap.m.Text({
+                text: sPortn
+              }),
+              new sap.m.Text({
+                text: sReancho
+              }),
+              new sap.m.Text({
+                text: sLatitude
+              }),
+              new sap.m.Text({
+                text: sLongitude
+              }),
+              new sap.m.Text({
+                text: sCountryn
+              }),
+              new sap.m.Text({
+                text: sLocid
+              }),
+              new sap.m.Input({
+                value: sInd,
+                editable: true
+              })
             ]
           });
           oUpdateTable.addItem(oColumnListItem);
@@ -869,7 +862,11 @@ onSearch: function(oEvent) {
         setTimeout(() => {
           this.resetView();
           oUpdateTable.removeAllItems();
-          this.onPatchCompleted({ getParameter: () => ({ success: true }) });
+          this.onPatchCompleted({
+            getParameter: () => ({
+              success: true
+            })
+          });
         }, 1500);
       },
 
@@ -883,18 +880,43 @@ onSearch: function(oEvent) {
         // Create a new row
         var oNewRow = new sap.m.ColumnListItem({
           cells: [
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
             new sap.m.Input({
-              value: "", editable: true,
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              editable: true,
               liveChange: this.onLiveChange.bind(this)
             }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-            new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
           ]
         });
 
@@ -1235,29 +1257,29 @@ onSearch: function(oEvent) {
           return;
         }
 
-        const that = this;  // creatinh reference for use in Dialog
+        const that = this; // creatinh reference for use in Dialog
         sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
           MessageBox.confirm(
             "Are you sure ,you want  to delete ?", {
 
-            title: "Confirm ",
-            onClose: function (oAction) {
-              if (oAction === MessageBox.Action.OK) {
+              title: "Confirm ",
+              onClose: function (oAction) {
+                if (oAction === MessageBox.Action.OK) {
 
-                that.deleteSelectedItems(aItems);
-              } else {
+                  that.deleteSelectedItems(aItems);
+                } else {
 
-                oTable.removeSelections();
-                sap.m.MessageToast.show("Deletion canceled");
+                  oTable.removeSelections();
+                  sap.m.MessageToast.show("Deletion canceled");
 
+                }
               }
             }
-          }
           );
         });
 
       },
-     
+
       deleteSelectedItems: function (aItems) {
         let slength = aItems.length;
         let deleteMsg = slength === 1 ? "Record" : "Records"

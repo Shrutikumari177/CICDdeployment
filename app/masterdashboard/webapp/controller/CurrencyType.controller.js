@@ -571,31 +571,32 @@ sap.ui.define(
     onDeleteRow1: function () {
       var oTable = this.byId("entryTypeTable");
       var aSelectedItems = oTable.getSelectedItems();
- 
+  
       if (aSelectedItems.length === 0) {
           sap.m.MessageToast.show("Please select an item");
           return;
       }
- 
+  
       var oFirstItem = oTable.getItems()[0];
       var aFirstItemCells = oFirstItem.getCells();
       var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
           return oCell.getValue && oCell.getValue() === "";
       });
- 
+  
+      // If the first row is empty and selected, prevent its deletion
       if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
           sap.m.MessageToast.show("The first empty row cannot be deleted.");
           oTable.removeSelections();
           return;
       }
- 
+  
       sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           onClose: function (oAction) {
               if (oAction === sap.m.MessageBox.Action.YES) {
                   var aItems = oTable.getItems();
                   var bAllSelected = aSelectedItems.length === aItems.length;
- 
+  
                   if (bAllSelected) {
                       // If all items are selected
                       aItems.forEach(function (oItem) {
@@ -603,7 +604,7 @@ sap.ui.define(
                               oTable.removeItem(oItem);
                           }
                       });
- 
+  
                       // Clear the values of the first row
                       aFirstItemCells.forEach(function (oCell) {
                           if (oCell.setValue) {
@@ -613,19 +614,17 @@ sap.ui.define(
                   } else {
                       // If not all items are selected, delete only selected items
                       aSelectedItems.forEach(function (oSelectedItem) {
-                          if (oSelectedItem !== oFirstItem) {
-                              oTable.removeItem(oSelectedItem);
-                          }
+                          oTable.removeItem(oSelectedItem);
                       });
                   }
- 
+  
                   oTable.removeSelections();
               } else {
                   oTable.removeSelections();
               }
           }
       });
-    },
+  },
 
 
       

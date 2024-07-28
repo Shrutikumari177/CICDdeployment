@@ -42,6 +42,20 @@ sap.ui.define([
     return Controller.extend("com.ingenx.nauti.quotation.controller.ReqForQuotation", {
 
       onInit: function () {
+        var oStartDateTimePicker = this.byId("bidStartD");
+    var oEndDateTimePicker = this.byId("bidEndD");
+    
+    var preventTyping = function(oEvent) {
+        oEvent.preventDefault();
+        sap.m.MessageToast.show("User input not allowed, please use the date picker.");
+    };
+    
+    oStartDateTimePicker.attachBrowserEvent("keydown", preventTyping);
+    oEndDateTimePicker.attachBrowserEvent("keydown", preventTyping);  
+
+
+
+
         getModelData = [];
         let oModel = new sap.ui.model.json.JSONModel();
         this.getView().setModel(oModel, "dataModel");

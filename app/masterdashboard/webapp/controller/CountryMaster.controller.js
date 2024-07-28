@@ -534,7 +534,7 @@ sap.ui.define(
                       value: "", 
                       editable: true,
                       showValueHelp: true,
-                      valueHelpRequest: this.currencyValueHelp.bind(this),
+                      valueHelpRequest: this.countryValueHelp.bind(this),
                       valueHelpOnly: true
                   }),
                   new sap.m.Input({
@@ -563,6 +563,7 @@ sap.ui.define(
         return oCell.getValue && oCell.getValue() === "";
     });
 
+    // If the first row is empty and selected, prevent its deletion
     if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
         sap.m.MessageToast.show("The first empty row cannot be deleted.");
         oTable.removeSelections();
@@ -593,9 +594,7 @@ sap.ui.define(
                 } else {
                     // If not all items are selected, delete only selected items
                     aSelectedItems.forEach(function (oSelectedItem) {
-                        if (oSelectedItem !== oFirstItem) {
-                            oTable.removeItem(oSelectedItem);
-                        }
+                        oTable.removeItem(oSelectedItem);
                     });
                 }
 
@@ -605,7 +604,7 @@ sap.ui.define(
             }
         }
     });
-  },
+},
 
 
       
