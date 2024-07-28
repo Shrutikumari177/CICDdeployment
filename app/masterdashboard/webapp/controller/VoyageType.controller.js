@@ -32,48 +32,54 @@ sap.ui.define(
         this.getView().byId("entryTypeTable").setVisible(false);
         this.getView().byId("mainPageFooter").setVisible(false);
         this.getView().byId("updateTypeTable").setVisible(false);
-        // this.initSearchField();
 
       },
 
-      onChange: function () {
-        debugger;
-      },
+     
 
       onCodeLiveChange: function (oEvent) {
         var oInput = oEvent.getSource();
         var sValue = oInput.getValue();
-        if (/[^a-zA-Z0-9]/.test(sValue)) {
-          sValue = sValue.replace(/[^a-zA-Z0-9]/g, '');
-
-          oInput.setValue(sValue);
-          sap.m.MessageToast.show("Only alphanumeric characters are allowed.");
-        }
 
         if (sValue.length > 4) {
           sValue = sValue.substring(0, 4);
           oInput.setValue(sValue);
           sap.m.MessageToast.show("Maximum length is 4 characters.");
         }
+        
+        if (/[^a-zA-Z0-9]/.test(sValue)) {
+          sValue = sValue.replace(/[^a-zA-Z0-9]/g, '');
+
+          oInput.setValue(sValue);
+          sap.m.MessageToast.show("Only Alphanumeric characters are allowed.");
+        }
+
+       
       },
 
-      onLiveChange: function (oEvent) {
-        var oInput = oEvent.getSource();
-        var sValue = oInput.getValue();
-        var sFilteredValue = sValue.replace(/[^a-zA-Z0-9.\- ]/g, '');
-    
-        // Show message if non-allowed characters are removed
-        if (sFilteredValue.length !== sValue.length) {
-            sap.m.MessageToast.show("Only alphanumeric characters, dots (.), hyphens (-), and spaces are allowed.");
-            oInput.setValue(sFilteredValue);
-        }
-    
-        // Ensure maximum length of 30 characters
-        if (sFilteredValue.length > 30) {
-            sFilteredValue = sFilteredValue.substring(0, 30);
-            oInput.setValue(sFilteredValue);
-            sap.m.MessageToast.show("Maximum length is 30 characters.");
-        }
+   
+
+    onLiveChange: function (oEvent) {
+      var oInput = oEvent.getSource();
+      var sValue = oInput.getValue();
+      var sFilteredValue = sValue.replace(/[^a-zA-Z0-9.\- ]/g, '');
+  
+      if (sFilteredValue.length !== sValue.length) {
+          sap.m.MessageToast.show("Only Alphanumeric characters, Dots (.), Hyphens (-), and Spaces are allowed.");
+          oInput.setValue(sFilteredValue);
+      }
+  
+      if (sFilteredValue.length > 30) {
+          sFilteredValue = sFilteredValue.substring(0, 30);
+          oInput.setValue(sFilteredValue);
+          sap.m.MessageToast.show("Maximum length is 30 characters.");
+      }
+  
+      if (sFilteredValue.startsWith('.') || sFilteredValue.startsWith('-')) {
+          sFilteredValue = sFilteredValue.replace(/^[.-]+/, ''); 
+          sap.m.MessageToast.show("Dots (.) and Hyphens (-) are not allowed as the first character.");
+          oInput.setValue(sFilteredValue);
+      }
     },
     
     
@@ -536,7 +542,7 @@ sap.ui.define(
             let value1 = items[i].getCells()[0].getValue();
             let value2 = items[i].getCells()[1].getValue();
             if (!value1 || !value2) {
-                sap.m.MessageToast.show("Please enter both fields before adding a new row ");
+                sap.m.MessageToast.show("Please Enter Both Fields Before Adding A New Row ");
                 return;
             }
         }
@@ -552,30 +558,65 @@ sap.ui.define(
     },
     
 
+   
+
     onDeleteRow1: function () {
       var oTable = this.byId("entryTypeTable");
       var aSelectedItems = oTable.getSelectedItems();
-      var aItems = oTable.getItems();
-      var oCreateTypeTable = this.byId("createTypeTable");
-
-      if (aItems.length <= 1) {
-        sap.m.MessageToast.show("The table must have at least one row.");
-        oCreateTypeTable.removeSelections();
-        return;
-      }
-
-
+ 
       if (aSelectedItems.length === 0) {
-        sap.m.MessageToast.show("Please select an item");
-        oCreateTypeTable.removeSelections();
-        return;
+          sap.m.MessageToast.show("Please select an item");
+          return;
       }
-      aSelectedItems.forEach(function (oSelectedItem) {
-        oTable.removeItem(oSelectedItem);
+ 
+      var oFirstItem = oTable.getItems()[0];
+      var aFirstItemCells = oFirstItem.getCells();
+      var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
+          return oCell.getValue && oCell.getValue() === "";
       });
-
-      oTable.removeSelections();
-      oCreateTypeTable.removeSelections();
+ 
+      if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
+          sap.m.MessageToast.show("The first empty row cannot be deleted.");
+          oTable.removeSelections();
+          return;
+      }
+ 
+      sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
+          actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+          onClose: function (oAction) {
+              if (oAction === sap.m.MessageBox.Action.YES) {
+                  var aItems = oTable.getItems();
+                  var bAllSelected = aSelectedItems.length === aItems.length;
+ 
+                  if (bAllSelected) {
+                      // If all items are selected
+                      aItems.forEach(function (oItem) {
+                          if (oItem !== oFirstItem) {
+                              oTable.removeItem(oItem);
+                          }
+                      });
+ 
+                      // Clear the values of the first row
+                      aFirstItemCells.forEach(function (oCell) {
+                          if (oCell.setValue) {
+                              oCell.setValue("");
+                          }
+                      });
+                  } else {
+                      // If not all items are selected, delete only selected items
+                      aSelectedItems.forEach(function (oSelectedItem) {
+                          if (oSelectedItem !== oFirstItem) {
+                              oTable.removeItem(oSelectedItem);
+                          }
+                      });
+                  }
+ 
+                  oTable.removeSelections();
+              } else {
+                  oTable.removeSelections();
+              }
+          }
+      });
     },
 
       validateAllRows: function () {
@@ -586,7 +627,7 @@ sap.ui.define(
             let value1 = items[i].getCells()[0].getValue();
             let value2 = items[i].getCells()[1].getValue();
             if (!value1 || !value2) {
-                sap.m.MessageToast.show("Please enter both fields for all rows.");
+                sap.m.MessageToast.show("Please enter both fields.");
                 return false;
             }
         }
@@ -595,9 +636,10 @@ sap.ui.define(
     onSave: function () {
       let that = this;
       let oTable = that.byId("entryTypeTable");
+      let oTable2 = that.byId("createTypeTable");
   
       if (!this.validateAllRows()) {
-          sap.m.MessageToast.show("Please enter both fields for all rows.");
+          sap.m.MessageToast.show("Please enter both fields.");
           return;
       }
   
@@ -677,9 +719,16 @@ sap.ui.define(
 
           that.resetView();
           oTable.removeSelections();
+          
           sap.m.MessageToast.show("All entries saved successfully.");
+          let createTable = this.getView.byId("createTypeTable");
+          createTable.removeSelections();
       }
-  },
+    },
+ 
+  
+
+
   
   formatDes: function (Voydes) {
       return Voydes.toLowerCase().replace(/\b\w/g, function (char) {
@@ -816,7 +865,7 @@ sap.ui.define(
           }
           if (onEditInput[i].trim() !== sDesc.trim()) {
             flagNothingtoUpdate = false;
-            break; // Break the loop when condition is met
+            break; 
           }
         }
 
@@ -980,6 +1029,11 @@ sap.ui.define(
             MessageBox.error("Error deleting item: " + oError.message);
           });
         });
+
+        let oTable = this.byId("createTypeTable");
+        oTable.removeSelections();
+
+
       },
 
       pressCopy: function () {

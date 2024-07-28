@@ -22,10 +22,13 @@ sap.ui.define([
         let bidPayload = [];
         var aData = [];
         var readPayload = []
+        let userEmail = undefined;
         "use strict";
         return Controller.extend("com.ingenx.nauti.submitquotation.controller.Bidding", {
 
-            onInit: function () {
+            onInit: async function () {
+
+                await this.getLoggedInUserInfo();
                 // this.byId("lastCleanDateBidInput").setMaxDate(new Date());
                 this.infoModel = new JSONModel({
                     "voyageNo": "",
@@ -65,6 +68,21 @@ sap.ui.define([
                     text: "Loading"
                 });
 
+            },
+
+            getLoggedInUserInfo : async function(){
+                try {
+                  let User = await sap.ushell.Container.getService("UserInfo");
+                  let userID = User.getId();
+                  userEmail = User.getEmail();
+                  let userFullName = User.getFullName();
+                  console.log("userEmail", userEmail);
+                  console.log("userFullName", userFullName);
+                  console.log("userID", userID);
+                } catch (error) {
+                  
+                  userEmail = "ashwani.sharma@ingenxtec.com";
+                }
             },
 
             _onObjectMatched: async function (oEvent) {
@@ -510,13 +528,13 @@ sap.ui.define([
                 const dCharter = {
                     voyageType: "",
                     vesselType: "",
-                    bStartDate: startDate ? ? null,
-                    bStartTime: startTime ? ? null,
-                    bEndDate: endDate ? ? null,
-                    bEndTime: endTime ? ? null,
+                    bStartDate: startDate ?? null,
+                    bStartTime: startTime ?? null,
+                    bEndDate: endDate ?? null,
+                    bEndTime: endTime ?? null,
                     biddingType: "",
                     Currency: ""
-                };
+                };                
                 try {
                     var oModel = this.getOwnerComponent().getModel();
                     var oBidListData = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, undefined, {
@@ -685,9 +703,16 @@ sap.ui.define([
                 return "N/A"
             },
 
-            // submit technical and commercial details data
-            onSubmitBid: function () {
+            dateConverter : function (date) {
+                var year = date.getFullYear();
+                var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-based
+                var day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+            },
 
+            // submit technical and commercial details data
+            onSubmitBid: async function() {
+            
                 // debugger;
                 let bidItemModelData = this.getView().getModel("bidItemModel");
                 let bidItemsData = bidItemModelData.getData();
@@ -702,8 +727,16 @@ sap.ui.define([
                     var oSecondCell = aCells[1];
                     if (oSecondCell instanceof sap.m.Input) {
                         oData.InputValue = oSecondCell.getValue();
+                        if(oData.InputValue === "" || ! oData.InputValue){
+                            sap.m.MessageBox.error("Please enter all valid fields !!");
+                            return;
+                        }
                     } else if (oSecondCell instanceof sap.m.DatePicker) {
-                        oData.DateValue = oSecondCell.getDateValue();
+                        oData.InputValue = oSecondCell.getDateValue();
+                        let year = oData.InputValue.getFullYear();
+                        let month = ('0' + (oData.InputValue.getMonth() + 1)).slice(-2); // Months are 0-based
+                        let day = ('0' + oData.InputValue.getDate()).slice(-2);
+                        oData.InputValue = `${year}-${month}-${day}`
                     }
                     aData.push(oData);
                 });
@@ -711,6 +744,7 @@ sap.ui.define([
                 let charterNo = infoModel.getProperty("/charteringNo")
                 let vendorNo = infoModel.getProperty("/vendorNo")
                 let voyageNo = infoModel.getProperty("/voyageNo")
+                let voyageCurr = infoModel.getProperty("/currency")
                 const oView = this.getView();
                 const freightValue = oView.byId("fCost2").getValue();
                 const sVNameInput = this.byId("vesselName").getValue();
@@ -721,13 +755,13 @@ sap.ui.define([
                     return item ? (item.InputValue || item.DateValue || "") : "";
                 }
 
-                const coorValue = findValueByZcode("COUNTRY OF ORIGIN");
-                const lastCleaningDate = findValueByZcode("LAST CLEANING DATE");
-                const lastPortvalue = findValueByZcode("LAST PORT OF CALL");
-                const demurrageInput = findValueByZcode("DEMURRAGE");
-                const classValue = findValueByZcode("CLASS OF VESSEL");
-                const dateObject = new Date(lastCleaningDate);
-                const formatLastCleaningDate = dateObject.toISOString().split('T')[0];
+                // const coorValue = findValueByZcode("COUNTRY OF ORIGIN");
+                // const lastCleaningDate = findValueByZcode("LAST CLEANING DATE");
+                // const lastPortvalue = findValueByZcode("LAST PORT OF CALL");
+                // const demurrageInput = findValueByZcode("DEMURRAGE");
+                // const classValue = findValueByZcode("CLASS OF VESSEL");
+                // const dateObject = new Date(lastCleaningDate);
+                // const formatLastCleaningDate = dateObject.toISOString().split('T')[0];
                 let date = new Date();
                 let currentDate = date.getFullYear() + '-' +
                     ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
@@ -737,22 +771,23 @@ sap.ui.define([
                     ('0' + date.getMinutes()).slice(-2) + ':' +
                     ('0' + date.getSeconds()).slice(-2);
 
-                if (!coorValue || !lastCleaningDate || !lastPortvalue || !demurrageInput || !sVIMONo || !sVNameInput || !freightValue) {
-                    sap.m.MessageBox.error("Please enter all valid fields !!")
-                    return
-                }
-                let quotationsitems = {
-                    "Zcode": "",
-                    "CodeDesc": "",
+                // if (!coorValue || !lastCleaningDate || !lastPortvalue || !demurrageInput || !sVIMONo || !sVNameInput || !freightValue) {
+                //     sap.m.MessageBox.error("Please enter all valid fields !!")
+                //     return
+                // }
+                let freightCostItem = {
+                    "Zcode": "FREIG",
+                    "CodeDesc": "FREIGHT",
                     "Cunit": "",
                     "Cvalue": "",
-                    "Value": "",
+                    "Value": freightValue,
                     "Zcom": ""
                 };
                 let to_quote_item = [];
 
                 for (let i = 0; i < bidItemsData.length; i++) {
                     let CodeDesc = bidItemsData[i].CodeDesc;
+                    let Zcode = bidItemsData[i].Zcode;
                     // Find the corresponding input value from aData
                     let inputValueObject = aData.find(item => item.Value === CodeDesc);
                     let inputValue = inputValueObject ? inputValueObject.InputValue : "";
@@ -761,7 +796,7 @@ sap.ui.define([
                     let quotationsitems = {
                         "Zcode": Zcode,
                         "CodeDesc": CodeDesc,
-                        "Cunit": "",
+                        "Cunit": voyageCurr,
                         "Cvalue": "",
                         "Value": inputValue,
                         "Zcom": ""
@@ -770,9 +805,10 @@ sap.ui.define([
                     // Push the quotationsitems object into the toQuoteItems array
                     to_quote_item.push(quotationsitems);
                 }
-
+                to_quote_item.push(freightCostItem);
 
                 let payload = {
+                    "createdBy" : userEmail,
                     "Lifnr": vendorNo,
                     "Voyno": voyageNo,
                     "Chrnmin": charterNo,
@@ -783,24 +819,44 @@ sap.ui.define([
                     "to_quote_item": to_quote_item
                 };
                 console.log("payload for submit Quoation :", payload);
-                const oModel = this.getOwnerComponent().getModel("modelV2");
-                let that = this
-                oModel.create('/quotations', payload, {
-                    success: function (oData) {
-                        let result = oData;
-                        console.log("results", result);
-                        new sap.m.MessageBox.success("Successfully Submitted");
-                        that.onClearField()
-                    },
-                    error: function (err) {
-                        console.log("Error occured", err);
-                        if (JSON.parse(err.responseText).error.message.value.includes("Entity already exists")) {
-                            new sap.m.MessageBox.error(`Quotation already submitted for the chartering no.: ${charterNo}`)
-                        } else {
-                            new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value)
-                        }
+                const oModel = this.getOwnerComponent().getModel();
+                let oBindList = oModel.bindList("/quotations");
+                try {
+                    let res = await oBindList.create(payload);
+                    if (res) {
+                        console.log("Res", res);
+                        // Show success message
+                        sap.m.MessageToast.show("Successfully posted!");
                     }
-                })
+                } catch (error) {
+                    console.error("Error", error);
+                    // Check for specific error messages or status codes to determine if the entry already exists
+                    if (error.responseText && error.responseText.includes("entry already exists")) {
+                        sap.m.MessageToast.show("Error: Entry already exists!");
+                    } else {
+                        sap.m.MessageToast.show("An error occurred while posting. Please try again.");
+                    }
+                } finally {
+                    oModel.refresh();
+                    this.onClearField();
+                }
+                // let that = this
+                // oModel.create('/quotations', payload, {
+                //     success: function (oData) {
+                //         let result = oData;
+                //         console.log("results", result);
+                //         new sap.m.MessageBox.success("Successfully Submitted");
+                //         that.onClearField()
+                //     },
+                //     error: function (err) {
+                //         console.log("Error occured", err);
+                //         if (JSON.parse(err.responseText).error.message.value.includes("Entity already exists")) {
+                //             new sap.m.MessageBox.error(`Quotation already submitted for the chartering no.: ${charterNo}`)
+                //         } else {
+                //             new sap.m.MessageBox.error(JSON.parse(err.responseText).error.message.value)
+                //         }
+                //     }
+                // })
             },
 
             //    country of origin value help code             

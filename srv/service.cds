@@ -448,7 +448,7 @@ entity xNAUTIxZSUBMITQUOUTFETCH as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SR
                 Uomdes
         };
 
-     entity CurTypeSet as projection on NAUTINAUTICALCV_SRV.CurTypeSet
+entity CurTypeSet as projection on NAUTINAUTICALCV_SRV.CurTypeSet
     {        key Navoycur, Navoycountry, Navoygcurdes     }    
 ;
 

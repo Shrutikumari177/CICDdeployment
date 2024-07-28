@@ -56,6 +56,7 @@ sap.ui.define([], function () {
       }
       return sInput;
     },
+    
     timeStringToDateObj: function (timeString) {
       if (timeString) {
         // Split the time string into components

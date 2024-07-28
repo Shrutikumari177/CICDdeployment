@@ -142,7 +142,7 @@
                     <HBox class="box1">
                         <Label
                             id="Label6"
-                            text="Historical Frieght Cost"
+                            text="Historical Freight Cost"
                             class="sapUiTinyMarginTop"
                         />
                         <Input
@@ -497,6 +497,7 @@
                                     value=" {path :'voyHeaderModel>/0/Frcost', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="160px"
+                            
                                 />
 
                                 <Label text="Unit" />
@@ -521,6 +522,7 @@
                                     width="11rem"
                                     id="_totalCostPlId"
                                     value=" {path :'voyItemModel>/', formatter:'.calctotalCost'}"
+                                    editable="false"
                                 />
 
                                 <Label text="Total Distance" />
@@ -533,6 +535,7 @@
                                 <Input
                                     value=" {path :'voyItemModel>/', formatter:'.totalSeaDaysCalc'}"
                                     id='_totalDays'
+                                    editable="false"
                                 />
                             </FlexBox>
 
@@ -846,6 +849,7 @@
                                     value=" {path :'voyItemModel1>/', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="160px"
+                            
                                 />
 
                                 <Label text="Unit"  width="1rem"/>
@@ -868,6 +872,7 @@
                                     width="12rem"
                                     id="_totalCostPlId2"
                                     value=" {path :'voyItemModel1>/', formatter:'.calctotalCost'}"
+                                    editable="false"
                                 />
 
                                 <Label text="Total Distance" />
@@ -877,7 +882,7 @@
 
                                 <Label text="Total Days" />
                                 <Input
-                                    value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}"
+                                    value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}" editable="false"
                                 />
                             </FlexBox>
 

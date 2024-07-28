@@ -11,12 +11,14 @@
 		title="Freight Simulator"
 	>
 		<content>
+		<Panel >
+	
 			<layout:BlockLayout>
 				<layout:BlockLayoutRow>
 					<layout:content>
 						<layout:BlockLayoutCell
 							title="Freight (Per TON)"
-							titleAlignment="Begin"
+							titleAlignment="Center"
 							titleLevel="H6"
 							width="0"
 							class="cellBlockTitle cellBlockPadding"
@@ -143,7 +145,7 @@
 					<layout:content>
 						<layout:BlockLayoutCell
 							title="Freight (Lumpsum)"
-							titleAlignment="Begin"
+							titleAlignment="Center"
 							titleLevel="H6"
 							width="0"
 							class="cellBlockTitle cellBlockPadding"
@@ -270,7 +272,7 @@
 					<layout:content>
 						<layout:BlockLayoutCell
 							title="Freight (TO/NM)"
-							titleAlignment="Begin"
+							titleAlignment="Center"
 							titleLevel="H6"
 							width="0"
 							class="cellBlockTitle cellBlockPadding"
@@ -392,6 +394,7 @@
 					</layout:BlockLayoutRow>
 				</layout:content>
 			</layout:BlockLayout>
+				</Panel>
 		</content>
 	</Page>
 </mvc:View>
