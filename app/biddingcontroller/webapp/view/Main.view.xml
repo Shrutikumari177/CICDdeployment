@@ -127,8 +127,9 @@
                             contextualWidth="Auto"
                             alternateRowColors="true"
                             inset="true"
+                            growing="true"
                             class="sapUiNoMargin"
-                            fixedLayout="true"
+                            fixedLayout="false"
                             width="auto"
                             items="{bidModel>/}"
                         > 

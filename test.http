@@ -25,14 +25,15 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:4004/odata/v4/nauticalservice/quotations(Lifnr='4000000601',Voyno='1000000197',Chrnmin='4000000601')
+POST http://localhost:4004/odata/v4/nauticalservice/quotations
 Content-Type: application/json
 
 {
-  "modifiedBy":"A.SHARMA",
   "Lifnr": "2100000002",
   "Voyno": "1000000197",
   "Chrnmin": "4000000601",
+  "createdBy":"A.SHARMA",
+  "vendorName" : "ESSAR Shipping",
   "Vimono": "ESSAR123",
   "Vname": "ESS87690",
   "Biddate": "2024-07-23",

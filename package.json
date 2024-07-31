@@ -359,7 +359,43 @@
           }
         }
       },
-      "db": "hana"
+      "db": "hana",
+      "NAUTIZLIVEBID_VEND_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTIZLIVEBID_VEND_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/LIVEBID_VEND_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/LIVEBID_VEND_SRV"
+          }
+        }
+      },
+      "NAUTILIVEBID_CONT_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTILIVEBID_CONT_SRV",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP1",
+            "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
+          }
+        }
+      }
     }
   },
   "sapux": [

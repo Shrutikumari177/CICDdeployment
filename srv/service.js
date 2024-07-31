@@ -32,6 +32,15 @@ module.exports = async (srv) => {
     srv.on('CREATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('UPDATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
 
+    const NAUTIZLIVEBID_VEND_SRV = await cds.connect.to("NAUTIZLIVEBID_VEND_SRV"); 
+      srv.on('READ', 'getfinalbidSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query)); 
+      srv.on('READ', 'venItemSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query)); 
+      srv.on('READ', 'vendorFinSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query)); 
+      srv.on('READ', 'xNAUTIxnewvendfbid', req => NAUTIZLIVEBID_VEND_SRV.run(req.query)); 
+
+
+    const NAUTILIVEBID_CONT_SRV = await cds.connect.to("NAUTILIVEBID_CONT_SRV"); 
+    srv.on('READ', 'livecontrollerfetchSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
 
     const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
     srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query));
@@ -64,17 +73,29 @@ module.exports = async (srv) => {
 
         return response;
     });
-    
+
     srv.on('UPDATE', 'quotations', async (req) => {
         try {
             // Extract key parameters from the request URL
-            const { Lifnr, Voyno, Chrnmin } = req.params[0];
+            const {
+                Lifnr,
+                Voyno,
+                Chrnmin
+            } = req.params[0];
 
             // Log the extracted key parameters
-            console.log("Key Parameters:", { Lifnr, Voyno, Chrnmin });
+            console.log("Key Parameters:", {
+                Lifnr,
+                Voyno,
+                Chrnmin
+            });
 
             // Create the where condition object
-            const whereCondition = { Lifnr, Voyno, Chrnmin };
+            const whereCondition = {
+                Lifnr,
+                Voyno,
+                Chrnmin
+            };
 
             // Extract and log the values to be updated from the request body
             const updateData = req.data;
@@ -83,8 +104,8 @@ module.exports = async (srv) => {
             // Perform the update operation
             const affectedRows = await cds.transaction(req).run(
                 UPDATE('nauticalservice.quotations')
-                    .set(updateData)
-                    .where(whereCondition)
+                .set(updateData)
+                .where(whereCondition)
             );
 
             // Log and return the number of affected rows
@@ -93,98 +114,112 @@ module.exports = async (srv) => {
             return affectedRows;
         } catch (error) {
             console.error("Error during update:", error);
-            req.error({ code: 500, message: "Internal server error during update operation" });
+            req.error({
+                code: 500,
+                message: "Internal server error during update operation"
+            });
         }
     });
 
 
 
     srv.on('READ', 'calculateRankings', async (req) => {
-        console.log("Triggered....", req.data)
-        console.log("valuesgfhjkl", req._queryOptions.$filter);
-
-        let Chrnmin = req._queryOptions.$filter.split(' ')[2];
-        Chrnmin = Chrnmin.replace(/'/g, '');
-        let charminData = undefined;
-        if (!Chrnmin) {
-            charminData = await SELECT.from('nauticalservice.quotations');
-        } else {
-            charminData = await SELECT.from('nauticalservice.quotations').where({
-                Chrnmin
-            });
-        }
-        console.log("Chrnmin", Chrnmin);
-
-
-        console.log("quotationsData", charminData);
-
-
-
-        if (!charminData || charminData.length === 0) {
-            console.error(`No data found for Chrnmin: ${Chrnmin}`);
-            return [];
-        }
-
-        let Voyno = charminData[0].Voyno;
-        console.log("Voyno from Charmin", Voyno);
-        if (!Voyno) {
-            console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
-            return [];
-        }
-
-        const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({
-            Voyno
-        }));
-        console.log("voyageData", voyageData);
-        if (!voyageData || voyageData.length === 0) {
-            console.error(`No voyage data found for Voyno: ${Voyno}`);
-            return [];
-        }
-
-        const rankedVendors = calculateAndRank(voyageData, charminData);
-        console.log("rankedVendors", rankedVendors);
-
-        return rankedVendors;
-    });
-
-    function calculateAndRank(voyageData, charminData) {
-        const vendorScores = calculateScores(voyageData, charminData);
-        const rankedVendors = rankVendors(vendorScores, charminData);
-        const rankedWithCommercial = calculateCommercialRank(rankedVendors);
-
-        const groupedRankedVendors = groupedByVoynoAndChrnmin(rankedWithCommercial);
-
-        return groupedRankedVendors;
-    }
-
-    function calculateScores(voyageData, charminData) {
-        const vendorScores = {};
+        try {
+            console.log("Triggered....", req.data);
+            console.log("Filter:", req._queryOptions.$filter);
     
-        charminData.forEach(vendor => {
-            if (!vendorScores[vendor.Lifnr]) {
-                vendorScores[vendor.Lifnr] = {
-                    Voyno: vendor.Voyno,
-                    Chrnmin: vendor.Chrnmin,
-                    score: 0,
-                    eligible: "Yes",
-                    Cvalue: vendor.to_quote_item.map(item => item.Cvalue),
-                    bidDetails: []
-                };
+            let Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+    
+            const charminData = Chrnmin ? await SELECT.from('nauticalservice.quotations').where({
+                Chrnmin
+            }) : await SELECT.from('nauticalservice.quotations');
+    
+            if (!charminData || charminData.length === 0) {
+                console.error(`No data found for Chrnmin: ${Chrnmin}`);
+                return [];
             }
     
+            const Voyno = charminData[0].Voyno;
+            if (!Voyno) {
+                console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
+                return [];
+            }
+    
+            const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({
+                Voyno
+            }));
+            if (!voyageData || voyageData.length === 0) {
+                console.error(`No voyage data found for Voyno: ${Voyno}`);
+                return [];
+            }
+    
+            const rankedVendors = calculateAndRank(voyageData, charminData);
+            return rankedVendors;
+        } catch (error) {
+            console.error("Error processing request:", error);
+            return [];
+        }
+    });
+    
+    function calculateAndRank(voyageData, charminData) {
+        const vendorScores = calculateScores(voyageData, charminData);
+        const rankedVendors = rankVendors(vendorScores);
+        const rankedWithCommercial = calculateCommercialRank(rankedVendors);
+        return groupedByVoynoAndChrnmin(rankedWithCommercial);
+    }
+    
+    function calculateScores(voyageData, charminData) {
+        const vendorScores = new Map();
+    
+        const voyageDataMap = new Map(voyageData.map(v => [`${v.Zcode}-${v.Voyno}`, v]));
+    
+        charminData.forEach(vendor => {
+            const vendorScore = vendorScores.get(vendor.Lifnr) || {
+                vendorId: vendor.Lifnr,
+                vendorName: vendor.vendorName,
+                Voyno: vendor.Voyno,
+                Chrnmin: vendor.Chrnmin,
+                score: 0,
+                eligible: "Yes",
+                Cvalue: vendor.to_quote_item.map(item => item.Cvalue),
+                bidDetails: []
+            };
+    
             vendor.to_quote_item.forEach(quoteItem => {
-                const expected = voyageData.find(v => v.Zcode === quoteItem.Zcode && v.Voyno === vendor.Voyno);
+                const expected = voyageDataMap.get(`${quoteItem.Zcode}-${vendor.Voyno}`);
                 if (expected) {
                     let fScore;
                     if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== quoteItem.Value) {
-                        vendorScores[vendor.Lifnr].eligible = "No";
+                        vendorScore.eligible = "No";
                         fScore = 0;
                     } else {
-                        const score = expected.Value === quoteItem.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
-                        vendorScores[vendor.Lifnr].score += score;
+                        let score;
+                        const isExpectedDate = !isNaN(Date.parse(expected.Value));
+                        const isQuoteItemDate = !isNaN(Date.parse(quoteItem.Value));
+    
+                        if (isExpectedDate && isQuoteItemDate) {
+                            const expectedDate = new Date(expected.Value);
+                            const quoteItemDate = new Date(quoteItem.Value);
+    
+                            console.log("Expected Date:", expectedDate);
+                            console.log("Quoted Date:", quoteItemDate);
+    
+                            if (quoteItemDate < expectedDate) {
+                                score = parseInt(expected.Zmin);  // Assign Zmin if quoted date is earlier
+                                console.log("Condition met: quoteItemDate < expectedDate");
+                            } else if (quoteItemDate >= expectedDate) {
+                                score = parseInt(expected.Zmax);  // Assign Zmax if quoted date is equal or later
+                                console.log("Condition met: quoteItemDate >= expectedDate");
+                            }
+                        } else {
+                            score = expected.Value === quoteItem.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
+                        }
+    
+                        vendorScore.score += score;
                         fScore = score;
                     }
-                    vendorScores[vendor.Lifnr].bidDetails.push({
+                    vendorScore.bidDetails.push({
                         CodeDesc: expected.CodeDesc,
                         Value: quoteItem.Value,
                         Cvalue: quoteItem.Cvalue,
@@ -192,81 +227,74 @@ module.exports = async (srv) => {
                     });
                 }
             });
+    
+            vendorScores.set(vendor.Lifnr, vendorScore);
         });
     
-        return vendorScores;
+        return Array.from(vendorScores.values());
     }
     
-    function rankVendors(vendorScores, charminData) {
-        const rankedVendors = Object.keys(vendorScores)
+    
+    
+    
+    function rankVendors(vendorScores) {
+        const rankedVendors = vendorScores
             .map(vendor => ({
-                vendorId: vendor,
-                Voyno: vendorScores[vendor].Voyno,
-                Chrnmin: vendorScores[vendor].Chrnmin,
-                score: vendorScores[vendor].score,
-                eligible: vendorScores[vendor].eligible,
-                Cvalue: vendorScores[vendor].Cvalue,
-                bidDetails: vendorScores[vendor].bidDetails
+                ...vendor,
+                Trank: ''
             }))
             .sort((a, b) => b.score - a.score);
     
-        let rankCounter = {};
+        const rankCounter = new Map();
         rankedVendors.forEach(vendor => {
             const key = `${vendor.Voyno}-${vendor.Chrnmin}`;
-            if (!rankCounter[key]) {
-                rankCounter[key] = 1;
-            }
-            vendor.Trank = `T${rankCounter[key]++}`;
+            const count = rankCounter.get(key) || 1;
+            vendor.Trank = `T${count}`;
+            rankCounter.set(key, count + 1);
         });
     
         return rankedVendors;
     }
     
-
     function calculateCommercialRank(rankedVendors) {
         const groupedByChrnmin = rankedVendors.reduce((acc, vendor) => {
-            if (!acc[vendor.Chrnmin]) {
-                acc[vendor.Chrnmin] = [];
-            }
+            if (!acc[vendor.Chrnmin]) acc[vendor.Chrnmin] = [];
             acc[vendor.Chrnmin].push(vendor);
             return acc;
         }, {});
-
+    
         Object.keys(groupedByChrnmin).forEach(key => {
             groupedByChrnmin[key].sort((a, b) => a.Cvalue - b.Cvalue);
-
-            groupedByChrnmin[key].forEach((vendor, index) => {
-                vendor.Crank = `C${index + 1}`;
-            });
+            groupedByChrnmin[key].forEach((vendor, index) => vendor.Crank = `C${index + 1}`);
         });
-
+    
         return rankedVendors;
     }
-
+    
     function groupedByVoynoAndChrnmin(rankedVendors) {
-        const grouped = {};
-
-        rankedVendors.forEach(vendor => {
+        const grouped = rankedVendors.reduce((acc, vendor) => {
             const key = `${vendor.Voyno}-${vendor.Chrnmin}`;
-            if (!grouped[key]) {
-                grouped[key] = {
-                    Voyno: vendor.Voyno,
-                    Chrnmin: vendor.Chrnmin,
-                    Vendors: []
-                };
-            }
-            grouped[key].Vendors.push({
+            if (!acc[key]) acc[key] = {
+                Voyno: vendor.Voyno,
+                Chrnmin: vendor.Chrnmin,
+                Vendors: []
+            };
+            acc[key].Vendors.push({
                 vendorId: vendor.vendorId,
+                vendorName: vendor.vendorName,  // Add vendorName here
                 score: vendor.score,
                 eligible: vendor.eligible,
                 Trank: vendor.Trank,
                 Crank: vendor.Crank,
                 bidDetails: vendor.bidDetails
             });
-        });
-
+            return acc;
+        }, {});
+    
         return Object.values(grouped);
-    };
+    }
+    
+
     srv.on('CREATE', "sendEmail", async (req) => {
         try {
             console.log("Triggered....", req.data);

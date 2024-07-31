@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="NAUTI.LIVEBID_VEND_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="vendorFin" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="venToItem" Relationship="NAUTI.LIVEBID_VEND_SRV.vendLiveBid" FromRole="FromRole_vendLiveBid" ToRole="ToRole_vendLiveBid"/>
+            </EntityType>
+            <EntityType Name="venItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Vendor" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcode" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Biddate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bid Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bidtime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bid Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CodeDesc" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Code Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding Start Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding Start Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding End Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bidding End Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Done by Vendor ?" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Created by" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stat" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Type (Auto/manual)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcom" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="getfinalbid" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                    <PropertyRef Name="Lifnr"/>
+                    <PropertyRef Name="Zcode"/>
+                    <PropertyRef Name="Biddate"/>
+                    <PropertyRef Name="Bidtime"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Voyage No" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Vendor" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcode" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Biddate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Bid Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bidtime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Bid Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Chartering Req. No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CodeDesc" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Code Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding Start Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bidding Start Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bidding End Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bidding End Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Done by Vendor ?" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Created by" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stat" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Type (Auto/manual)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcom" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxnewvendfbidType" sap:label="new vend fbid" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                    <PropertyRef Name="Lifnr"/>
+                    <PropertyRef Name="Zcode"/>
+                    <PropertyRef Name="Biddate"/>
+                    <PropertyRef Name="Bidtime"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
+                <Property Name="Zcode" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
+                <Property Name="Biddate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
+                <Property Name="Bidtime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Bid Time"/>
+                <Property Name="Chrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="CodeDesc" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Code Description"/>
+                <Property Name="Value" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Value"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
+                <Property Name="Cunit" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
+                <Property Name="DoneBy" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Done by Vendor ?"/>
+                <Property Name="Uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created by"/>
+                <Property Name="Stat" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Status"/>
+                <Property Name="Zmode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Type (Auto/manual)"/>
+                <Property Name="Zcom" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+            </EntityType>
+            <Association Name="vendLiveBid" sap:content-version="1">
+                <End Type="NAUTI.LIVEBID_VEND_SRV.vendorFin" Multiplicity="1" Role="FromRole_vendLiveBid"/>
+                <End Type="NAUTI.LIVEBID_VEND_SRV.venItem" Multiplicity="*" Role="ToRole_vendLiveBid"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_vendLiveBid">
+                        <PropertyRef Name="Chrnmin"/>
+                    </Principal>
+                    <Dependent Role="ToRole_vendLiveBid">
+                        <PropertyRef Name="Chrnmin"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="NAUTI_LIVEBID_VEND_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="xNAUTIxnewvendfbid" EntityType="NAUTI.LIVEBID_VEND_SRV.xNAUTIxnewvendfbidType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="vendorFinSet" EntityType="NAUTI.LIVEBID_VEND_SRV.vendorFin" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="venItemSet" EntityType="NAUTI.LIVEBID_VEND_SRV.venItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="getfinalbidSet" EntityType="NAUTI.LIVEBID_VEND_SRV.getfinalbid" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="vendLiveBidSet" Association="NAUTI.LIVEBID_VEND_SRV.vendLiveBid" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="vendorFinSet" Role="FromRole_vendLiveBid"/>
+                    <End EntitySet="venItemSet" Role="ToRole_vendLiveBid"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations Target="NAUTI.LIVEBID_VEND_SRV.NAUTI_LIVEBID_VEND_SRV_Entities"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                                <String>groupby</String>
+                                <String>filter</String>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Rollup" EnumMember="None"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/LIVEBID_VEND_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/LIVEBID_VEND_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

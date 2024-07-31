@@ -24,6 +24,7 @@ type BidDetail {
 
 type Vendors {
     vendorId : String;
+    vendorName : String(100);
     score : Integer;
     eligible : String;
     Trank : String;
@@ -67,23 +68,26 @@ type emails : String;
 type vendorsName : String;
 type routes : String;
 
-entity quotations : managed {
-    key Lifnr : String;
-    key Voyno : String;
-    key Chrnmin :String;
-    createdBy : String;
-    Vimono : String;
-    Vname :String;
+entity quotations {
+    key Lifnr : String(20);
+    key Voyno : String(20);
+    key Chrnmin :String(20);
+    createdBy : String(30);
+    @cds.on.insert: $now
+    createdAt : Timestamp;
+    vendorName :String(100);
+    Vimono : String(20);
+    Vname :String(20);
     Biddate : Date;
     Bidtime : Time;
     to_quote_item : array of quotationsItems;
 };
  
 type quotationsItems {
-    Zcode  : String;
-    CodeDesc   : String;
-    Cunit      : String;
-    Cvalue     : String;
-    Value      : String;
-    Zcom       : String;
+    Zcode  : String(20);
+    CodeDesc   : String(20);
+    Cunit      : String(20);
+    Cvalue     : String(20);
+    Value      : String(20);
+    Zcom       : String(20);
 };

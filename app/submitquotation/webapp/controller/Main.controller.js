@@ -53,10 +53,10 @@ sap.ui.define([
                 this.getBidData = [];
                 this.staticData = "2100000001";
                 if(userEmail === "shruti.kumari@ingenxtec.com"){
-                    this.staticData = "2100000001";
+                    this.staticData = "2100000002";
                 }
                 else{
-                    this.staticData = "2100000002";
+                    this.staticData = "2100000001";
                 }
 
                 var oModel = this.getOwnerComponent().getModel();
