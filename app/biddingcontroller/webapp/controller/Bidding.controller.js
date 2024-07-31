@@ -57,6 +57,7 @@ sap.ui.define([
                 this.byId("_IDGenHeader1").setSubtitle("Voyage No : " + VoyageNo);
     
                 await this._calculateRanking(Charterno);
+                await this._calculateRankingAndSetModel(Charterno);
             },
 
             _waitForModelData: function (model, paths) {
@@ -202,6 +203,146 @@ sap.ui.define([
                     });
                 });
             },
+
+            _calculateRankingAndSetModel: async function (Chrnmin) {
+                let sortedData = await this.fetchAndSortData(Chrnmin);
+                this.setVendorModel(sortedData);
+            },
+
+            fetchAndSortData: async function (Chrnmin) {
+                let oModel = this.getOwnerComponent().getModel();
+                const aFilters = [
+                    new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, Chrnmin)
+                ];
+                let oBindList = oModel.bindList("/calculateRankings", undefined, undefined, aFilters);
+                let receivedData = [];
+            
+                await oBindList.requestContexts().then(function (aContexts) {
+                    aContexts.forEach(oContext => {
+                        
+                        let vendor = oContext.getObject();
+                        let freightCost = 0;
+                        // let freightCost = vendor.bidDetails.find(detail => detail.CodeDesc === "FREIGHT")?.Value || "N/A";
+                        for(let i = 0; i < vendor.Vendors.length; i++){
+                            let LiveBiddData = {
+                                vendorId : "",
+                                vendorName : "",
+                                Trank: "",
+                                Crank: "",
+                                originalBid : "",
+                                currentBid : "Bid not started"
+                            }
+                            for(let j = 0; j < vendor.Vendors[i].bidDetails.length; j++){
+                                if(vendor.Vendors[i].bidDetails[j].CodeDesc === "FREIGHT"){
+                                    freightCost = vendor.Vendors[i].bidDetails[j].Value
+                                }
+                            }
+                            LiveBiddData.vendorId = vendor.Vendors[i].vendorId;
+                            LiveBiddData.vendorName = vendor.Vendors[i].vendorName;
+                            LiveBiddData.Trank = vendor.Vendors[i].Trank;
+                            LiveBiddData.Crank = vendor.Vendors[i].Crank;
+                            LiveBiddData.originalBid = freightCost;
+                            receivedData.push(LiveBiddData);
+                        }
+                        
+                    });
+                });
+            
+                // Sort the data based on freight and score
+                receivedData.sort(function (a, b) {
+                    if (a.originalBid === b.originalBid) {
+                        return b.score - a.score; // If freight is equal, sort by score descending
+                    }
+                    return a.originalBid - b.originalBid; // Sort by freight ascending
+                });
+            
+                return receivedData;
+            },
+            
+            setVendorModel: function (data) {
+                let oViewModel = new sap.ui.model.json.JSONModel({ vendors: data });
+                this.getView().setModel(oViewModel, "rankmodel");
+                this.updateCardFromTable();
+            },
+
+            updateCardFromTable: function() {
+                var oTable = this.byId("centerDataTable");
+                var oItems = oTable.getItems();
+                if (oItems.length === 0) {
+                    console.error("No items in the table to update the card.");
+                    return;
+                }
+                
+                var oFirstItem = oItems[0];
+                var oBindingContext = oFirstItem.getBindingContext("rankmodel");
+                var oData = oBindingContext.getObject();
+                
+                var oCard = this.byId("_IDGenCard4");
+                var oHeader = oCard.getHeader();
+                
+                var oCommercialScore = this.byId("_IDGenObjectStatus3");
+                var oTechnicalScore = this.byId("_IDGenObjectStatus4");
+                
+                oHeader.setTitle(oData.vendorName);
+                oHeader.setSubtitle(`Quote: ${oData.currentBid}`);
+                
+                oCommercialScore.setText(oData.Crank);
+                oTechnicalScore.setText(oData.Trank);
+            },
+            onStart: function () {
+                let oModel = this.getView().getModel("rankmodel");
+                let aVendors = oModel.getProperty("/vendors");
+            
+                aVendors.forEach(vendor => {
+                    vendor.currentBid = vendor.originalBid;
+                });
+            
+                oModel.updateBindings();
+            
+                // Start the live bidding process
+                this._startLiveBidding();
+            },
+
+            _startLiveBidding: function () {
+                this._liveBiddingInterval = setInterval(() => {
+                    this._fetchLatestBids();
+                }, 1000); // Fetch every second
+            },
+            
+            _fetchLatestBids: async function () {
+                let oModel = this.getOwnerComponent().getModel();
+                const Chrnmin = this.getView().getModel("rankmodel").getProperty("/Chrnmin"); // Assuming you have stored Chrnmin in the model
+            
+                const aFilters = [
+                    new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, Chrnmin)
+                ];
+                let oBindList = oModel.bindList("/vendorLiveBidding", undefined, undefined, aFilters);
+                let liveBids = [];
+            
+                await oBindList.requestContexts().then(function (aContexts) {
+                    aContexts.forEach(oContext => {
+                        liveBids.push(oContext.getObject());
+                    });
+                });
+            
+                // Update the current bid values in the model
+                let oViewModel = this.getView().getModel("rankmodel");
+                let aVendors = oViewModel.getProperty("/vendors");
+            
+                liveBids.forEach(liveBid => {
+                    let vendor = aVendors.find(vendor => vendor.vendorId === liveBid.vendorId);
+                    if (vendor) {
+                        vendor.currentBid = liveBid.currentBid;
+                    }
+                });
+            
+                oViewModel.updateBindings();
+            },
+            
+            onStop: function () {
+                clearInterval(this._liveBiddingInterval);
+            },
+            
 
 
             _startTimer: function () {

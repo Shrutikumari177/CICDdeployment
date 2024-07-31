@@ -68,7 +68,7 @@
                 <VBox id="_IDGenVBox2" width="100%" class="sapUiResponsiveMargin"/>
                 <HBox id="_IDGenHBox1" width="100%" class="sapUiResponsiveMargin" backgroundDesign="Translucent"></HBox>
             </FlexBox>
-            <Table id="centerDataTable" autoPopinMode="true" contextualWidth="Auto" alternateRowColors="true" inset="true" class="sapUiResponsiveMargin" fixedLayout="true" width="auto" items="{rankmodel>/}">
+            <Table id="centerDataTable" autoPopinMode="true" contextualWidth="Auto" alternateRowColors="true" inset="true" class="sapUiResponsiveMargin" fixedLayout="true" width="auto" items="{rankmodel>/vendors}">
                 <headerToolbar>
                     <Toolbar id="_IDGenToolbar1" class="toolbar">
                         <Title id="_IDGenTitle1" text="Vendor List for Charter Request - ImCha"/>
@@ -80,6 +80,7 @@
                         <Input width="auto" id="quoteInput" type="Number"/>
                         <Button id="submitButton" text="Submit" type="Emphasized" press="onQuoteSubmit" enabled="false"/>
                         <Button id="startButton" text="START" type="Accept" press="onStart"/>
+                        <Button id="stopButton" text="STOP" type="Reject" press="onStop"/>
                     </Toolbar>
                 </headerToolbar>
                 <columns>
@@ -98,51 +99,24 @@
                     <Column id="_IDGenColumn5" hAlign="Right">
                         <Label id="_IDGenLabel7" text="Current Bid"/>
                     </Column>
-                    <!-- <Column
-                    						demandPopin="true"
-                    						hAlign="Right"
-                    						minScreenWidth="phone"
-                    					>
-                    						<Label text="Bid Time From"/>
-                    					</Column>
-                    					<Column
-                    						demandPopin="true"
-                    						hAlign="Right"
-                    						minScreenWidth="phone"
-                    					>
-                    						<Label text="Bid Time To"/>
-                    					</Column> -->
-                    <!-- <Column
-                    						demandPopin="true"
-                    						minScreenWidth="tablet"
-                    					>
-                    						<Label text=""/>
-                    					</Column>
-                    					<Column
-                    						demandPopin="true"
-                    						minScreenWidth="tablet"
-                    					>
-                    						<Label text=""/>
-                    					</Column> -->
                 </columns>
                 <items>
                     <ColumnListItem id="_IDGenColumnListItem1">
                         <cells>
+                            <Text id="_IDGenText1" text="{rankmodel>vendorId}" maxLines="1" tooltip="{rankmodel>vendorName} ({rankmodel>vendorId})"/>
+                            <Text id="_IDGenText2" text="{rankmodel>Trank}"/>
+                            <Text id="_IDGenText3" text="{rankmodel>Crank}"/>
                             <Text
-                            id="_IDGenText1" text="Name1 Name2" maxLines="1" tooltip="Name1 Name2 (Lifnr)"/>
-                            <!-- <Text text="{sample>timefrom}"/>
-                            							<Text text="{sample>timeto}"/> -->
-                            <Text id="_IDGenText2" text="TRank"/>
-                            <Text id="_IDGenText3" text="CRank"/>
-                            <Text id="_IDGenText4" text="originalBid"/>
+                            id="_IDGenText4" text="{rankmodel>originalBid}"/>
+                            <!-- Original Bid -->
                             <Text
-                            id="_IDGenText5" text="currentBid"/>
-                        <!-- <Text text=""/>
-                        							<Text text=""/> -->
+                            id="_IDGenText5" text="{rankmodel>currentBid}"/>
+                        <!-- Current Bid -->
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
+
         </content>
     </Page>
 </mvc:View>

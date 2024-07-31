@@ -131,9 +131,7 @@ module.exports = async (srv) => {
             let Chrnmin = req._queryOptions.$filter.split(' ')[2];
             Chrnmin = Chrnmin.replace(/'/g, '');
     
-            const charminData = Chrnmin ? await SELECT.from('nauticalservice.quotations').where({
-                Chrnmin
-            }) : await SELECT.from('nauticalservice.quotations');
+            const charminData = Chrnmin ? await SELECT.from('nauticalservice.quotations').where({ Chrnmin }) : await SELECT.from('nauticalservice.quotations');
     
             if (!charminData || charminData.length === 0) {
                 console.error(`No data found for Chrnmin: ${Chrnmin}`);
@@ -146,9 +144,7 @@ module.exports = async (srv) => {
                 return [];
             }
     
-            const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({
-                Voyno
-            }));
+            const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({ Voyno }));
             if (!voyageData || voyageData.length === 0) {
                 console.error(`No voyage data found for Voyno: ${Voyno}`);
                 return [];
@@ -164,14 +160,13 @@ module.exports = async (srv) => {
     
     function calculateAndRank(voyageData, charminData) {
         const vendorScores = calculateScores(voyageData, charminData);
-        const rankedVendors = rankVendors(vendorScores);
-        const rankedWithCommercial = calculateCommercialRank(rankedVendors);
+        const rankedVendors = rankByTechnicalScore(vendorScores);
+        const rankedWithCommercial = rankByCommercialValue(rankedVendors);
         return groupedByVoynoAndChrnmin(rankedWithCommercial);
     }
     
     function calculateScores(voyageData, charminData) {
         const vendorScores = new Map();
-    
         const voyageDataMap = new Map(voyageData.map(v => [`${v.Zcode}-${v.Voyno}`, v]));
     
         charminData.forEach(vendor => {
@@ -202,15 +197,10 @@ module.exports = async (srv) => {
                             const expectedDate = new Date(expected.Value);
                             const quoteItemDate = new Date(quoteItem.Value);
     
-                            console.log("Expected Date:", expectedDate);
-                            console.log("Quoted Date:", quoteItemDate);
-    
                             if (quoteItemDate < expectedDate) {
                                 score = parseInt(expected.Zmin);  // Assign Zmin if quoted date is earlier
-                                console.log("Condition met: quoteItemDate < expectedDate");
                             } else if (quoteItemDate >= expectedDate) {
                                 score = parseInt(expected.Zmax);  // Assign Zmax if quoted date is equal or later
-                                console.log("Condition met: quoteItemDate >= expectedDate");
                             }
                         } else {
                             score = expected.Value === quoteItem.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
@@ -234,16 +224,10 @@ module.exports = async (srv) => {
         return Array.from(vendorScores.values());
     }
     
-    
-    
-    
-    function rankVendors(vendorScores) {
+    function rankByTechnicalScore(vendorScores) {
         const rankedVendors = vendorScores
-            .map(vendor => ({
-                ...vendor,
-                Trank: ''
-            }))
-            .sort((a, b) => b.score - a.score);
+            .map(vendor => ({ ...vendor, Trank: '' }))
+            .sort((a, b) => b.score - a.score); // Sort by technical score descending
     
         const rankCounter = new Map();
         rankedVendors.forEach(vendor => {
@@ -256,7 +240,7 @@ module.exports = async (srv) => {
         return rankedVendors;
     }
     
-    function calculateCommercialRank(rankedVendors) {
+    function rankByCommercialValue(rankedVendors) {
         const groupedByChrnmin = rankedVendors.reduce((acc, vendor) => {
             if (!acc[vendor.Chrnmin]) acc[vendor.Chrnmin] = [];
             acc[vendor.Chrnmin].push(vendor);
@@ -264,11 +248,17 @@ module.exports = async (srv) => {
         }, {});
     
         Object.keys(groupedByChrnmin).forEach(key => {
-            groupedByChrnmin[key].sort((a, b) => a.Cvalue - b.Cvalue);
+            groupedByChrnmin[key].forEach(vendor => {
+                vendor.originalBid = vendor.bidDetails.find(detail => detail.CodeDesc === "FREIGHT")?.Value || "N/A";
+            });
+            groupedByChrnmin[key].sort((a, b) => parseFloat(a.originalBid) - parseFloat(b.originalBid)); // Sort by freight cost ascending
             groupedByChrnmin[key].forEach((vendor, index) => vendor.Crank = `C${index + 1}`);
         });
     
-        return rankedVendors;
+        return rankedVendors.map(vendor => ({
+            ...vendor,
+            Crank: groupedByChrnmin[vendor.Chrnmin].find(v => v.vendorId === vendor.vendorId).Crank
+        }));
     }
     
     function groupedByVoynoAndChrnmin(rankedVendors) {
@@ -281,7 +271,7 @@ module.exports = async (srv) => {
             };
             acc[key].Vendors.push({
                 vendorId: vendor.vendorId,
-                vendorName: vendor.vendorName,  // Add vendorName here
+                vendorName: vendor.vendorName,
                 score: vendor.score,
                 eligible: vendor.eligible,
                 Trank: vendor.Trank,
@@ -293,6 +283,7 @@ module.exports = async (srv) => {
     
         return Object.values(grouped);
     }
+    
     
 
     srv.on('CREATE', "sendEmail", async (req) => {
