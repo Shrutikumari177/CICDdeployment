@@ -1,0 +1,249 @@
+<mvc:View controllerName="com.ingenx.nauti.vendorbidding.controller.Bidding"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    displayBlock="true"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    height="100%"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
+    xmlns:microchart="sap.suite.ui.microchart"
+    busyIndicatorDelay="0"
+    >
+   <Page
+		id="page"
+        showNavButton="true"
+        navButtonPress="onBackButtonPress"
+	>
+    	<headerContent>
+			<Button id="Exitbtn" type="Unstyled" class="exit_btn" press="OnExitButton" text="Exit Bidding" tooltip="Exit" />
+		</headerContent>
+        <MessageStrip
+                id="msgStrip"
+				text="Bidding is not started yet."
+				type="Warning"
+				showIcon="true"
+                visible="false"
+				class="sapUiTinyMargin">
+			</MessageStrip>
+    
+     <l:VerticalLayout
+            id="_IDGenVerticalLayout1"
+            width="100%"
+            class="sapUiContentPadding box_height"
+        >
+            <l:BlockLayout
+                id="_IDGenBlockLayout1"
+                background="Dashboard"
+            >
+                <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+                 <l:BlockLayoutCell
+                        id="_IDGenBlockLayoutCell1"
+                        width="70%"
+                    >
+                     <Toolbar id="t3">
+					            <Title id="closed_title3" textAlign="Center"  class="h_text" level="H6" text="Chartering List : Details for Charter:{VendorData>/charteringNo} " />
+				    </Toolbar>   
+                        <l:HorizontalLayout
+                            id="_IDGenHorizontalLayout1"
+                            allowWrapping="false"
+                        >
+                            <form:SimpleForm
+                                id="_IDGenSimpleForm1"
+                                editable="false"
+                                backgroundDesign="Transparent"
+                            >
+                                <Label
+                                    id="_IDGenLabel1"
+                                    text="Voyage Type"
+                                    labelFor="voyageType"
+                                    design="Bold"
+                                />
+                                <Text
+                                    text="{headerDetailModel>/voyageType}"
+                                    id="voyageType"
+                                />
+                                <Label
+                                    id="_IDGenLabel2"
+                                    text="Vessel Type"
+                                    labelFor="vesselType"
+                                    design="Bold"
+                                />
+                                <Text
+                                    text="{headerDetailModel>/vesselType}"
+                                    id="vType"
+                                />
+                            </form:SimpleForm>
+                            <form:SimpleForm
+                                id="_IDGenSimpleForm2"
+                                editable="false"
+                                backgroundDesign="Transparent"
+                            >
+                                <Label
+                                    id="_IDGenLabel3"
+                                    text="Bid Start"
+                                    labelFor="bidStart"
+                                    design="Bold"
+                                />
+                                <Text
+                                text="{parts: [{path: 'headerDetailModel>/bStartDate'}, {path: 'headerDetailModel>/bStartTime'}], formatter: '.formatter.formatDateTime'}"
+                                 id="bidStart"
+                                />
+                                <Label
+                                    id="_IDGenLabel4"
+                                    text="Bid End"
+                                    labelFor="bidEnd"
+                                    design="Bold"
+                                />
+                                <Text
+                                    text="{parts: [{path: 'headerDetailModel>/bEndDate'}, {path: 'headerDetailModel>/bEndTime'}], formatter: '.formatter.formatDateTime'}"
+                                    id="bidEnd"
+                                />
+                            </form:SimpleForm>
+                            <form:SimpleForm
+                                id="_IDGenSimpleForm3"
+                                editable="false"
+                                backgroundDesign="Transparent"
+                                class="sapUiLargeMarginBegin"
+                            >
+                                <Label
+                                    id="_IDGenLabel5"
+                                    text="Bidding Type"
+                                    labelFor="biddingType"
+                                    design="Bold"
+                                />
+                                <Text
+                                    text="{headerDetailModel>/biddingType}"
+                                    id="bType"
+                                />
+                                <Label
+                                    id="_IDGenLabel6"
+                                    text="Currency"
+                                    labelFor="currency"
+                                    design="Bold"
+                                />
+                                <Text
+                                     text="{headerDetailModel>/Currency}"
+                                    id="curr"
+                                />
+                            </form:SimpleForm>
+                        </l:HorizontalLayout>
+                    </l:BlockLayoutCell>
+
+                    <l:BlockLayoutCell
+                        id="GenBlockLayoutCell1"
+                        title="Details for Charter: {vData>/charteringNo}"
+                        width="30%"
+                        class="block_height"
+                    >
+                        <l:HorizontalLayout
+                            id="_IDGenHorizontalLayout2"
+                            allowWrapping="false"
+                        />
+                      <VBox id="_IDGenVBox1" alignItems="Center" class="chartContainer" backgroundDesign="Translucent">
+						<microchart:RadialMicroChart
+							id="radialClock"
+							size="L"
+							width="190px"
+							height="190px"
+							alignContent="Center"
+							class="alignCircle scaleCircle hideCirclePercent"
+							hideOnNoData="true"
+						>
+						</microchart:RadialMicroChart>
+                        <!-- <Label id="timeText" text="" class="overlayText" /> -->
+                       <Text id="timeText" text="" class="timeTextStyle sapUiSmallMarginTop"/>
+					</VBox>
+
+                </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+                <l:BlockLayoutRow id="GenBlockLayoutRow1">
+                 <l:BlockLayoutCell
+                        id="GenBlockLayoutCell12"
+                        width="70%"
+                        
+                    >
+                        <l:HorizontalLayout
+                            id="GenHorizontalLayout1"
+                            allowWrapping="false"
+                        >
+
+                        	<f:Card id="GenCard1" width="250px"  height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+		                       <f:header>
+		                        	<card:Header id="GenHeader1"  title="Customer Quoted Value" subtitle="USD" />
+		                       </f:header>
+		                       <f:content>
+			                        <List id="GenList1" class="sapUiSmallMarginBottom" showSeparators="None">
+				                     <CustomListItem id="GenCustomListItem1" class="sapUiSmallMarginTop">
+						                    <ObjectStatus id="GenObjectStatus1" class="sapUiTinyMargin amount_text" text="{parts: [{path: 'inputModel>/displayValue'}], formatter: '.formatter.formatNumber'}" state="Success"/>
+				                     </CustomListItem>
+			                        </List>
+		                        </f:content>
+	                          </f:Card>
+
+                              <f:Card id="GenCard2" width="250px" height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+		                       <f:header>
+		                        	<card:Header id="GenHeader2" title="First Bid" subtitle="USD" />
+		                       </f:header>
+		                       <f:content>
+			                        <List id="GenList2" class="sapUiSmallMarginBottom" showSeparators="None">
+				                     <CustomListItem id="GenCustomListItem2" class="sapUiSmallMarginTop">
+						                    <ObjectStatus id="GenObjectStatus2" class="sapUiTinyMargin amount_text" text="" state="Success"/>
+				                     </CustomListItem>
+			                        </List>
+		                        </f:content>
+	                          </f:Card>
+
+                              <f:Card id="GenCard3" width="250px" height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+		                       <f:header>
+		                        	<card:Header id="GenHeader3" title="Last Bid" subtitle="USD" />
+		                       </f:header>
+		                       <f:content>
+			                        <List id="GenList3" class="sapUiSmallMarginBottom" showSeparators="None">
+				                     <CustomListItem id="GenCustomListItem3" class="sapUiSmallMarginTop">
+						                    <ObjectStatus id="GenObjectStatus3" class="sapUiTinyMargin amount_text" text="" state="Success"/>
+				                     </CustomListItem>
+			                        </List>
+		                        </f:content>
+	                          </f:Card>
+
+        
+                        </l:HorizontalLayout>
+                    </l:BlockLayoutCell>
+
+                    <l:BlockLayoutCell
+                        id="GenBlockLayout12"
+                        width="30%"
+                    >
+                        <l:HorizontalLayout
+                            id="GenHorizontalLayout2"
+                            allowWrapping="false"
+                        />
+                        <VBox id="_IDGenVBox7">
+                            <Toolbar id="t4">
+					            <Title id="closed_title4" textAlign="Center"  class="h_text" level="H6" text="Send Quote " />
+				            </Toolbar> 
+                           
+                           <Label id="_IDGenLabel7" text="Freight Cost" class="sapUiSmallMarginTop"/>
+                           <HBox id="_IDGenHBox1" class="test">
+                           <Input id="freightCostInput" value="{inputModel>/inputValue}" type="Number" width="142%" class="sapUiSmallMarginBottom"/>
+                           <Label id="_IDGenLabel9" text="" class="sapUiTinyMarginTop test1 sapUiTinyMarginBegin" />
+                           </HBox>
+
+                           <Label id="_IDGenLabel8" text="Comment" />
+                           <Input id="commentInput" width="88%" class="sapUiSmallMarginBottom"/>
+
+                          <Button id="_IDGenButton1" width="88%" text="Submit" press="onSubmit" />
+                        </VBox>
+
+                </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+            </l:BlockLayout>
+    </l:VerticalLayout>
+		
+	</Page>
+
+</mvc:View>

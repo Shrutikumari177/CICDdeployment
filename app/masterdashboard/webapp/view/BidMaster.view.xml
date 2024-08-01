@@ -132,7 +132,7 @@
             class="tablepanel entrytables"
             visible="false"
             mode="MultiSelect"
-        >
+         >
               <columns>
                 <Column id="_IDGenColumn9" >
                     <Label id="_IDGenLabel9" text="Code" required="true" />
@@ -169,9 +169,9 @@
                     <Input id="Cunit"  showValueHelp="true" valueHelpRequest="onCurrencyPress" valueHelpOnly="true"/>
                     <!-- <Input id="Datatype"  liveChange="onLiveChangeDatatype"/> -->
                     <Select id="Datatype" forceSelection="false" liveChange="onLiveChangeDatatype" width="30rem">
-                        <core:Item id="_IDGenItem1" key="" text="CHAR" />
-                        <core:Item id="_IDGenItem2" key="" text="CURR" />
-                        <core:Item id="_IDGenItem3" key="" text="DATE" />
+                        <core:Item id="_IDGenItem1" key="CHAR" text="CHAR" />
+                        <core:Item id="_IDGenItem2" key="CURR" text="CURR" />
+                        <core:Item id="_IDGenItem3" key="DATE" text="DATE" />
                     </Select>
                     <Input id="Tablename" liveChange="onLiveChangeTablename"/>
                     <CheckBox id="Multi_Choice"  select="onSelectChange"/>
@@ -196,7 +196,7 @@
                     <Label id="_IDGenLabel18" text="User" />
                 </Column>
                 <Column id="_IDGenColumn18" width="12rem" >
-                    <Label id="_IDGenLabel19" text="Value" />
+                    <Label id="_IDGenLabel19" text="Value"  required="true"/>
                 </Column>
                 <Column id="_IDGenColumn19" >
                     <Label id="_IDGenLabel20" text="Revaluation" />
@@ -205,7 +205,7 @@
                     <Label id="_IDGenLabel21" text="Currency" />
                 </Column>
                 <Column id="_IDGenColumn21" >
-                    <Label id="_IDGenLabel22" text="Data Type" />
+                    <Label id="_IDGenLabel22" text="Data Type" required="true"/>
                 </Column>
                 <Column id="_IDGenColumn22" >
                     <Label id="_IDGenLabel23" text="Table Name" />
@@ -224,9 +224,9 @@
                     <Input id="Cunit1" showValueHelp="true" valueHelpRequest="onCurrencyPress" />
 
                     <Select id="Datatype1" forceSelection="false" liveChange="onLiveChangeDatatype" width="30rem">
-                        <core:Item id="IDGenItem1" key="" text="CHAR" />
-                        <core:Item id="IDGenItem2" key="" text="CURR" />
-                        <core:Item id="IDGenItem3" key="" text="DATE" />
+                        <core:Item id="IDGenItem1" key="CHAR" text="CHAR" />
+                        <core:Item id="IDGenItem2" key="CURR" text="CURR" />
+                        <core:Item id="IDGenItem3" key="DATE" text="DATE" />
 				    </Select>
                     
                     <Input id="Tablename1" liveChange="onLiveChangeTablename"/>

@@ -1,4 +1,4 @@
-/* checksum : 9e4b7a570a516fb9a853c90861f5d0a6 */
+/* checksum : 5704625efbaeaa924f6bc9e64059c6d3 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -26,7 +26,7 @@ entity NAUTIVOYSTATUS_SRV.newallstatusesSet {
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  Status : String(20) not null;
+  Status : String(45) not null;
   @odata.Type : 'Edm.DateTime'
   @odata.Precision : 7
   @sap.unicode : 'false'

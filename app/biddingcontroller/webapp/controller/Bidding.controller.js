@@ -343,8 +343,6 @@ sap.ui.define([
                 clearInterval(this._liveBiddingInterval);
             },
             
-
-
             _startTimer: function () {
                 var oRadialMicroChart = this.byId("radialClock");
                 var oTimeLabel = this.byId("timeLeftCell");

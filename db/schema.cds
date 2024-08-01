@@ -91,3 +91,12 @@ type quotationsItems {
     Value      : String(20);
     Zcom       : String(20);
 };
+
+entity VenodrLiveBidDetails : managed {
+    key ID : UUID@Core.Computed;
+    key charmin : String;
+    vendorNo : String;
+    voyno : String;
+    quotationPrice : String;
+    comment : String
+}

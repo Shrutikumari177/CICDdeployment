@@ -15,6 +15,7 @@ sap.ui.define(
     let getModelData3 = [];
     let getModelData4 = [];
     let getChartModelData = [];
+    let oVoyno
     let sloc;
     return BaseController.extend("com.ingenx.nauti.chartering.controller.CreateChartering", {
       onInit() {
@@ -504,7 +505,7 @@ sap.ui.define(
         let oDate = this.byId("Input3").getValue();
         let oTime = this.byId("Input5").getValue();
         let oVoynm = this.byId("voyname").getValue();
-        let oVoyno = this.byId("voyNO").getValue();
+       oVoyno = this.byId("voyNO").getValue();
         let oVendorString = this.byId('VendNo').getProperty("_semanticFormValue");
         let ochatExt = this.byId("chatExt").getValue();
         let oPurchaseGr = this.byId("PurchaseGroup").getValue();
@@ -641,7 +642,15 @@ sap.ui.define(
           console.log("oParameters", oParameters);
           console.log("oContext", oContext.sPath);
           console.log("bSuccess", bSuccess);
+          let oDataModelV4 = this.getOwnerComponent().getModel();
+          let statusBindList = oDataModelV4.bindList("/newallstatusesSet");
+            statusBindList.create({
+              "Voyage" :  oVoyno,
+              "Status" : "Chartering Created"
+
+            }, true);
         	MessageBox.success(`Chartering created successfully with Chrnmin No: ${charminNum}`);
+
         } else {
           MessageBox.error(`Failed to create chartering`);
         }

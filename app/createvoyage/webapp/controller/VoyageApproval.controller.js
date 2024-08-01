@@ -16,6 +16,8 @@ sap.ui.define(
     let LoggedInUser;
     let userEmail;
     let username;
+    let isLastApprover = false;
+    let highestApproverLevel =0;
 
     return BaseController.extend("com.ingenx.nauti.createvoyage.controller.VoyageApproval", {
       onInit: async function () {
@@ -35,7 +37,8 @@ sap.ui.define(
           console.log("userID", userID);
         } catch (error) {
           // userEmail = "ashwani.sharma@ingenxtec.com";
-          userEmail = undefined;
+          userEmail = "mohin.khan@ingenxtec.com";
+          // userEmail = undefined;
         }
       },
       getSUerIdInfo :async function(){
@@ -79,7 +82,7 @@ sap.ui.define(
         let userlogin = username;
         console.log("hii",userlogin);
         let oInput = this.byId("VoyageNo");
-        let oDescriptionInput = this.byId("_voyageAppReqField");
+        // let oDescriptionInput = this.byId("_voyageAppReqField");
         let aSelectedContexts = evt.getParameter("selectedContexts");
 
         if (!aSelectedContexts || !aSelectedContexts.length) {
@@ -90,7 +93,7 @@ sap.ui.define(
           return;
         }
         let oVoyno = aSelectedContexts[0].getObject().Voyno;
-        let oVreqno = aSelectedContexts[0].getObject().Vreqno;
+        // let oVreqno = aSelectedContexts[0].getObject().Vreqno;
         oInput.setValue(oVoyno);
         let aFilteredData = [];
 
@@ -114,7 +117,7 @@ sap.ui.define(
 
           let oBindList = oModel.bindList("/voyapprovalSet", null, null, aFilter);
 
-          let res = await oBindList.requestContexts().then(function (aContexts) {
+           await oBindList.requestContexts().then(function (aContexts) {
             aFilteredData = aContexts.map(context => context.getObject());
             // Sort the aFilteredData array by Zlevel property
 
@@ -139,10 +142,12 @@ sap.ui.define(
         console.log(transformedData);
         // oApprovalModel.setData(transformedData);
 
-        LoggedInUser =username;
+        LoggedInUser = username;
+
         this.approverMatched = false;
         let that = this;
         transformedData.forEach(data => {
+
           if (data.Vreqno == xVreqno) {
             oApprovalModel.setData([data]);
 
@@ -151,6 +156,7 @@ sap.ui.define(
         });
         let transformedStatusData = that.transformStatusData([...testData]);
         oApprovalStatusModel.setData(transformedStatusData);
+
         transformedStatusData.forEach(data => {
           that.createStatusDynamicColumns(data.Approvers);
         });
@@ -221,12 +227,24 @@ sap.ui.define(
         // Check if the logged-in user is an approver and get their level
         let approverMatched = false;
         let userLevel = null;
+        for (const approver of approvers) {
+          const level = parseInt(approver.Zlevel, 10);
+          if (level > highestApproverLevel && level > 0) {
+              highestApproverLevel = level;
+          }
+      }
     
         for (const approver of approvers) {
             if (LoggedInUser === approver.Uname && approver.Zlevel !== '00') {
                 approverMatched = true;
                 userLevel = parseInt(approver.Zlevel, 10); // Convert Zlevel to integer for comparison
+                
                 console.log("User matched at level: ", userLevel);
+                 // Check if the approver is the last one
+                  if (userLevel === highestApproverLevel) {
+                   console.log("The approver is the last one.");
+                   isLastApprover = true;
+                 } 
                 break;
             }
         }
@@ -675,6 +693,8 @@ sap.ui.define(
 
         let oModel = this.getOwnerComponent().getModel(); // Get Table model instance
 
+
+
         // Create a filter for the entity ID
         let fVreqno = new sap.ui.model.Filter("Vreqno", sap.ui.model.FilterOperator.EQ, data.Vreqno);
         let fVoyno = new sap.ui.model.Filter("Voyno", sap.ui.model.FilterOperator.EQ, data.Voyno);
@@ -682,7 +702,7 @@ sap.ui.define(
         let fUname = new sap.ui.model.Filter("Uname", sap.ui.model.FilterOperator.EQ, userName);
 
         let zlvl = userData[0].Zlevel;
-        let uname = userName
+
         // Bind to the entity set with the filter
         let oBindList = oModel.bindList("/voyapprovalSet", undefined, undefined, [fVreqno, fVoyno, fZlevel, fUname]);
 
@@ -697,13 +717,35 @@ sap.ui.define(
             filterContext[0].setProperty("Zaction", stat);
 
             // Refresh the model and rebind the table after 1.5 seconds
-            setTimeout(function () {
-              oModel.refresh();
+            sap.m.MessageToast.show("Voyage Approval Done");
 
-              sap.ui.core.BusyIndicator.hide();
+            let voyageStatusBindList = oModel.bindList("/newallstatusesSet");
+            if( stat == "REJ"){
+
+              voyageStatusBindList.create({
+                
+                "Voyage" : "1000000270",
+                "Status" : "Voyage Approval Rejected"
+                
+                
+              }, true)
+            } else if ( isLastApprover && stat == "APPR"){
+              voyageStatusBindList.create({
+                
+                "Voyage" : "1000000270",
+                "Status" : "Voyage Approval Done"
+                
+                
+              }, true);
+
+            }
+            
+            setTimeout(function () {
 
               that.rebindApprovalTable(data.Voyno);
             }.bind(that), 1500);
+
+            sap.ui.core.BusyIndicator.hide(); // Hide the busy indicator
 
 
 

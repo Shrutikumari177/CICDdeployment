@@ -12,3 +12,5 @@ using from './submitquotation/annotations';
 using from './report/annotations';
 
 using from './biddingcontroller/annotations';
+
+using from './vendorbidding/annotations';

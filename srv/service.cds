@@ -22,16 +22,17 @@ using NAUTILIVEBID_CONT_SRV from './external/NAUTILIVEBID_CONT_SRV.cds';
 
 
 service nauticalservice {
+    entity VenodrLiveBidDetails as projection on nauticalschema.VenodrLiveBidDetails;
     entity livecontrollerfetchSet as projection on NAUTILIVEBID_CONT_SRV.livecontrollerfetchSet
     {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
 ;
-    entity newallstatusesSet            as
-        projection on NAUTIVOYSTATUS_SRV.newallstatusesSet {
-                Status,
-            key Voyage,
-                Vdate,
-                Vtime
-        };
+    entity newallstatusesSet as projection on NAUTIVOYSTATUS_SRV.newallstatusesSet
+    {        Status, key Voyage, Vdate, Vtime     }    
+;
+    
+    entity xNAUTIxallstatuses as projection on NAUTIVOYSTATUS_SRV.xNAUTIxallstatuses
+    {        key Voyage, Status, Vdate, Vtime     }    
+;
 
 
     entity getfinalbidSet               as
@@ -82,7 +83,7 @@ service nauticalservice {
 
     entity vendorFinSet                 as
         projection on NAUTIZLIVEBID_VEND_SRV.vendorFinSet {
-            key Chrnmin
+            key Chrnmin,venToItem
         };
 
     entity xNAUTIxnewvendfbid           as
@@ -108,13 +109,7 @@ service nauticalservice {
                 Zcom
         };
 
-    entity xNAUTIxallstatuses           as
-        projection on NAUTIVOYSTATUS_SRV.xNAUTIxallstatuses {
-            key Voyage,
-                Status,
-                Vdate,
-                Vtime
-        };
+    
 
     entity xNAUTIxZSUBMITQUOUTFETCH     as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH {
@@ -1079,6 +1074,9 @@ service nauticalservice {
                 Biddate,
                 Bidtime
         };
+         entity BusinessPartnerSet as projection on NAUTIMASTER_BTP_SRV.BusinessPartnerSet
+    {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, TimeZone, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo     }    
+;
 
     entity xNAUTIxVENFBID               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {

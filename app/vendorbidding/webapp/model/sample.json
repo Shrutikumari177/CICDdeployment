@@ -1,0 +1,104 @@
+{
+    "bids": [
+        {
+            "bidId": 1,
+            "bidTime": "09:00",
+            "bidValue": 90000
+        },
+        {
+            "bidId": 2,
+            "bidTime": "09:05",
+            "bidValue": 200000
+        },
+        {
+            "bidId": 3,
+            "bidTime": "09:10",
+            "bidValue": 350000
+        },
+        {
+            "bidId": 4,
+            "bidTime": "09:15",
+            "bidValue": 400000
+        },
+        {
+            "bidId": 5,
+            "bidTime": "09:20",
+            "bidValue": 550000
+        },
+        {
+            "bidId": 6,
+            "bidTime": "09:25",
+            "bidValue": 600000
+        },
+        {
+            "bidId": 7,
+            "bidTime": "09:30",
+            "bidValue": 750000
+        },
+        {
+            "bidId": 8,
+            "bidTime": "09:35",
+            "bidValue": 800000
+        },
+        {
+            "bidId": 9,
+            "bidTime": "09:40",
+            "bidValue": 950000
+        },
+        {
+            "bidId": 10,
+            "bidTime": "09:45",
+            "bidValue": 1000000
+        },
+        {
+            "bidId": 11,
+            "bidTime": "09:50",
+            "bidValue": 1150000
+        },
+        {
+            "bidId": 12,
+            "bidTime": "09:55",
+            "bidValue": 1200000
+        },
+        {
+            "bidId": 13,
+            "bidTime": "10:00",
+            "bidValue": 1350000
+        },
+        {
+            "bidId": 14,
+            "bidTime": "10:05",
+            "bidValue": 1400000
+        },
+        {
+            "bidId": 15,
+            "bidTime": "10:10",
+            "bidValue": 1550000
+        },
+        {
+            "bidId": 16,
+            "bidTime": "10:40",
+            "bidValue": 1900000
+        },
+        {
+            "bidId": 17,
+            "bidTime": "10:20",
+            "bidValue": 1750000
+        },
+        {
+            "bidId": 18,
+            "bidTime": "10:25",
+            "bidValue": 1800000
+        },
+        {
+            "bidId": 19,
+            "bidTime": "10:30",
+            "bidValue": 1950000
+        },
+        {
+            "bidId": 20,
+            "bidTime": "10:35",
+            "bidValue": 2000000
+        }
+    ]
+}

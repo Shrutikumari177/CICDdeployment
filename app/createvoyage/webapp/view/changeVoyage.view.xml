@@ -47,7 +47,7 @@
 
                     <Button
                         id="_cancelVoyageBtn"
-                        text="Cancel Voyage No."
+                        text="Cancel Voyage"
                         press=".onCancelVoayge"
                         type="Emphasized"
                     />
@@ -93,6 +93,7 @@
                             id="Input2"
                             width="200px"
                             value="{voyHeaderModel>/0/Voynm}"
+                            editable="false"
                         />
                     </HBox>
                     <HBox class="box1">
@@ -165,6 +166,7 @@
                             id="Input5"
                             width="200px"
                             value="{voyHeaderModel>/0/Bidtype}"
+                            editable="false"
                         />
                     </HBox>
 
@@ -193,7 +195,7 @@
                         <Input
                             id="Input6"
                             width="200px"
-                            value="{voyHeaderModel>/0/GV_CSTATUS}"
+                            value=""
                             editable="false"
                         />
                     </HBox>
@@ -268,7 +270,7 @@
                      <IconTabFilter
                         text="Vessel Details"
                         key="info"
-                        visible="false"
+                        visible="true"
                     >
                         <Panel
                             id="p1"
@@ -575,7 +577,7 @@
                                         </Column>
                                         <Column
                                             id="_IDGenComn7"
-                                            visible="false"
+                                    
                                         >
                                             <Label
                                                 id="_IDGenbel16"
@@ -586,7 +588,7 @@
                                         <Column id="_IDGenColn6">
                                             <Label
                                                 id="_IDGenLel15"
-                                                text="Port name"
+                                                text="Port Name"
                                             />
                                         </Column>
 
@@ -700,7 +702,7 @@
                                                     valueHelpRequest=".onPortValueHelpRequest"
                                                     valueHelpOnly=""
                                                 />
-                                                <Input value="" />
+                                                <Input value="" showValueHelp="true" valueHelpRequest=".onEventValueHelp"/>
                                                 <Input
                                                     value="{voyItemModel>Portn}"
                                                     editable="false"
@@ -752,6 +754,7 @@
                                                     <!-- liveChange=".onPortDaysChange" -->
                                                 <Input
                                                     value="{voyItemModel>Vwead}"
+                                                    change=".onPortDaysChange"
                                                 />
                                                 <Input
                                                     value="{voyItemModel>Vsdays}"
@@ -910,14 +913,14 @@
                                             <Label text="LegId" />
                                         </Column>
                                         <Column>
-                                            <Label text="Port Cost" />
+                                            <Label text="Port Code" />
                                         </Column>
                                         <Column>
                                             <Label text="Events" />
                                         </Column>
 
                                         <Column>
-                                            <Label text="Port name" />
+                                            <Label text="Port Name" />
                                         </Column>
 
                                         <Column>
@@ -1735,12 +1738,11 @@
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>
                             </l:VerticalLayout>
-
-                            <!-- <HBox
+              <HBox
                     id="HBox2"
                     width="100%"
                 >
-                    <FlexBox
+                    <!-- <FlexBox
                         width="10%"
                         class="flexbtn"
                     >
@@ -1756,14 +1758,14 @@
                             press=".onDeleteRow2"
                             type="Default"
                         />
-                    </FlexBox>
-                    <FlexBox width="20%">
+                    </FlexBox> -->
+                    <!-- <FlexBox width="20%">
                         <Button
                             id="saveprofileId"
                             type="Default"
                             text="Save Profile"
                         />
-                    </FlexBox>
+                    </FlexBox> -->
                     <FlexBox width="20%">
                         <Label
                             id="_IDGenLabel49"
@@ -1779,7 +1781,7 @@
                             </items>
                         </Select>
                     </FlexBox>
-                    <FlexBox width="30%">
+                    <!-- <FlexBox width="30%">
                         <Button
                             id="_IDGenBuon13"
                             icon="sap-icon://sys-add"
@@ -1792,8 +1794,8 @@
                             press=".onDeleteRow2"
                             type="Default"
                         />
-                    </FlexBox>
-                </HBox> -->
+                    </FlexBox> -->
+                </HBox> 
                         </Panel>
                     </IconTabFilter>
                     <IconTabFilter

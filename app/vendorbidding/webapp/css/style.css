@@ -1,0 +1,41 @@
+
+.amount_text{
+    font-size: 30px;
+}
+
+
+  .alignCircle .sapSuiteRMCVerticalAlignmentContainer.sapSuiteRMCAlignCenter {
+    align-items: center;
+  }
+  .scaleCircle .sapSuiteRMCVerticalAlignmentContainer.sapSuiteRMCAlignCenter .sapSuiteRMCInnerContainer {
+    width: 200px !important;
+    height: 200px !important;
+  }
+  .exit_btn{
+    color:rgb(163, 27, 27);
+    font-weight: bold;
+    border-color: rgb(163, 27, 27);
+    cursor: pointer;
+  }
+  .exit_btn:focus{
+    border-color: rgb(163, 27, 27);
+    outline: none;
+  }
+  .test1{
+    margin-left: 85px !important;
+    font-weight: bold;
+  }
+  .timeTextStyle{
+    font-weight: bold;
+  }
+  
+.blurred {
+  filter: blur(3px);
+  transition: filter 0.5s ease-in-out;
+}
+.h_text{
+  font-size: 25px;
+}
+.statusText{
+  font-weight: bold;
+}

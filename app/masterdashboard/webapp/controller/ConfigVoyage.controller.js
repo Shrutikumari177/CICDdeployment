@@ -31,6 +31,11 @@ sap.ui.define(
     return Controller.extend("com.ingenx.nauti.masterdashboard.controller.ConfigVoyage", {
 
       onInit: function () {
+
+
+
+
+
         this.filteredUsersModel = new sap.ui.model.json.JSONModel();
 
         let oModel2 = new sap.ui.model.json.JSONModel();
@@ -49,47 +54,46 @@ sap.ui.define(
         this.getView().byId("entryTypeTable").setVisible(false);
         this.getView().byId("mainPageFooter").setVisible(false);
         this.getView().byId("updateTypeTable").setVisible(false);
-        this.byId("approver1Column").setVisible(false);
-        this.byId("approver2Column").setVisible(false);
-        this.byId("approver3Column").setVisible(false);
-      },
-      onTableUpdateFinished: function () {
-        this.byId("createTypeTable").removeSelections();
+        // this.byId("approver1Column").setVisible(false);
+        // this.byId("approver2Column").setVisible(false);
+        // this.byId("approver3Column").setVisible(false);
       },
 
-      onCodeLiveChange: function (oEvent) {
-        var oInput = oEvent.getSource();
-        var sValue = oInput.getValue();
-        // Convert the first character to uppercase and keep the rest of the string unchanged
-        var newValue = sValue.charAt(0).toUpperCase() + sValue.slice(1);
+      onMaintainUserSearch: function (oEvent) {
+        var sValue1 = oEvent.getParameter("value");
 
-        // Check if the new value contains any non-alphanumeric characters
-        if (/[^a-zA-Z0-9]/.test(newValue)) {
-          // Remove any non-alphanumeric characters
-          newValue = newValue.replace(/[^a-zA-Z0-9]/g, '');
+        var oFilter1 = new sap.ui.model .Filter("Zgroup", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+          filters: [oFilter1]
+        });
 
-          // Show a message to the user
-          sap.m.MessageToast.show("Only alphanumeric characters are allowed.");
-        }
+        var oBinding = oEvent.getSource().getBinding("items");
+        var oSelectDialog = oEvent.getSource();
+        oBinding.filter([andFilter]);
+ 
+        oBinding.attachEventOnce("dataReceived", function() {
+          var aItems = oBinding.getCurrentContexts();
+ 
+          if (aItems.length === 0) {
+              oSelectDialog.setNoDataText("No data found");
+          } else {
+              oSelectDialog.setNoDataText("Loading");
+          }
+      });
 
-        // Check if the length of the new value exceeds 4
-        if (newValue.length > 10) {
-          // Truncate the value to keep only the first 4 characters
-          newValue = newValue.substring(0, 10);
-
-          // Show a message to the user
-          sap.m.MessageToast.show("Maximum length is 10 characters.");
-        }
-
-        // Update the value of the input if it has changed
-        if (newValue !== sValue) {
-          oInput.setValue(newValue);
-        }
+        // oEvent.getSource().getBinding("items").filter([oFilter1]);
       },
+
+
+
+
+
+
 
       onApproverSelect: function (oEvent) {
         var oView = this.getView();
         this._oInputField = oEvent.getSource();
+
         if (!this._oApprpover) {
           this._oApprpover = sap.ui.xmlfragment(oView.getId(), "com.ingenx.nauti.masterdashboard.fragments.ApproverSelect", this);
           oView.addDependent(this._oApprpover);
@@ -107,25 +111,36 @@ sap.ui.define(
         }
         this._oInputField.setValue(oSelectedItem.getTitle());
       },
-
-      onMaintainUserSearch: function (oEvent) {
-
+      onApproverSearch: function(oEvent) {
         var sValue1 = oEvent.getParameter("value");
-
-        var oFilter1 = new sap.ui.model.Filter("Zgroup", sap.ui.model.FilterOperator.Contains, sValue1);
-        var andFilter = new sap.ui.model.Filter({
-          filters: [oFilter1]
-        });
-
-        oEvent.getSource().getBinding("items").filter([andFilter]);
-      },
-      onApproverSearch: function (oEvent) {
-        var sValue1 = oEvent.getParameter("value");
-
         var oFilter1 = new sap.ui.model.Filter("Zuser", sap.ui.model.FilterOperator.Contains, sValue1);
+        var andFilter = new sap.ui.model.Filter({
+            filters: [oFilter1]
+        });
+    
+        var oSelectDialog = oEvent.getSource();
+        var oBinding = oSelectDialog.getBinding("items");
+    
+        // Set the initial noDataText to "Loading..."
+        oSelectDialog.setNoDataText("No Data Found");
+    
+        oBinding.filter([andFilter]);
+    
+        // Attach a one-time event handler for dataReceived
+        oBinding.attachEventOnce("dataReceived", function() {
+            var aItems = oBinding.getCurrentContexts();
+    
+            if (aItems.length === 0) {
+                oSelectDialog.setNoDataText("No data found");
+            } else {
+                oSelectDialog.setNoDataText(""); // Clear the noDataText
+            }
+        });
+    },
+    
+    
 
-        oEvent.getSource().getBinding("items").filter([oFilter1]);
-      },
+  
 
 
       onZgroup: function (oEvent) {
@@ -139,6 +154,7 @@ sap.ui.define(
         }
         this._oMaintainGroup.open();
       },
+
 
 
       onZgroupClose: function (oEvent) {
@@ -160,31 +176,139 @@ sap.ui.define(
 
         console.log("Users in Zgroup", ZgroupId, filteredUsers);
         this.filteredUsersModel.setData(filteredUsers);
-        var approver1Column = this.getView().byId("approver1Column");
-        var approver2Column = this.getView().byId("approver2Column");
-        var approver3Column = this.getView().byId("approver3Column");
-        this.byId("App1").setValue("");
-        this.byId("App2").setValue("");
-        this.byId("App3").setValue("");
-        if (filteredUsers.length >= 1) {
-          approver1Column.setVisible(true);
-        } else {
-          approver1Column.setVisible(false);
-        }
-        if (filteredUsers.length >= 2) {
-          approver2Column.setVisible(true);
-        } else {
-          approver2Column.setVisible(false);
-        }
-        if (filteredUsers.length >= 3) {
-          approver3Column.setVisible(true);
-        } else {
-          approver3Column.setVisible(false);
-        }
         this.getView().setModel(this.filteredUsersModel, "filteredUsersModel");
         console.log("Filtered Users JSON Model", this.filteredUsersModel.getData());
+        this.createDynamicColumnsBasedOnApprovers(filteredUsers);
+        let oTable = this.byId("entryTypeTable");
+        let items = oTable.getItems()[0];
+        let cells = items.getCells();
+        for (let i = 4; i < cells.length; i++) {
+          cells[i].setValue("");
+        }
       },
-      onChange: function () {},
+      createDynamicColumnsBasedOnApprovers1: function (filteredUsers) {
+        let oTable = this.getView().byId("entryTypeTable");
+
+        oTable.getColumns().forEach(function (column) {
+          if (column.getHeader().getText().startsWith("Approver")) {
+            oTable.removeColumn(column);
+          }
+        });
+
+        filteredUsers.forEach((user, index) => {
+          oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: `Approver ${index + 1}` })
+
+
+          }));
+        });
+        filteredUsers.forEach((x, index, arr) => {
+          if (index < 3) {
+
+            oTable.getItems()[0].addCell(new sap.m.Input({
+              showValueHelp: true,
+              valueHelpOnly: true,
+              valueHelpRequest: this.onApproverSelect.bind(this)
+            }));
+          } else {
+
+
+            oTable.getItems()[0].addCell(new sap.m.Input({
+              showValueHelp: true,
+              valueHelpOnly: true,
+              editable: false,
+              valueHelpRequest: this.onApproverSelect.bind(this)
+            }));
+
+          }
+        });
+
+
+        oTable.setVisible(true);
+
+
+
+        console.log("Filtered Users Data:", this.getView().getModel("filteredUsersModel").getData());
+      },
+      createDynamicColumnsBasedOnApprovers: function (filteredUsers) {
+        let oTable = this.getView().byId("entryTypeTable");
+      
+        // Remove existing dynamic Approver columns
+        oTable.getColumns().forEach(function (column) {
+          if (column.getHeader().getText().startsWith("Approver")) {
+            oTable.removeColumn(column);
+          }
+        });
+      
+        // Add new dynamic Approver columns based on filteredUsers
+        filteredUsers.forEach((user, index) => {
+          oTable.addColumn(new sap.m.Column({
+            header: new sap.m.Label({ text: `Approver ${index + 1}` })
+          }));
+        });
+      
+        // Add cells to the first row for each dynamic column
+        filteredUsers.forEach((x, index) => {
+          if (index < 3) {
+            oTable.getItems()[0].addCell(new sap.m.Input({
+              showValueHelp: true,
+              valueHelpOnly: true,
+              valueHelpRequest: this.onApproverSelect.bind(this)
+            }));
+          } else {
+            oTable.getItems()[0].addCell(new sap.m.Input({
+              showValueHelp: true,
+              valueHelpOnly: true,
+              editable: false,
+              valueHelpRequest: this.onApproverSelect.bind(this)
+            }));
+          }
+        });
+      
+        // Show MessageBox if there are more than 3 approvers
+        if (filteredUsers.length > 3) {
+          sap.m.MessageBox.show(
+            "Currently system maintains only upto  three Approvers. Additional approvers are not allowed.",
+            {
+              icon: sap.m.MessageBox.Icon.INFORMATION,
+              title: "Information",
+              actions: [sap.m.MessageBox.Action.OK],
+              onClose: function (oAction) { 
+                oTable.getItems()[0].addCell(new sap.m.Input({
+                  showValueHelp: true,
+                  valueHelpOnly: true,
+                  editable: false,
+                  valueHelpRequest: this.onApproverSelect.bind(this)
+                }));
+               }
+            }
+          );
+        }
+      
+        oTable.setVisible(true);
+      
+        console.log("Filtered Users Data:", this.getView().getModel("filteredUsersModel").getData());
+      },
+      
+      onCodeLiveChange: function (oEvent) {
+        var oInput = oEvent.getSource();
+        var sValue = oInput.getValue();
+
+        if (sValue.length > 4) {
+          sValue = sValue.substring(0, 4);
+          oInput.setValue(sValue);
+          sap.m.MessageToast.show("Maximum length is 4 characters.");
+        }
+
+        if (/[^a-zA-Z0-9]/.test(sValue)) {
+          sValue = sValue.replace(/[^a-zA-Z0-9]/g, '');
+
+          oInput.setValue(sValue);
+          sap.m.MessageToast.show("Only Alphanumeric characters are allowed.");
+        }
+
+
+      },
 
       onBackPress: function () {
         const that = this;
@@ -196,120 +320,137 @@ sap.ui.define(
         if (aSelectedIds.length === 0 && !newEntryFlag) {
 
           oRouter.navTo("RouteConfigReleaseDashboard");
-        } else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
+        }
+        else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
           oRouter.navTo("RouteConfigReleaseDashboard");
           this.byId('createTypeTable').removeSelections();
 
-        } else if (newEntryFlag) {
-          let Rels = this.getView().byId("Rels").getValue().trim();
-          let Voyty = this.getView().byId("Voyty").getSelectedKey().trim();
-          let Carty = this.getView().byId("Carty").getSelectedKey().trim();
-          let Zgroup = this.getView().byId("Zgroup").getValue().trim();
-          let App1 = this.getView().byId("App1").getValue().trim();
-          let App2 = this.getView().byId("App2").getValue().trim();
-          let App3 = this.getView().byId("App3").getValue().trim();
+        }
 
-          if (Rels == "" && Voyty == "" && Carty == "" && Zgroup == "" && App1 == "" && App2 == "" && App3 == "") {
-            oEntryTable.setVisible(false);
-            oEntryTable.getItems()[0].getCells()[0].setValue("");
-            oEntryTable.getItems()[0].getCells()[1].setValue("");
-            this.byId("approver1Column").setVisible(false);
-            this.byId("approver2Column").setVisible(false);
-            this.byId("approver3Column").setVisible(false);
 
-            var items = oEntryTable.getItems();
-            for (var i = items.length - 1; i > 0; i--) {
-              oEntryTable.removeItem(items[i]);
+        else if (newEntryFlag) {
+          var oTable = this.byId("entryTypeTable");
+          var oSelectVoyty = this.byId("Voyty");
+          var oSelectCarty = this.byId("Carty");
+
+          let selectedVoyty = oSelectVoyty.getSelectedKey();
+          let selectedCarty = oSelectCarty.getSelectedKey();
+
+          var aItems = oTable.getItems();
+          let flag = false;
+          for (let i = 0; i < aItems.length; i++) {
+            var oCells = aItems[i].getCells();
+            let code = "";
+            let zgroup = "";
+
+            if (oCells[0] && oCells[0].getValue) {
+              code = oCells[0].getValue().trim();
             }
+
+            if (oCells[3] && oCells[3].getValue) {
+              zgroup = oCells[3].getValue().trim();
+            }
+
+            if (code !== "" || zgroup !== "" || selectedVoyty !== "" || selectedCarty !== "") {
+              flag = true;
+              break;
+            }
+          }
+          if (flag) {
+            sap.m.MessageBox.confirm("Do you want to discard the changes?", {
+              title: "Confirmation",
+              onClose: function (oAction) {
+                if (oAction === sap.m.MessageBox.Action.OK) {
+
+                  this.hideDynamicColumns(oTable);
+                  this.resetView();
+                }
+              }.bind(this)
+            });
+          } else {
+
+            this.hideDynamicColumns(oTable);
             this.resetView();
-          } else {
-            sap.m.MessageBox.confirm(
-              "Do you want to discard the changes?", {
-                title: "Confirmation",
-                onClose: function (oAction) {
-                  if (oAction === sap.m.MessageBox.Action.OK) {
-                    oEntryTable.setVisible(false);
-                    oEntryTable.getItems()[0].getCells()[0].setValue("");
-                    oEntryTable.getItems()[0].getCells()[1].setValue("");
-
-                    var items = oEntryTable.getItems();
-                    for (var i = items.length - 1; i > 0; i--) {
-                      oEntryTable.removeItem(items[i]);
-                    }
-                    that.resetView();
-                  } else {}
-                }
-              }
-            );
           }
+
+
+
         }
+
+
+
       },
 
-      onPressHome: function () {
-        const that = this;
-        var oEntryTable = that.getView().byId("entryTypeTable");
-        const oRouter = this.getOwnerComponent().getRouter();
-        if (aSelectedIds.length === 0 && !newEntryFlag) {
 
-          const oRouter = this.getOwnerComponent().getRouter();
-          oRouter.navTo("RouteHome");
+      // onPressHome: function () {
+      //   const that = this;
+      //   var oEntryTable = that.getView().byId("entryTypeTable");
+      //   const oRouter = this.getOwnerComponent().getRouter();
+      //   if (aSelectedIds.length === 0 && !newEntryFlag) {
 
-        } else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
-          oRouter.navTo("RouteHome");
-          this.byId("createTypeTable").removeSelections();
-        } else if (newEntryFlag) {
-          let Rels = this.getView().byId("Rels").getValue().trim();
-          let Voyty = this.getView().byId("Voyty").getValue().trim();
-          let Carty = this.getView().byId("Carty").getValue().trim();
-          let Zgroup = this.getView().byId("Zgroup").getValue().trim();
-          let App1 = this.getView().byId("App1").getValue().trim();
-          let App2 = this.getView().byId("App2").getValue().trim();
-          let App3 = this.getView().byId("App3").getValue().trim();
-          if (Rels == "" && Voyty == "" && Carty == "" && Zgroup == "" && App1 == "" && App2 == "" && App3 == "") {
+      //     const oRouter = this.getOwnerComponent().getRouter();
+      //     oRouter.navTo("RouteHome");
 
-            const oRouter = that.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteConfigReleaseDashboard");
-            setTimeout(() => {
-              oEntryTable.setVisible(false);
-              oEntryTable.getItems()[0].getCells()[0].setValue("");
-              oEntryTable.getItems()[0].getCells()[1].setValue("");
-              this.byId("approver1Column").setVisible(false);
-              this.byId("approver2Column").setVisible(false);
-              this.byId("approver3Column").setVisible(false);
+      //   }
 
-              var items = oEntryTable.getItems();
-              for (var i = items.length - 1; i > 0; i--) {
-                oEntryTable.removeItem(items[i]);
-              }
-              that.resetView();
-            }, 1500);
+      //   else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
+      //     oRouter.navTo("RouteHome");
+      //     this.byId("createTypeTable").removeSelections();
+      //   }
+      //   else if (newEntryFlag) {
+      //     let Rels = this.getView().byId("Rels").getValue().trim();
+      //     let Voyty = this.getView().byId("Voyty").getValue().trim();
+      //     let Carty = this.getView().byId("Carty").getValue().trim();
+      //     let Zgroup = this.getView().byId("Zgroup").getValue().trim();
+      //     let App1 = this.getView().byId("App1").getValue().trim();
+      //     let App2 = this.getView().byId("App2").getValue().trim();
+      //     let App3 = this.getView().byId("App3").getValue().trim();
+      //     if (Rels == "" && Voyty == "" && Carty == "" && Zgroup == "" && App1 == "" && App2 == "" && App3 == "") {
 
-          } else {
-            sap.m.MessageBox.confirm(
-              "Do you want to discard the changes?", {
-                title: "Confirmation",
-                onClose: function (oAction) {
-                  if (oAction === sap.m.MessageBox.Action.OK) {
-                    const oRouter = that.getOwnerComponent().getRouter();
-                    oRouter.navTo("RouteConfigReleaseDashboard");
-                    setTimeout(() => {
-                      oEntryTable.setVisible(false);
-                      oEntryTable.getItems()[0].getCells()[0].setValue("");
-                      oEntryTable.getItems()[0].getCells()[1].setValue("");
+      //       const oRouter = that.getOwnerComponent().getRouter();
+      //       oRouter.navTo("RouteConfigReleaseDashboard");
+      //       setTimeout(() => {
+      //         oEntryTable.setVisible(false);
+      //         oEntryTable.getItems()[0].getCells()[0].setValue("");
+      //         oEntryTable.getItems()[0].getCells()[1].setValue("");
+      //         this.byId("approver1Column").setVisible(false);
+      //         this.byId("approver2Column").setVisible(false);
+      //         this.byId("approver3Column").setVisible(false);
 
-                      var items = oEntryTable.getItems();
-                      for (var i = items.length - 1; i > 0; i--) {
-                        oEntryTable.removeItem(items[i]);
-                      }
-                      that.resetView();
-                    }, 1500);
-                  } else {}
-                }
-              }
-            );
-          }
-        }
-      },
+      //         var items = oEntryTable.getItems();
+      //         for (var i = items.length - 1; i > 0; i--) {
+      //           oEntryTable.removeItem(items[i]);
+      //         }
+      //         that.resetView();
+      //       }, 1500);
+
+      //     } else {
+      //       sap.m.MessageBox.confirm(
+      //         "Do you want to discard the changes?", {
+      //         title: "Confirmation",
+      //         onClose: function (oAction) {
+      //           if (oAction === sap.m.MessageBox.Action.OK) {
+      //             const oRouter = that.getOwnerComponent().getRouter();
+      //             oRouter.navTo("RouteConfigReleaseDashboard");
+      //             setTimeout(() => {
+      //               oEntryTable.setVisible(false);
+      //               oEntryTable.getItems()[0].getCells()[0].setValue("");
+      //               oEntryTable.getItems()[0].getCells()[1].setValue("");
+
+      //               var items = oEntryTable.getItems();
+      //               for (var i = items.length - 1; i > 0; i--) {
+      //                 oEntryTable.removeItem(items[i]);
+      //               }
+      //               that.resetView();
+      //             }, 1500);
+      //           } else {
+      //           }
+      //         }
+      //       }
+      //       );
+      //     }
+      //   }
+      // },
 
       selectedItems: function (oEvent) {
         let oTable = oEvent.getSource();
@@ -328,85 +469,47 @@ sap.ui.define(
               oSelectedItem.getBindingContext().getProperty("App2"),
               oSelectedItem.getBindingContext().getProperty("App3")
             ]
-          } else {}
+          } else { }
 
         });
         console.log(aSelectedIds);
         return aSelectedIds;
       },
 
+
       newEntries: function () {
         newEntryFlag = true;
         editFlag = false;
 
-        // Clear selections in createTypeTable
         this.byId("createTypeTable").removeSelections();
 
-        // Remove items from entryTypeTable except the first item
         var oEntryTable = this.getView().byId("entryTypeTable");
         var items = oEntryTable.getItems();
         for (var i = items.length - 1; i > 0; i--) {
           oEntryTable.removeItem(items[i]);
         }
 
-        // Clear values in the first item's cells
         var firstItemCells = items[0].getCells();
         firstItemCells[0].setValue("");
-        this.resetSelectControl(firstItemCells[1]); // Reset Voyage Type
-        this.resetSelectControl(firstItemCells[2]); // Reset Vessel Type
-        firstItemCells[3].setValue("");
 
-        // Hide createTypeTable and show entryTypeTable
+        firstItemCells[3].setValue("");
+        var oSelectVoyty = this.byId("Voyty");
+        var oSelectCarty = this.byId("Carty");
+
+        oSelectVoyty.setSelectedKey("");
+        oSelectCarty.setSelectedKey("");
+
         this.getView().byId("createTypeTable").setVisible(false);
         this.getView().byId("entryTypeTable").setVisible(true);
-
-        // Show mainPageFooter and disable entryBtn and deleteBtn
         this.getView().byId("mainPageFooter").setVisible(true);
         this.getView().byId("entryBtn").setEnabled(false);
         this.getView().byId("deleteBtn").setEnabled(false);
 
-        // Hide approver columns
-        this.byId("approver1Column").setVisible(false);
-        this.byId("approver2Column").setVisible(false);
-        this.byId("approver3Column").setVisible(false);
+        // this.byId("approver1Column").setVisible(false);
+        // this.byId("approver2Column").setVisible(false);
+        // this.byId("approver3Column").setVisible(false);
       },
 
-      resetSelectControl: function (selectControl) {
-        if (selectControl instanceof sap.m.Select) {
-          selectControl.setSelectedKey(""); 
-          selectControl.setSelectedItem(null); 
-        }
-      },
-      // newEntries: function () {
-      //   newEntryFlag = true;
-      //   editFlag = false;
-
-      //   this.byId("createTypeTable").removeSelections();
-
-      //   var oEntryTable = this.getView().byId("entryTypeTable");
-      //   var items = oEntryTable.getItems();
-      //   for (var i = items.length - 1; i > 0; i--) {
-      //     oEntryTable.removeItem(items[i]);
-      //   }
-
-      //   var firstItemCells = items[0].getCells();
-      //   firstItemCells[0].setValue("");
-      //   firstItemCells[1].setValue("");
-      //   firstItemCells[2].setValue("");
-      //   firstItemCells[3].setValue("");
-
-      //   this.getView().byId("createTypeTable").setVisible(false);
-      //   this.getView().byId("entryTypeTable").setVisible(true);
-      //   this.getView().byId("mainPageFooter").setVisible(true);
-      //   this.getView().byId("entryBtn").setEnabled(false);
-      //   this.getView().byId("deleteBtn").setEnabled(false);
-
-      //   this.byId("approver1Column").setVisible(false);
-      //   this.byId("approver2Column").setVisible(false);
-      //   this.byId("approver3Column").setVisible(false);
-
-
-      // },
 
       onSave: function () {
         var that = this;
@@ -415,144 +518,175 @@ sap.ui.define(
         var entriesProcessed = 0;
         var errors = [];
         var duplicateEntries = [];
-
+    
         oTable.getItems().forEach(function (row) {
+            var values = [];
+            row.getCells().forEach(function (cell) {
+                if (cell instanceof sap.m.Input) {
+                    values.push(cell.getValue());
+                } else if (cell instanceof sap.m.Select) {
+                    values.push(cell.getSelectedKey());
+                }
+            });
+    
+            if (!values[0]) {
+                errors.push("Please fill the Release Strategy.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+            if (!values[1]) {
+                errors.push("Please fill the Voyage type.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+            if (!values[2]) {
+                errors.push("Please fill the Vessel type.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+            if (!values[3]) {
+                errors.push("Please fill the User ID Group.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+    
+            // Check if at least one approver is selected
+            if (!values[4] && !values[5] && !values[6]) {
+                errors.push("Please fill approvers. Release Strategy must have at least one approver.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+    
+            // Check if selected approvers are unique
+            var approvers = values.slice(4, 7).filter(Boolean); // Only consider non-empty values
+            if (new Set(approvers).size !== approvers.length) {
+                errors.push("Approvers must be unique.");
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+                return;
+            }
+    
+            var oBindListSP = that.getView().getModel().bindList("/VoyageRealeaseSet");
+            oBindListSP.attachEventOnce("dataReceived", function () {
+                var existingEntries = oBindListSP.getContexts().map(function (context) {
+                    return [
+                        context.getProperty("Rels"),
+                        context.getProperty("Voyty"),
+                        context.getProperty("Vesty"),
+                        context.getProperty("Zgroup")
+                    ].join('|');
+                });
+    
+                var currentEntry = values.join('|');
+    
+                if (existingEntries.includes(currentEntry)) {
+                    duplicateEntries.push(currentEntry);
+                }
+    
+                entriesProcessed++;
+                that.checkCompletion(entriesProcessed, totalEntries, errors, duplicateEntries);
+            });
+    
+            oBindListSP.getContexts();
+        });
+      },
+    
+      
+      checkCompletion: function (entriesProcessed, totalEntries, errors, duplicateEntries) {
+        if (entriesProcessed === totalEntries) {
+          if (errors.length === 0 && duplicateEntries.length === 0) {
+            this.createEntries();
+          } else {
+            var errorMessage = errors.join("\n");
+            if (duplicateEntries.length > 0) {
+              errorMessage += "\nDuplicate entries found with the same keys:\n";
+              duplicateEntries.forEach(function (entry) {
+                errorMessage += entry + "\n";
+              });
+            }
+            sap.m.MessageToast.show(errorMessage);
+          }
+        }
+      },
+      
+      createEntries: function () {
+        var that = this;
+        var oTable = that.byId("entryTypeTable");
+        var entriesCreated = 0;
+        var totalEntries = oTable.getItems().length;
+      
+        oTable.getItems().forEach(function (row, index) {
           var values = [];
           row.getCells().forEach(function (cell) {
             if (cell instanceof sap.m.Input) {
               values.push(cell.getValue());
             } else if (cell instanceof sap.m.Select) {
-              values.push(cell.getSelectedKey());
+              values.push(cell.getItemByKey(cell.getSelectedKey()).getText());
             }
           });
-
-          if (!values[0] || !values[1] || !values[2] || !values[3] || !values[4]) {
-            errors.push("Please enter both fields for all rows.");
-            entriesProcessed++;
-            checkCompletion();
-            return;
-          }
-
+          var oBusyDialog = new sap.m.BusyDialog({
+            text: "Saving data, please wait..."
+          });
+          oBusyDialog.open();
           var oBindListSP = that.getView().getModel().bindList("/VoyageRealeaseSet");
-          oBindListSP.attachEventOnce("dataReceived", function () {
-            var existingEntries = oBindListSP.getContexts().map(function (context) {
-              return [
-                context.getProperty("Rels"),
-                context.getProperty("Voyty"),
-                context.getProperty("Vesty"),
-                context.getProperty("Zgroup")
-              ].join('|');
-            });
-
-            var currentEntry = values.join('|');
-
-            if (existingEntries.includes(currentEntry)) {
-              duplicateEntries.push(currentEntry);
-            }
-
-            entriesProcessed++;
-            checkCompletion();
-          });
-
-          oBindListSP.getContexts();
-        });
-
-        function checkCompletion() {
-          if (entriesProcessed === totalEntries) {
-            if (errors.length === 0 && duplicateEntries.length === 0) {
-              createEntries();
+          oBindListSP.attachCreateCompleted(function (oEvent) {
+            let response = oEvent.getParameters();
+            if (response.success) {
+              entriesCreated++;
+              if (entriesCreated === totalEntries) {
+                sap.m.MessageBox.success("All entries saved successfully.");
+                oBusyDialog.close();
+                that.getView().getModel().refresh();
+                that.formatTableEntries();
+                that.hideDynamicColumns(oTable);
+                that.resetView();
+                that.byId("createTypeTable").removeSelections();
+              }
             } else {
-              var errorMessage = "Errors occurred while saving entries:\n";
-              if (errors.length > 0) {
-                errorMessage += errors.join("\n") + "\n";
-              }
-              if (duplicateEntries.length > 0) {
-                errorMessage += "Duplicate entries found with the same keys:\n";
-                duplicateEntries.forEach(function (entry) {
-                  errorMessage += entry + "\n";
-                });
-              }
-              sap.m.MessageToast.show(errorMessage);
+              let msg = response.context.oModel.mMessages[""][0].message;
+              sap.m.MessageBox.error(msg);
+              oBusyDialog.close();
             }
+          });
+      
+          let payload = {
+            Rels: values[0],
+            Voyty: values[1],
+            Vesty: values[2].trim(),
+            Zgroup: values[3],
+            App1: values[4],
+            App2: values[5],
+            App3: values[6],
+          };
+      
+          try {
+            oBindListSP.create(payload);
+          } catch (error) {
+            sap.m.MessageToast.show("Error while saving data");
+            oBusyDialog.close();
           }
-        }
+        });
+      },
+      
 
-        function createEntries() {
-          var allSavePromises = []; 
-          var entriesCreated = 0;
-
-          oTable.getItems().forEach(function (row, index) {
-            var values = [];
-            row.getCells().forEach(function (cell) {
-              if (cell instanceof sap.m.Input) {
-                values.push(cell.getValue() || "Null");
-              } else if (cell instanceof sap.m.Select) {
-                var selectedKey = cell.getSelectedKey();
-                values.push(selectedKey ? cell.getItemByKey(selectedKey).getText() : "Null");
-              }
-            });
-
-            // Ensure that any missing approver values are set to "Null"
-            if (!values[4] || values[4] === "") {
-              values[4] = "Null";
-            }
-            if (!values[5] || values[5] === "") {
-              values[5] = "Null";
-            }
-            if (!values[6] || values[6] === "") {
-              values[6] = "Null";
-            }
-
-            var oBindListSP = that.getView().getModel().bindList("/VoyageRealeaseSet");
-            var savePromise = new Promise((resolve, reject) => {
-              oBindListSP.attachCreateCompleted(function (oEvent) {
-                let response = oEvent.getParameters();
-                if (response.success) {
-                  entriesCreated++;
-                  resolve();
-                } else {
-                  let msg = response.context.oModel.mMessages[""][0].message;
-                  reject(new Error(msg));
-                }
-              });
-
-              let payload = {
-                Rels: values[0],
-                Voyty: values[1],
-                Vesty: values[2].trim(),
-                Zgroup: values[3],
-                App1: values[4],
-                App2: values[5],
-                App3: values[6]
-              };
-
-              try {
-                oBindListSP.create(payload);
-              } catch (error) {
-                reject(error);
-              }
-            });
-
-            allSavePromises.push(savePromise);
-          });
-
-          Promise.allSettled(allSavePromises).then((results) => {
-            var errors = results.filter(result => result.status === "rejected");
-            if (errors.length > 0) {
-              var errorMessage = "Errors occurred while saving entries:\n";
-              errors.forEach(error => {
-                errorMessage += error.reason.message + "\n";
-              });
-              sap.m.MessageBox.error(errorMessage);
-            } else {
-              sap.m.MessageBox.success("All entries saved successfully.");
-              oTable.removeSelections();
-              that.getView().getModel().refresh();
-              that.resetView();
+      formatValue: function (value) {
+        return value ? value : "NA";
+      },
+      formatTableEntries: function () {
+        var that = this;
+        var oTable = that.byId("entryTypeTable");
+        oTable.getItems().forEach(function (row) {
+          row.getCells().forEach(function (cell) {
+            if (cell instanceof sap.m.Text) {
+              cell.setText(that.formatValue(cell.getText()));
             }
           });
-        }
-
+        });
       },
 
 
@@ -560,10 +694,10 @@ sap.ui.define(
 
 
 
-      handletFunction: function (oEvent) {
-        console.log(oEvent);
 
-      },
+
+
+
 
 
       onCancel: function () {
@@ -574,9 +708,11 @@ sap.ui.define(
 
       onCancelNewEntry: function () {
         var oTable = this.byId("entryTypeTable");
-        this.byId("approver1Column").setVisible(false);
-        this.byId("approver2Column").setVisible(false);
-        this.byId("approver3Column").setVisible(false);
+        var oSelectVoyty = this.byId("Voyty");
+        var oSelectCarty = this.byId("Carty");
+
+        let selectedVoyty = oSelectVoyty.getSelectedKey();
+        let selectedCarty = oSelectCarty.getSelectedKey();
 
         var aItems = oTable.getItems();
         let flag = false;
@@ -584,18 +720,17 @@ sap.ui.define(
         for (let i = 0; i < aItems.length; i++) {
           var oCells = aItems[i].getCells();
           let code = "";
-          let sValue = "";
+          let zgroup = "";
 
-          // Assuming the cells could contain different controls
           if (oCells[0] && oCells[0].getValue) {
             code = oCells[0].getValue().trim();
           }
 
-          if (oCells[1] && oCells[1].getValue) {
-            sValue = oCells[1].getValue().trim();
+          if (oCells[3] && oCells[3].getValue) {
+            zgroup = oCells[3].getValue().trim();
           }
 
-          if (sValue !== "" || code !== "") {
+          if (code !== "" || zgroup !== "" || selectedVoyty !== "" || selectedCarty !== "") {
             flag = true;
             break;
           }
@@ -606,12 +741,23 @@ sap.ui.define(
             title: "Confirmation",
             onClose: function (oAction) {
               if (oAction === sap.m.MessageBox.Action.OK) {
+
+                this.hideDynamicColumns(oTable);
                 this.resetView();
               }
-            }.bind(this) // Ensure access to outer scope
+            }.bind(this)
           });
         } else {
+
+          this.hideDynamicColumns(oTable);
           this.resetView();
+        }
+      },
+
+      hideDynamicColumns: function (oTable) {
+        var aColumns = oTable.getColumns();
+        for (let i = 4; i < aColumns.length; i++) { // Assuming the first 4 columns are fixed
+          aColumns[i].setVisible(false);
         }
       },
 
@@ -632,9 +778,9 @@ sap.ui.define(
         // copyFlag = false;
         newEntryFlag = false;
         this.getView().byId("createTypeTable").setVisible(true).removeSelections();
-        // this.getView().byId("_IDGenText9").setVisible(false).removeSelections();
+
         // this.getView().byId("Code1").setText("");
-        // this.getView().byId("Desc1").setValue(""); 
+        // this.getView().byId("Desc1").setValue("");
         // this.getView().byId("Code").setValue("");
         // this.getView().byId("Desc").setValue("");
 
@@ -642,8 +788,6 @@ sap.ui.define(
         // this.getView().byId("copyBtn").setEnabled(true);
         this.getView().byId("entryBtn").setEnabled(true);
         this.byId("createTypeTable").setMode("MultiSelect");
-
-
       },
 
       onDeletePress: function () {
@@ -659,16 +803,16 @@ sap.ui.define(
           MessageBox.confirm(
             "Are you sure ,you want  to delete ?", {
 
-              title: "Confirm ",
-              onClose: function (oAction) {
-                if (oAction === MessageBox.Action.OK) {
-                  that.deleteSelectedItems(aItems);
-                } else {
-                  oTable.removeSelections();
-                  sap.m.MessageToast.show("Deletion canceled");
-                }
+            title: "Confirm ",
+            onClose: function (oAction) {
+              if (oAction === MessageBox.Action.OK) {
+                that.deleteSelectedItems(aItems);
+              } else {
+                oTable.removeSelections();
+                sap.m.MessageToast.show("Deletion canceled");
               }
             }
+          }
           );
         });
       },
@@ -687,68 +831,12 @@ sap.ui.define(
             MessageBox.error("Error deleting item: " + oError.message);
           });
         });
+        let oTable = this.byId("createTypeTable");
+        oTable.removeSelections();
+
+
       },
 
-      // pressCopy: function () {
-
-      //   // Reset copyFlag and editFlag
-
-
-
-      //   if (aSelectedIds.length === 0) {
-      //     MessageToast.show("Please select at least one row");
-      //     return
-      //   }
-      //   newEntryFlag = false;
-      //   editFlag = false;
-
-      //   copyFlag = true;
-      //   let oView = this.getView();
-
-      //   // Get the createTypeTable
-      //   let oCreateTable = oView.byId("createTypeTable");
-      //   var oTable = this.byId("createTypeTable");
-      //   var aSelectedItems = oTable.getSelectedItems();
-      //   onCopyInput = [];
-      //   // Iterating over selected items and printing values
-      //   aSelectedItems.forEach(function (oItem) {
-      //     var oBindingContext = oItem.getBindingContext();
-      //     var sValue = oBindingContext.getProperty("Voycd");
-      //     var sDescription = oBindingContext.getProperty("Voydes");
-      //     console.log("desc", sDescription);
-      //     onCopyInput.push(sDescription);
-      //   });
-
-      //   this.getView().byId("deleteBtn").setEnabled(false);
-      //   this.getView().byId("editBtn").setEnabled(false);
-      //   this.getView().byId("entryBtn").setEnabled(false);
-      //   this.getView().byId("createTypeTable").setVisible(false);
-      //   this.getView().byId('entryTypeTable').setVisible(true);
-      //   this.getView().byId("mainPageFooter").setVisible(true);
-
-
-      //   let entryTable = this.getView().byId("entryTypeTable");
-      //   entryTable.removeAllItems();
-      //   for (let i = 0; i < aSelectedIds.length; i++) {
-      //     let code = aSelectedIds[i][0];
-      //     let desc = aSelectedIds[i][1];
-
-      //     let newItem = new sap.m.ColumnListItem({
-      //       cells: [
-      //         new sap.m.Input({
-      //           value: code, editable: true,
-      //           liveChange: this.onCodeLiveChange.bind(this)
-      //         }),
-      //         new sap.m.Input({
-      //           value: desc, editable: true,
-      //           liveChange: this.onLiveChange.bind(this)
-      //         })
-      //       ]
-      //     });
-      //     entryTable.addItem(newItem);
-      //   }
-
-      // },
 
     });
 

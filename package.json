@@ -20,14 +20,15 @@
   "devDependencies": {
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^7.9.4",
-    "@sap/ux-specification": "^1.120.10",
+    "@sap/ux-specification": "^1.120.15",
     "rimraf": "^3.0.2"
   },
   "scripts": {
     "start": "cds-serve",
     "undeploy": "cf undeploy nautical --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-vendorbidding": "cds watch --open vendorbidding/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
