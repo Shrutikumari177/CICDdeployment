@@ -75,7 +75,7 @@
                                     iconVisible="true"
                                     statusText="Active"
                                     subtitle="Bids: {bidtilemodel>/Ongoing}"
-                                    title="Ongoing"
+                                    title="YetToStart"
                                     titleMaxLines="30"
                                     press="pressOngoing"
                                 />
@@ -109,7 +109,7 @@
 					           <micro:bars>
 						          <micro:InteractiveBarChartBar id="_IDGenInteractiveBarChartBar1" label="Open" value="{bidtilemodel>/Open}" />
 						          <micro:InteractiveBarChartBar id="_IDGenInteractiveBarChartBar2" label="Closed" value="{bidtilemodel>/Closed}" />
-						          <micro:InteractiveBarChartBar id="_IDGenInteractiveBarChartBar3" label="Ongoing" value="{bidtilemodel>/Ongoing}"/>
+						          <micro:InteractiveBarChartBar id="_IDGenInteractiveBarChartBar3" label="YetToStart" value="{bidtilemodel>/YetToStart}"/>
 					           </micro:bars>
 				           </micro:InteractiveBarChart>
 			           </items>

@@ -1,9 +1,9 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
-  ],
+  "sap/ui/core/mvc/Controller",
+  "sap/ui/model/json/JSONModel",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
+],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
@@ -12,8 +12,8 @@ sap.ui.define([
 
     var getBidData = [];
     const statusEnum = {
-      OPEN: "",
-      ONGOING: "ONGO",
+      OPEN: "OPEN",
+      ONGOING: "YTS",
       CLOSED: "CLOS",
     };
     return Controller.extend("com.ingenx.nauti.biddingcontroller.controller.Main", {
@@ -24,7 +24,7 @@ sap.ui.define([
         const bidTileModel = new JSONModel({
           Open: 0,
           Closed: 0,
-          Ongoing: 0,
+          YetToStart: 0,
           All: 0,
         });
         this.getView().setModel(bidTileModel, "bidtilemodel");
@@ -57,22 +57,40 @@ sap.ui.define([
           let counts = {
             Open: 0,
             Closed: 0,
-            Ongoing: 0
+            YetToStart: 0
           };
           getBidData.forEach(function (bid) {
-            if (bid.Stat === "") {
-              counts.Open++;
-            } else if (bid.Stat === "CLOS") {
+            // Combine date and time strings into a single date-time string
+            const startDateTime = new Date(`${bid.Chrqsdate.split('T')[0]}T${bid.Chrqstime}`);
+            const endDateTime = new Date(`${bid.Chrqedate.split('T')[0]}T${bid.Chrqetime}`);
+            const currentDateTime = new Date();
+
+            // Compare the date-times and set the Stat field accordingly
+            if (currentDateTime >= endDateTime) {
+              bid.Stat = "CLOS";
               counts.Closed++;
-            } else if (bid.Stat === "ONGO") {
-              counts.Ongoing++;
+            } else if (currentDateTime >= startDateTime && currentDateTime < endDateTime) {
+              bid.Stat = "OPEN";
+              counts.Open++;
+            } else if (currentDateTime < startDateTime) {
+              bid.Stat = "YTS";
+              counts.YTS++;
             }
+
+            // // Count the statuses
+            // if (bid.Stat === "OPEN") {
+            //   counts.Open++;
+            // } else if (bid.Stat === "CLOS") {
+            //   counts.YTS++;
+            // } else if (bid.Stat === "YTS") {
+            //   counts.YTS++;
+            // }
           });
 
           let bidTileModel = this.getView().getModel("bidtilemodel");
           bidTileModel.setProperty("/Open", counts.Open);
           bidTileModel.setProperty("/Closed", counts.Closed);
-          bidTileModel.setProperty("/Ongoing", counts.Ongoing);
+          bidTileModel.setProperty("/Ongoing", counts.YetToStart);
           bidTileModel.setProperty("/All", getBidData.length);
 
           let oModel = new JSONModel();
@@ -104,6 +122,7 @@ sap.ui.define([
         const BidStartTime = oContext.getProperty("Chrqstime");
         const BidEndDate = oContext.getProperty("Chrqedate");
         const BidEndTime = oContext.getProperty("Chrqetime");
+        const controllerCurrentBid = oContext.getProperty("Cvalue");
         const Mode = oContext.getProperty("Zmode");
 
         // Set properties to navModel
@@ -114,6 +133,7 @@ sap.ui.define([
         navModel.setProperty("/navigatedBidStartTime", BidStartTime);
         navModel.setProperty("/navigatedBidEndDate", BidEndDate);
         navModel.setProperty("/navigatedBidEndTime", BidEndTime);
+        navModel.setProperty("/navigatedControllerCurrBid", controllerCurrentBid);
         navModel.setProperty("/navigatedMode", Mode);
 
         // Navigate to the target route

@@ -74,7 +74,7 @@
                         <Title id="_IDGenTitle1" text="Vendor List for Charter Request - ImCha"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
                         <Label id="_IDGenLabel1" text="Current Bid:" labelFor="currentQuote"/>
-                        <Input width="auto" id="currentQuote" enabled="false"/>
+                        <Input width="auto" id="currentQuote"  class="bold-input" enabled="false"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
                         <Label id="_IDGenLabel2" text="Quote Price:" labelFor="quoteInput"/>
                         <Input width="auto" id="quoteInput" type="Number"/>

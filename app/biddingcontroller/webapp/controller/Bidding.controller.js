@@ -9,6 +9,8 @@ sap.ui.define([
     function (Controller,DateFormat,  JSONModel) {
         "use strict";
         let receivedData = [];
+        let sVoyageNo = undefined;
+        let sChrnminNo = undefined;
 
         return Controller.extend("com.ingenx.nauti.biddingcontroller.controller.Bidding", {
             onInit: async function () {
@@ -21,8 +23,11 @@ sap.ui.define([
             },
 
             _onObjectMatched2: async function(oEvent) {
+                this._BusyDialog = new sap.m.BusyDialog({
+                    title: "Loading...",
+                });
+                this._BusyDialog.open();  
                 const navModel = this.getOwnerComponent().getModel("navModel");
-    
                 // Wait for the data to be available in the model
                 await this._waitForModelData(navModel, [
                     "/navigatedVoyageNo",
@@ -31,14 +36,18 @@ sap.ui.define([
                     "/navigatedBidStartTime",
                     "/navigatedBidEndDate",
                     "/navigatedBidEndTime",
+                    "/navigatedControllerCurrBid",
                     "/navigatedMode"
                 ]);
                 const VoyageNo = navModel.getProperty("/navigatedVoyageNo");
+                sVoyageNo = VoyageNo;
                 const Charterno = navModel.getProperty("/navigatedCharterno");
+                sChrnminNo = Charterno;
                 const BidStartDate = navModel.getProperty("/navigatedBidStartDate");
                 const BidStartTime = navModel.getProperty("/navigatedBidStartTime");
                 const BidEndDate = navModel.getProperty("/navigatedBidEndDate");
                 const BidEndTime = navModel.getProperty("/navigatedBidEndTime");
+                const ControllerCurrentBid = navModel.getProperty("/navigatedControllerCurrBid");
                 const Mode = navModel.getProperty("/navigatedMode");
     
                 // Use the retrieved properties as needed
@@ -49,8 +58,9 @@ sap.ui.define([
                 // console.log("Local Date and Time:", localDateTimeString);
     
                 // Get the control by its ID and set the text
-                this.byId("_IDGenObjectStatus1").setText(BidStartDate + " " + BidStartTime);
-                this.byId("_IDGenObjectStatus2").setText(BidEndDate + " " + BidEndTime);
+                this.byId("_IDGenObjectStatus1").setText(BidStartDate.split("T")[0] + " | " + BidStartTime);
+                this.byId("_IDGenObjectStatus2").setText(BidEndDate.split("T")[0] + " | " + BidEndTime);
+                this.byId("currentQuote").setValue(parseFloat(ControllerCurrentBid).toFixed(3));
     
                 // Set the title and subtitle of the header
                 this.byId("_IDGenHeader1").setTitle("Bid information for Charter Request : " + Charterno);
@@ -150,8 +160,8 @@ sap.ui.define([
                 oView.byId("quoteInput").setValue("");
                 let payLoad = {
                     "createdBy": "user123",
-                    "charmin": "400000008",
-                    "voyno": "100000057",
+                    "Chrnmin": sChrnminNo,
+                    "voyno": sVoyageNo,
                     "quotationPrice": sQuotePrice
                 }
                 this.createEntries(payLoad);
@@ -228,6 +238,7 @@ sap.ui.define([
                                 vendorId : "",
                                 vendorName : "",
                                 Trank: "",
+                                Tscore : "",
                                 Crank: "",
                                 originalBid : "",
                                 currentBid : "Bid not started"
@@ -240,6 +251,7 @@ sap.ui.define([
                             LiveBiddData.vendorId = vendor.Vendors[i].vendorId;
                             LiveBiddData.vendorName = vendor.Vendors[i].vendorName;
                             LiveBiddData.Trank = vendor.Vendors[i].Trank;
+                            LiveBiddData.Tscore = vendor.Vendors[i].score;
                             LiveBiddData.Crank = vendor.Vendors[i].Crank;
                             LiveBiddData.originalBid = freightCost;
                             receivedData.push(LiveBiddData);
@@ -276,6 +288,7 @@ sap.ui.define([
                 var oFirstItem = oItems[0];
                 var oBindingContext = oFirstItem.getBindingContext("rankmodel");
                 var oData = oBindingContext.getObject();
+                console.log("oDatafghfghj",oData);
                 
                 var oCard = this.byId("_IDGenCard4");
                 var oHeader = oCard.getHeader();
@@ -284,12 +297,23 @@ sap.ui.define([
                 var oTechnicalScore = this.byId("_IDGenObjectStatus4");
                 
                 oHeader.setTitle(oData.vendorName);
-                oHeader.setSubtitle(`Quote: ${oData.currentBid}`);
+                if(oData.currentBid === "Bid not started"){
+                    oHeader.setSubtitle(`Quote: ${oData.originalBid}`);
+                }
+                else{
+                    oHeader.setSubtitle(`Quote: ${oData.currentBid}`);
+                }
                 
                 oCommercialScore.setText(oData.Crank);
                 oTechnicalScore.setText(oData.Trank);
+                if(this._BusyDialog){
+                    this._BusyDialog.close();
+                }
             },
             onStart: function () {
+                this.byId("submitButton").setEnabled(true);
+                this.byId("startMsgStrip").setVisible(false);
+                this.byId("startButton").setVisible(false);
                 let oModel = this.getView().getModel("rankmodel");
                 let aVendors = oModel.getProperty("/vendors");
             
@@ -311,35 +335,49 @@ sap.ui.define([
             
             _fetchLatestBids: async function () {
                 let oModel = this.getOwnerComponent().getModel();
-                const Chrnmin = this.getView().getModel("rankmodel").getProperty("/Chrnmin"); // Assuming you have stored Chrnmin in the model
-            
                 const aFilters = [
-                    new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, Chrnmin)
+                    new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, sChrnminNo)
                 ];
-                let oBindList = oModel.bindList("/vendorLiveBidding", undefined, undefined, aFilters);
+                let oBindList = oModel.bindList("/VenodrLiveBidDetails", undefined, undefined, aFilters);
                 let liveBids = [];
-            
+                
                 await oBindList.requestContexts().then(function (aContexts) {
                     aContexts.forEach(oContext => {
                         liveBids.push(oContext.getObject());
                     });
                 });
-            
+                
                 // Update the current bid values in the model
                 let oViewModel = this.getView().getModel("rankmodel");
                 let aVendors = oViewModel.getProperty("/vendors");
-            
+                
                 liveBids.forEach(liveBid => {
-                    let vendor = aVendors.find(vendor => vendor.vendorId === liveBid.vendorId);
+                    let vendor = aVendors.find(vendor => vendor.vendorId === liveBid.vendorNo);
                     if (vendor) {
-                        vendor.currentBid = liveBid.currentBid;
+                        vendor.currentBid = liveBid.quotationPrice;
                     }
                 });
             
+                // Sort vendors by currentBid, with preference for higher Tscore in case of ties
+                aVendors.sort((a, b) => {
+                    if (a.currentBid === b.currentBid) {
+                        // If currentBid is the same, sort by Tscore descending
+                        return b.Tscore - a.Tscore;
+                    }
+                    return a.currentBid - b.currentBid; // Sort by currentBid ascending
+                });
+            
+                // Update Crank based on the sorted order
+                aVendors.forEach((vendor, index) => {
+                    vendor.Crank = `C${index + 1}`;
+                });
+            
                 oViewModel.updateBindings();
+                this.updateCardFromTable(); // Ensure the card is updated with the new data
             },
             
             onStop: function () {
+                this.byId("submitButton").setEnabled(false);
                 clearInterval(this._liveBiddingInterval);
             },
             

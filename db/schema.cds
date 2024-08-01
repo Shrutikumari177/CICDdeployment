@@ -41,7 +41,7 @@ entity calculateRankings {
 entity ControllerLiveBidDetails : managed {
     key ID : UUID@Core.Computed;
     key createdBy :String;
-    key charmin : String;
+    key Chrnmin : String;
     voyno : String;
     quotationPrice : String;
 }
@@ -94,7 +94,7 @@ type quotationsItems {
 
 entity VenodrLiveBidDetails : managed {
     key ID : UUID@Core.Computed;
-    key charmin : String;
+    key Chrnmin : String;
     vendorNo : String;
     voyno : String;
     quotationPrice : String;

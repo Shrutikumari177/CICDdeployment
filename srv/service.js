@@ -74,6 +74,62 @@ module.exports = async (srv) => {
         return response;
     });
 
+    srv.on('READ', 'ControllerLiveBidDetails', async function (req) {
+
+        console.log("Triggered....", req.data);
+        
+        let Chrnmin;
+        let currentQuotedRes = [];
+    
+        // Check if the filter is provided and extract the Chrnmin value
+        if (req._queryOptions && req._queryOptions.$filter) {
+            Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+        }
+        
+        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
+        let ControllerLiveBidData = Chrnmin ? await SELECT.from('nauticalservice.ControllerLiveBidDetails').where({ Chrnmin }) : await SELECT.from('nauticalservice.ControllerLiveBidDetails');
+        ControllerLiveBidData = ControllerLiveBidData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        console.log("response", ControllerLiveBidData);
+        if(Chrnmin){
+            currentQuotedRes.push(ControllerLiveBidData[0])
+            return currentQuotedRes;
+        }
+
+        return ControllerLiveBidData;
+    });
+
+
+    srv.on('READ', 'VenodrLiveBidDetails', async function (req) {
+        console.log("Triggered....", req.data);
+        
+        let Chrnmin;
+    
+        // Check if the filter is provided and extract the Chrnmin value
+        if (req._queryOptions && req._queryOptions.$filter) {
+            Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+        }
+        
+        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
+        const allData = Chrnmin ? await SELECT.from('nauticalservice.VenodrLiveBidDetails').where({ Chrnmin }) : await SELECT.from('nauticalservice.VenodrLiveBidDetails');
+    
+        // Filter the latest entry for each vendorNo
+        const latestEntries = allData.reduce((acc, current) => {
+            const existingEntry = acc.find(entry => entry.vendorNo === current.vendorNo);
+            if (!existingEntry || new Date(existingEntry.createdAt) < new Date(current.createdAt)) {
+                acc = acc.filter(entry => entry.vendorNo !== current.vendorNo);
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+    
+        console.log("response", latestEntries);
+    
+        return latestEntries;
+    });
+    
+    
     srv.on('UPDATE', 'quotations', async (req) => {
         try {
             // Extract key parameters from the request URL
@@ -104,8 +160,8 @@ module.exports = async (srv) => {
             // Perform the update operation
             const affectedRows = await cds.transaction(req).run(
                 UPDATE('nauticalservice.quotations')
-                .set(updateData)
-                .where(whereCondition)
+                    .set(updateData)
+                    .where(whereCondition)
             );
 
             // Log and return the number of affected rows
@@ -120,19 +176,19 @@ module.exports = async (srv) => {
             });
         }
     });
-    srv.on('CREATE', 'VenodrLiveBidDetails', async (req) => {
-        debugger;
-        const newData = {
-            ...req.data,
-            ID: 1
-        };
-        try {
-            const newBidDetails = await cds.create('VenodrLiveBidDetails').entries(newData);
-            req.reply(newBidDetails);
-        } catch (error) {
-            req.error(500, `Error creating VenodrLiveBidDetails: ${error.message}`);
-        }
-    });
+    // srv.on('CREATE', 'VenodrLiveBidDetails', async (req) => {
+    //     debugger;
+    //     const newData = {
+    //         ...req.data,
+    //         ID: 1
+    //     };
+    //     try {
+    //         const newBidDetails = await cds.create('VenodrLiveBidDetails').entries(newData);
+    //         req.reply(newBidDetails);
+    //     } catch (error) {
+    //         req.error(500, `Error creating VenodrLiveBidDetails: ${error.message}`);
+    //     }
+    // });
 
 
     srv.on('READ', 'calculateRankings', async (req) => {
@@ -268,7 +324,7 @@ module.exports = async (srv) => {
 
         Object.keys(groupedByChrnmin).forEach(key => {
             groupedByChrnmin[key].forEach(vendor => {
-                vendor.originalBid = vendor.bidDetails.find(detail => detail.CodeDesc === "FREIGHT") ?.Value || "N/A";
+                vendor.originalBid = vendor.bidDetails.find(detail => detail.CodeDesc === "FREIGHT")?.Value || "N/A";
             });
             groupedByChrnmin[key].sort((a, b) => parseFloat(a.originalBid) - parseFloat(b.originalBid)); // Sort by freight cost ascending
             groupedByChrnmin[key].forEach((vendor, index) => vendor.Crank = `C${index + 1}`);
@@ -472,7 +528,7 @@ module.exports = async (srv) => {
 
     // Register handlers for NAUTIMASTER_BTP_SRV entities
     registerHandlers(srv, NAUTIMASTER_BTP_SRV, [
-        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet', 'xNAUTIxcury_count','BusinessPartnerSet',
+        'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet', 'xNAUTIxcury_count', 'BusinessPartnerSet',
         'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet', 'xNAUTIxportmascds', 'xNAUTIxSAPUSERS',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
         'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',

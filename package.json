@@ -39,7 +39,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
           }
         },
@@ -57,7 +57,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
           }
         },
@@ -75,7 +75,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
           }
         },
@@ -93,7 +93,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         },
@@ -111,7 +111,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
           }
         },
@@ -135,7 +135,7 @@
         "model": "srv/external/NAUTIVENDOR_SRV",
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/VENDOR_SRV"
           }
         },
@@ -153,7 +153,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/VOY_VALUEHELP_CDS"
           }
         },
@@ -171,7 +171,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/CHATAPPROVAL_SRV"
           }
         },
@@ -189,7 +189,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/CONTROLLER_SRV"
           }
         },
@@ -207,7 +207,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/VENDOR_BTP_SRV"
           }
         },
@@ -225,7 +225,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
           }
         },
@@ -243,7 +243,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/CHASTATUS_SRV"
           }
         },
@@ -261,7 +261,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/ingxt/CONTROLLER_SRV"
           }
         },
@@ -279,7 +279,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/INVITECOMPARE_SRV"
           }
         },
@@ -297,7 +297,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/VOYSTATUS_SRV"
           }
         },
@@ -313,7 +313,7 @@
         "model": "srv/external/NAUTIUSERMAILID_SRV",
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/USERMAILID_SRV"
           }
         },
@@ -331,7 +331,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
           }
         },
@@ -349,7 +349,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
           }
         },
@@ -368,7 +368,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/LIVEBID_VEND_SRV"
           }
         },
@@ -386,7 +386,7 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP1",
+            "destination": "Ingenx_OData_SAP",
             "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
           }
         },

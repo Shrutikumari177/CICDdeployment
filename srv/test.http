@@ -1,4 +1,31 @@
 
+
+POST http://localhost:4004/odata/v4/nauticalservice/VenodrLiveBidDetails
+Content-Type: application/json
+
+{
+  "Chrnmin": "4000000621",
+  "vendorNo": "2100000001",
+  "voyno": "1000000221",
+  "quotationPrice": "7800000",
+  "comment": "for vendor 2100000001 testing."
+}
+
+###
+GET http://localhost:4004/odata/v4/nauticalservice/ControllerLiveBidDetails?$filter=Chrnmin eq '4000000641'
+
+### To POST ControllerLiveBidDetails
+POST http://localhost:4004/odata/v4/nauticalservice/ControllerLiveBidDetails
+Content-Type: application/json
+
+{
+  "createdBy" : "ashwani.sharma@ingenxtec.com",
+  "Chrnmin" : "4000000621",
+  "voyno" : "1000000221",
+  "quotationPrice" : "7500000"
+}
+
+###
 POST http://localhost:4004/odata/v4/nauticalservice/quotations
 Content-Type: application/json
 
