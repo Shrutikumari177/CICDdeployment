@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog title="Vendor Details" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%">
+        <Panel>
+            <FlexBox class="flex sapUiMediumMarginTop">
+                <VBox class="flexOne" alignItems="Start">
+                    <FlexBox class="sapUiSmallMarginBottom headerItem1" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop" text="Done By :" />
+                        <Input class="inputStyle" value="{path:'vendorDetail>/DoneBy',formatter:'.booleanFormatter'}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem1 sapUiSmallMarginBottom" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop" text="Status :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Stat}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem1 sapUiSmallMarginBottom" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop" text="Type :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Zmode}" editable="false" />
+                    </FlexBox>
+                </VBox>
+
+                <VBox class="flexTwo" alignItems="Start">
+                    <FlexBox class="headerItem1 sapUiSmallMarginBottom secondColumn" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop sapUiSmallMarginBegin" text="Comments :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Zcom}" editable="false" />
+                    </FlexBox>
+                    <FlexBox class="headerItem1 sapUiSmallMarginBottom secondColumn" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop sapUiSmallMarginBegin" text="Award Info :" />
+                        <Input class="inputStyle" value="No" editable="false" />
+                    </FlexBox>
+
+                    <FlexBox class="headerItem1 sapUiSmallMarginBottom secondColumn" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle sapUiTinyMarginTop sapUiSmallMarginBegin" text="Currency :" />
+                        <Input class="inputStyle" value="{vendorDetail>/Stras}" editable="false" />
+                    </FlexBox>
+                </VBox>
+            </FlexBox>
+        </Panel>
+
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

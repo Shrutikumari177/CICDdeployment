@@ -26,7 +26,9 @@ sap.ui.define(
     let deschanged = [];
     let inputFieldObj = {};
     let saveObj = {};
-    let cancelObj = {}
+    let cancelObj = {};
+    let oBusyDialog;
+
  
     return Controller.extend("com.ingenx.nauti.masterdashboard.controller.CountryMaster", {
  
@@ -677,57 +679,63 @@ sap.ui.define(
         this.getView().byId("entryBtn").setEnabled(true);
       },
       onDeletePress: function () {
- 
-        let aItems = this.byId("createTypeTable").getSelectedItems();
-        let oTable = this.byId("createTypeTable")
- 
+
+        let oTable = this.byId("createTypeTable");
+        let aItems = oTable.getSelectedItems();
         if (!aItems.length) {
- 
-          MessageToast.show("Please select atleast one row ");
- 
+
+          MessageToast.show("Please Select at least one row ");
           return;
         }
- 
-        const that = this;  // creatinh reference for use in Dialog
+
+        const that = this; 
         sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
           MessageBox.confirm(
-            "Are you sure  to delete the selected items?", {
+            "Are you sure ,you want  to delete ?", {
+
             title: "Confirm ",
             onClose: function (oAction) {
               if (oAction === MessageBox.Action.OK) {
-                // User confirmed deletion
+                 oBusyDialog = new sap.m.BusyDialog({
+                  text: "Deleting, please wait...",
+                  title: "Processing"
+              });
+                oBusyDialog.open();
                 that.deleteSelectedItems(aItems);
               } else {
-                // User canceled deletion
-                sap.m.MessageToast.show("Deletion canceled");
+
                 oTable.removeSelections();
+                sap.m.MessageToast.show("Deletion canceled");
+
               }
             }
           }
           );
         });
- 
-      }, // ending fn
- 
- 
- 
+
+      },
+
       deleteSelectedItems: function (aItems) {
- 
+        let slength = aItems.length;
+        let deleteMsg = slength === 1 ? "Record" : "Records"
         aItems.forEach(function (oItem) {
           const oContext = oItem.getBindingContext();
           oContext.delete().then(function () {
-            // Successful deletion
-            MessageToast.show("Record deleted sucessfully");
- 
+            MessageToast.show(`${deleteMsg} deleted sucessfully`);
+            oBusyDialog.close();
+
             console.log("Succesfully Deleted");
+            aSelectedIds = []
           }).catch(function (oError) {
-            // Handle deletion error
             MessageBox.error("Error deleting item: " + oError.message);
+            oBusyDialog.close();
+
           });
         });
 
         let oTable = this.byId("createTypeTable");
         oTable.removeSelections();
+
 
       },
       CurSearch: function(oEvent) {

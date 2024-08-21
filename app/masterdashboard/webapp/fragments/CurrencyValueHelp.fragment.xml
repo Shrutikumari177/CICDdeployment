@@ -14,6 +14,7 @@
         initialFocus="SearchField"
         growing="true"
         growingThreshold="20"
+        noDataText="loading..."
         >
        
                 <columns>

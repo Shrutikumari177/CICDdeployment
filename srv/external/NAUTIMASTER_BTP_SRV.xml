@@ -26,6 +26,61 @@
     <edmx:DataServices m:DataServiceVersion="2.0">
         <Schema Namespace="NAUTI.MASTER_BTP_SRV" xml:lang="en" sap:schema-version="1"
             xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="profileBidMaster" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BidprofileId"/>
+                    <PropertyRef Name="Code"/>
+                </Key>
+                <Property Name="BidprofileId" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="ProfileId" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Datatype" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Datatype" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Tablename" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Table Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MultiChoice" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Multiple Choice" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creadate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bid created date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creatime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bid creat Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creaby" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Created By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changedon" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="change on" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changeat" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="BID CHANGEAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="costProfile" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Costprofid"/>
+                    <PropertyRef Name="Costcode"/>
+                </Key>
+                <Property Name="Costprofid" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="CostProId" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Costcode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Cost.Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cstcodes" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Cost.Code.Des" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creadate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="created Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creatime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="created time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creaby" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Created By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changedby" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="changed By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changedon" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="change on" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changeat" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="change at" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="BidMaster" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BidprofileId"/>
+                    <PropertyRef Name="Bname"/>
+                    <PropertyRef Name="Code"/>
+                </Key>
+                <Property Name="BidprofileId" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="ProfileId" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Datatype" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Datatype" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Tablename" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Table Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MultiChoice" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Multiple Choice" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creadate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Bid created date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creatime" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="Bid creat Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Creaby" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Created By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changedon" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="change on" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Changeat" Type="Edm.Time" Precision="0" sap:unicode="false" sap:label="BID CHANGEAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
             <EntityType Name="BusinessPartner" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Lifnr"/>
@@ -88,20 +143,6 @@
                 </Key>
                 <Property Name="ZfValue" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:updatable="false" sap:filterable="false"/>
                 <Property Name="ZfDesc" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Field Description" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="BidMaster" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Bname"/>
-                    <PropertyRef Name="Code"/>
-                </Key>
-                <Property Name="Bname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Cvalue" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Revaluation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Cunit" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
-                <Property Name="Datatype" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Datatype" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Tablename" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Table Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="MultiChoice" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Multiple Choice" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="GROUPID" sap:content-version="1">
                 <Key>
@@ -201,8 +242,8 @@
                 <Key>
                     <PropertyRef Name="Land1"/>
                 </Key>
-                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Spras" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Language" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Landx50" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Country" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="Currency" sap:content-version="1">
@@ -275,16 +316,21 @@
             </EntityType>
             <EntityType Name="xNAUTIxMASBIDType" sap:label="Bidding Master" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="Bname"/>
+                    <PropertyRef Name="profileId"/>
                     <PropertyRef Name="Code"/>
                 </Key>
-                <Property Name="Bname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User" sap:quickinfo="User Name in User Master Record"/>
+                <Property Name="profileId" Type="Edm.String" Nullable="false" MaxLength="25" sap:display-format="UpperCase" sap:label="ProfileId" sap:quickinfo="Profile id"/>
                 <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
                 <Property Name="Value" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Value"/>
                 <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
                 <Property Name="Cunit" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
                 <Property Name="Datatype" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Datatype" sap:quickinfo="RSM Data type"/>
                 <Property Name="Tablename" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Table Name"/>
+                <Property Name="creaDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="" sap:quickinfo=" created date"/>
+                <Property Name="creaTime" Type="Edm.Time" Precision="0" sap:label="" sap:quickinfo="Bid creat Time"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Created By"/>
+                <Property Name="changedOn" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="" sap:quickinfo="change on"/>
+                <Property Name="changeAt" Type="Edm.Time" Precision="0" sap:label="" sap:quickinfo="BID CHANGEAT"/>
                 <Property Name="Multi_Choice" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Multiple Choice"/>
             </EntityType>
             <EntityType Name="xNAUTIxnewportcdsType" sap:label="post mas new cds" sap:content-version="1">
@@ -521,13 +567,15 @@
                 <End Type="NAUTI.MASTER_BTP_SRV.xNAUTIxUIIDUSRGROUPType" Multiplicity="*" Role="ToRole_assoc_F2CADB88EE0507B82C8BFE1F7B426327"/>
             </Association>
             <EntityContainer Name="NAUTI_MASTER_BTP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="profileBidMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.profileBidMaster" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="costProfileSet" EntityType="NAUTI.MASTER_BTP_SRV.costProfile" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="BidMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.BidMaster" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="BusinessPartnerSet" EntityType="NAUTI.MASTER_BTP_SRV.BusinessPartner" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="MaintainGroupSet" EntityType="NAUTI.MASTER_BTP_SRV.MaintainGroup" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="CountryMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.CountryMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="CostMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.CostMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="EventMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.EventMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="ClassMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.ClassMaster" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="BidMasterSet" EntityType="NAUTI.MASTER_BTP_SRV.BidMaster" sap:pageable="false" sap:content-version="1"/>
                 <EntitySet Name="GROUPIDSet" EntityType="NAUTI.MASTER_BTP_SRV.GROUPID" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
                 <EntitySet Name="GROUPIDUSERSSet" EntityType="NAUTI.MASTER_BTP_SRV.GROUPIDUSERS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
                 <EntitySet Name="RelStrategySet" EntityType="NAUTI.MASTER_BTP_SRV.RelStrategy" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>

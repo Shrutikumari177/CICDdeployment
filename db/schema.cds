@@ -15,6 +15,11 @@ entity getRoute {
     message        : String;
 }
 
+entity biddingStartManual : managed{
+    key Chrnmin : String;
+    biddStartStatus : Boolean;
+}
+
 type BidDetail {
     CodeDesc: String;
     Value: String;
@@ -33,6 +38,12 @@ type Vendors {
 }
 
 entity calculateRankings {
+    Voyno: String;
+    Chrnmin: String;
+    Vendors : array of Vendors;
+}
+
+entity CompareLiveFreight {
     Voyno: String;
     Chrnmin: String;
     Vendors : array of Vendors;

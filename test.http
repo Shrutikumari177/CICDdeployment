@@ -1,3 +1,13 @@
+### Update BiddingStartStatus 
+PUT http://localhost:4004/odata/v4/nauticalservice/biddingStartManual('4000000641')
+Content-Type: application/json
+
+{
+    "Chrnmin" : "4000000631",
+    "biddStartStatus" : false
+}
+
+###
 POST http://localhost:4004/odata/v4/nauticalservice/ControllerLiveBidDetails
 Content-Type: application/json
 
@@ -8,6 +18,7 @@ Content-Type: application/json
     "quotationPrice": "1000.00"
 }
 #####
+GET  http://localhost:4004/odata/v4/nauticalservice/biddingStartManual
 
 GET http://localhost:4004/odata/v4/nauticalservice/quotations?$filter=Chrnmin eq '4000000601'
 
@@ -21,10 +32,12 @@ Content-Type: application/json
       "Status": "Voyage Appr Pend"
      
     }
+###
+
+GET http://localhost:4004/odata/v4/nauticalservice/quotations
 
 
 ###
-
 POST http://localhost:4004/odata/v4/nauticalservice/quotations
 Content-Type: application/json
 
@@ -89,3 +102,10 @@ Content-Type: application/json
     }
   ]
 }
+
+
+###
+GET http://localhost:4004/odata/v4/nauticalservice/CompareLiveFreight?$filter=Chrnmin eq '4000000001'
+
+###
+GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxbidhist_valuehelp

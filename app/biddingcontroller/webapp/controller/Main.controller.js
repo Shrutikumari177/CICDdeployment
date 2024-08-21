@@ -60,12 +60,9 @@ sap.ui.define([
             YetToStart: 0
           };
           getBidData.forEach(function (bid) {
-            // Combine date and time strings into a single date-time string
             const startDateTime = new Date(`${bid.Chrqsdate.split('T')[0]}T${bid.Chrqstime}`);
             const endDateTime = new Date(`${bid.Chrqedate.split('T')[0]}T${bid.Chrqetime}`);
             const currentDateTime = new Date();
-
-            // Compare the date-times and set the Stat field accordingly
             if (currentDateTime >= endDateTime) {
               bid.Stat = "CLOS";
               counts.Closed++;
@@ -112,10 +109,7 @@ sap.ui.define([
       },
 
       toBiddingDetail: function (oEvent) {
-        debugger;
         const oContext = oEvent.getSource().getBindingContext("bidModel");
-
-        // Retrieve properties
         const Voyno = oContext.getProperty("Voyno");
         const Chrnmin = oContext.getProperty("Chrnmin");
         const BidStartDate = oContext.getProperty("Chrqsdate");
@@ -124,8 +118,8 @@ sap.ui.define([
         const BidEndTime = oContext.getProperty("Chrqetime");
         const controllerCurrentBid = oContext.getProperty("Cvalue");
         const Mode = oContext.getProperty("Zmode");
+        const vendorNo = oContext.getProperty("Lifnr");
 
-        // Set properties to navModel
         const navModel = this.getOwnerComponent().getModel("navModel");
         navModel.setProperty("/navigatedVoyageNo", Voyno);
         navModel.setProperty("/navigatedCharterno", Chrnmin);
@@ -135,6 +129,7 @@ sap.ui.define([
         navModel.setProperty("/navigatedBidEndTime", BidEndTime);
         navModel.setProperty("/navigatedControllerCurrBid", controllerCurrentBid);
         navModel.setProperty("/navigatedMode", Mode);
+        navModel.setProperty("/navigatedVendorNo",vendorNo)
 
         // Navigate to the target route
         const oRouter = this.getOwnerComponent().getRouter();

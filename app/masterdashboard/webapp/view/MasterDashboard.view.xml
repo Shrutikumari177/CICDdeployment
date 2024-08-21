@@ -116,12 +116,12 @@
                     </TileContent>
                 </GenericTile>
                 
-                <!-- <GenericTile id="GenGenericTile12" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                <GenericTile id="GenGenericTile12" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
                     header="Business Partner" press="onBusinessPartnerPress">
                     <TileContent >
                     <ImageContent  src="sap-icon://group"></ImageContent>  
                     </TileContent>
-                </GenericTile> -->
+                </GenericTile>
 
                 <!-- <GenericTile id="GenGenericTile7" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
                     header="Route Master" press="onRouterMaster">

@@ -57,6 +57,24 @@
   },
   "sap.ui5": {
     "flexEnabled": true,
+    "config": {
+      "sample": {
+        "files": [
+          "delegate/JSONTableDelegate.js",
+          "delegate/JSONFilterBarDelegate.js",
+          "delegate/JSONValueHelpDelegate.js",
+          "delegate/JSONBaseDelegate.js",
+          "fragments/NameValueHelp.fragment.xml",
+          "fragments/RangeValueHelp.fragment.xml",
+          "model/metadata/JSONPropertyInfo.js",
+          "model/type/TypeMap.js",
+          "model/type/LengthMeter.js",
+          "view/VendorDataSyncing.view.xml",
+          "view/BPMasterDetails.view.xml",
+          "manifest.json"
+        ]
+      }
+    },
     "dependencies": {
       "minUI5Version": "1.122.1",
       "libs": {
@@ -67,13 +85,16 @@
         "sap.ui.comp": {},
         "sap.ui.generic.app": {},
         "sap.ui.table": {},
-        "sap.ushell": {}
+        "sap.ushell": {},
+        "sap.ui.fl": {},
+        "sap.ui.mdc": {}
       }
     },
     "contentDensities": {
       "compact": true,
       "cozy": true
     },
+    "handleValidation": true,
     "models": {
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",

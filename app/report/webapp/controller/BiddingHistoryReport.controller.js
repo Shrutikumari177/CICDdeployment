@@ -34,7 +34,7 @@ sap.ui.define(
                 this.getView().setModel(oModel2, "dataModel2");
                 
                 let oModel4 = this.getOwnerComponent().getModel();
-                let oBindList4 = oModel4.bindList("/xNAUTIxBIDHISREPORT");
+                let oBindList4 = oModel4.bindList("/xNAUTIxnewbidhistoryreport");
                 
                 oBindList4.requestContexts(0, Infinity).then((aContexts) => {
                     aContexts.forEach((oContext) => {

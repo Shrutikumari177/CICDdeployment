@@ -93,7 +93,7 @@
                                     iconVisible="true"
                                     statusText="Active"
                                     subtitle="Bids: {bidtilemodel>/Open}"
-                                    title="Open / Ongoing"
+                                    title="Open / Submitted"
                                     titleMaxLines="30"
                                     press="pressOpen"
                                 />
@@ -170,8 +170,7 @@
 										inset="true"
 										fixedLayout="false"
 										width="auto"
-										items="{charteringRequestModel>/}"
-
+										items="{path:'charteringRequestModel>/',sorter:{path:'Chrnmin',descending:true}}"
 									>
 										<columns>
 											<Column id="_IDGenColumn1">
@@ -180,17 +179,17 @@
 											
 											<Column id="_IDGenColumn2"
 												minScreenWidth="phone"
-												hAlign="Right"
+											
 											>
 												<Label id="_IDGenLabel2" text="RFQ Date"/>
 											</Column>
-											<Column id="_IDGenColumn3" hAlign="Right">
+											<Column id="_IDGenColumn3">
 												<Label id="_IDGenLabel3" text="Bid Start Date"/>
 											</Column>
 											<Column id="_IDGenColumn4">
 												<Label id="_IDGenLabel4" text="Bid Start Time"/>
 											</Column>
-											<Column id="_IDGenColumn5" hAlign="Right">
+											<Column id="_IDGenColumn5">
 												<Label id="_IDGenLabel5" text="Bid End Date"/>
 											</Column>
 											<Column id="_IDGenColumn6">

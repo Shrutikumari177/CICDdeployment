@@ -1,1 +1,15 @@
-/* Enter your custom styles here */
+.vendor_no{
+    font-size: 20px;
+}
+.sapUiSmallMargin {
+    margin: 10px 0;
+}
+.statusText{
+    font-weight: bold;
+}
+.h_text{
+    font-size: 25px;
+}
+.classTable{
+    cursor: pointer;
+}

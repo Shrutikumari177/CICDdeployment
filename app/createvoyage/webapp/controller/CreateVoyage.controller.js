@@ -96,6 +96,7 @@ sap.ui.define(
       handleDateChange: function (oEvent) {
         let oDatePicker = oEvent.getSource();
 
+
         // let sPortDays = oEvent.getSource().getParent().getCells()[7].getValue();
 
         // if( !sPortDays){
@@ -106,22 +107,22 @@ sap.ui.define(
         let sValue = oEvent.getParameter("value");
         let oSelectedDate = new Date(sValue);
         let oMinDate = new Date(); // Today's date
-        let minTimeGap = 7;
+        let minTimeGap = 15;
 
-        // oMinDate.setDate(oMinDate.getDate() + parseInt(sPortDays + minTimeGap, 10));
+        oMinDate.setDate(oMinDate.getDate() + parseInt(minTimeGap, 10));
 
         // Check if the selected date is before today's date
         if (oSelectedDate < oMinDate) {
           // Set ValueState to Error and clear the date value
           oDatePicker.setValueState("Error");
-          oDatePicker.setValueStateText("Select date should be today onwards.");
+          oDatePicker.setValueStateText(`Select Date should be ${minTimeGap} days after Today onwards.`);
           oDatePicker.setDateValue(null);
         } else {
           // Reset ValueState to None if the date is valid
           oDatePicker.setValueState("None");
         }
       },
-   
+
 
       //   var aDatePickers = oView.findAggregatedObjects(true, function(oControl) {
       //       return oControl instanceof sap.m.DatePicker;
@@ -136,7 +137,7 @@ sap.ui.define(
       //       });
       //   });
       // },
-    
+
       getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
 
         let oModel = this.getOwnerComponent().getModel();
@@ -308,7 +309,7 @@ sap.ui.define(
         if (isPortDuplicated !== -1) {
           var that = window.that;
           sap.ui.core.BusyIndicator.hide();
-          MessageBox.warning("Already Selected.");
+          MessageBox.warning("Port Already Selected.");
           return;
         }
 
@@ -339,9 +340,11 @@ sap.ui.define(
         // console.log("json model port data", oJsonModel.getData().portData);
         oJsonModel.refresh();
 
+        // fn for DatePicker to realonly mode 
+
         window.that.attachDatePickerHandlers();
 
-     
+
         var portLng = oJsonModel.getData().portData.length;
         var that = window.that;
 
@@ -401,7 +404,7 @@ sap.ui.define(
           sap.ui.core.BusyIndicator.hide();
 
         }
-      
+
 
         function prepareData(oData, FromPortName, ToPortName) {
 
@@ -452,7 +455,9 @@ sap.ui.define(
           }
         }
       },
-      attachDatePickerHandlers: function() {
+      attachDatePickerHandlers: function () {
+        let uiTable = window.that.byId("idPortTab");
+
         var aDatePickers = window.that.getView().findAggregatedObjects(
           true,
           function (oControl) {
@@ -460,10 +465,10 @@ sap.ui.define(
           }
         );
 
-        aDatePickers.forEach(function(oControl) {
+        aDatePickers.forEach(function (oControl) {
           var $input = oControl.$().find("input");
           $input.prop("readonly", true);
-      });
+        });
       },
 
       getRouteData: function (from, to, optimized) {
@@ -694,7 +699,8 @@ sap.ui.define(
       onCalc: function (oEvent) {
         try {
           let selectedPorts = oJsonModel.getData().portData;
-          let GvSpeed = selectedPorts[0].Speed;
+          console.log("Selected port ", selectedPorts.length);
+          // let GvSpeed = selectedPorts[1].Speed;
 
           let ZCalcNav = [];
           for (let i = 0; i < selectedPorts.length; i++) {
@@ -709,54 +715,149 @@ sap.ui.define(
               MessageBox.error("Please enter Cargo Unit");
               return false;
             }
-            if (!GvSpeed) {
+            // changes  source port speed to be Zero only
+            if (i !== 0 && !selectedPorts[i].Speed) {
               MessageBox.error("Please enter Speed");
               return false;
             }
+            if (i !== 0 && selectedPorts[i].Speed == "0") {
+              MessageBox.error("Destination Port Speed Can't be Zero");
+              return;
+            }
+
             if (!selectedPorts[i].PortDays) {
               MessageBox.error("Please enter PortDays");
               return false;
             }
           }
           if (!selectedPorts[0].DepartureDate) {
-            MessageBox.error("Please select Departure Date and Time");
+            MessageBox.error("Please select Departure Date");
+            return false;
+          }
+          if (!selectedPorts[0].DepartureTime) {
+            MessageBox.error("Please select Departure Time");
             return false;
           }
 
-          ZCalcNav.push({
-            Portc: selectedPorts[0].PortId,
-            Portn: selectedPorts[0].PortName,
-            Pdist: selectedPorts[0].Distance,
-            Medst: "NM",
-            Vspeed: GvSpeed,
-            Ppdays: selectedPorts[0].PortDays,
-            Vetdd: selectedPorts[0].DepartureDateValue,
-            Vetdt: selectedPorts[0].DepartureTime,
-            Vwead: selectedPorts[0].Weather,
-          });
-          for (let i = 1; i < selectedPorts.length; i++) {
-            ZCalcNav.push({
-              Portc: selectedPorts[i].PortId,
-              Portn: selectedPorts[i].PortName,
-              Pdist: selectedPorts[i].Distance,
-              Medst: "NM",
-              Vspeed: GvSpeed,
-              Ppdays: selectedPorts[i].PortDays,
-              Vwead: selectedPorts[i].Weather,
-            });
+          // ZCalcNav.push({
+          //   Portc: selectedPorts[0].PortId,
+          //   Portn: selectedPorts[0].PortName,
+          //   Pdist: selectedPorts[0].Distance,
+          //   Medst: "NM",
+          //   Vspeed: GvSpeed,
+          //   Ppdays: selectedPorts[0].PortDays,
+          //   Vetdd: selectedPorts[0].DepartureDateValue,
+          //   Vetdt: selectedPorts[0].DepartureTime,
+          //   Vwead: selectedPorts[0].Weather,
+          // });
+          // for (let i = 1; i < selectedPorts.length; i++) {
+          //   ZCalcNav.push({
+          //     Portc: selectedPorts[i].PortId,
+          //     Portn: selectedPorts[i].PortName,
+          //     Pdist: selectedPorts[i].Distance,
+          //     Medst: "NM",
+          //     Vspeed: GvSpeed,
+          //     Ppdays: selectedPorts[i].PortDays,
+          //     Vwead: selectedPorts[i].Weather,
+          //   });
+          // }
+          // let oPayload = {
+          //   GvSpeed: GvSpeed,
+          //   ZCalcNav: ZCalcNav,
+          // };
+          // console.log(oPayload);
+          MessageToast.show("Calculating Arrival Date and Time ...", { duration: 1200 });
+
+          for (let i = 0; i < selectedPorts.length; i++) {
+            let dummySelectedPorts = {
+              ArrivalDate: "",
+              ArrivalTime: "",
+              CargoSize: "",
+              CargoUnit: "",
+              DepartureDateValue: "",
+              DepartureTime: "",
+              Distance: "",
+              LegId: "",
+              PortDays: "",
+              PortId: "",
+              PortName: "",
+              SeaDays: "",
+              Speed: "",
+              Weather: ""
+            }
+            dummySelectedPorts.ArrivalDate = selectedPorts[i].ArrivalDate;
+            dummySelectedPorts.ArrivalTime = selectedPorts[i].ArrivalTime;
+            dummySelectedPorts.CargoSize = selectedPorts[i].CargoSize;
+            dummySelectedPorts.CargoUnit = selectedPorts[i].CargoUnit;
+            dummySelectedPorts.DepartureDateValue = selectedPorts[i].DepartureDateValue;
+            dummySelectedPorts.DepartureTime = selectedPorts[i].DepartureTime;
+            dummySelectedPorts.Distance = selectedPorts[i].Distance;
+            dummySelectedPorts.LegId = selectedPorts[i].LegId;
+            dummySelectedPorts.PortDays = selectedPorts[i].PortDays;
+            dummySelectedPorts.PortId = selectedPorts[i].PortId;
+            dummySelectedPorts.PortName = selectedPorts[i].PortName;
+            dummySelectedPorts.SeaDays = selectedPorts[i].SeaDays;
+            dummySelectedPorts.Speed = selectedPorts[i].Speed;
+            dummySelectedPorts.Weather = selectedPorts[i].Weather;
+
+            ZCalcNav.push(dummySelectedPorts);
           }
-          let oPayload = {
-            GvSpeed: GvSpeed,
-            ZCalcNav: ZCalcNav,
-          };
-          console.log(oPayload);
+
 
           const oDataModelV4 = this.getOwnerComponent().getModel();
+          let oBindList1 = oDataModelV4.bindList("/calculateDateAndTime");
+          let data1 = oBindList1.create(
+            {
+              "ZCalcNav": ZCalcNav
+            }
+          ).created().then(context => {
+            console.log(context);
+          });
+
+          oBindList1.attachCreateCompleted((p) => {
+            try {
+              let p1 = p.getParameters();
+              let oContext = p1.context;
+              if (p1.success) {
+                let ZCalcNav = oContext.getObject().ZCalcNav;
+                console.table(ZCalcNav);
+
+                let totalDays = 0;
+                // console.log(ZCalcNav[0].Vetad, ZCalcNav[0].Vetat, ZCalcNav[0].Vetdd, ZCalcNav[0].Vetdt, ZCalcNav[1].Vetad, ZCalcNav[1].Vetat, ZCalcNav[1].Vetdd, ZCalcNav[1].Vetdt);
+
+                ZCalcNav.forEach((data, index) => {
+                  selectedPorts[index].SeaDays = data.SeaDays;
+                  selectedPorts[index].Speed = data.Speed;
+                  selectedPorts[index].Weather = data.Weather;
+                  selectedPorts[index].ArrivalDate = formatter.dateStringToDateObj(data.ArrivalDate);
+                  selectedPorts[index].ArrivalTime = formatter.timeStringToDateObj(data.ArrivalTime);
+                  selectedPorts[index].DepartureDate = formatter.dateStringToDateObj(data.DepartureDateValue);
+                  selectedPorts[index].DepartureTime = data.DepartureTime;
+
+                  totalDays += Number(selectedPorts[index].SeaDays) + Number(selectedPorts[index].PortDays);
+                  oJsonModel.refresh();
+                });
+
+                that.byId("daysInput").setValue(totalDays.toFixed(1));
+              } else {
+                throw new Error(p1.context.oModel.mMessages[""][0].message);
+              }
+            } catch (error) {
+              MessageBox.error(error.message);
+              console.error(error.message);
+            } finally {
+              // bustDialog1.close();
+            }
+          });
+
+
+          return
           let oBindList = oDataModelV4.bindList("/ZCalculateSet", true);
           let bustDialog1 = new sap.m.BusyDialog({
             title: "Fetching data",
           });
-          bustDialog1.setText("Calculating arrival date and time ..");
+
+          bustDialog1.setText("Calculating Arrival Date and Time ..");
           bustDialog1.open();
 
           oBindList.create(oPayload, true).created(x => {
@@ -802,6 +903,24 @@ sap.ui.define(
           console.error(error);
         }
       },
+      onVoyageNameliveChange : function (oEvent) {
+        let oSource = oEvent.getSource();
+        let sValue = oSource.getValue().trim();
+        if ( sValue.length > 40) {
+          let stopValue = sValue.substring(0, 40 );
+          oSource.setValue( stopValue );
+          oSource.setValueState("Error");
+          oSource.setValueStateText("Maximum length is 40 Characters");
+          
+        }
+        // Check if the value doesn't match the decimal pattern
+        else  {
+          oSource.setValueState("None");
+          oSource.setValueStateText("");
+          
+        }
+
+      },
 
 
       onVoyageCreate: function (oEvent) {
@@ -813,7 +932,8 @@ sap.ui.define(
         let legOneCargoSize = selectedPorts[0].CargoSize;
         let totalCargoSize = 0;
 
-        if (!headerData[0].voynm) {
+        if (!headerData[0].voynm.trim()) {
+          
           MessageBox.error("Please enter Voyage Name.");
           return false;
         }
@@ -850,8 +970,12 @@ sap.ui.define(
             MessageBox.error("Please enter Cargo Unit");
             return false;
           }
-          if (!GvSpeed) {
+          if (!selectedPorts[i].Speed) {
             MessageBox.error("Please enter Speed ");
+            return false;
+          }
+          if( !selectedPorts[i].PortDays){
+            MessageBox.error("Please enter Port Days");
             return false;
           }
         }
@@ -887,7 +1011,7 @@ sap.ui.define(
           }
         }
         let oPayload = {
-          Voynm: headerData[0].voynm,
+          Voynm: headerData[0].voynm.trim().replace(/\s+/g, ' '),
           Voyty: headerData[0].voyty,
           Carty: headerData[0].carty,
           Curr: headerData[0].curty,
@@ -908,9 +1032,8 @@ sap.ui.define(
         }
         console.log("payload for create:", oPayload);
 
-
-
         // oData V4 model Create method
+        sap.m.MessageToast.show("Creating Voyage ... ");
 
         const oDataModelV4 = this.getOwnerComponent().getModel();
         let oRouter = this.getOwnerComponent().getRouter();
@@ -926,12 +1049,12 @@ sap.ui.define(
           if (p1.success) {
             // console.log(oData);
 
-            let statusBindList = oDataModelV4.bindList("/newallstatusesSet");
-            statusBindList.create({
-              "Voyage" :  oData.Voyno,
-              "Status" : "Voyage Created"
+            // let statusBindList = oDataModelV4.bindList("/newallstatusesSet");
+            // statusBindList.create({
+            //   "Voyage": oData.Voyno,
+            //   "Status": "Voyage Created"
 
-            }, true);
+            // }, true);
             MessageBox.success(`Successfully created voyage - ${oData.Voyno}`, {
               title: "Voyage Created",
               onClose: function () {
@@ -946,7 +1069,7 @@ sap.ui.define(
             });
 
           } else {
-            sap.m.MessageBox.error("Error occurred while creating voyage");
+            sap.m.MessageBox.error("Error occurred in creating Voyage");
             console.log("error messages : ", oContext.getMessages());
           }
         });
@@ -1008,12 +1131,59 @@ sap.ui.define(
 
 
       // TODO
-      // FIXME: Issue log 71
+      
+      validateInputValue: function (oEvent) {
+        var oInput = oEvent.getSource();
+        var sValue = oInput.getValue();
+
+        // Remove leading zeros, but keep the number as "0" if the input was "0"
+        sValue = sValue.replace(/^0+(?!\.|$)/, '');
+        // Set the modified value back to the input field
+        oInput.setValue(sValue);
+
+        // Regular expression to allow positive decimal numbers with up to 3 digits after the decimal
+      
+        var oRegex = /^[0-9]\d*(\.\d{0,3})?$/;
+
+        // Check if the value is negative
+        if (parseFloat(sValue) < 0) {
+          oInput.setValueState("Error");
+          oInput.setValueStateText("Negative values are not allowed.");
+        }
+        // Check if the value doesn't match the decimal pattern
+        else if (!oRegex.test(sValue)) {
+          oInput.setValueState("Error");
+          oInput.setValueStateText("Please enter a valid positve number with up to 3 decimal places.");
+        }
+        // If the value is valid, clear any error state
+        else {
+          oInput.setValueState("None");
+          oInput.setValueStateText("");
+        }
+      },
       onPortTabCargoSizeChange: function (oEvent) {
         let oSource = oEvent.getSource();
         let CargoSizePathInModel = oSource.getBindingContext("oJsonModel").getPath();
         let path = oSource.getBindingContext("oJsonModel").getPath();
         let value = oEvent.getParameter("value");
+        // Regular expression to allow positive decimal numbers with up to 3 digits after the decimal
+        var oRegex = /^\d*\.?\d{0,3}$/;
+        if (parseFloat(value) < 0) {
+          oSource.setValueState("Error");
+          oSource.setValueStateText("Negative values are not allowed.");
+          return
+        }
+        // Check if the value doesn't match the decimal pattern
+        else if (!oRegex.test(value)) {
+          oSource.setValueState("Error");
+          oSource.setValueStateText("Please enter a valid number with up to 3 decimal places.");
+          return
+        }
+        // If the value is valid, clear any error state
+        else {
+          oSource.setValueState("None");
+          oSource.setValueStateText("");
+        }
         // removing "," from "12,000.00"
         let formatedValue = value.replace(/\,/g, '');
         oJsonModel.setProperty(path + "/CargoSize", formatedValue);
@@ -1021,40 +1191,25 @@ sap.ui.define(
           oJsonModel.getData().portData[1].CargoSize = formatedValue;
           oJsonModel.refresh();
         }
-        // if (CargoSizePathInModel !== "/portData/0") {
-        //   let legOneCargoSize = oEvent
-        //     .getSource()
-        //     .getBindingContext("oJsonModel")
-        //     .getModel()
-        //     .getProperty("/portData/0/CargoSize");
-        //   // let inputCargoSize = oEvent
-        //   //   .getSource()
-        //   //   .getBindingContext("oJsonModel")
-        //   //   .getModel()
-        //   //   .getProperty(`${CargoSizePathInModel}/CargoSize`);
-        //   let totalCargoSize = oJsonModel.getData().portData.reduce((acc, item, index) => {
-        //     return (acc = +acc + (index > 0 ? +item.CargoSize : 0));
-        //   }, 0);
-        //   if (+totalCargoSize > +legOneCargoSize) {
-        //     oSource.setValueState(sap.ui.core.ValueState.Error);
-        //     oSource.setValueStateText("The sum of Leg 2 (and onwards) Cargo Size must be less than Leg One Cargo Size");
-        //     this.byId("CNG").setEnabled(false);
-        //     this.byId("freighSimButton").setEnabled(false);
-        //     this.byId("SUB").setEnabled(false);
-        //   } else {
-        //     oSource.setValueState(sap.ui.core.ValueState.Success);
-        //     oSource.setValueStateText(null);
-        //     this.byId("CNG").setEnabled(true);
-        //     this.byId("freighSimButton").setEnabled(true);
-        //     this.byId("SUB").setEnabled(true);
-        //   }
-        // }
+
       },
 
+
       onSpeedInputChange: function (oEvent) {
-        oJsonModel.getData().portData[0].Speed = oEvent.getParameter("value");
+
+
+        var oData = oJsonModel.getData();
+        var newSpeed = oEvent.getParameter("value");
+
+        // Loop through portData and update the Speed, except for the first port
+        for (var i = 1; i < oData.portData.length; i++) {
+          oData.portData[i].Speed = newSpeed;
+        }
+
+        // Ensure the first port's speed is fixed at 0
+        oData.portData[0].Speed = "0";
+
         oJsonModel.refresh();
-        // console.log(oJsonModel.getData());
       },
 
       onVoyTyHelpRequest: function (oEvent) {
@@ -1274,7 +1429,7 @@ sap.ui.define(
               template: "sCurrencyType",
             },
             {
-              label: "Description",
+              label: "Country",
               template: "sCurrencyTypeText",
             },
           ],

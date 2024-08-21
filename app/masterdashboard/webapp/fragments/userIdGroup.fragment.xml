@@ -6,7 +6,7 @@
         id="mySelect"
         noDataText="Loading..."
         title="Select User Group"
-       search="onMaintainUserSearch"
+        search="onMaintainUserSearch"
         confirm="onZgroupClose"
         cancel="onZgroupClose"
          initialFocus="SearchField"

@@ -1,0 +1,89 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
+    xmlns:l="sap.ui.layout">
+    <Dialog id="_IDDialog"
+      title="Business Partner Details"
+       class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%" >
+
+        <Panel>
+            <VBox class="sapUiSmallMargin">
+                
+                <FlexBox class="flex" wrap="Wrap" alignItems="Start">
+                    <!-- First Column Group -->
+                    <VBox class="sapUiSmallMarginEnd sapUiLargeMarginBottom">
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Business Partner:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/BusinessPartner}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Country: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Country}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Postal Code: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/PostalCode}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="City Name:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/CityName}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Phone Number 1: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/PhoneNumber1}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label id="_IDGenLabel14" class="labelStyle" text="Erdat: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Erdat}" editable="false" />
+                        </FlexBox>
+                    </VBox>
+        
+                    <!-- Second Column Group -->
+                    <VBox>
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Regio: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Regio}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Spras: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Spras}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Telf1: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf1}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Telf2: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf2}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Telfx: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telfx}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label id="_IDGenLabel13" class="labelStyle" text="SmtpAddr: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/SmtpAddr}" editable="false" />
+                        </FlexBox>
+                    </VBox>
+                </FlexBox>
+            </VBox>
+        </Panel>
+
+        <footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar2">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                <Button id="_IDGenButto" text="Close" press="oncancell" />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

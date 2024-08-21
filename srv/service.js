@@ -12,7 +12,11 @@ module.exports = async (srv) => {
     const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV");
     srv.on('READ', 'xNAUTIxuserEmail', req => NAUTIUSERMAILID_SRV.run(req.query));
     const NAUTICONTRACTAWARD_SRV = await cds.connect.to("NAUTICONTRACTAWARD_SRV");
-    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query));
+    srv.on('READ', 'xNAUTIxcomparelivereport', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('READ', 'contaward_tableSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+
+
 
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
@@ -21,11 +25,19 @@ module.exports = async (srv) => {
     const NAUTIZVOY_VALUEHELP_CDS = await cds.connect.to("NAUTIZVOY_VALUEHELP_CDS");
     const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV");
     const NAUTICHASTATUS_SRV = await cds.connect.to("NAUTICHASTATUS_SRV");
+    const NAUTINAUTICAL_VALUEHELP_SRV = await cds.connect.to("NAUTINAUTICAL_VALUEHELP_SRV"); 
+    srv.on('READ', 'xNAUTIxbidhist_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxbidprofile_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
 
+    
+    
     const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
     const NAUTICOMP_QUOT_SRV = await cds.connect.to("NAUTICOMP_QUOT_SRV");
-
+    srv.on('READ', 'xNAUTIxbidhist_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
+    
     const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV");
+    srv.on('READ', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('CREATE', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
     srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('READ', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxallstatuses', req => NAUTIVOYSTATUS_SRV.run(req.query));
@@ -41,6 +53,9 @@ module.exports = async (srv) => {
 
     const NAUTILIVEBID_CONT_SRV = await cds.connect.to("NAUTILIVEBID_CONT_SRV");
     srv.on('READ', 'livecontrollerfetchSet', req => NAUTILIVEBID_CONT_SRV.run(req.query));
+    srv.on('READ', 'contItemSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
+    srv.on('CREATE', 'contheaderSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
+    srv.on('READ', 'contheaderSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
 
     const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
     srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query));
@@ -65,6 +80,9 @@ module.exports = async (srv) => {
 
     const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
     srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
+    srv.on('READ', 'xNAUTIxnewvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
+
+
 
 
     srv.on('READ', 'quotations', async function (req) {
@@ -189,6 +207,248 @@ module.exports = async (srv) => {
     //         req.error(500, `Error creating VenodrLiveBidDetails: ${error.message}`);
     //     }
     // });
+
+
+    srv.on('READ', 'CompareLiveFreight', async (req) => {
+        try {
+            console.log("Triggered....", req.data);
+            console.log("Filter:", req._queryOptions.$filter);
+
+            let Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+
+            const charminData = await NAUTICONTRACTAWARD_SRV.run(SELECT.from('xNAUTIxcomparelivereport').where({
+                Chrnmin
+            }));
+            console.log("charminData ", charminData);
+            if (!charminData || charminData.length === 0) {
+                console.error(`No data found for Chrnmin: ${Chrnmin}`);
+                return [];
+            }
+
+            const Voyno = charminData[0].Voyno;
+            if (!Voyno) {
+                console.error(`No Voyno found for Chrnmin: ${Chrnmin}`);
+                return [];
+            }
+
+            const voyageData = await NAUTICOMP_QUOT_SRV.run(SELECT.from('xNAUTIxitemBid').where({
+                Voyno
+            }));
+            if (!voyageData || voyageData.length === 0) {
+                console.error(`No voyage data found for Voyno: ${Voyno}`);
+                return [];
+            }
+            console.log("voyageData", voyageData);
+            const rankedVendors = calculateAndRankAward(voyageData, charminData);
+            return rankedVendors;
+        } catch (error) {
+            console.error("Error processing request:", error);
+            return [];
+        }
+    });
+
+function calculateAndRankAward(voyageData, charminData) {
+
+        const vendorScores = calculateScoresAward(voyageData, charminData);
+
+        const rankedVendors = rankVendorsAward(vendorScores, charminData);
+
+        const rankedWithCommercial = calculateCommercialRankAward(rankedVendors);
+ 
+        const groupedRankedVendors = groupedByVoynoAndChrnminAward(rankedWithCommercial);
+ 
+        return groupedRankedVendors;
+
+    }
+ 
+    function calculateScoresAward(voyageData, charminData) {
+
+        const vendorScores = {};
+ 
+        charminData.forEach(vendor => {
+
+            if (!vendorScores[vendor.Lifnr]) {
+
+                vendorScores[vendor.Lifnr] = {
+
+                    Voyno: vendor.Voyno,
+
+                    Chrnmin: vendor.Chrnmin,
+
+                    score: 0,
+
+                    eligible: "Yes",
+
+                    Cvalue: vendor.Cvalue,
+
+                    bidDetails: []
+
+                };
+
+            }
+ 
+            const expected = voyageData.find(v => v.Zcode === vendor.Zcode && v.Voyno === vendor.Voyno);
+
+            if (expected) {
+
+                let fScore;
+
+                if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== vendor.Value) {
+
+                    vendorScores[vendor.Lifnr].eligible = "No";
+
+                    fScore = 0;
+
+                } else {
+
+                    const score = expected.Value === vendor.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
+
+                    vendorScores[vendor.Lifnr].score += score;
+
+                    fScore = score;
+
+                }
+
+                vendorScores[vendor.Lifnr].bidDetails.push({
+
+                    CodeDesc: expected.CodeDesc,
+
+                    Value: vendor.Value,
+
+                    Cvalue: vendor.Cvalue,
+
+                    fScore: fScore
+
+                });
+
+            }
+
+        });
+ 
+        return vendorScores;
+
+    }
+ 
+    function rankVendorsAward(vendorScores, charminData) {
+
+        const rankedVendors = Object.keys(vendorScores)
+
+            .map(vendor => ({
+
+                vendorId: vendor,
+
+                Voyno: vendorScores[vendor].Voyno,
+
+                Chrnmin: vendorScores[vendor].Chrnmin,
+
+                score: vendorScores[vendor].score,
+
+                eligible: vendorScores[vendor].eligible,
+
+                Cvalue: vendorScores[vendor].Cvalue,
+
+                bidDetails: vendorScores[vendor].bidDetails
+
+            }))
+
+            .sort((a, b) => b.score - a.score);
+ 
+        let rankCounter = {};
+
+        rankedVendors.forEach(vendor => {
+
+            const key = `${vendor.Voyno}-${vendor.Chrnmin}`;
+
+            if (!rankCounter[key]) {
+
+                rankCounter[key] = 1;
+
+            }
+
+            vendor.Trank = `T${rankCounter[key]++}`;
+
+        });
+ 
+        return rankedVendors;
+
+    }
+ 
+    function calculateCommercialRankAward(rankedVendors) {
+
+        const groupedByChrnmin = rankedVendors.reduce((acc, vendor) => {
+
+            if (!acc[vendor.Chrnmin]) {
+
+                acc[vendor.Chrnmin] = [];
+
+            }
+
+            acc[vendor.Chrnmin].push(vendor);
+
+            return acc;
+
+        }, {});
+ 
+        Object.keys(groupedByChrnmin).forEach(key => {
+
+            groupedByChrnmin[key].sort((a, b) => a.Cvalue - b.Cvalue);
+ 
+            groupedByChrnmin[key].forEach((vendor, index) => {
+
+                vendor.Crank = `C${index + 1}`;
+
+            });
+
+        });
+ 
+        return rankedVendors;
+
+    }
+ 
+    function groupedByVoynoAndChrnminAward(rankedVendors) {
+
+        const grouped = {};
+ 
+        rankedVendors.forEach(vendor => {
+
+            const key = `${vendor.Voyno}-${vendor.Chrnmin}`;
+
+            if (!grouped[key]) {
+
+                grouped[key] = {
+
+                    Voyno: vendor.Voyno,
+
+                    Chrnmin: vendor.Chrnmin,
+
+                    Vendors: []
+
+                };
+
+            }
+
+            grouped[key].Vendors.push({
+
+                vendorId: vendor.vendorId,
+
+                score: vendor.score,
+
+                eligible: vendor.eligible,
+
+                Trank: vendor.Trank,
+
+                Crank: vendor.Crank,
+
+                bidDetails: vendor.bidDetails
+
+            });
+
+        });
+ 
+        return Object.values(grouped);
+
+    };
 
 
     srv.on('READ', 'calculateRankings', async (req) => {
@@ -359,6 +619,20 @@ module.exports = async (srv) => {
         return Object.values(grouped);
     }
 
+    srv.on('CREATE', 'biddingStartManual', async (req) => {
+        try {
+            console.log("CREATE Event Triggered....", req.data);
+
+            const { Chrnmin, biddStartStatus } = req.data;
+            if (biddStartStatus) {
+                console.log(`Bidding has been started manually for Chrnmin: ${Chrnmin}`);
+            }
+            return req.data;
+        } catch (error) {
+            console.error("Error in CREATE event:", error);
+            req.error(500, "An error occurred while processing the request");
+        }
+    });
 
 
     srv.on('CREATE', "sendEmail", async (req) => {
@@ -531,8 +805,8 @@ module.exports = async (srv) => {
         'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet', 'xNAUTIxcury_count', 'BusinessPartnerSet',
         'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet', 'xNAUTIxportmascds', 'xNAUTIxSAPUSERS',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
-        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',
-        'xNAUTIxSAPUSERS', 'xNAUTIxcury_count', 'xNAUTIxuseridassociation', 'xNAUTIxUIIDUSRGROUP'
+        'PortmasterSet', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',
+        'xNAUTIxSAPUSERS', 'xNAUTIxcury_count', 'xNAUTIxuseridassociation', 'xNAUTIxUIIDUSRGROUP','xNAUTIxMASBID','costProfileSet'
     ]);
 
     // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
@@ -567,7 +841,8 @@ module.exports = async (srv) => {
         'xNAUTIxBIDHISREPORT',
         'xNAUTIxbidhist_valuehelp',
         'xNAUTIxsubmitquafetch',
-        'xNAUTIxZSUBMITQUOUTFETCH'
+        'xNAUTIxZSUBMITQUOUTFETCH',
+        'xNAUTIxnewbidhistoryreport'
     ]);
 };
 

@@ -20,6 +20,8 @@ sap.ui.define(
     let ZgroupId;
     let mydata = [];
     let filteredUsers = [];
+    let oBusyDialog;
+
 
     let oView;
 
@@ -791,14 +793,16 @@ sap.ui.define(
       },
 
       onDeletePress: function () {
+
         let oTable = this.byId("createTypeTable");
         let aItems = oTable.getSelectedItems();
         if (!aItems.length) {
-          MessageToast.show("Please Select  Items ");
+
+          MessageToast.show("Please Select at least one row ");
           return;
         }
 
-        const that = this;
+        const that = this; 
         sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
           MessageBox.confirm(
             "Are you sure ,you want  to delete ?", {
@@ -806,15 +810,23 @@ sap.ui.define(
             title: "Confirm ",
             onClose: function (oAction) {
               if (oAction === MessageBox.Action.OK) {
+                 oBusyDialog = new sap.m.BusyDialog({
+                  text: "Deleting, please wait...",
+                  title: "Processing"
+              });
+                oBusyDialog.open();
                 that.deleteSelectedItems(aItems);
               } else {
+
                 oTable.removeSelections();
                 sap.m.MessageToast.show("Deletion canceled");
+
               }
             }
           }
           );
         });
+
       },
 
       deleteSelectedItems: function (aItems) {
@@ -824,13 +836,17 @@ sap.ui.define(
           const oContext = oItem.getBindingContext();
           oContext.delete().then(function () {
             MessageToast.show(`${deleteMsg} deleted sucessfully`);
+            oBusyDialog.close();
 
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
             MessageBox.error("Error deleting item: " + oError.message);
+            oBusyDialog.close();
+
           });
         });
+
         let oTable = this.byId("createTypeTable");
         oTable.removeSelections();
 

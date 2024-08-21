@@ -34,7 +34,7 @@
                         />
                         <Input
                             class="inputStyle"
-                            value="{biddingHisReport1>/0/createdBy}"
+                            value="{biddingHisReport1>/0/Uname}"
                             editable="false"
                         />
                     </FlexBox>
@@ -97,7 +97,7 @@
                         />
                         <Input
                             class="inputStyle"
-                            value="{biddingHisReport1>/0/Voyty}"
+                            value="{biddingHisReport1>/0/voyagrType}"
                             editable="false"
                         />
                     </FlexBox>
@@ -110,7 +110,7 @@
                         />
                         <Input
                             class="inputStyle"
-                            value="{biddingHisReport1>/0/Carty}"
+                            value="{biddingHisReport1>/0/cargoType}"
                             editable="false"
                         />
                     </FlexBox>
@@ -122,7 +122,7 @@
                         />
                         <Input
                             class="inputStyle"
-                            value="{biddingHisReport1>/0/Voynm}"
+                            value="{biddingHisReport1>/0/voyageName}"
                             editable="false"
                         />
                     </FlexBox>

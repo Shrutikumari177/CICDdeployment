@@ -38,12 +38,17 @@ sap.ui.define(
         let userEmail;
         var bidData = [];
         var voyageStatus;
+        var selectedProfile;
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
             formatter: formatter,
             onInit: async function () {
 
                 await this.getLoggedInUserInfo();
+                this._rowCount = 0;
+                this._uploadedFiles = [];
+                this._aFileUploaders = [];
+
 
                 bidPayload = [];
                 let model = this.getOwnerComponent().getModel();
@@ -102,6 +107,35 @@ sap.ui.define(
             },
 
             onPortDaysChange: function (oEvent) {
+                let oInput = oEvent.getSource();
+                let sValue = oInput.getValue();
+
+                // Remove leading zeros, but keep the number as "0" if the input was "0"
+                sValue = sValue.replace(/^0+(?!\.|$)/, '');
+                // Set the modified value back to the input field
+                oInput.setValue(sValue);
+
+                // Regular expression to allow positive decimal numbers with up to 3 digits after the decimal
+
+                var oRegex = /^[0-9]\d*(\.\d{0,3})?$/;
+
+                // Check if the value is negative
+                if (parseFloat(sValue) < 0) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Negative values are not allowed.");
+                    return;
+                }
+                // Check if the value doesn't match the decimal pattern
+                else if (!oRegex.test(sValue)) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Please enter a valid positve number with up to 3 decimal places.");
+                    return;
+                }
+                // If the value is valid, clear any error state
+                else {
+                    oInput.setValueState("None");
+                    oInput.setValueStateText("");
+                }
                 this.debouncedOnPortDaysChange(oEvent);
             },
 
@@ -115,14 +149,14 @@ sap.ui.define(
                 });
             },
 
-            _fetchData:  function (oValue) {
+            _fetchData: function (oValue) {
                 return new Promise(async (resolve, reject) => {
                     voyItemModel.refresh();
                     console.log("on port days change ", voyItemModel.getData())
 
                     // CALLING OnCalc FUNCTION FOR POSTING DETAILS AND GETTING ARRIVAL DATE AND ARRIVAL TIME
-                     await this.onCalc();
-                 
+                    await this.onCalc();
+
                     resolve();
                 });
             },
@@ -156,7 +190,7 @@ sap.ui.define(
 
                     let templateData = await that._getBidTemplate(oModel, "technical");
 
-                    bidData =  JSON.parse(JSON.stringify(data));
+                    bidData = JSON.parse(JSON.stringify(data));
 
                     bidPayload = [...data];
 
@@ -175,7 +209,7 @@ sap.ui.define(
                     }
                 }
             },
-          
+
             getBidDetails1: async function (VoyageNo) {
                 let that = this;
                 if (!that._busyDialog) {
@@ -203,7 +237,7 @@ sap.ui.define(
                     console.table(that.getView().getModel("bidItemModel").getData());
                     let templateData = await that._getBidTemplate(oModel, "technical");
                     bidPayload = [...data];
-                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable")); 
+                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable"));
                 } catch (error) {
                     console.error("Error loading bid details:", error);
                 } finally {
@@ -212,32 +246,32 @@ sap.ui.define(
                         that._busyDialog = null;
                     }
                 }
-            },  
-            getVoyageStatus : async  function (myVOYNO){
+            },
+            getVoyageStatus: async function (myVOYNO) {
                 try {
                     let oModel = this.getOwnerComponent().getModel();
                     let oData = await helperFunctions.readEntity(oModel, "xNAUTIxallstatuses", undefined, undefined, undefined, undefined);
-                    if( oData.length){
-                        let filterValue = oData.filter( x => x.Voyage == myVOYNO);
+                    if (oData.length) {
+                        let filterValue = oData.filter(x => x.Voyage == myVOYNO);
 
-                        if( filterValue.length){
+                        if (filterValue.length) {
 
                             voyageStatus = filterValue[0].Status;
                             let oStatusField = this.byId('Input6');
                             oStatusField.setValue(voyageStatus);
-                        }else {
+                        } else {
                             sap.m.MessageBox.error("Voyage Status not Found")
                         }
                     }
-                    
+
                 } catch (error) {
                     MessageBox.error(error.message)
-                    
-                }
-              
 
-             },
-          
+                }
+
+
+            },
+
             onObjectMatched: async function (oEvent) {
                 let that = this;
                 that._BusyDialog = new sap.m.BusyDialog();
@@ -402,12 +436,29 @@ sap.ui.define(
                 });
             },
 
+            onProfileChange: async function (oEvent) {
+                let oSource = oEvent.getSource();
+                selectedProfile = oSource._getSelectedItemText();
+                console.log("profile selected : ", selectedProfile);
+                if( selectedProfile !== ""){
+
+                    await this._initBidTemplate();
+                }
+
+
+            },
+
             _getBidTemplate: function (oModel, detailType) {
                 let index = "Not Found";
                 return new Promise(async (resolve, reject) => {
                     try {
 
-                        let oData = await helperFunctions.readEntity(oModel, "MasBidTemplateSet", undefined, undefined, undefined, undefined);
+                        selectedProfile = this.byId('_selectProfileId')._getSelectedItemText();
+                        let aFilter = new sap.ui.model.Filter('profileId', sap.ui.model.FilterOperator.Contains, selectedProfile);
+
+                        let oData = await helperFunctions.readEntity(oModel, "xNAUTIxMASBID", undefined, undefined, aFilter);
+
+                        // let oData = await helperFunctions.readEntity(oModel, "MasBidTemplateSet", undefined, undefined, undefined, undefined);
                         console.log("MasBidTemplate", oData);
                         oData.sort((a, b) => {
                             if (a.Datatype.toLocaleLowerCase() < b.Datatype.toLocaleLowerCase()) {
@@ -521,7 +572,7 @@ sap.ui.define(
                     let filterItems = bidPayload.filter(item => item.CodeDesc === el.Value);
                     let resultData = this.getInputData(filterItems);
                     let isEditable = resultData ? true : false;
-                    oCells.push(new sap.m.CheckBox({ 
+                    oCells.push(new sap.m.CheckBox({
                         select: this.toggleCheckbox.bind(this),
                         selected: isEditable,
                         // editable: !isEditable
@@ -532,9 +583,9 @@ sap.ui.define(
                             valueHelpRequest: function (oEvent) {
                                 that._showValueHelpDialogMaster(oEvent, el.Datatype, el.Tablename, el.Value, el.Code);
                             },
-                            editable: isEditable, 
+                            editable: isEditable,
                             valueHelpOnly: true,
-                            value: resultData 
+                            value: resultData
                         })
                     );
                     // Add the Button
@@ -626,9 +677,12 @@ sap.ui.define(
 
             },
             _onHelpTableRequest: async function (oEvent, description) {
+                let _BusyDialogTable = new sap.m.BusyDialog({});
+                _BusyDialogTable.open()
                 let oView = this.getView();
                 let oSource = oEvent.getSource();
                 oSource.setBusy(true);
+
                 // let sBidTemplateDetail = oSource.getParent().getAggregation("cells")[0].getText();  // replaced by Description parameter
                 let sBidTemplateDetail = description
                 let oTemplateData = oView.getModel("bidtemplate").getData();
@@ -636,6 +690,7 @@ sap.ui.define(
                 let sBidHelpTableName = sBidHelpTableData.Tablename;
                 let sBidHelpTableTitle = sBidHelpTableData.Value;
                 let oHelpTableData = await this._getHelpTableData(sBidHelpTableName);
+
                 if (Array.isArray(oHelpTableData && oHelpTableData.data)) {
                     // console.table(oHelpTableData.data);
                     this._showHelpTableDialog(oSource, oHelpTableData, sBidHelpTableTitle);
@@ -643,6 +698,7 @@ sap.ui.define(
                     console.log({ ErrorResponse: oHelpTableData });
                 }
                 oSource.setBusy(false);
+                _BusyDialogTable.close();
             },
             _getHelpTableData: async function (sTable) {
 
@@ -667,8 +723,8 @@ sap.ui.define(
                             distinctSet.add(oData.name);
                         }
                     });
-                    console.table(tempData);
-                    console.log(distinctSet);
+                    // console.table(tempData);
+                    // console.log(distinctSet);
 
                     let distinctArray = Array.from(distinctSet);
 
@@ -980,8 +1036,8 @@ sap.ui.define(
                         sap.m.MessageBox.error("Please fill the Value field");
                         return;
                     }
-                    
-                    
+
+
                     if (entry.Good === "" && entry.Mand === "" && entry.Must === "") {
                         sap.m.MessageBox.error("Please fill at least one of the Good, Mand, or Must fields");
                         return;
@@ -990,7 +1046,7 @@ sap.ui.define(
                         sap.m.MessageBox.error("Please fill the Zmin field");
                         return;
                     }
-                    
+
                     if (entry.Zmax == "") {
                         sap.m.MessageBox.error("Please fill the Zmax field");
                         return;
@@ -1016,14 +1072,14 @@ sap.ui.define(
                     row.getCells()[3].setGroupName(groupName);
                 }
             },
-         
+
             formatZminEditable: function (sGood, sMand, sMust) {
                 return sGood === "X";
             },
             formatZmaxEditable: function (sGood, sMand, sMust) {
                 return sGood === "X" || sMand === "X";
             },
-            
+
             getInputData: function (hintData) {
                 var firstMandValue = null;
                 var firstGoodValue = null;
@@ -1144,7 +1200,27 @@ sap.ui.define(
                                                 formatter: that.formatRadioButtonSelection
                                             },
                                             select: function (oEvent) {
-                                                // Handle radio button selection
+                                                let dialog = oEvent.getSource().getParent().getParent().getParent();
+                                                // Retrieve the model and data
+                                                let tempModel = oEvent.getSource().getModel("tempModel");
+                                                let tempData = tempModel.getData();
+                                                let currentContext = oEvent.getSource().getBindingContext("tempModel");
+                                                let currentPath = currentContext.getPath();
+
+                                                // Check if there are any other entries in the model
+                                                let otherEntriesExist = tempData.some(function (entry) {
+                                                    return entry !== tempData[currentPath.slice(currentPath.lastIndexOf('/') + 1)];
+                                                });
+
+                                                if (otherEntriesExist) {
+                                                    sap.m.MessageBox.error("Only one Entry can be Mandatory.");
+                                                    // Reset the radio button selection
+                                                    oEvent.getSource().setSelected(false);
+
+                                                    return;
+                                                }
+
+                                                // Handle radio button selection if no other entries exist
                                                 let value = oEvent.getParameter("selected");
                                                 if (value) {
                                                     let context = oEvent.getSource().getBindingContext("tempModel");
@@ -1153,6 +1229,15 @@ sap.ui.define(
                                                     context.getModel().setProperty(context.getPath() + "/Must", "");
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setValue("").setEditable(true);
+
+                                                    // Disable buttons in the dialog at content[1] and content[2]
+
+                                                    dialog.getContent()[1].setEnabled(false);
+                                                    dialog.getContent()[2].setEnabled(false);
+                                                } else {
+                                                    dialog.getContent()[1].setEnabled(true);
+                                                    dialog.getContent()[2].setEnabled(true);
+
                                                 }
                                             }
                                         }),
@@ -1206,17 +1291,30 @@ sap.ui.define(
                         }).addStyleClass("sapUiTinyMarginTop"),
                         new sap.m.Button({
                             text: "Add Row",
-                            icon:"sap-icon://sys-add",
+                            icon: "sap-icon://sys-add",
                             type: "Success",
                             press: function (oEvent) {
                                 that.onAddNewBid(oEvent, Code, description, undefined) // adding 4th parameter for make fn reusable
                             }
+                            ,
+                            enabled: {
+                                path: 'tempModel>/',
+                                formatter: function (aItems) {
+                                    return that.isEditableBasedOnMand(aItems);
+                                }
+                            }
                         }).addStyleClass("sapUiTinyMargin"),
                         new sap.m.Button({
                             text: "Delete",
-                            type:"Reject",
+                            type: "Reject",
                             press: function (oEvent) {
                                 that.onDeleteBidDetail(oEvent)
+                            },
+                            enabled: {
+                                path: 'tempModel>/',
+                                formatter: function (aItems) {
+                                    return that.isEditableBasedOnMand(aItems);
+                                }
                             }
                         }).addStyleClass("sapUiTinyMargin")
                     ],
@@ -1255,7 +1353,7 @@ sap.ui.define(
 
                                 // Check for internal duplicates within new entries
                                 if (hasInternalDuplicates(entries)) {
-                                    new sap.m.MessageBox.error("Duplicate entry not allowed");
+                                    new sap.m.MessageBox.error("Duplicate Entry found");
                                     return; // Exit the press function
                                 }
                                 for (let entry of entries) {
@@ -1294,7 +1392,9 @@ sap.ui.define(
                         type: "Reject",
                         press: function () {
                             oDialog.close();
-                            console.log("kjkj");
+                            // console.log("kjkj");
+                            let oInputValue = that.getInputData(filterData);
+                            oSource.setValue(oInputValue);
                             console.table(bidPayload);
                         },
                     }),
@@ -1305,6 +1405,16 @@ sap.ui.define(
                 this.assignGroupToRadioButton(oDialog);
                 oDialog.open(); // Open the dialog
                 this.onAddNewBid(oEvent, Code, description, oDialog);
+            },
+            isEditableBasedOnMand: function (aItems) {
+                if (aItems && aItems.length > 0) {
+                    for (var i = 0; i < aItems.length; i++) {
+                        if (aItems[i].Mand === "X") {
+                            return false; // Disable button if Mand is "X"
+                        }
+                    }
+                }
+                return true; // Enable button by default
             },
             checkRangeforZmin: function (oEvent) {
                 // Get the input control
@@ -1408,17 +1518,38 @@ sap.ui.define(
                 });
             },
 
-            onVetddDatePickerChange: function (oEvent) {
+            onVetddDatePickerChange: async function (oEvent) {
                 let selectedDate = oEvent.getParameter("value");
+                let oSource = oEvent.getSource();
                 var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
-                    pattern: "MM/dd/yyyy" // Match the value format
+                    pattern: "MM/dd/yyyy"
                 });
                 let parsedDate = dateFormat.parse(selectedDate);
-                if (parsedDate < new Date()) {
-                    sap.m.MessageToast.show("You cannot select a past date.");
-                    oEvent.getSource().setValue("");
+                let oMinDate = new Date(); // Today's date
+                let minTimeGap = 15;
+
+                oMinDate.setDate(oMinDate.getDate() + parseInt(minTimeGap, 10));
+                if (parsedDate < oMinDate) {
+                    oSource.setValueState("Error");
+                    oSource.setValueStateText(`Select Date should be ${minTimeGap} days after Today onwards.`);
+                    oSource.setDateValue(null);
+                } else {
+
+                    oSource.setValueState("None");
+                    await this.onCalc();
                 }
             },
+            onVetdtDatePickerChange: async function (oEvent) {
+                let oSource = oEvent.getSource();
+                let oDate = oSource.getDateValue()
+
+
+
+                await this.onCalc();
+
+            },
+
+
             dateFormat: function (date) {
                 // Get day, month, and year components
                 const day = date.getDate();
@@ -1430,7 +1561,7 @@ sap.ui.define(
                 // const formattedDate = `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
                 const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
 
-                console.log(formattedDate);
+                console.log("formatted date :", formattedDate);
                 return formattedDate;
             },
             //  FUNCTION: TO FORMAT TIME WHILE PUSH BACK TO MODEL AFTER FETCHING RESPONSE FROM API V2 oData
@@ -1466,124 +1597,139 @@ sap.ui.define(
                 return date;
             },
 
-            onPortDaysChange1: function (oEvent) {
-                let oValue = oEvent.getParameter('value');
-                voyItemModel.refresh();
-                console.log("on port days change ", voyItemModel.getData())
-
-                this.onCalc();
-               
-            },
             onCalc: function () {
-               
-            
+
                 try {
                     let selectedPorts = voyItemModel.getData();
-                    let GvSpeed = selectedPorts[0].Vspeed;
-            
+
+
                     let ZCalcNav = [];
                     for (let i = 0; i < selectedPorts.length; i++) {
                         if (!selectedPorts[i].Vwead) {
                             selectedPorts[i].Vwead = "0";
                         }
                         if (!selectedPorts[i].Cargs) {
-                            new sap.ui.m.MessageBox.error("Please enter CargoSize");
+                            new sap.m.MessageBox.error("Please enter Cargo Size");
                             return false;
                         }
                         if (!selectedPorts[i].Cargu) {
-                            new sap.ui.m.MessageBox.error("Please enter Cargo Unit");
+                            new sap.m.MessageBox.error("Please enter Cargo Unit");
                             return false;
                         }
-                        if (!GvSpeed) {
-                            new sap.ui.m.MessageBox.error("Please enter Speed");
+                        if (i !== 0 && !selectedPorts[i].Vspeed) {
+                            MessageBox.error("Please enter Speed");
                             return false;
                         }
+                        if (i !== 0 && selectedPorts[i].Vspeed == "0") {
+                            MessageBox.error("Speed can't  be Zero except Source Port");
+                            return;
+
+                        }
+
                         if (!selectedPorts[i].Ppdays) {
-                            new sap.ui.m.MessageBox.error("Please enter PortDays");
+                            new sap.m.MessageBox.error("Please enter Port Days");
                             return false;
                         }
                     }
                     if (!selectedPorts[0].Vetdd) {
-                        new sap.ui.m.MessageBox.error("Please select Departure Date and Time");
+                        new sap.m.MessageBox.error("Please select Departure Date and Time");
                         return false;
                     }
-            
+
                     let that = this;
-                    sap.m.MessageToast.show("Calculating arrival date and time ...", { duration: 1200 });
-            
-                    ZCalcNav.push({
-                        Portc: selectedPorts[0].Portc,
-                        Portn: selectedPorts[0].Portn,
-                        Pdist: selectedPorts[0].Pdist,
-                        Medst: "NM",
-                        Vspeed: GvSpeed,
-                        Ppdays: selectedPorts[0].Ppdays,
-                        Vetdd: selectedPorts[0].Vetdd,
-                        Vetdt: selectedPorts[0].Vetdt,
-                        Vwead: selectedPorts[0].Vwead,
-                    });
-            
-                    for (let i = 1; i < selectedPorts.length; i++) {
-                        ZCalcNav.push({
-                            Portc: selectedPorts[i].Portc,
-                            Portn: selectedPorts[i].Portn,
-                            Pdist: selectedPorts[i].Pdist,
-                            Medst: "NM",
-                            Vspeed: GvSpeed,
-                            Ppdays: selectedPorts[i].Ppdays,
-                            Vwead: selectedPorts[i].Vwead,
-                        });
+                    sap.m.MessageToast.show("Calculating Arrival Date and Time ...", { duration: 1200 });
+
+
+                    for (let i = 0; i < selectedPorts.length; i++) {
+                        let dummySelectedPorts = {
+                            ArrivalDate: "",
+                            ArrivalTime: "",
+                            CargoSize: "",
+                            CargoUnit: "",
+                            DepartureDateValue: "",
+                            DepartureTime: "",
+                            Distance: "",
+                            LegId: "",
+                            PortDays: "",
+                            PortId: "",
+                            PortName: "",
+                            SeaDays: "",
+                            Speed: "",
+                            Weather: ""
+                        }
+                        if (i == 0 && selectedPorts[i].Vetdt == "24:00:00") {
+                            dummySelectedPorts.DepartureTime = "00:00:00";
+                        }
+                        else {
+                            dummySelectedPorts.DepartureTime = selectedPorts[i].Vetdt;
+                        }
+                        dummySelectedPorts.ArrivalDate = selectedPorts[i].Vetad;
+                        dummySelectedPorts.ArrivalTime = selectedPorts[i].Vetat;
+                        dummySelectedPorts.CargoSize = selectedPorts[i].Cargs;
+                        dummySelectedPorts.CargoUnit = selectedPorts[i].Cargu;
+                        dummySelectedPorts.DepartureDateValue = selectedPorts[i].Vetdd;
+
+                        dummySelectedPorts.Distance = selectedPorts[i].Pdist;
+                        dummySelectedPorts.LegId = selectedPorts[i].Vlegn.toString();
+                        dummySelectedPorts.PortDays = selectedPorts[i].Ppdays;
+                        dummySelectedPorts.PortId = selectedPorts[i].Portc;
+                        dummySelectedPorts.PortName = selectedPorts[i].Portn;
+                        dummySelectedPorts.SeaDays = selectedPorts[i].Vsdays;
+                        dummySelectedPorts.Speed = selectedPorts[i].Vspeed;
+                        dummySelectedPorts.Weather = selectedPorts[i].Vwead;
+
+                        ZCalcNav.push(dummySelectedPorts);
                     }
-            
-                    let oPayload = {
-                        GvSpeed: GvSpeed,
-                        ZCalcNav: ZCalcNav,
-                    };
-            
-                    console.log(oPayload);
-            
+
+
                     const oDataModelV4 = this.getOwnerComponent().getModel();
-                    let oBindList = oDataModelV4.bindList("/ZCalculateSet", true);
-            
-                    
-            
-                    oBindList.create(oPayload, true).created(x => {
-                        console.log(x);
+                    let oBindList1 = oDataModelV4.bindList("/calculateDateAndTime");
+                    let data1 = oBindList1.create(
+                        {
+                            "ZCalcNav": ZCalcNav
+                        }
+                    ).created().then(context => {
+                        console.log(context);
                     });
-            
-                    oBindList.attachCreateCompleted(function (p) {
+
+                    oBindList1.attachCreateCompleted((p) => {
+
+
                         let p1 = p.getParameters();
-            
+                        let oContext = p1.context;
                         if (p1.success) {
-                            let oData = p1.context.getObject();
-                            console.table(oData.ZCalcNav);
-            
+                            let ZCalcNav = oContext.getObject().ZCalcNav;
+                            console.table(ZCalcNav);
+
                             let totalDays = 0;
-            
-                            oData.ZCalcNav.forEach((data, index) => {
-                                selectedPorts[index].Vsdays = data.Vsdays;
-                                selectedPorts[index].Vspeed = GvSpeed;
-                                selectedPorts[index].Vwead = data.Vwead;
-                                selectedPorts[index].Vetad = data.Vetad;
-                                selectedPorts[index].Vetat = data.Vetat;
-                                selectedPorts[index].Vetdd = data.Vetdd;
-                                selectedPorts[index].Vetdt = data.Vetdt;
-            
+                            // console.log(ZCalcNav[0].Vetad, ZCalcNav[0].Vetat, ZCalcNav[0].Vetdd, ZCalcNav[0].Vetdt, ZCalcNav[1].Vetad, ZCalcNav[1].Vetat, ZCalcNav[1].Vetdd, ZCalcNav[1].Vetdt);
+
+                            ZCalcNav.forEach((data, index) => {
+                                selectedPorts[index].Vsdays = data.SeaDays;
+                                selectedPorts[index].Vspeed = data.Speed;
+                                selectedPorts[index].Vwead = data.Weather;
+                                selectedPorts[index].Vetad = data.ArrivalDate;
+                                selectedPorts[index].Vetat = data.ArrivalTime;
+                                selectedPorts[index].Vetdd = data.DepartureDateValue;
+                                selectedPorts[index].Vetdt = data.DepartureTime;
+
                                 totalDays += Number(selectedPorts[index].Vsdays) + Number(selectedPorts[index].Ppdays);
-                                that.byId('_totalDays').setValue(totalDays.toFixed(1));
+
                             });
-            
+
+                            that.byId("_totalDays").setValue(totalDays.toFixed(1));
                             voyItemModel.refresh();
                         } else {
-                            sap.m.MessageBox.error("Error occurred in calculation");
+                            sap.m.MessageBox.error("Unexpected error occured during Calculation");
                             console.log(p1.context.oModel.mMessages[""][0].message);
                         }
                     });
+
                 } catch (error) {
                     sap.m.MessageBox.error("An unexpected error occurred: " + error.message);
                     console.error(error);
                 } finally {
-    
+
                 }
             },
             onAddPortRow1: function (oEvent) {
@@ -1592,7 +1738,7 @@ sap.ui.define(
                 // let itemLength = oTableData.length  + 1;
                 // console.log(itemLength);
                 let lastEntry = oTableData[oTableData.length - 1];
-                
+
                 if (lastEntry.Vlegn && lastEntry.Pdist && lastEntry.Portn && lastEntry.Portc) {
                     console.log("valid row");
                     oTableData.push({
@@ -1625,6 +1771,36 @@ sap.ui.define(
                 }
 
             },
+            validateInputValue: function (oEvent) {
+                var oInput = oEvent.getSource();
+                var sValue = oInput.getValue();
+
+                // Remove leading zeros, but keep the number as "0" if the input was "0"
+                sValue = sValue.replace(/^0+(?!\.|$)/, '');
+                // Set the modified value back to the input field
+                oInput.setValue(sValue);
+
+                // Regular expression to allow positive decimal numbers with up to 3 digits after the decimal
+
+                var oRegex = /^[0-9]\d*(\.\d{0,3})?$/;
+
+                // Check if the value is negative
+                if (parseFloat(sValue) < 0) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Negative values are not allowed.");
+                }
+                // Check if the value doesn't match the decimal pattern
+                else if (!oRegex.test(sValue)) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Please enter a valid positve number with up to 3 decimal places.");
+                }
+                // If the value is valid, clear any error state
+                else {
+                    oInput.setValueState("None");
+                    oInput.setValueStateText("");
+                }
+            },
+            // Currently not in use
             onPortTabCargoSizeChange: function (oEvent) {
                 let oSource = oEvent.getSource();
                 // let CargoSizePathInModel = oSource.getBindingContext("oJsonModel").getPath();
@@ -1636,7 +1812,7 @@ sap.ui.define(
                 if (path == "/0" && voyItemModel.getData().length === 2) {
                     voyItemModel.getData()[1].Cargs = formatedValue;
                     this.liveFrCostChange();
-                }else {
+                } else {
                     this.liveFrCostChange()
                 }
                 voyItemModel.refresh();
@@ -1720,25 +1896,8 @@ sap.ui.define(
 
 
             },
-            calctotalCostNew: function (voyItemsArr) {
-                // console.log(voyItemsArr);
-                let totalCost = 0;
-                let arr = voyItemsArr;
-                if (arr && arr.length) {
-
-                    arr.forEach((port) => {
-                        totalCost += parseFloat(port.Totco);
-
-                    })
-                    // console.log("total Totco cost: ", totalCost);
-
-                    this.byId("_totalCostPlId").setValue(formatter.numberFormat(totalCost))
-                    return formatter.numberFormat(totalCost);
-                }
-
-
-            },
-            // port value help
+        
+            // port value help currently not in use
             onPortValueHelpRequest: function (oEvent) {
                 let oInputSource = oEvent.getSource();
                 //   console.log(oData);
@@ -1879,9 +2038,40 @@ sap.ui.define(
 
             // },
             liveFrCostChange: function () {
-                let fCost1 = this.byId("_friegthIdPlan").getValue() || 0;
+                let oInput = this.byId("_friegthIdPlan");
+                let sValue = oInput.getValue() || "0";
+                // Remove leading and trailing spaces
+                sValue = sValue.trim();
 
-                let FCost = fCost1 == "" ? 0 : this.parseStringToNumber(fCost1);
+                // Restrict multiple leading zeros (if there is more than one leading zero and no decimal point)
+                if (/^0{2,}/.test(sValue)) {
+                    sValue = sValue.replace(/^0+/, '0'); // Replace leading zeros with a single zero
+                    oInput.setValue(sValue);
+                }
+
+                // Regular expression to allow positive numbers with commas and up to 3 decimal places
+                var oRegex = /^\d{1,}(\.\d{0,3})?$/;
+
+
+                // Check if the value is negative
+                if (parseFloat(sValue) < 0) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Negative values are not allowed.");
+                    return;
+                }
+                // Check if the value doesn't match the decimal pattern
+                else if (!oRegex.test(sValue)) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Please enter a valid positve number with up to 3 decimal places.");
+                    return
+                }
+                // If the value is valid, clear any error state
+                else {
+                    oInput.setValueState("None");
+                    oInput.setValueStateText("");
+                }
+
+                let FCost = sValue == "" ? 0 : this.parseStringToNumber(sValue);
                 let selectedUnit = this.byId("_idFrunitPlan").getSelectedKey();
                 if (FCost === undefined || isNaN(FCost)) {
                     FCost = 0;
@@ -1896,22 +2086,32 @@ sap.ui.define(
 
                     this.tonNMFCostChange(FCost);
                 } else {
-                    MessageToast.show("Select a valid cargo unit")
+                    MessageToast.show("Select Cargo Unit")
                 }
 
             },
-            onCargoUniSelectChange: function (oEvent) {
+            onCargoUnitSelectChange: function (oEvent) {
                 let oSelectedUnit = oEvent.getSource().getSelectedKey();
+                let itemData = voyItemModel.getData();
+                itemData.forEach(item => item.Cargu = oSelectedUnit);
+                
+                let costTableItems = this.byId('_costTablePlan').getItems();
+                if (costTableItems.length) {
+
+                    costTableItems.forEach(item => {
+
+                        item.getCells()[3].setSelectedKey(oSelectedUnit);
+                    })
+                }
                 this.liveFrCostChange();
 
             },
+
 
             lumpsumFrCostChange: function (FCost) {
 
                 try {
 
-
-                    // if (FCost) {
                     const lumpsumPortData = voyItemModel.getData();
                     let totalCost = 0,
                         last = 0,
@@ -2064,10 +2264,10 @@ sap.ui.define(
                 let cell1 = oParent.getCells()[1];
                 let cell2 = oParent.getCells()[2];
                 let cell5 = oParent.getCells()[5];
-            
+
                 if (cell5.getValue() !== "") {
                     cell5.setValue("0.000");
-                    if( prevLegId){
+                    if (prevLegId) {
                         this.calculateSumAllCharges(parseInt(prevLegId));
                     }
                 }
@@ -2218,10 +2418,36 @@ sap.ui.define(
             // fn  when any changes happen in cost item projected cost
             onCostLiveChange: function (oEvent) {
 
-                let oSource = oEvent.getSource();
-                let oValue = oEvent.getParameter('value')
-                let sPath = oSource.getBindingContext("costdetailsModel").getPath();
-                let oVlegn = parseInt(oSource.getBindingContext("costdetailsModel").getObject().Vlegn);
+                let oInput = oEvent.getSource();
+                let sValue = oEvent.getParameter('value');
+                sValue = sValue.replace(/^0+(?!\.|$)/, '');
+                // Set the modified value back to the input field
+                oInput.setValue(sValue);
+
+                // Regular expression to allow positive decimal numbers with up to 3 digits after the decimal
+
+                var oRegex = /^[0-9]\d*(\.\d{0,3})?$/;
+
+                // Check if the value is negative
+                if (parseFloat(sValue) < 0) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Negative values are not allowed.");
+                    return;
+                }
+                // Check if the value doesn't match the decimal pattern
+                else if (!oRegex.test(sValue)) {
+                    oInput.setValueState("Error");
+                    oInput.setValueStateText("Please enter a valid positve number with up to 3 decimal places.");
+                    return;
+                }
+                // If the value is valid, clear any error state
+                else {
+                    oInput.setValueState("None");
+                    oInput.setValueStateText("");
+                }
+
+                let sPath = oInput.getBindingContext("costdetailsModel").getPath();
+                let oVlegn = parseInt(oInput.getBindingContext("costdetailsModel").getObject().Vlegn);
                 if (oVlegn) {
 
                     this.calculateSumAllCharges(oVlegn);
@@ -2256,11 +2482,11 @@ sap.ui.define(
 
             // forselection in select control for cost charge unit to be emplty for new entry 
             formatForceSelection: function (legId) {
-                
+
                 return legId ? true : false;
             },
-            onSaveVoyage: function () {
-                
+            onSaveVoyage1: function () {
+
                 let oModel = this.getOwnerComponent().getModel();
                 let headerDetail = voyHeaderModel.getData();
                 let itemDetails = voyItemModel.getData();
@@ -2282,12 +2508,13 @@ sap.ui.define(
 
                     return
                 };
-                // condition to check cost charges empty entries
+
                 let isEmptyCostField = this.checkEmptyFieldsCostCharges(costData);
-                if(isEmptyCostField){
-                    sap.m.MessageBox.error("Empty cost charges  entry found");
+                if (isEmptyCostField) {
+                    sap.m.MessageBox.error(this.errorMessage);
                     return;
                 }
+
 
                 // Check for loading charges and unloading charges conditions
                 let hasLoadingCharges = false;
@@ -2296,7 +2523,7 @@ sap.ui.define(
 
                 for (let i = 0; i < costData.length; i++) {
                     let cost = costData[i];
-                    if (cost.Vlegn === 1 && (cost.Costcode === "1000" || cost.Cstcodes === "LOADING CHARGES") ){
+                    if (cost.Vlegn === 1 && (cost.Costcode === "1000" || cost.Cstcodes === "LOADING CHARGES")) {
                         hasLoadingCharges = true;
                     }
                     if (cost.Vlegn === destinationPort && (cost.Costcode === "1001" || cost.Cstcodes === "UNLOADING CHARGES")) {
@@ -2304,19 +2531,19 @@ sap.ui.define(
                     }
                 }
 
+                if (!hasLoadingCharges) {
+                    new sap.m.MessageBox.error("Loading Charges for the Source Port is Mandatory");
+                    return;
+                }
                 if (hasLoadingCharges && !hasUnloadingCharges) {
-                    new sap.m.MessageBox.error("Unloading Charges for the Destination Port are missing.");
+                    new sap.m.MessageBox.error("Unloading Charges for the Destination Port is Mandatory");
                     return;
                 }
 
-                if (!hasLoadingCharges && hasUnloadingCharges) {
-                    new sap.m.MessageBox.error("Loading Charges for the Source Port are missing.");
-                    return;
-                }
 
                 // saving commercial Details to bidPayload;
 
-                // this.onSaveCommercialDetail();
+                this.onSaveCommercialDetail();
 
                 console.log(costData);
 
@@ -2394,22 +2621,48 @@ sap.ui.define(
                 });
 
             },
-            checkEmptyFieldsCostCharges : function (dataArray) {
-                for (let i = 0; i < dataArray.length; i++) {
-                    const obj = dataArray[i];
-                    if (
-                        obj.Vlegn === ""  ||   obj.Costcode === "" ||    obj.Costu === "" ||    obj.Procost === ""  ||
-                        obj.Costcurr === ""  ||
-                        obj.Cstcodes === ""
-                    ) {
-                        return true
-                    }
-                }
-                return false; 
-            },
+            onSaveVoyage: async function () {
 
-            onSaveVoyage1: function () {
                 let oModel = this.getOwnerComponent().getModel();
+                let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
+                let isVoyageEditable = true;
+
+                await oBinding.requestObject().then((oContext) => {
+                    console.log(oContext);
+
+                    if (oContext) {
+                        let Zaction = oContext.Zaction;
+                        console.log(oContext.Voyno);
+                        console.log(Zaction);
+
+                        if (Zaction === "REJ") {
+                            isVoyageEditable = true;
+
+                        } else if (Zaction.toUpperCase() === "APPR") {
+                            sap.m.MessageBox.warning("Already Sent for Approval , can't modified.");
+                            isVoyageEditable = false;
+                        } else {
+                            sap.m.MessageBox.warning("Already sent for Approval , can't be modified.");
+                            isVoyageEditable = false;
+                        }
+                    } else {
+
+                        isVoyageEditable = true;
+                    }
+                }).catch(error => {
+                    console.log("Error",);
+                    if (error.message.includes("No record found in Voyage Status") || error.error.message.includes("No record found in voyage status")) {
+                        isVoyageEditable = true
+                    }
+                    console.error("Error while fething contetxs : ", error)
+                });
+                if (!isVoyageEditable) {
+
+                    return
+
+                }
+
+
                 let headerDetail = voyHeaderModel.getData();
                 let itemDetails = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
@@ -2418,20 +2671,55 @@ sap.ui.define(
 
                 let frcostPlValue = this.byId("_friegthIdPlan").getValue();
                 let frUnitPl = this.byId("_idFrunitPlan").getSelectedKey();
-                let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
+
+                // let totalcostPlvalue = this.byId("_totalCostPlId").getValue();
                 let frCostPlanformatted = this.parseStringToNumber(frcostPlValue);
+
                 // let totalCostPlformatted = this.parseStringToNumber(totalcostPlvalue);
 
-                let commerDetailPayload = this.getView().getModel("commercialModel").getData().myData;
+
                 if (itemDetails.length < 2) {
                     new sap.m.MessageBox.warning("Minimum Two Ports are Mandatory");
 
                     return
                 };
 
+                // condition to check cost charges empty entries
+                let isEmptyCostField = this.checkEmptyFieldsCostCharges(costData);
+                if (isEmptyCostField) {
+                    sap.m.MessageBox.error(this.errorMessage);
+                    return;
+                }
+
+                // Check for loading charges and unloading charges conditions
+                let hasLoadingCharges = false;
+                let hasUnloadingCharges = false;
+                let destinationPort = itemDetails[itemDetails.length - 1].Vlegn;
+
+                for (let i = 0; i < costData.length; i++) {
+                    let cost = costData[i];
+                    if (cost.Vlegn === 1 && (cost.Costcode === "1000" || cost.Cstcodes === "LOADING CHARGES")) {
+                        hasLoadingCharges = true;
+                    }
+                    if (cost.Vlegn === destinationPort && (cost.Costcode === "1001" || cost.Cstcodes === "UNLOADING CHARGES")) {
+                        hasUnloadingCharges = true;
+                    }
+                }
+
+                if (!hasLoadingCharges) {
+                    new sap.m.MessageBox.error("Loading Charges for the Source Port is Mandatory");
+                    return;
+                }
+                if (hasLoadingCharges && !hasUnloadingCharges) {
+                    new sap.m.MessageBox.error("Unloading Charges for the Destination Port is Mandatory");
+                    return;
+                }
+
                 // saving commercial Details to bidPayload;
+
                 this.onSaveCommercialDetail();
 
+                console.log(costData);
 
                 let payload = {
                     Bidtype: headerDetail[0].Bidtype,
@@ -2470,10 +2758,9 @@ sap.ui.define(
                 console.log("voyage payload :", payload);
                 console.table(bidPayload);
 
-                new sap.m.MessageToast.show("Saving voyage data ...", { duration: 500 });
+                new sap.m.MessageToast.show("Saving Voyage Data ...", { duration: 500 });
 
                 // oData v4 model create code
-
                 const oDataModelV4 = this.getOwnerComponent().getModel();
                 let oBindList = oDataModelV4.bindList("/xNAUTIxVOYAGEHEADERTOITEM", true);
 
@@ -2491,13 +2778,14 @@ sap.ui.define(
                         console.log(oData);
 
                         // MessageBox.success(`Successfully saved `);
-                        MessageBox.success(`Successfully saved changes`, {
+                        MessageBox.success(`Successfully saved `, {
                             title: "Voyage updated",
                             onClose: function () {
-              
-                                   
+
+                                that.onRefresh();
+
                             }
-                          });
+                        });
 
                     } else {
                         sap.m.MessageBox.error(p1.context.oModel.mMessages[""][0].message);
@@ -2506,8 +2794,33 @@ sap.ui.define(
 
 
                 });
-            
+
             },
+
+            checkEmptyFieldsCostCharges: function (dataArray) {
+                for (let i = 0; i < dataArray.length; i++) {
+                    const obj = dataArray[i];
+                    if (
+                        obj.Vlegn === "" ||
+                        obj.Costcode === "" ||
+                        obj.Costu === "" ||
+                        obj.Procost === "" ||
+                        obj.Costcurr === "" ||
+                        obj.Cstcodes === ""
+                    ) {
+                        this.errorMessage = "All Cost Charges fields are Mandatory";
+                        return true;
+                    }
+
+                    if (parseFloat(obj.Procost) === 0.000) {
+                        this.errorMessage = "Projected Cost are Mandatory";
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+
             /*
             [
                         {
@@ -2575,7 +2888,7 @@ sap.ui.define(
                 voyItemModel.refresh();
                 costdetailsModel.refresh();
                 bidItemModel.refresh();
-                
+
 
             },
             sendApproval: async function () {
@@ -2595,9 +2908,9 @@ sap.ui.define(
 
                 // Loop through the bidPayload array to check for Cunit value other than 'CURR'
                 for (let item of bidPayload) {
-                    if ( item.Cunit == "") {        // if CURR type( commercial) then Cunit must be present
+                    if (item.Cunit == "") {        // if CURR type( commercial) then Cunit must be present
                         isTechnicalDetailsPresent = true;
-                    
+
                     }
                     else {
                         isCommercialDetailsPresent = true
@@ -2607,16 +2920,17 @@ sap.ui.define(
                     sap.m.MessageBox.error("Please fill Technical Bid Details");
                     return;
                 };
-                if( bidData.length !== bidPayload.length){
+                if (bidData.length !== bidPayload.length) {
                     sap.m.MessageBox.error("Please Save  the Bid Details.");
                     return;
                 }
                 let sBidType = voyHeaderModel.getData()[0].Bidtype;
 
-                if( !isCommercialDetailsPresent ){
-                    sap.m.MessageBox.error("Please fill Commercial Bid Details")
+                if (!isCommercialDetailsPresent) {
+                    sap.m.MessageBox.error("Please fill Commercial Bid Details");
+                    return;
                 }
-                
+
 
                 let oModel = this.getOwnerComponent().getModel();
                 let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
@@ -2707,8 +3021,8 @@ sap.ui.define(
                             let statusBindList = oModel.bindList("/newallstatusesSet");
                             voyageStatus = "Voyage Approval Pending";
                             statusBindList.create({
-                                "Voyage" : myVOYNO,
-                                "Status" : voyageStatus
+                                "Voyage": myVOYNO,
+                                "Status": voyageStatus
                             }, true)
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
@@ -2812,81 +3126,291 @@ sap.ui.define(
                 }.bind(this))
 
             },
-            // upload document code 
+
+            onAddRowFileUpload: function () {
+                var oInitialInput = this.byId("fileinput");
+                var oInitialFileUploader = this.byId("fileUploader");
+
+                if (oInitialInput && oInitialFileUploader) {
+                    if (!oInitialInput.getValue() || !oInitialFileUploader.getValue()) {
+                        sap.m.MessageToast.show("Please Upload file and add Description First ");
+                        return;
+                    }
+                }
+
+                if (this._aFileUploaders && this._aFileUploaders.length > 0) {
+                    var lastUploader = this._aFileUploaders[this._aFileUploaders.length - 1];
+
+                    if (!lastUploader.descriptionInput.getValue() || !lastUploader.fileUploader.getValue()) {
+                        sap.m.MessageToast.show("Please upload a File and provide a Description before adding a New File.");
+                        return;
+                    }
+                }
+
+                var oVerticalLayout = this.byId("_IDGenVertiLayout1");
+
+                if (oVerticalLayout) {
+                    var oHorizontalLayout = new sap.ui.layout.HorizontalLayout();
+
+                    var oInput = new sap.m.Input({
+                        width: "250px",
+                        placeholder: "Description of file",
+                        liveChange: this.Fileinputchange.bind(this)
+                    });
+                    oInput.addStyleClass("sapUiMarginTinyEnd");
+
+                    var oFileUploader = new sap.ui.unified.FileUploader({
+                        uploadUrl: "odata/v4/nautical/FileuploadSet",
+                        sendXHR: true,
+                        httpRequestMethod: sap.ui.unified.FileUploaderHttpRequestMethod.Post,
+                        change: this.handleValueChangeUpload.bind(this),
+                        tooltip: "Upload your file to the local server",
+                        buttonText: "Choose File",
+                        icon: "sap-icon://value-help",
+                        fileType: "pdf",
+                        typeMissmatch: this.handleTypeMissmatch.bind(this)
+                    });
+
+                    var oUploadButton = new sap.m.Button({
+                        text: "Upload File",
+                        press: this.handleUploadPress.bind(this)
+                    });
+
+                    var oDeleteButton = new sap.m.Button({
+                        icon: "sap-icon://delete",
+                        type: sap.m.ButtonType.Reject,
+                        press: this.OnfileUploadDelete.bind(this)
+                    });
+
+                    var oSuccessIconButton = new sap.m.Button({
+                        icon: "sap-icon://message-success",
+                        visible: false
+                    });
+
+                    oHorizontalLayout.addContent(oInput);
+                    oHorizontalLayout.addContent(oFileUploader);
+                    oHorizontalLayout.addContent(oUploadButton);
+                    oHorizontalLayout.addContent(oDeleteButton); // Add delete button to the layout
+                    oHorizontalLayout.addContent(oSuccessIconButton);
+
+                    oVerticalLayout.insertContent(oHorizontalLayout, oVerticalLayout.getContent().length - 1);
+
+                    if (!this._aFileUploaders) {
+                        this._aFileUploaders = [];
+                    }
+                    this._aFileUploaders.push({
+                        fileUploader: oFileUploader,
+                        uploadButton: oUploadButton,
+                        deleteButton: oDeleteButton, // Store reference to delete button
+                        successIconButton: oSuccessIconButton,
+                        descriptionInput: oInput
+                    });
+                } else {
+                    console.error("VerticalLayout with ID '_IDGenVertiLayout1' not found.");
+                }
+            },
+
+            Fileinputchange: function (oEvent) {
+                var oInput = oEvent.getSource();
+                var sValue = oInput.getValue();
+
+                if (sValue.length > 100) {
+                    sValue = sValue.substring(0, 100);
+                    oInput.setValue(sValue);
+                    sap.m.MessageToast.show("Maximum length is 100 characters.");
+                }
+
+                if (/[^a-zA-Z0-9 ]/.test(sValue) || /^\s/.test(sValue)) {
+                    sValue = sValue.replace(/[^a-zA-Z0-9 ]/g, '').replace(/^\s+/g, '');
+
+                    oInput.setValue(sValue);
+                    sap.m.MessageToast.show("Only Alphanumeric Characters are allowed");
+                }
+            },
+
             handleUploadPress: function (oEvent) {
                 this._busyDialog = new sap.m.BusyDialog();
                 if (this._busyDialog) {
                     this._busyDialog.open();
                 }
-                let oFileUploader = this.byId("fileUploader");
-                let domRef = oFileUploader.getDomRef();
 
-                let file = domRef.querySelector("input[type='file']").files[0];
+                let oUploadButton = oEvent.getSource();
+                let oHorizontalLayout = oUploadButton.getParent();
+                let oFileUploader = oHorizontalLayout.getContent().find(function (content) {
+                    return content instanceof sap.ui.unified.FileUploader;
+                });
+                let oDescriptionInput = oHorizontalLayout.getContent().find(function (content) {
+                    return content instanceof sap.m.Input;
+                });
 
-                if (!file) {
-                    sap.m.MessageToast.show("No file selected for upload.");
-                    return;
-                }
+                if (oFileUploader && oDescriptionInput) {
+                    let fileDescription = oDescriptionInput.getValue().trim(); // Trim any leading/trailing spaces
 
-                this.fileName = file.name;
-                this.fileType = file.type;
-                let reader = new FileReader();
-                let that = this;
-                reader.onload = function (e) {
-
-
-                    //  let vContent = e.target.result.replace("data:image/jpeg;base64,",""); // hardcoded for image/jpeg file obly
-                    let arr = e.target.result.split(",")
-                    let vContent1 = arr[1];
-                    // if(vContent === vContent1) console.log("same Binary string")
-
-                    that.postToBackend(myVOYNO, that.fileName, that.fileType, vContent1);
-
-                }
-                reader.readAsDataURL(file);
-
-            },
-            postToBackend: function (voyageNo, filename, filetype, content) {
-
-                let oModel = this.getOwnerComponent().getModel();
-
-                let bindList = oModel.bindList("/FileuploadSet");
-
-                let that = this;
-                bindList.attachCreateCompleted(async function (p) {
-                    let params = p.getParameters();
-
-                    let isSuccess = params.success;
-
-                    that._busyDialog.close();
-                    if (isSuccess) {
-                        new sap.m.MessageBox.success("File sucessfully uploaded");
-
-                    } else {
-                        let errMsgArr = params.context.oModel.mMessages[""];
-                        let errMsg = errMsgArr[errMsgArr.length - 1].message
-                        if (errMsg.includes("Duplicate Key")) {
-
-                            new sap.m.MessageBox.error(`File with name " ${filename}  "  already exists`);
-                        } else {
-                            new sap.m.MessageBox.error(errMsg);
-
-
-                        }
-
+                    // Check if the description input is filled
+                    if (!fileDescription) {
+                        sap.m.MessageToast.show("Please provide a description before uploading.");
+                        this._busyDialog.close();
+                        return;
                     }
 
+                    let domRef = oFileUploader.getDomRef();
+                    let file = domRef.querySelector("input[type='file']").files[0];
+
+                    if (!file) {
+                        sap.m.MessageToast.show("No file selected for upload.");
+                        this._busyDialog.close();
+                        return;
+                    }
+
+                    this.fileName = file.name.substring(0, 30);
+                    this.fileType = file.type.substring(0, 30);
+                    this.fileDescription = fileDescription;
+
+                    let reader = new FileReader();
+                    let that = this;
+                    reader.onload = function (e) {
+                        let arr = e.target.result.split(",");
+                        let vContent1 = arr[1];
+                        that.postToBackend(myVOYNO, that.fileName, that.fileType, vContent1, that.fileDescription, oUploadButton, oDescriptionInput, oFileUploader);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    sap.m.MessageToast.show("FileUploader or Description Input not found in the row.");
+                    this._busyDialog.close();
+                }
+            },
+
+
+
+            OnfileUploadDelete: function (oEvent) {
+                var oButton = oEvent.getSource();
+                var oHorizontalLayout = oButton.getParent();
+                var oVerticalLayout = this.byId("_IDGenVertiLayout1");
+
+                var isStaticRow = !this._aFileUploaders.find(function (item) {
+                    return item.fileUploader.getParent() === oHorizontalLayout;
                 });
+
+                if (isStaticRow) {
+                    var oDescriptionInput = oHorizontalLayout.getContent().find(function (content) {
+                        return content instanceof sap.m.Input;
+                    });
+                    var oFileUploader = oHorizontalLayout.getContent().find(function (content) {
+                        return content instanceof sap.ui.unified.FileUploader;
+                    });
+
+                    if (oDescriptionInput && oFileUploader) {
+                        var descriptionValue = oDescriptionInput.getValue().trim();
+                        var fileUploaderValue = oFileUploader.getValue();
+
+                        if (descriptionValue === "" && fileUploaderValue === "") {
+                            sap.m.MessageToast.show("Nothing to delete. The description and file uploader are empty.");
+                            return;
+                        } else {
+                            sap.m.MessageBox.confirm("Are you sure you want to delete this item?", {
+                                actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.Cancel],
+                                onClose: function (oAction) {
+                                    if (oAction === sap.m.MessageBox.Action.OK) {
+                                        if (descriptionValue !== "") {
+                                            oDescriptionInput.setValue("");
+                                        }
+                                        if (fileUploaderValue !== "") {
+                                            oFileUploader.clear();
+                                        }
+                                        sap.m.MessageToast.show(" Deleted Successfully");
+                                    }
+                                }.bind(this)
+                            });
+                        }
+                    }
+                } else {
+                    sap.m.MessageBox.confirm("Are you sure you want to delete this item?", {
+                        actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.Cancel],
+                        onClose: function (oAction) {
+                            if (oAction === sap.m.MessageBox.Action.OK) {
+                                oVerticalLayout.removeContent(oHorizontalLayout);
+
+                                var index = this._aFileUploaders.findIndex(function (item) {
+                                    return item.fileUploader.getParent() === oHorizontalLayout;
+                                });
+                                if (index !== -1) {
+                                    this._aFileUploaders.splice(index, 1);
+                                }
+                                sap.m.MessageToast.show(" Deleted Successfully");
+
+                                var oSuccessIconButton = oHorizontalLayout.getContent().find(function (content) {
+                                    return content instanceof sap.m.Button && content.getIcon() === "sap-icon://message-success";
+                                });
+                                if (oSuccessIconButton) {
+                                    oSuccessIconButton.setVisible(false);
+                                }
+                            }
+                        }.bind(this)
+                    });
+                }
+            },
+            postToBackend: function (voyageNo, filename, filetype, content, fileDescription, oUploadButton, oDescriptionInput, oFileUploader) {
+                let oModel = this.getOwnerComponent().getModel();
+                let bindList = oModel.bindList("/FileuploadSet");
+                let that = this;
+
+                bindList.attachCreateCompleted(async function (p) {
+                    let params = p.getParameters();
+                    let isSuccess = params.success;
+                    that._busyDialog.close();
+
+                    let oHorizontalLayout = oUploadButton.getParent();
+
+                    let oSuccessIconButton = oHorizontalLayout.getContent().find(function (content) {
+                        return content instanceof sap.m.Button && content.getIcon() === "sap-icon://message-success";
+                    });
+
+                    let oDeleteIconButton = oHorizontalLayout.getContent().find(function (content) {
+                        return content instanceof sap.m.Button && content.getIcon() === "sap-icon://delete";
+                    });
+
+                    if (isSuccess) {
+                        sap.m.MessageBox.success("File successfully uploaded");
+
+                        if (oUploadButton) {
+                            oUploadButton.setEnabled(false);
+                        }
+                        if (oFileUploader) {
+                            oFileUploader.setEnabled(false);
+                        }
+                        if (oDescriptionInput) {
+                            oDescriptionInput.setEnabled(false);
+                        }
+                        if (oSuccessIconButton) {
+                            oSuccessIconButton.setType(sap.m.ButtonType.Accept);
+                            oSuccessIconButton.setVisible(true);
+                        }
+                        if (oDeleteIconButton) {
+                            oDeleteIconButton.setVisible(false);
+                        }
+                    } else {
+                        let errMsgArr = params.context.oModel.mMessages[""];
+                        let errMsg = errMsgArr[errMsgArr.length - 1].message;
+                        if (errMsg.includes("Duplicate Key")) {
+                            sap.m.MessageBox.error(`File with name "${filename}" already exists`);
+                        } else {
+                            sap.m.MessageBox.error(errMsg);
+                        }
+                    }
+                });
+
                 let payload = {
+                    "Filedescription": fileDescription,
                     "Filename": filename,
                     "Filecont": content,
                     "Voyageno": voyageNo,
-                    "Filetype": filetype
+                    "Filetype": filetype,
+                };
 
-                }
                 bindList.create(payload, true);
-
             },
+
+
             handleValueChangeUpload: function (oEvent) {
                 sap.m.MessageToast.show("Press 'Upload File' to upload file '" + oEvent.getParameter("newValue") + "'");
             },
@@ -2899,6 +3423,7 @@ sap.ui.define(
                     " is not supported. Choose one of the following types: " +
                     aFileTypes.join(", "));
             },
+
 
 
             handleNav: function (evt) {

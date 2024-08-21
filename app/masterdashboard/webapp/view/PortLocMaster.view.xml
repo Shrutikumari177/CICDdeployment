@@ -30,13 +30,14 @@
                 </contentLeft>
                 <contentRight>
                     <SearchField
-        id="searchField"
-        width="300px"
-        search="onSearch"
-        placeholder="Search..."
-        liveChange="onSearch"
-       
-    />
+                        id="searchField"
+                        width="300px"
+                        search="onSearch"
+                        placeholder="Search..."
+                        liveChange="onSearch"
+                        
+                    
+                    />
                 </contentRight>
             </Bar>
         </headerContent>

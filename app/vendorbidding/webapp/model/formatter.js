@@ -4,7 +4,6 @@ sap.ui.define([], function () {
     return {
         dateFormat: function (oDate) {
             let date = new Date(oDate);
-
             let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
                 pattern: 'yyyy-MM-dd',
             });
@@ -16,7 +15,6 @@ sap.ui.define([], function () {
             function pad(n) {
                 return n < 10 ? '0' + n : n;
             }
-        
             if (time) {
                 let timeParts = time.split(':');
                 let hours = pad(parseInt(timeParts[0], 10));
@@ -37,7 +35,6 @@ sap.ui.define([], function () {
             function pad(n) {
                 return n < 10 ? '0' + n : n;
             }
-        
             let now = new Date();
             let hours = pad(now.getHours());
             let minutes = pad(now.getMinutes());
@@ -48,7 +45,6 @@ sap.ui.define([], function () {
 
 
         formatDateTime: function (date, time) {
-            
             let date1 = new Date(date);
             let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
                 pattern: 'yyyy-MM-dd',
@@ -66,8 +62,8 @@ sap.ui.define([], function () {
             }
             var number = parseFloat(value);
             return new Intl.NumberFormat('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
             }).format(number) ;
         },  
        

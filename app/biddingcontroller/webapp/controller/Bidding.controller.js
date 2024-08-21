@@ -2,31 +2,31 @@ sap.ui.define([
         "sap/ui/core/mvc/Controller",
         "sap/ui/core/format/DateFormat",
         "sap/ui/model/json/JSONModel",
+       "sap/m/MessageToast"
     ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller,DateFormat,  JSONModel) {
+    function (Controller,DateFormat,  JSONModel, MessageToast) {
         "use strict";
         let receivedData = [];
         let sVoyageNo = undefined;
         let sChrnminNo = undefined;
-
+        let oEventBus = sap.ui.getCore().getEventBus();
         return Controller.extend("com.ingenx.nauti.biddingcontroller.controller.Bidding", {
             onInit: async function () {
                 const oRouter = this.getOwnerComponent().getRouter();
                 oRouter.getRoute("RouteBidding").attachPatternMatched(this._onObjectMatched2, this);
-                
                 // oRouter.getRoute("RouteBidding").attachPatternMatched(this._onObjectMatched, this);
 
-                
+               
             },
 
             _onObjectMatched2: async function(oEvent) {
                 this._BusyDialog = new sap.m.BusyDialog({
                     title: "Loading...",
-                });
-                this._BusyDialog.open();  
+                  });
+                  this._BusyDialog.open();
                 const navModel = this.getOwnerComponent().getModel("navModel");
                 // Wait for the data to be available in the model
                 await this._waitForModelData(navModel, [
@@ -39,6 +39,8 @@ sap.ui.define([
                     "/navigatedControllerCurrBid",
                     "/navigatedMode"
                 ]);
+                // debugger;
+                const vendorNo = navModel.getProperty("/navigatedVendorNo")
                 const VoyageNo = navModel.getProperty("/navigatedVoyageNo");
                 sVoyageNo = VoyageNo;
                 const Charterno = navModel.getProperty("/navigatedCharterno");
@@ -49,26 +51,75 @@ sap.ui.define([
                 const BidEndTime = navModel.getProperty("/navigatedBidEndTime");
                 const ControllerCurrentBid = navModel.getProperty("/navigatedControllerCurrBid");
                 const Mode = navModel.getProperty("/navigatedMode");
-    
-                // Use the retrieved properties as needed
+                
+                let newStartDate = this.dateFormat(BidStartDate)
+                let newEndDate = this.dateFormat(BidEndDate)
+                try {
+                    this._startTimer(newStartDate,BidStartTime,newEndDate,BidEndTime)
+                    this.onControllerPostData(vendorNo,VoyageNo,Charterno,BidStartDate,BidStartTime,BidEndDate,BidEndTime)
+                    
+                } catch (error) {
+                    console.log("error:",error);
+                }
                 console.log(VoyageNo, Charterno, BidStartDate, BidStartTime, BidEndDate, BidEndTime, Mode);
     
-                // Format the given date and time to the current system time zone
-                // const localDateTimeString = this._formatToLocalDateTime("2023-07-07T00:05:30Z 15:33:12");
-                // console.log("Local Date and Time:", localDateTimeString);
     
-                // Get the control by its ID and set the text
                 this.byId("_IDGenObjectStatus1").setText(BidStartDate.split("T")[0] + " | " + BidStartTime);
                 this.byId("_IDGenObjectStatus2").setText(BidEndDate.split("T")[0] + " | " + BidEndTime);
-                this.byId("currentQuote").setValue(parseFloat(ControllerCurrentBid).toFixed(3));
+                // this.byId("currentQuote").setValue(parseFloat(ControllerCurrentBid).toFixed(3));
+                this.byId("currentQuote").setValue(this.formatNumber(ControllerCurrentBid));
     
-                // Set the title and subtitle of the header
                 this.byId("_IDGenHeader1").setTitle("Bid information for Charter Request : " + Charterno);
                 this.byId("_IDGenHeader1").setSubtitle("Voyage No : " + VoyageNo);
     
                 await this._calculateRanking(Charterno);
                 await this._calculateRankingAndSetModel(Charterno);
+                if(Mode === "Auto"){
+                    this.onStart2()
+                }
+                if (this._BusyDialog) {
+                    this._BusyDialog.close();
+                  }
             },
+            dateFormat: function (oDate) {
+                let date = new Date(oDate);
+    
+                let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+                    pattern: 'yyyy-MM-dd',
+                });
+                return oDateFormat.format(date);
+            },
+            formatNumber: function(value) {
+                if (!value) {
+                    return "";
+                }
+                var number = parseFloat(value);
+                return new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                }).format(number) ;
+            }, 
+
+            onQuotePriceChange: function (oEvent) {
+                var oInput = oEvent.getSource();
+                var sValue = oInput.getValue();
+                var regex = /^\d+(\.\d{0,2})?$/;
+            
+                oInput.setValueState(sap.ui.core.ValueState.None);
+                oInput.setValueStateText("");
+            
+                if (sValue === "" || regex.test(sValue)) {
+                    var validValue = sValue.match(/^\d+(\.\d{0,2})?/);
+                    if (validValue) {
+                        oInput.setValue(validValue[0]);
+                    }
+                } else {
+                    oInput.setValueState(sap.ui.core.ValueState.Error);
+                    oInput.setValueStateText("Please enter a valid number with up to two decimal places.");
+                    oInput.setValue("");
+                }
+            }
+            ,
 
             _waitForModelData: function (model, paths) {
                 return new Promise((resolve) => {
@@ -83,20 +134,15 @@ sap.ui.define([
                         if (dataAvailable) {
                             resolve();
                         } else {
-                            setTimeout(checkData, 100); // Check again after 100ms
+                            setTimeout(checkData, 100); 
                         }
                     };
                     checkData();
                 });
             },
             _getTimeZone: function () {
-                // Get the current system date and time
                 const currentDate = new Date();
-
-                // Get the current system time zone
                 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-                // Format the current date and time to include the time zone information
                 const options = {
                     timeZone: timeZone,
                     year: "numeric",
@@ -111,27 +157,16 @@ sap.ui.define([
 
                 const formatter = new Intl.DateTimeFormat([], options);
                 const formattedDate = formatter.format(currentDate);
-
-                // Output the current date and time with the time zone
                 console.log("Current Date and Time with Time Zone:", formattedDate);
                 console.log("Current System Time Zone:", timeZone);
             },
             _checkingTime : function(){
-                // Given date and time
             const dateString = "30-07-2024";
             const timeString = "15:30";
-
-            // Parse the date and time strings
             const [day, month, year] = dateString.split('-').map(Number);
             const [hours, minutes] = timeString.split(':').map(Number);
-
-            // Create a Date object
             const date = new Date(Date.UTC(year, month - 1, day, hours, minutes));
-
-            // Format the Date object to the desired format
             const formattedDate = this.formatDateTime(date);
-
-            // Display the formatted date and time
             console.log("Formatted Date and Time:", formattedDate);
             },
             formatDateTime: function(date) {
@@ -141,18 +176,91 @@ sap.ui.define([
                 const hours = String(date.getUTCHours()).padStart(2, '0');
                 const minutes = String(date.getUTCMinutes()).padStart(2, '0');
                 const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-    
-                // Format the date part as YYYY-MM-DD
                 const datePart = `${year}-${month}-${day}`;
-    
-                // Format the time part as HH:MM:SS
-                const timePart = `${hours}:${minutes}:${seconds}`;
-    
-                // Combine date and time parts with a 'T' separator and append 'Z' for UTC
+                const timePart = `${hours}:${minutes}:${seconds}`;    
                 const formattedDateTime = `${datePart}T${timePart}Z ${hours}:${minutes}:${seconds}`;
-    
                 return formattedDateTime;
             },
+
+            triggerControllerPostLineItemData: async function () {
+                try {
+                    let data = this.getView().getModel("navModel").getData();
+                    await this.onControllerPostData(data.navigatedVendorNo,data.navigatedVoyageNo, data.navigatedCharterno, data.navigatedBidStartDate, data.navigatedBidStartTime, data.navigatedBidEndDate, data.navigatedBidEndTime);
+                } catch (error) {
+                    console.error("Error in triggerPostLineItemData:", error);
+                }
+            },
+
+            onControllerPostData: async function (vendorNum,voyageNo, charterNo, startDate, sTime, endDate, eTime){
+                try {
+                    debugger;
+                    let allControllerData = []; 
+                    let startTime = `${sTime}.0`;
+                    let endTime = `${eTime}.0`;
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBindList = oModel.bindList("/ControllerLiveBidDetails");
+                    
+                    await oBindList.requestContexts().then(aContexts => {
+                        aContexts.forEach(oContext => {
+                            allControllerData.push(oContext.getObject());
+                        });
+                    });
+            
+                    let extractData = allControllerData.filter(item => item.Chrnmin === charterNo && item.voyno === voyageNo);
+            
+                    let headerToItem = allControllerData.map((vendor, index) => {
+                        let createdAtDate = new Date(vendor.createdAt);
+                        let biddate1 = createdAtDate.toISOString().split('T')[0]; 
+                        let bidtime1 = createdAtDate.toTimeString().split(' ')[0];
+                        let biddate = `${biddate1}T00:00:00Z`
+                        let bidtime = `${bidtime1}.0`
+                        return{
+                        "Voyno": vendor.voyno,
+                        "Lifnr": vendorNum,
+                        "Zcode": "FREIG",
+                        "Chrnmin": vendor.Chrnmin,
+                        "Biddate": biddate,
+                        "Bidtime": bidtime,
+                        "CodeDesc": "FRIEGHT COST",
+                        "Cvalue": vendor.quotationPrice,
+                        "Chrqsdate": startDate,
+                        "Chrqstime": startTime,
+                        "Chrqedate": endDate,
+                        "Chrqetime": endTime,
+                        "Zmode": "AUTO",
+                        "Uname": "ASHWANI",
+                        }
+                    });
+            
+                    let payload = {
+                        "Chrnmin": charterNo, 
+                        "contItemSet": headerToItem
+                    };
+            
+                    console.log("Payload:", payload);
+                    await this._sendControllerDataToS4(payload);
+                } catch (error) {
+                    console.error("Error in onControllerPostData:", error);
+                }
+            },            
+
+            sendControllerDataToS4: function(oPayload) {
+                debugger;
+                const oDataModelV4 = this.getOwnerComponent().getModel();
+                let oBindList = oDataModelV4.bindList("/contheaderSet");
+            
+                oBindList.create(oPayload).created().then(oContext => {
+                    sap.m.MessageBox.success(`S4 data Submit Successfully`, {
+                        title: "Data Created",
+                        onClose: function () {
+                        }
+                    });
+                }).catch(oError => {
+                    sap.m.MessageBox.error("Error occurred while creating voyage");
+                    console.log("Error messages: ", oError);
+                });
+            },
+            
             onQuoteSubmit: function () {
                 let oView = this.getView();
                 let sQuotePrice = oView.byId("quoteInput").getValue();
@@ -182,7 +290,6 @@ sap.ui.define([
 
             _onObjectMatched: async function (oEvent) {
                 debugger;
-                this._startTimer();
                 let selectedCharterNo = this.getOwnerComponent().getModel("navModel").getProperty("/navigatedCharterno");
                 let mode = this.getOwnerComponent().getModel("navModel").getProperty("/navigatedMode");
                 selectedCharterNo = "4000000621";
@@ -220,11 +327,14 @@ sap.ui.define([
             },
 
             fetchAndSortData: async function (Chrnmin) {
+                debugger
                 let oModel = this.getOwnerComponent().getModel();
                 const aFilters = [
                     new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, Chrnmin)
                 ];
-                let oBindList = oModel.bindList("/calculateRankings", undefined, undefined, aFilters);
+                let oBindList = oModel.bindList("/calculateRankings", undefined, undefined, undefined,{
+                    $filter: `Chrnmin eq '${Chrnmin}'`
+                });
                 let receivedData = [];
             
                 await oBindList.requestContexts().then(function (aContexts) {
@@ -263,9 +373,9 @@ sap.ui.define([
                 // Sort the data based on freight and score
                 receivedData.sort(function (a, b) {
                     if (a.originalBid === b.originalBid) {
-                        return b.score - a.score; // If freight is equal, sort by score descending
+                        return b.score - a.score; 
                     }
-                    return a.originalBid - b.originalBid; // Sort by freight ascending
+                    return a.originalBid - b.originalBid; 
                 });
             
                 return receivedData;
@@ -278,6 +388,7 @@ sap.ui.define([
             },
 
             updateCardFromTable: function() {
+                debugger;
                 var oTable = this.byId("centerDataTable");
                 var oItems = oTable.getItems();
                 if (oItems.length === 0) {
@@ -288,7 +399,7 @@ sap.ui.define([
                 var oFirstItem = oItems[0];
                 var oBindingContext = oFirstItem.getBindingContext("rankmodel");
                 var oData = oBindingContext.getObject();
-                console.log("oDatafghfghj",oData);
+                // console.log("oDatafghfghj",oData);
                 
                 var oCard = this.byId("_IDGenCard4");
                 var oHeader = oCard.getHeader();
@@ -296,7 +407,7 @@ sap.ui.define([
                 var oCommercialScore = this.byId("_IDGenObjectStatus3");
                 var oTechnicalScore = this.byId("_IDGenObjectStatus4");
                 
-                oHeader.setTitle(oData.vendorName);
+                oHeader.setTitle(`${oData.vendorName} : ${oData.vendorId}`);
                 if(oData.currentBid === "Bid not started"){
                     oHeader.setSubtitle(`Quote: ${oData.originalBid}`);
                 }
@@ -306,31 +417,100 @@ sap.ui.define([
                 
                 oCommercialScore.setText(oData.Crank);
                 oTechnicalScore.setText(oData.Trank);
-                if(this._BusyDialog){
-                    this._BusyDialog.close();
-                }
+                // if(this._BusyDialog){
+                //     this._BusyDialog.close();
+                // }
             },
-            onStart: function () {
+            onStart2: function () {
                 this.byId("submitButton").setEnabled(true);
                 this.byId("startMsgStrip").setVisible(false);
                 this.byId("startButton").setVisible(false);
+                this.byId("stopButton").setVisible(false);
                 let oModel = this.getView().getModel("rankmodel");
+                if (!oModel) {
+                    console.error("Model 'rankmodel' is not defined.");
+                    return;
+                }
                 let aVendors = oModel.getProperty("/vendors");
             
                 aVendors.forEach(vendor => {
                     vendor.currentBid = vendor.originalBid;
                 });
-            
                 oModel.updateBindings();
-            
-                // Start the live bidding process
                 this._startLiveBidding();
             },
 
+            onStartBidding:function(){
+                var sChrnmin = "4000000640";    
+                var oModel = this.getView().getModel("biddingModel");
+                var oEntry = {
+                    Chrnmin: sChrnmin,
+                    biddStartStatus: true
+                };
+                this.createEntries2(oEntry)
+            },
+
+            createEntries2: async function (payLoad) {
+                try {
+                    let oModel = this.getView().getModel();
+                    console.log("Creating Entry.... ", payLoad);
+            
+                    let oBindList = oModel.bindList("/biddingStartManual");
+                    let res = await oBindList.create(payLoad);
+            
+                    console.log("Entry created successfully", res);
+                    sap.m.MessageToast.show("Entry created successfully.");
+            
+                    oModel.refresh();
+                } catch (error) {
+                    console.error("Failed to create entry:", error);
+                    sap.m.MessageBox.error("Failed to create the entry.");
+                }
+            },            
+
+            nStartBidding: async function() {
+                let currentSelectedCharminNo = sChrnminNo;
+                this.checkBiddingStatusExist(currentSelectedCharminNo);
+                let bidStartStatusPayLoad = {
+                    Chrnmin: currentSelectedCharminNo,
+                    biddStartStatus : true
+                }
+                let srvModel = this.getOwnerComponent().getModel();
+                let oBindList = srvModel.bindList("/biddingStartManual");
+                try {
+                    await oBindList.create(bidStartStatusPayLoad);
+                    MessageToast.show("Bidding Started.....");
+                    this.byId("submitButton").setEnabled(true);
+                    this.byId("startMsgStrip").setVisible(false);
+                    this.byId("startButton").setVisible(false);
+                    let oModel = this.getView().getModel("rankmodel");
+                    if (!oModel) {
+                        console.error("Model 'rankmodel' is not defined.");
+                        return;
+                    }
+                    let aVendors = oModel.getProperty("/vendors");
+                
+                    aVendors.forEach(vendor => {
+                        vendor.currentBid = vendor.originalBid;
+                    });
+                    oModel.updateBindings();            
+                    this._startLiveBidding();
+                } catch (error) {
+                   MessageToast.show("Error : ", error);
+                } 
+            },
+
+            checkBiddingStatusExist : async function(sChrnminNo){
+                let srvModel = this.getOwnerComponent().getModel();
+                let oContext = srvModel.bindContext(`/biddingStartManual(Chrnmin='${sChrnminNo}')`);
+                let oContextItem = await oContext.getBoundContext().getObject();
+                console.log("oContextItem", oContextItem);
+                return;
+            },
             _startLiveBidding: function () {
                 this._liveBiddingInterval = setInterval(() => {
                     this._fetchLatestBids();
-                }, 1000); // Fetch every second
+                }, 1000); 
             },
             
             _fetchLatestBids: async function () {
@@ -356,73 +536,105 @@ sap.ui.define([
                     if (vendor) {
                         vendor.currentBid = liveBid.quotationPrice;
                     }
-                });
-            
-                // Sort vendors by currentBid, with preference for higher Tscore in case of ties
+                });            
                 aVendors.sort((a, b) => {
                     if (a.currentBid === b.currentBid) {
-                        // If currentBid is the same, sort by Tscore descending
                         return b.Tscore - a.Tscore;
                     }
-                    return a.currentBid - b.currentBid; // Sort by currentBid ascending
-                });
-            
-                // Update Crank based on the sorted order
+                    return a.currentBid - b.currentBid;
+                });            
                 aVendors.forEach((vendor, index) => {
                     vendor.Crank = `C${index + 1}`;
                 });
             
                 oViewModel.updateBindings();
-                this.updateCardFromTable(); // Ensure the card is updated with the new data
+                this.updateCardFromTable(); 
             },
             
-            onStop: function () {
-                this.byId("submitButton").setEnabled(false);
-                clearInterval(this._liveBiddingInterval);
+            onStop: async function () {
+                let oModel = this.getOwnerComponent().getModel();
+                try {
+                    const oContext = oModel.bindContext(`/biddingStartManual(Chrnmin='${sChrnminNo}')`);
+                    await oContext.getBoundContext().setProperty("biddStartStatus", false);
+                    this.byId("submitButton").setEnabled(false);
+                    clearInterval(this._liveBiddingInterval);
+                    MessageToast.show("Bidding Stopped.....");
+                } catch (error) {
+                    MessageToast.show("Failed to Exit.....");
+                }
             },
             
-            _startTimer: function () {
+
+            _startTimer: function(startDate, startTime, endDate, endTime) {
+                // debugger;
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+            
+                var startDateTime = new Date(startDate + 'T' + startTime);
+                var endDateTime = new Date(endDate + 'T' + endTime);
+            
+                var updateInterval = 1000;
+            
                 var oRadialMicroChart = this.byId("radialClock");
-                var oTimeLabel = this.byId("timeLeftCell");
-                var duration = 5 * 60 * 1000; // 15 minutes in milliseconds
-                var startTime = Date.now();
-
-                // Reset the chart and label
+                var oTimeText = this.byId("timeLeftCell");
+            
                 oRadialMicroChart.setPercentage(0);
-                oTimeLabel.setText("Time Left - 00:5:00");
-
-                var timer = setInterval(function () {
-                    var elapsed = Date.now() - startTime;
-                    var remainingTime = duration - elapsed;
-                    var hours = Math.floor(remainingTime / 3600000);
-                    var minutes = Math.floor((remainingTime % 3600000) / 60000);
-                    var seconds = Math.floor((remainingTime % 60000) / 1000);
-
-                    // Format the time as HH:MM:SS
-                    var timeString =
-                        (hours < 10 ? "0" : "") + hours + ":" +
-                        (minutes < 10 ? "0" : "") + minutes + ":" +
-                        (seconds < 10 ? "0" : "") + seconds;
-                    oTimeLabel.setText("Time Left - " + timeString);
-
-                    var percentage = (elapsed / duration) * 100;
-                    oRadialMicroChart.setPercentage(percentage);
-
-                    if (elapsed >= duration) {
-                        clearInterval(timer);
-                        oTimeLabel.setText("Time Left - 00:00:00");
+                oTimeText.setText("");
+            
+                this.intervalId = setInterval(function () {
+                    var currentDateTime = new Date();
+            
+                    if (currentDateTime >= startDateTime) {
+                        var totalTime = (endDateTime - startDateTime) / 1000;
+                        var timeElapsed = (currentDateTime - startDateTime) / 1000;
+                        var remainingTime = totalTime - timeElapsed;
+            
+                        remainingTime = Math.max(0, remainingTime);
+            
+                        var hours = Math.floor(remainingTime / 3600);
+                        var minutes = Math.floor((remainingTime % 3600) / 60);
+                        var seconds = Math.floor(remainingTime % 60);
+            
+                        var percentage = Math.round((remainingTime / totalTime) * 100);
+                        oRadialMicroChart.setPercentage(Math.max(0, percentage));
+            
+                        let  timeText;
+                    if (remainingTime > 0) {
+                        timeText = "Time Left - " + hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+                        oTimeText.setText(timeText)
+                    } else {
+                        oRadialMicroChart.setPercentage(Math.max(100, percentage));
                     }
-                }, 1000); // Update every second
-
-                this._timer = timer; // Store the timer to clear it later if needed
-            },
+                    if (remainingTime <= 600) { 
+                        oRadialMicroChart.setValueColor("Critical"); // Or any other color like "Error", "Good", "Neutral"
+                    } else {
+                        oRadialMicroChart.setValueColor("Neutral"); 
+                    }
+                        if (remainingTime <= 0) {
+                            clearInterval(this.intervalId);
+                            this.intervalId = null;
+                            let that = this;
+                            sap.m.MessageBox.show("Bidding successfully completed.", {
+                                icon: sap.m.MessageBox.Icon.SUCCESS,
+                                title: "Bidding Complete",
+                                actions: [sap.m.MessageBox.Action.OK],
+                                onClose: function (oAction) {
+                                    that.getOwnerComponent().getRouter().navTo("RouteMain");
+                                }
+                            });
+                        }
+                    }
+                }.bind(this), updateInterval);
+            }, 
             onExit: function () {
-                // Clean up the timer when the controller is destroyed
                 if (this._timer) {
                     clearInterval(this._timer);
                 }
-            }
+                
 
+            }
         });
 
     });

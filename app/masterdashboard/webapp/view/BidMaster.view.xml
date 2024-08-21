@@ -68,10 +68,10 @@
 
         <ScrollContainer id="scrollContainer" height="calc(100% - 50px)" vertical="true" class="scrollContainer">
 
-         <Table id="createTypeTable"
+        <Table id="createTypeTable"
             width="100%"
             class="mastertables"
-            items="{path: '/xNAUTIxMASBID', sorter: {path: 'Bname', descending: false}}"
+            items="{path: '/xNAUTIxMASBID', sorter: {path: 'profileId', descending: false}}"
             mode="MultiSelect"
             selectionChange="selectedItems"
             sticky="ColumnHeaders"
@@ -79,9 +79,10 @@
             >
 
             <columns>
-                <Column id="_IDGenColumn1"  >
-                    <Label id="_IDGenLabel1" text="User" />
+            <Column id="_IDGenColumn0"  >
+                    <Label id="_IDGenLabel0" text="Bid Profile Id" />
                 </Column>
+                
                 <Column id="_IDGenColumn2" >
                     <Label id="_IDGenLabel2" text="Code" />
                 </Column>
@@ -107,7 +108,7 @@
             </columns>
             <ColumnListItem id="_istItem1">
                 <cells>
-                    <Text id="_IDGenText3" text="{Bname}" />
+                    <Text id="_IDGenText0" text="{profileId}" />
                     <Text id="_IDGenText4"  text="{Code}" />
                     <Text id="_IDGenText5" text="{Value}" />
                     <Text id="_IDGenText6" text="{Cvalue}" />
@@ -134,11 +135,13 @@
             mode="MultiSelect"
          >
               <columns>
+                <Column id="_IDGenColumn01" >
+                    <Label id="_IDGenLabe01" text="Bid Profile Id" required="true"/>
+                </Column>
+                
+                
                 <Column id="_IDGenColumn9" >
                     <Label id="_IDGenLabel9" text="Code" required="true" />
-                </Column>
-                <Column id="User">
-                    <Label id="_IDGenLabel10" text="User" required="true" />
                 </Column>
                 <Column id="_IDGenColumn10" width="12rem" >
                     <Label id="_IDGenLabel11" text="Value"  required="true"/>
@@ -162,8 +165,8 @@
             </columns>
             <ColumnListItem id="istItem1">
                 <cells>
-                    <Input id="Code"  liveChange="onCodeLiveChange" />
-                    <Input id="Bname" showValueHelp="true" valueHelpRequest="onMaintaingroup" valueHelpOnly="true" />
+                    <Input id="BidprofileId"  liveChange="onCodeLiveChange" />
+                    <Input id="Code"  liveChange="onCodeLiveChange" />                    
                     <Input id="Value" liveChange="onLiveChangeValue"/>
                     <Input id="Cvalue" liveChange="onLiveChangeCvalue"/>
                     <Input id="Cunit"  showValueHelp="true" valueHelpRequest="onCurrencyPress" valueHelpOnly="true"/>
@@ -189,11 +192,12 @@
            
         >
               <columns>
-                <Column id="_IDGenColumn16" >
-                    <Label id="_IDGenLabel17" text="Code" />
+              <Column id="_IDGenColumn001" >
+                    <Label id="_IDGenLabel001" text="Bid Profile Id" />
                 </Column>
+                
                 <Column id="_IDGenColumn17" >
-                    <Label id="_IDGenLabel18" text="User" />
+                    <Label id="_IDGenLabel18" text="Code" />
                 </Column>
                 <Column id="_IDGenColumn18" width="12rem" >
                     <Label id="_IDGenLabel19" text="Value"  required="true"/>
@@ -217,8 +221,9 @@
             </columns>
             <ColumnListItem id="istItem2">
                 <cells>
+                    <Text id="BidprofileId1"/>
+                   
                     <Text id="Code1"/>
-                    <Text id="Bname1"  />
                     <Input id="Value1" liveChange="onLiveChangeValue"/>
                     <Input id="Cvalue1" liveChange="onLiveChangeCvalue"/>
                     <Input id="Cunit1" showValueHelp="true" valueHelpRequest="onCurrencyPress" />
@@ -230,7 +235,7 @@
 				    </Select>
                     
                     <Input id="Tablename1" liveChange="onLiveChangeTablename"/>
-                    <CheckBox id="Multi_Choice1"  select="onSelectChange"/>
+                    <CheckBox id="MultiChoice1"  select="onSelectChange"/>
                 </cells>
             </ColumnListItem>
         </Table>
@@ -276,11 +281,5 @@
                     type="Emphasized"
                 />
             </OverflowToolbar>
-
-      
-           
-       
     </Page>
- 
-   
 </mvc:View>

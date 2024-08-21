@@ -20,7 +20,7 @@
   "devDependencies": {
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^7.9.4",
-    "@sap/ux-specification": "^1.120.15",
+    "@sap/ux-specification": "^1.120.16",
     "rimraf": "^3.0.2"
   },
   "scripts": {
@@ -28,7 +28,10 @@
     "undeploy": "cf undeploy nautical --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-vendorbidding": "cds watch --open vendorbidding/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-vendorbidding": "cds watch --open vendorbidding/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-contractaward": "cds watch --open contractaward/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-contactaward": "cds watch --open contactaward/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-comparelivefreight": "cds watch --open comparelivefreight/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
@@ -394,6 +397,22 @@
           "credentials": {
             "destination": "SandboxPO",
             "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
+          }
+        }
+      },
+      "NAUTINAUTICAL_VALUEHELP_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/NAUTINAUTICAL_VALUEHELP_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV"
           }
         }
       }

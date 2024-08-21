@@ -23,7 +23,9 @@ sap.ui.define(
 
     let inputFieldObj = {};
     let saveObj = {};
-    let cancelObj = {}
+    let cancelObj = {};
+    let oBusyDialog;
+
 
     return Controller.extend("com.ingenx.nauti.masterdashboard.controller.EventMaster", {
 
@@ -848,6 +850,7 @@ sap.ui.define(
         let oCreateTable = oView.byId("createTypeTable");
         let oUpdateTable = oView.byId("updateTypeTable");
 
+        // Get all items from the updateTypeTable
         let aItems = oUpdateTable.getItems();
 
         let i = 0;
@@ -855,10 +858,15 @@ sap.ui.define(
         for (let i = 0; i < aItems.length; i++) {
           let oItem = aItems[i];
           let sDesc = oItem.getCells()[1].getValue();
+          console.log("sDesc", sDesc);
           sDesc = this.removeExtraSpaces(sDesc);
-          if (onEditInput[i].trim() !== sDesc.trim()) {
+          if (sDesc.length > 30) {
+            MessageToast.show("Description length can not exceed thirty characters");
+            return;
+          }
+          if (onEditInput[i].trim().toLowerCase() !== sDesc.trim().toLowerCase()) {
             flagNothingtoUpdate = false;
-            break; 
+            break;
           }
         }
 
@@ -867,36 +875,49 @@ sap.ui.define(
           return;
         }
 
+        // Iterate over the items to update the corresponding item in the createTypeTable
         aItems.forEach(function (oItem) {
-          let sValue = oItem.getCells()[0].getText(); 
-          let sDesc = oItem.getCells()[1].getValue(); 
+          let sValue = oItem.getCells()[0].getText(); // Assuming Value is in the first cell
+          let sDesc = oItem.getCells()[1].getValue(); // Assuming Field Description is in the second cell
 
           var formattedDes = that.formatDes(sDesc);
 
+          // Find the corresponding item in the createTypeTable
           let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
-            return oCreateItem.getCells()[0].getText() === sValue;
+            return oCreateItem.getCells()[0].getText() === sValue; // Assuming Value is in the first cell
           });
 
-          
+
           if (oCreateItem) {
             oCreateItem.getCells()[1].setText(formattedDes.replace(/\s+/g, " ").trim()); // Assuming Field Description is in the second cell
           }
         });
 
+        // Show the createTypeTable
         oCreateTable.setVisible(true).removeSelections();
 
 
         oUpdateTable.setVisible(false);
 
+
+
         this.onPatchSent();
         setTimeout(() => {
           this.resetView();
           oUpdateTable.removeAllItems();
-          this.onPatchCompleted({ getParameter: () => ({ success: true }) });
-        }, 1500);
+          this.onPatchCompleted({
+            getParameter: () => ({
+              success: true
+            })
+          });
+
+
+        }, 1100);
+
+
+
 
       },
-
       removeExtraSpaces: function (sentence) {
         // Split the sentence into words
         let words = sentence.split(/\s+/);
@@ -973,7 +994,7 @@ sap.ui.define(
           return;
         }
 
-        const that = this;  // creatinh reference for use in Dialog
+        const that = this; 
         sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
           MessageBox.confirm(
             "Are you sure ,you want  to delete ?", {
@@ -981,7 +1002,11 @@ sap.ui.define(
             title: "Confirm ",
             onClose: function (oAction) {
               if (oAction === MessageBox.Action.OK) {
-
+                 oBusyDialog = new sap.m.BusyDialog({
+                  text: "Deleting, please wait...",
+                  title: "Processing"
+              });
+                oBusyDialog.open();
                 that.deleteSelectedItems(aItems);
               } else {
 
@@ -1002,20 +1027,21 @@ sap.ui.define(
         aItems.forEach(function (oItem) {
           const oContext = oItem.getBindingContext();
           oContext.delete().then(function () {
-            // Successful deletion
-            MessageToast.show(`${deleteMsg} deleted successfully`);
+            MessageToast.show(`${deleteMsg} deleted sucessfully`);
+            oBusyDialog.close();
 
-            console.log("Successfully Deleted");
+            console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            // Handle deletion error
             MessageBox.error("Error deleting item: " + oError.message);
+            oBusyDialog.close();
+
           });
         });
 
-
         let oTable = this.byId("createTypeTable");
         oTable.removeSelections();
+
 
       },
 

@@ -1,9 +1,305 @@
-/* checksum : ba27d84518f4693870657710593b5d0d */
+/* checksum : 54ad40335702c240ae71390ac6298b8c */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
 @sap.supported.formats : 'atom json xlsx'
 service NAUTIMASTER_BTP_SRV {};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.profileBidMasterSet {
+  @sap.unicode : 'false'
+  @sap.label : 'ProfileId'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key BidprofileId : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Code'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Code : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Value'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Value : String(50) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Revaluation'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Cvalue : Decimal(14, 3) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Currency'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  @sap.semantics : 'currency-code'
+  Cunit : String(5) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Datatype'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Datatype : String(4) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Table Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Tablename : String(20) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Multiple Choice'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  MultiChoice : Boolean not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'Bid created date'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creadate : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'Bid creat Time'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creatime : Time;
+  @sap.unicode : 'false'
+  @sap.label : 'Created By'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creaby : String(30) not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'change on'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changedon : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'BID CHANGEAT'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changeat : Time;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.costProfileSet {
+  @sap.unicode : 'false'
+  @sap.label : 'CostProId'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Costprofid : String(30) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Cost.Code'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Costcode : String(4) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Cost.Code.Des'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Cstcodes : String(35) not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'created Date'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creadate : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'created time'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creatime : Time;
+  @sap.unicode : 'false'
+  @sap.label : 'Created By'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creaby : String(30) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'changed By'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changedby : String(15) not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'change on'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changedon : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'change at'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changeat : Time;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.pageable : 'false'
+@sap.content.version : '1'
+entity NAUTIMASTER_BTP_SRV.BidMasterSet {
+  @sap.unicode : 'false'
+  @sap.label : 'ProfileId'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key BidprofileId : String(25) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'User'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Bname : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Code'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  key Code : String(12) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Value'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Value : String(50) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Revaluation'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Cvalue : Decimal(14, 3) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Currency'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  @sap.semantics : 'currency-code'
+  Cunit : String(5) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Datatype'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Datatype : String(4) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Table Name'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Tablename : String(20) not null;
+  @sap.unicode : 'false'
+  @sap.label : 'Multiple Choice'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  MultiChoice : Boolean not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'Bid created date'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creadate : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'Bid creat Time'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creatime : Time;
+  @sap.unicode : 'false'
+  @sap.label : 'Created By'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Creaby : String(30) not null;
+  @odata.Type : 'Edm.DateTime'
+  @odata.Precision : 7
+  @sap.unicode : 'false'
+  @sap.label : 'change on'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changedon : Timestamp;
+  @sap.unicode : 'false'
+  @sap.label : 'BID CHANGEAT'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  Changeat : Time;
+};
 
 @cds.external : true
 @cds.persistence.skip : true
@@ -155,70 +451,6 @@ entity NAUTIMASTER_BTP_SRV.ClassMasterSet {
   @sap.label : 'Field Description'
   @sap.filterable : 'false'
   ZfDesc : String(50) not null;
-};
-
-@cds.external : true
-@cds.persistence.skip : true
-@sap.pageable : 'false'
-@sap.content.version : '1'
-entity NAUTIMASTER_BTP_SRV.BidMasterSet {
-  @sap.unicode : 'false'
-  @sap.label : 'User'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  key Bname : String(12) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Code'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  key Code : String(12) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Value'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Value : String(50) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Revaluation'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Cvalue : Decimal(14, 3) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Currency'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  @sap.semantics : 'currency-code'
-  Cunit : String(5) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Datatype'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Datatype : String(4) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Table Name'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  Tablename : String(20) not null;
-  @sap.unicode : 'false'
-  @sap.label : 'Multiple Choice'
-  @sap.creatable : 'false'
-  @sap.updatable : 'false'
-  @sap.sortable : 'false'
-  @sap.filterable : 'false'
-  MultiChoice : Boolean not null;
 };
 
 @cds.external : true
@@ -825,9 +1057,9 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxcury_count {
 @sap.label : 'Bidding Master'
 entity NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
   @sap.display.format : 'UpperCase'
-  @sap.label : 'User'
-  @sap.quickinfo : 'User Name in User Master Record'
-  key Bname : String(12) not null;
+  @sap.label : 'ProfileId'
+  @sap.quickinfo : 'Profile id'
+  key profileId : String(25) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Code'
   key Code : String(12) not null;
@@ -848,6 +1080,23 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Table Name'
   Tablename : String(20);
+  @sap.display.format : 'Date'
+  @sap.label : ''
+  @sap.quickinfo : 'created date'
+  creaDate : Date;
+  @sap.label : ''
+  @sap.quickinfo : 'Bid creat Time'
+  creaTime : Time;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Created By'
+  createdBy : String(30);
+  @sap.display.format : 'Date'
+  @sap.label : ''
+  @sap.quickinfo : 'change on'
+  changedOn : Date;
+  @sap.label : ''
+  @sap.quickinfo : 'BID CHANGEAT'
+  changeAt : Time;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Multiple Choice'
   Multi_Choice : Boolean;
@@ -993,7 +1242,6 @@ entity NAUTIMASTER_BTP_SRV.xNAUTIxuseridassociation {
   @sap.display.format : 'UpperCase'
   @sap.label : 'User ID group'
   key Zgroup : String(12) not null;
-  @cds.ambiguous : 'missing on condition?'
   to_association : Association to many NAUTIMASTER_BTP_SRV.xNAUTIxUIIDUSRGROUP {  };
 };
 

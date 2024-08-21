@@ -11,6 +11,7 @@
         cancel="onApproverClose"
          initialFocus="SearchField"
         items="{filteredUsersModel>/}"
+        liveChange="onApproverSearch"
        
         >
         <StandardListItem id="_IDGenSnd"

@@ -23,7 +23,8 @@ sap.ui.define(
 
     let inputFieldObj = {};
     let saveObj = {};
-    let cancelObj = {}
+    let cancelObj = {};
+    let oBusyDialog;
 
     return Controller.extend("com.ingenx.nauti.masterdashboard.controller.VoyageType", {
 
@@ -35,7 +36,7 @@ sap.ui.define(
 
       },
 
-     
+
 
       onCodeLiveChange: function (oEvent) {
         var oInput = oEvent.getSource();
@@ -46,7 +47,7 @@ sap.ui.define(
           oInput.setValue(sValue);
           sap.m.MessageToast.show("Maximum length is 4 characters.");
         }
-        
+
         if (/[^a-zA-Z0-9]/.test(sValue)) {
           sValue = sValue.replace(/[^a-zA-Z0-9]/g, '');
 
@@ -54,46 +55,46 @@ sap.ui.define(
           sap.m.MessageToast.show("Only Alphanumeric characters are allowed.");
         }
 
-       
+
       },
 
-   
+
 
       onLiveChange: function (oEvent) {
         var oInput = oEvent.getSource();
         var sValue = oInput.getValue();
- 
+
         if (sValue.length > 30) {
-            sValue = sValue.substring(0, 30);
-            oInput.setValue(sValue);
-            sap.m.MessageToast.show("Maximum length is 30 characters.");
-            return;
+          sValue = sValue.substring(0, 30);
+          oInput.setValue(sValue);
+          sap.m.MessageToast.show("Maximum length is 30 characters.");
+          return;
         }
- 
+
         var sFilteredValue = sValue.replace(/[^a-zA-Z0-9.\- ]/g, '');
-       
+
         if (sFilteredValue.length !== sValue.length) {
-            sap.m.MessageToast.show("Only Alphanumeric characters, Dots (.), Hyphens (-), and Spaces are allowed.");
-            sValue = sFilteredValue;
+          sap.m.MessageToast.show("Only Alphanumeric characters, Dots (.), Hyphens (-), and Spaces are allowed.");
+          sValue = sFilteredValue;
         }
         if (sFilteredValue.startsWith('.') || sFilteredValue.startsWith('-')) {
-            sFilteredValue = sFilteredValue.replace(/^[.-]+/, '');
-            sap.m.MessageToast.show("Dots (.) and Hyphens (-) are not allowed as the first character.");
-            sValue = sFilteredValue;
+          sFilteredValue = sFilteredValue.replace(/^[.-]+/, '');
+          sap.m.MessageToast.show("Dots (.) and Hyphens (-) are not allowed as the first character.");
+          sValue = sFilteredValue;
         }
- 
+
         oInput.setValue(sFilteredValue);
-   
+
         if (sFilteredValue.length > 30) {
-            sFilteredValue = sFilteredValue.substring(0, 30);
-            oInput.setValue(sFilteredValue);
-            sap.m.MessageToast.show("Maximum length is 30 characters.");
+          sFilteredValue = sFilteredValue.substring(0, 30);
+          oInput.setValue(sFilteredValue);
+          sap.m.MessageToast.show("Maximum length is 30 characters.");
         }
-    },
+      },
 
-    
 
-      
+
+
 
       onBackPress: function () {
         const that = this;
@@ -106,8 +107,7 @@ sap.ui.define(
 
           // If no items have been selected, navigate to "RouteMasterDashboard"
           oRouter.navTo("RouteMasterDashboard");
-        }
-        else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
+        } else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
           oRouter.navTo("RouteMasterDashboard");
           this.byId('createTypeTable').removeSelections();
 
@@ -144,8 +144,6 @@ sap.ui.define(
 
         //   }
         // }
-
-
         else if (newEntryFlag) {
           let voyCode = this.getView().byId("Code").getValue().trim();
           let voyCodeDesc = this.getView().byId("Desc").getValue().trim();
@@ -166,34 +164,32 @@ sap.ui.define(
             sap.m.MessageBox.confirm(
               "Do you want to discard the changes?", {
 
-              title: "Confirmation",
-              onClose: function (oAction) {
+                title: "Confirmation",
+                onClose: function (oAction) {
 
-                if (oAction === sap.m.MessageBox.Action.OK) {
+                  if (oAction === sap.m.MessageBox.Action.OK) {
 
-                  oEntryTable.setVisible(false);
-                  // Clear input fields of the first row
-                  oEntryTable.getItems()[0].getCells()[0].setValue("");
-                  oEntryTable.getItems()[0].getCells()[1].setValue("");
+                    oEntryTable.setVisible(false);
+                    // Clear input fields of the first row
+                    oEntryTable.getItems()[0].getCells()[0].setValue("");
+                    oEntryTable.getItems()[0].getCells()[1].setValue("");
 
-                  // Remove items except the first row
-                  var items = oEntryTable.getItems();
-                  for (var i = items.length - 1; i > 0; i--) {
-                    oEntryTable.removeItem(items[i]);
+                    // Remove items except the first row
+                    var items = oEntryTable.getItems();
+                    for (var i = items.length - 1; i > 0; i--) {
+                      oEntryTable.removeItem(items[i]);
+                    }
+                    // If user clicks OK, reset the view to its initial state
+                    that.resetView();
+                  } else {
+                    // If user clicks Cancel, do nothing
                   }
-                  // If user clicks OK, reset the view to its initial state
-                  that.resetView();
-                } else {
-                  // If user clicks Cancel, do nothing
                 }
               }
-            }
             );
 
           }
-        }
-
-        else if (editFlag) {
+        } else if (editFlag) {
 
           var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
           var aItems = oTable.getItems();
@@ -278,12 +274,10 @@ sap.ui.define(
 
         //   }
         // }
-
         else if (aSelectedIds.length && !newEntryFlag && !editFlag) {
           oRouter.navTo("RouteHome");
           this.byId("createTypeTable").removeSelections();
-        }
-        else if (newEntryFlag) {
+        } else if (newEntryFlag) {
           let voyCode = this.getView().byId("Code").getValue().trim();
           let voyCodeDesc = this.getView().byId("Desc").getValue().trim();
           if (voyCode == "" && voyCodeDesc == "") {
@@ -307,38 +301,35 @@ sap.ui.define(
           } else {
             sap.m.MessageBox.confirm(
               "Do you want to discard the changes?", {
-              title: "Confirmation",
-              onClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                  // If user clicks OK, reset the view to its initial state
-                  const oRouter = that.getOwnerComponent().getRouter();
-                  oRouter.navTo("RouteHome");
-                  setTimeout(() => {
-                    oEntryTable.setVisible(false);
-                    // Clear input fields of the first row
-                    oEntryTable.getItems()[0].getCells()[0].setValue("");
-                    oEntryTable.getItems()[0].getCells()[1].setValue("");
+                title: "Confirmation",
+                onClose: function (oAction) {
+                  if (oAction === sap.m.MessageBox.Action.OK) {
+                    // If user clicks OK, reset the view to its initial state
+                    const oRouter = that.getOwnerComponent().getRouter();
+                    oRouter.navTo("RouteHome");
+                    setTimeout(() => {
+                      oEntryTable.setVisible(false);
+                      // Clear input fields of the first row
+                      oEntryTable.getItems()[0].getCells()[0].setValue("");
+                      oEntryTable.getItems()[0].getCells()[1].setValue("");
 
-                    // Remove items except the first row
-                    var items = oEntryTable.getItems();
-                    for (var i = items.length - 1; i > 0; i--) {
-                      oEntryTable.removeItem(items[i]);
-                    }
-                    that.resetView();
-                  }, 1500);
-                } else {
-                  // If user clicks Cancel, do nothing
+                      // Remove items except the first row
+                      var items = oEntryTable.getItems();
+                      for (var i = items.length - 1; i > 0; i--) {
+                        oEntryTable.removeItem(items[i]);
+                      }
+                      that.resetView();
+                    }, 1500);
+                  } else {
+                    // If user clicks Cancel, do nothing
+                  }
                 }
               }
-            }
             );
 
           }
 
-        }
-
-
-        else if (editFlag) {
+        } else if (editFlag) {
 
           var oTable = this.byId("updateTypeTable"); // Assuming you have the table reference
           var aItems = oTable.getItems();
@@ -449,14 +440,14 @@ sap.ui.define(
           var oBindingContext = oItem.getBindingContext();
           var sValue = oBindingContext.getProperty("Voycd");
           var sDescription = oBindingContext.getProperty("Voydes");
-          
 
-          
+
+
           console.log("desc", sDescription);
           onEditInput.push(sDescription);
         });
 
-       
+
         // Get all selected items from the createTypeTable
         // let aSelectedItems = oCreateTable.getSelectedItems();
 
@@ -487,14 +478,20 @@ sap.ui.define(
           // Add new item to updateTypeTable
           let oColumnListItem = new sap.m.ColumnListItem({
             cells: [
-              new sap.m.Text({ text: sValue }),
-              new sap.m.Input({ value: sDesc, editable: true,liveChange:this.onLiveChange.bind(this) })
+              new sap.m.Text({
+                text: sValue
+              }),
+              new sap.m.Input({
+                value: sDesc,
+                editable: true,
+                liveChange: this.onLiveChange.bind(this)
+              })
             ]
           });
           oUpdateTable.addItem(oColumnListItem);
         }.bind(this));
 
-        
+
 
 
 
@@ -513,7 +510,7 @@ sap.ui.define(
         oView.byId("entryBtn").setEnabled(false);
         oView.byId("editBtn").setEnabled(false);
 
-        
+
       },
 
       onPatchSent: function (ev) {
@@ -543,266 +540,273 @@ sap.ui.define(
         }
       },
 
-     
+
       onAddRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var items = oTable.getItems();
         for (let i = 0; i < items.length; i++) {
-            let value1 = items[i].getCells()[0].getValue();
-            let value2 = items[i].getCells()[1].getValue();
-            if (!value1 || !value2) {
-                sap.m.MessageToast.show("Please Enter Both Fields Before Adding A New Row ");
-                return;
-            }
+          let value1 = items[i].getCells()[0].getValue();
+          let value2 = items[i].getCells()[1].getValue();
+          if (!value1 || !value2) {
+            sap.m.MessageToast.show("Please Enter Both Fields Before Adding A New Row ");
+            return;
+          }
         }
 
         var oNewRow = new sap.m.ColumnListItem({
-            cells: [
-                new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
-                new sap.m.Input({ value: "", editable: true, liveChange: this.onLiveChange.bind(this) })
-            ]
+          cells: [
+            new sap.m.Input({
+              value: "",
+              liveChange: this.onCodeLiveChange.bind(this)
+            }),
+            new sap.m.Input({
+              value: "",
+              editable: true,
+              liveChange: this.onLiveChange.bind(this)
+            })
+          ]
         });
 
         oTable.addItem(oNewRow);
-    },
-    
+      },
 
-   
 
-    // onDeleteRow1: function () {
-    //   var oTable = this.byId("entryTypeTable");
-    //   var aSelectedItems = oTable.getSelectedItems();
- 
-    //   if (aSelectedItems.length === 0) {
-    //       sap.m.MessageToast.show("Please select an item");
-    //       return;
-    //   }
- 
-    //   var oFirstItem = oTable.getItems()[0];
-    //   var aFirstItemCells = oFirstItem.getCells();
-    //   var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
-    //       return oCell.getValue && oCell.getValue() === "";
-    //   });
- 
-    //   if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
-    //       sap.m.MessageToast.show("The first empty row cannot be deleted.");
-    //       oTable.removeSelections();
-    //       return;
-    //   }
- 
-    //   sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
-    //       actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-    //       onClose: function (oAction) {
-    //           if (oAction === sap.m.MessageBox.Action.YES) {
-    //               var aItems = oTable.getItems();
-    //               var bAllSelected = aSelectedItems.length === aItems.length;
- 
-    //               if (bAllSelected) {
-    //                   // If all items are selected
-    //                   aItems.forEach(function (oItem) {
-    //                       if (oItem !== oFirstItem) {
-    //                           oTable.removeItem(oItem);
-    //                       }
-    //                   });
- 
-    //                   // Clear the values of the first row
-    //                   aFirstItemCells.forEach(function (oCell) {
-    //                       if (oCell.setValue) {
-    //                           oCell.setValue("");
-    //                       }
-    //                   });
-    //               } else {
-    //                   // If not all items are selected, delete only selected items
-    //                   aSelectedItems.forEach(function (oSelectedItem) {
-    //                       if (oSelectedItem !== oFirstItem) {
-    //                           oTable.removeItem(oSelectedItem);
-    //                       }
-    //                   });
-    //               }
- 
-    //               oTable.removeSelections();
-    //           } else {
-    //               oTable.removeSelections();
-    //           }
-    //       }
-    //   });
-    // },
-    onDeleteRow1: function () {
-      var oTable = this.byId("entryTypeTable");
-      var aSelectedItems = oTable.getSelectedItems();
-  
-      if (aSelectedItems.length === 0) {
+
+
+      // onDeleteRow1: function () {
+      //   var oTable = this.byId("entryTypeTable");
+      //   var aSelectedItems = oTable.getSelectedItems();
+
+      //   if (aSelectedItems.length === 0) {
+      //       sap.m.MessageToast.show("Please select an item");
+      //       return;
+      //   }
+
+      //   var oFirstItem = oTable.getItems()[0];
+      //   var aFirstItemCells = oFirstItem.getCells();
+      //   var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
+      //       return oCell.getValue && oCell.getValue() === "";
+      //   });
+
+      //   if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
+      //       sap.m.MessageToast.show("The first empty row cannot be deleted.");
+      //       oTable.removeSelections();
+      //       return;
+      //   }
+
+      //   sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
+      //       actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+      //       onClose: function (oAction) {
+      //           if (oAction === sap.m.MessageBox.Action.YES) {
+      //               var aItems = oTable.getItems();
+      //               var bAllSelected = aSelectedItems.length === aItems.length;
+
+      //               if (bAllSelected) {
+      //                   // If all items are selected
+      //                   aItems.forEach(function (oItem) {
+      //                       if (oItem !== oFirstItem) {
+      //                           oTable.removeItem(oItem);
+      //                       }
+      //                   });
+
+      //                   // Clear the values of the first row
+      //                   aFirstItemCells.forEach(function (oCell) {
+      //                       if (oCell.setValue) {
+      //                           oCell.setValue("");
+      //                       }
+      //                   });
+      //               } else {
+      //                   // If not all items are selected, delete only selected items
+      //                   aSelectedItems.forEach(function (oSelectedItem) {
+      //                       if (oSelectedItem !== oFirstItem) {
+      //                           oTable.removeItem(oSelectedItem);
+      //                       }
+      //                   });
+      //               }
+
+      //               oTable.removeSelections();
+      //           } else {
+      //               oTable.removeSelections();
+      //           }
+      //       }
+      //   });
+      // },
+      onDeleteRow1: function () {
+        var oTable = this.byId("entryTypeTable");
+        var aSelectedItems = oTable.getSelectedItems();
+
+        if (aSelectedItems.length === 0) {
           sap.m.MessageToast.show("Please select an item");
           return;
-      }
-  
-      var oFirstItem = oTable.getItems()[0];
-      var aFirstItemCells = oFirstItem.getCells();
-      var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
+        }
+
+        var oFirstItem = oTable.getItems()[0];
+        var aFirstItemCells = oFirstItem.getCells();
+        var bFirstItemEmpty = aFirstItemCells.every(function (oCell) {
           return oCell.getValue && oCell.getValue() === "";
-      });
-  
-      // If the first row is empty and selected, prevent its deletion
-      if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
+        });
+
+        // If the first row is empty and selected, prevent its deletion
+        if (aSelectedItems.includes(oFirstItem) && bFirstItemEmpty) {
           sap.m.MessageToast.show("The first empty row cannot be deleted.");
           oTable.removeSelections();
           return;
-      }
-  
-      sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
+        }
+
+        sap.m.MessageBox.confirm("Do you want to delete the selected items?", {
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           onClose: function (oAction) {
-              if (oAction === sap.m.MessageBox.Action.YES) {
-                  var aItems = oTable.getItems();
-                  var bAllSelected = aSelectedItems.length === aItems.length;
-  
-                  if (bAllSelected) {
-                      // If all items are selected
-                      aItems.forEach(function (oItem) {
-                          if (oItem !== oFirstItem) {
-                              oTable.removeItem(oItem);
-                          }
-                      });
-  
-                      // Clear the values of the first row
-                      aFirstItemCells.forEach(function (oCell) {
-                          if (oCell.setValue) {
-                              oCell.setValue("");
-                          }
-                      });
-                  } else {
-                      // If not all items are selected, delete only selected items
-                      aSelectedItems.forEach(function (oSelectedItem) {
-                          oTable.removeItem(oSelectedItem);
-                      });
+            if (oAction === sap.m.MessageBox.Action.YES) {
+              var aItems = oTable.getItems();
+              var bAllSelected = aSelectedItems.length === aItems.length;
+
+              if (bAllSelected) {
+                // If all items are selected
+                aItems.forEach(function (oItem) {
+                  if (oItem !== oFirstItem) {
+                    oTable.removeItem(oItem);
                   }
-  
-                  oTable.removeSelections();
+                });
+
+                // Clear the values of the first row
+                aFirstItemCells.forEach(function (oCell) {
+                  if (oCell.setValue) {
+                    oCell.setValue("");
+                  }
+                });
               } else {
-                  oTable.removeSelections();
+                // If not all items are selected, delete only selected items
+                aSelectedItems.forEach(function (oSelectedItem) {
+                  oTable.removeItem(oSelectedItem);
+                });
               }
+
+              oTable.removeSelections();
+            } else {
+              oTable.removeSelections();
+            }
           }
-      });
-  },
-  
+        });
+      },
+
 
       validateAllRows: function () {
         var oTable = this.byId("entryTypeTable");
         var items = oTable.getItems();
-    
+
         for (let i = 0; i < items.length; i++) {
-            let value1 = items[i].getCells()[0].getValue();
-            let value2 = items[i].getCells()[1].getValue();
-            if (!value1 || !value2) {
-                sap.m.MessageToast.show("Please enter both fields.");
-                return false;
-            }
+          let value1 = items[i].getCells()[0].getValue();
+          let value2 = items[i].getCells()[1].getValue();
+          if (!value1 || !value2) {
+            sap.m.MessageToast.show("Please enter both fields.");
+            return false;
+          }
         }
         return true;
       },
-    onSave: function () {
-      let that = this;
-      let oTable = that.byId("entryTypeTable");
-      let oTable2 = that.byId("createTypeTable");
-  
-      if (!this.validateAllRows()) {
+      onSave: function () {
+        let that = this;
+        let oTable = that.byId("entryTypeTable");
+        let oTable2 = that.byId("createTypeTable");
+
+        if (!this.validateAllRows()) {
           sap.m.MessageToast.show("Please enter both fields.");
           return;
-      }
-  
-      let totalEntries = oTable.getItems().length;
-      let entriesProcessed = 0;
-      let errors = [];
-      let duplicateEntries = [];
-      let tempCodesArray = [];
-  
-      sap.m.MessageToast.show("Creating entries...");
-  
-      let items = oTable.getItems();
-      for (let i = 0; i < items.length; i++) {
+        }
+
+        let totalEntries = oTable.getItems().length;
+        let entriesProcessed = 0;
+        let errors = [];
+        let duplicateEntries = [];
+        let tempCodesArray = [];
+
+        sap.m.MessageToast.show("Creating entries...");
+
+        let items = oTable.getItems();
+        for (let i = 0; i < items.length; i++) {
           let value1 = items[i].getCells()[0].getValue().toUpperCase();
           let value2 = items[i].getCells()[1].getValue();
-  
+
           if (tempCodesArray.length && tempCodesArray.includes(value1)) {
-              duplicateEntries.push(value1);
+            duplicateEntries.push(value1);
           } else {
-              tempCodesArray.push(value1);
+            tempCodesArray.push(value1);
           }
-  
+
           var oBindListSP = that.getView().getModel().bindList("/VoyTypeSet");
           oBindListSP.attachEventOnce("dataReceived", function () {
-              var existingEntries = oBindListSP.getContexts().map(function (context) {
-                  return context.getProperty("Voycd").toUpperCase();
-              });
-  
-              if (existingEntries.includes(value1)) {
-                  duplicateEntries.push(value1);
-              }
-  
-              entriesProcessed++;
-              checkCompletion();
+            var existingEntries = oBindListSP.getContexts().map(function (context) {
+              return context.getProperty("Voycd").toUpperCase();
+            });
+
+            if (existingEntries.includes(value1)) {
+              duplicateEntries.push(value1);
+            }
+
+            entriesProcessed++;
+            checkCompletion();
           });
-  
+
           oBindListSP.getContexts();
-      }
-  
-      function checkCompletion() {
+        }
+
+        function checkCompletion() {
           if (entriesProcessed === totalEntries) {
-              if (errors.length === 0 && duplicateEntries.length === 0) {
-                  createEntries();
-              } else {
-                  var errorMessage = "";
-                  if (errors.length > 0) {
-                      errorMessage += errors.join("\n") + "\n";
-                  }
-                  if (duplicateEntries.length > 0) {
-                      errorMessage += "Duplicate entries found with the same code: " + duplicateEntries.join(", ") + "\n";
-                  }
-                  sap.m.MessageToast.show(errorMessage);
+            if (errors.length === 0 && duplicateEntries.length === 0) {
+              createEntries();
+            } else {
+              var errorMessage = "";
+              if (errors.length > 0) {
+                errorMessage += errors.join("\n") + "\n";
               }
+              if (duplicateEntries.length > 0) {
+                errorMessage += "Duplicate entries found with the same code: " + duplicateEntries.join(", ") + "\n";
+              }
+              sap.m.MessageToast.show(errorMessage);
+            }
           }
-      }
-  
-      function createEntries() {
+        }
+
+        function createEntries() {
           oTable.getItems().forEach(function (row) {
-              var value1 = row.getCells()[0].getValue();
-              var value2 = row.getCells()[1].getValue();
-  
-              var formattedDes = that.formatDes(value2);
-  
-              var oBindListSP = that.getView().getModel().bindList("/VoyTypeSet");
-  
-              try {
-                  oBindListSP.create({
-                      Voycd: value1,
-                      Voydes: formattedDes
-                  });
-                  that.getView().getModel().refresh();
-                  that.resetView();
-              } catch (error) {
-                  sap.m.MessageToast.show("Error while saving data");
-              }
+            var value1 = row.getCells()[0].getValue();
+            var value2 = row.getCells()[1].getValue();
+
+            var formattedDes = that.formatDes(value2);
+
+            var oBindListSP = that.getView().getModel().bindList("/VoyTypeSet");
+
+            try {
+              oBindListSP.create({
+                Voycd: value1,
+                Voydes: formattedDes
+              });
+              that.getView().getModel().refresh();
+              that.resetView();
+            } catch (error) {
+              sap.m.MessageToast.show("Error while saving data");
+            }
           });
 
           that.resetView();
           oTable.removeSelections();
-          
+
           sap.m.MessageToast.show("All entries saved successfully.");
           let createTable = this.getView.byId("createTypeTable");
           createTable.removeSelections();
-      }
-    },
- 
-  
+        }
+      },
 
 
-  
-  formatDes: function (Voydes) {
-      return Voydes.toLowerCase().replace(/\b\w/g, function (char) {
+
+
+
+      formatDes: function (Voydes) {
+        return Voydes.toLowerCase().replace(/\b\w/g, function (char) {
           return char.toUpperCase();
-      });
-  },
-  
+        });
+      },
+
 
       onCancel: function () {
         // checking if edit section
@@ -924,15 +928,15 @@ sap.ui.define(
         for (let i = 0; i < aItems.length; i++) {
           let oItem = aItems[i];
           let sDesc = oItem.getCells()[1].getValue();
-          console.log("sDesc",sDesc);
+          console.log("sDesc", sDesc);
           sDesc = this.removeExtraSpaces(sDesc);
-          if(sDesc.length>30){
+          if (sDesc.length > 30) {
             MessageToast.show("Description length can not exceed thirty characters");
-          return;
+            return;
           }
-          if (onEditInput[i].trim() !== sDesc.trim()) {
+          if (onEditInput[i].trim().toLowerCase() !== sDesc.trim().toLowerCase()) {
             flagNothingtoUpdate = false;
-            break; 
+            break;
           }
         }
 
@@ -953,7 +957,7 @@ sap.ui.define(
             return oCreateItem.getCells()[0].getText() === sValue; // Assuming Value is in the first cell
           });
 
-          
+
           if (oCreateItem) {
             oCreateItem.getCells()[1].setText(formattedDes.replace(/\s+/g, " ").trim()); // Assuming Field Description is in the second cell
           }
@@ -971,7 +975,11 @@ sap.ui.define(
         setTimeout(() => {
           this.resetView();
           oUpdateTable.removeAllItems();
-          this.onPatchCompleted({ getParameter: () => ({ success: true }) });
+          this.onPatchCompleted({
+            getParameter: () => ({
+              success: true
+            })
+          });
 
 
         }, 1100);
@@ -1057,24 +1065,28 @@ sap.ui.define(
           return;
         }
 
-        const that = this;  // creatinh reference for use in Dialog
+        const that = this; // creatinh reference for use in Dialog
         sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
           MessageBox.confirm(
             "Are you sure ,you want  to delete ?", {
 
-            title: "Confirm ",
-            onClose: function (oAction) {
-              if (oAction === MessageBox.Action.OK) {
+              title: "Confirm ",
+              onClose: function (oAction) {
+                if (oAction === MessageBox.Action.OK) {
+                  oBusyDialog = new sap.m.BusyDialog({
+                    text: "Deleting, please wait...",
+                    title: "Processing"
+                  });
+                  oBusyDialog.open();
+                  that.deleteSelectedItems(aItems);
+                } else {
 
-                that.deleteSelectedItems(aItems);
-              } else {
+                  oTable.removeSelections();
+                  sap.m.MessageToast.show("Deletion canceled");
 
-                oTable.removeSelections();
-                sap.m.MessageToast.show("Deletion canceled");
-
+                }
               }
             }
-          }
           );
         });
 
@@ -1086,14 +1098,15 @@ sap.ui.define(
         aItems.forEach(function (oItem) {
           const oContext = oItem.getBindingContext();
           oContext.delete().then(function () {
-            // Successful deletion
             MessageToast.show(`${deleteMsg} deleted sucessfully`);
+            oBusyDialog.close();
 
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            // Handle deletion error
             MessageBox.error("Error deleting item: " + oError.message);
+            oBusyDialog.close();
+
           });
         });
 
@@ -1150,11 +1163,13 @@ sap.ui.define(
           let newItem = new sap.m.ColumnListItem({
             cells: [
               new sap.m.Input({
-                value: code, editable: true,
+                value: code,
+                editable: true,
                 liveChange: this.onCodeLiveChange.bind(this)
               }),
               new sap.m.Input({
-                value: desc, editable: true,
+                value: desc,
+                editable: true,
                 liveChange: this.onLiveChange.bind(this)
               })
             ]

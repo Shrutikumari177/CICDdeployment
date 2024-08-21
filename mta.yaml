@@ -99,6 +99,10 @@ modules:
       - comingenxnautivendorbidding.zip
       name: comingenxnautivendorbidding
       target-path: resources/
+    - artifacts:
+      - comingenxnauticomparelivefreight.zip
+      name: comingenxnauticomparelivefreight
+      target-path: resources/
 - name: comingenxnautimasterdashboard
   type: html5
   path: app/masterdashboard
@@ -172,6 +176,16 @@ modules:
 - name: comingenxnautivendorbidding
   type: html5
   path: app/vendorbidding
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnauticomparelivefreight
+  type: html5
+  path: app/comparelivefreight
   build-parameters:
     build-result: dist
     builder: custom

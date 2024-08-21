@@ -550,7 +550,7 @@ sap.ui.define([
                     "Chrqstime": formattedStartTime,
                     "Chrqedate": finalBidEndDate,
                     "Chrqetime": formattedEndTime,
-                    "Zmode": modeSelectText
+                    "Zmode": modeSelectText.substring(0,3)
                 };
                 oPayload.HEADERTOITEM.push(vendorEntry);
             }

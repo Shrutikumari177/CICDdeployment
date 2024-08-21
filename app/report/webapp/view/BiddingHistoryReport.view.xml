@@ -120,15 +120,15 @@
                     <items>
                         <ColumnListItem type="Navigation" press="onNavigateDetails">
                             <cells>
-                                <Text text="{biddingHistoryAwardModel>Voyno}" />
-                                <Text text="{biddingHistoryAwardModel>Lifnr}" />
+                                <Text text="{biddingHistoryAwardModel>voyno}" />
+                                <Text text="{biddingHistoryAwardModel>vendor}" />
                                 <Text text="{biddingHistoryAwardModel>Chrnmin}" />
-                                <Text text="{biddingHistoryAwardModel>Zcode}" />
-                                <Text text="{biddingHistoryAwardModel>Biddate}" />
-                                <Text text="{biddingHistoryAwardModel>Bidtime}" />
+                                <Text text="{biddingHistoryAwardModel>code}" />
+                                <Text text="{biddingHistoryAwardModel>biddate}" />
+                                <Text text="{biddingHistoryAwardModel>bidtime}" />
                                 <Text text="{biddingHistoryAwardModel>CodeDesc}" />
                                 <Text text="{biddingHistoryAwardModel>Cvalue}" />
-                                <Text text="{biddingHistoryAwardModel>Currkeys}" />
+                                <Text text="{biddingHistoryAwardModel>curkey}" />
                                
                             
                             </cells>

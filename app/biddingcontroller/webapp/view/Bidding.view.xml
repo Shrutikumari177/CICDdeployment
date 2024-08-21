@@ -1,4 +1,4 @@
-<mvc:View xmlns:grid="sap.ui.layout.cssgrid" controllerName="com.ingenx.nauti.biddingcontroller.controller.Bidding" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:core="sap.ui.core" xmlns:card="sap.f.cards" xmlns:f="sap.f" xmlns="sap.m" xmlns:microchart="sap.suite.ui.microchart">
+<mvc:View xmlns:grid="sap.ui.layout.cssgrid" controllerName="com.ingenx.nauti.biddingcontroller.controller.Bidding" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:card="sap.f.cards" xmlns:f="sap.f" xmlns="sap.m" xmlns:microchart="sap.suite.ui.microchart">
     <Page id="page" title="{i18n>title2}" titleAlignment="Center">
         <content>
             <MessageStrip id="startMsgStrip" visible="true" text="Press START to initiate bidding session." type="Information" class="sapUiResponsiveMargin"/>
@@ -8,7 +8,7 @@
                     <FlexBox
                         id="_IDGenFlexBox1" alignContent="Center" alignItems="Center" justifyContent="SpaceAround" class="leadingClass">
                         <!-- 1st datails card -->
-                        <f:Card id="_IDGenCard1" width="500px" height="250px" class="sapUiSmallMarginBegin sapUiSmallMarginTop firstDetailBox">
+                        <f:Card id="_IDGenCard1" width="525px" height="250px" class="sapUiSmallMarginTop firstDetailBox">
                             <f:header>
                                 <card:Header id="_IDGenHeader1" title="Bid information for Charter Request" iconSrc="sap-icon://folder-full" subtitle="Voyage No"/>
                             </f:header>
@@ -33,7 +33,7 @@
                         </f:Card>
 
                         <!-- 2nd details card -->
-                        <f:Card id="_IDGenCard4" width="500px" height="250px" class="sapUiSmallMarginTop sapUiSmallMarginBegin">
+                        <f:Card id="_IDGenCard4" width="525px" height="250px" class="sapUiSmallMarginTop sapUiSmallMarginBegin">
                             <f:header>
                                 <card:Header id="_IDGenHeader3" title="The Shipping Corporation Of India Limited" iconSrc="sap-icon://details" subtitle="Quote : INR 730.000.00"/>
                             </f:header>
@@ -57,29 +57,49 @@
                             </f:content>
                         </f:Card>
                     </FlexBox>
-
-                    <VBox id="_IDGenVBox1" alignItems="Center" class="timer sapUiSmallMarginTop" backgroundDesign="Translucent">
-                        <microchart:RadialMicroChart id="radialClock" size="L" width="250px" height="250px" alignContent="Center" percentage="45" class="alignCircle scaleCircle hideCirclePercent"></microchart:RadialMicroChart>
-                        <Label id="timeLeftCell" design="Bold" displayOnly="true" text="Time Left - 00:00:00"/>
+        
+                    <!-- timer card -->
+                   <FlexBox id="_IDGenFlexBox2" alignContent="Center" alignItems="Center" justifyContent="SpaceAround" class="timerFlexBox">
+            <f:Card id="timerCard" width="290px" height="250px" class="sapUiSmallMarginTop">
+                <f:content>
+                    <VBox id="_IDGenVBox1" alignItems="Center" class="timer" backgroundDesign="Translucent">
+                        <microchart:RadialMicroChart id="radialClock" class="customRadialChart"/>
+                        <Label id="timeLeftCell" class="chart_label" design="Bold" displayOnly="true" text="Time Left - 00:00:00"/>
                     </VBox>
+                </f:content>
+            </f:Card>
+        </FlexBox>
                 </grid:items>
             </grid:CSSGrid>
-            <FlexBox id="_IDGenFlexBox2" alignContent="Stretch" justifyContent="SpaceBetween" alignItems="Center">
+
+
+            <!-- <FlexBox id="_IDGenFlexBox2" alignContent="Stretch" justifyContent="SpaceBetween" alignItems="Center">
                 <VBox id="_IDGenVBox2" width="100%" class="sapUiResponsiveMargin"/>
                 <HBox id="_IDGenHBox1" width="100%" class="sapUiResponsiveMargin" backgroundDesign="Translucent"></HBox>
-            </FlexBox>
+            </FlexBox> -->
+         
+            <!-- table code -->
+            <layout:BlockLayout id="_IDGenBlockLayout2" background="Dashboard">
+				<layout:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+					<layout:BlockLayoutCell id="_IDGenBlockLayoutCell1"
+						class="cellFixedHeight cellNoPadding cellContentText"
+						titleLevel="H6"
+						titleAlignment="Center"
+					>  
+						<layout:content>
+                      
             <Table id="centerDataTable" autoPopinMode="true" contextualWidth="Auto" alternateRowColors="true" inset="true" class="sapUiResponsiveMargin" fixedLayout="true" width="auto" items="{rankmodel>/vendors}">
                 <headerToolbar>
                     <Toolbar id="_IDGenToolbar1" class="toolbar">
-                        <Title id="_IDGenTitle1" text="Vendor List for Charter Request - ImCha"/>
+                        <Title id="_IDGenTitle1" text="Vendor List for Charter Request"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
                         <Label id="_IDGenLabel1" text="Current Bid:" labelFor="currentQuote"/>
                         <Input width="auto" id="currentQuote"  class="bold-input" enabled="false"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
                         <Label id="_IDGenLabel2" text="Quote Price:" labelFor="quoteInput"/>
-                        <Input width="auto" id="quoteInput" type="Number"/>
+                        <Input width="auto" value="" liveChange="onQuotePriceChange" id="quoteInput" type="Number"/>
                         <Button id="submitButton" text="Submit" type="Emphasized" press="onQuoteSubmit" enabled="false"/>
-                        <Button id="startButton" text="START" type="Accept" press="onStart"/>
+                        <Button id="startButton" text="START" type="Accept" press="onStartBidding"/>
                         <Button id="stopButton" text="STOP" type="Reject" press="onStop"/>
                     </Toolbar>
                 </headerToolbar>
@@ -116,7 +136,10 @@
                     </ColumnListItem>
                 </items>
             </Table>
-
+            </layout:content>
+            </layout:BlockLayoutCell>
+            </layout:BlockLayoutRow>
+            </layout:BlockLayout>
         </content>
     </Page>
 </mvc:View>

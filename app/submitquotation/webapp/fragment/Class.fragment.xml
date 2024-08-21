@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="classValueHelpDialog" title="Class of Vessel" contentWidth="20%">
+        <content>
+            <Table id="valueHelpTable" rememberSelections="false" noDataText="Loading..." items="{/ClassMasterSet}" autoPopinMode="true" mode="SingleSelectMaster" alternateRowColors="true" fixedLayout="false" selectionChange=".toGetClassOfVessel">
+                <columns>
+                    <Column id="IDColumn1" hAlign="Center">
+                        <Text id="IDText1" text="Value" />
+                    </Column>
+                    <Column id="IDColumn2" hAlign="Center">
+                        <Text id="IDText2" text="Description" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem class="classTable" id="IDColumnListItem1" >
+                        <cells>
+                            <Text id="IDText3" text="{ZfValue}" />
+                            <Text id="IDText4" text="{ZfDesc}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <endButton>
+            <Button id="_IDGenButton1" text="Close" type="Emphasized" press="onValueHelpClose" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

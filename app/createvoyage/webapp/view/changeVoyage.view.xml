@@ -60,7 +60,6 @@
                 </contentLeft>
             </Bar>
         </subHeader>
-        
 
         <form:SimpleForm layout="ResponsiveLayout">
             <core:Title text="Header details" />
@@ -141,7 +140,7 @@
                         </Select>
                     </HBox>
                 </VBox>
-                
+
                 <VBox>
                     <HBox class="box1">
                         <Label
@@ -203,7 +202,6 @@
             </HBox>
         </form:SimpleForm>
 
-        
         <Button
             id="Hide"
             icon="sap-icon://minimize"
@@ -267,7 +265,7 @@
                 class="icontab1"
             >
                 <items>
-                     <IconTabFilter
+                    <IconTabFilter
                         text="Vessel Details"
                         key="info"
                         visible="true"
@@ -281,9 +279,8 @@
                             <FlexBox
                                 id="vdsection1"
                                 class="vdsection"
-                              
                             >
-                                <HBox >
+                                <HBox>
                                     <Label
                                         id="_IDGenLabel1"
                                         text="Vessel Name:"
@@ -296,9 +293,7 @@
                                         editable="false"
                                     />
                                 </HBox>
-                                <HBox
-                                   
-                                >
+                                <HBox>
                                     <Label
                                         id="_IDGenLabel3"
                                         text="Charter Party Agreement:"
@@ -308,7 +303,7 @@
                                         id="_IDGenInput3"
                                         width="150px"
                                         value="{voyHeaderModel>/0/Party}"
-                                         editable="false"
+                                        editable="false"
                                     />
                                 </HBox>
                                 <HBox alignItems="Start">
@@ -321,7 +316,7 @@
                                         id="_IDGenInput2"
                                         width="170px"
                                         value="{voyHeaderModel>/0/Vimo}"
-                                         editable="false"
+                                        editable="false"
                                     />
                                 </HBox>
                             </FlexBox>
@@ -337,18 +332,15 @@
                             />
                             <Table
                                 id="_IDGenTable3"
-                                width="50%" 
+                                width="50%"
                                 fixedLayout="false"
                                 mode="SingleSelectLeft"
                                 class="table"
-
-                    
                             >
                                 <columns>
                                     <Column
                                         id="_IDGenColumn2"
                                         width="50%"
-                                        
                                     >
                                         <Label
                                             id="_IDGenLabel5"
@@ -364,7 +356,6 @@
                                             text="Reference Docuement No"
                                         />
                                     </Column>
-                                    
                                 </columns>
                                 <items>
                                     <ColumnListItem id="_IDGenColumnListItem1">
@@ -493,19 +484,19 @@
                             />
 
                             <FlexBox class="planInfoFlexHeader">
-                                <Label
+                                <!-- <Label
                                     text="Plan Speed"
                                     required="true"
-                                />
-                                <Input value="{voyItemModel>/0/Vspeed}" />
+                                /> -->
+                                <!-- <Input value="{voyItemModel>/1/Vspeed}" editable="false" /> -->
 
                                 <Label text="Freight Cost" />
                                 <Input
                                     id="_friegthIdPlan"
-                                     value=" {path :'voyHeaderModel>/0/Frcost', formatter:'.FrieghtCostToShow'}"
+                                    value=" {path :'voyHeaderModel>/0/Frcost', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="160px"
-                                
+                            
                                 />
 
                                 <Label text="Unit" />
@@ -516,8 +507,7 @@
                                      path: '/CargoUnitSet'
                                     }"
                                     selectedKey="{voyHeaderModel>/0/Frtu}"
-                                    change="onCargoUniSelectChange"
-                                    
+                                    change="onCargoUnitSelectChange"
                                 >
                                     <core:Item
                                         key="{Uom}"
@@ -577,7 +567,7 @@
                                         </Column>
                                         <Column
                                             id="_IDGenComn7"
-                                    
+                                            visible="false"
                                         >
                                             <Label
                                                 id="_IDGenbel16"
@@ -634,6 +624,13 @@
                                                 text="UOM"
                                             />
                                         </Column>
+                                        <Column id="_IDGenColumn133">
+                                            <Label
+                                                id="_IDGenLabel223"
+                                                text="Speed"
+                                            />
+                                        </Column>
+
                                         <Column id="_IDGenColumn15">
                                             <Label
                                                 id="_IDGenLabel24"
@@ -702,7 +699,11 @@
                                                     valueHelpRequest=".onPortValueHelpRequest"
                                                     valueHelpOnly=""
                                                 />
-                                                <Input value="" showValueHelp="true" valueHelpRequest=".onEventValueHelp"/>
+                                                <Input
+                                                    value=""
+                                                    showValueHelp="true"
+                                                    valueHelpRequest=".onEventValueHelp"
+                                                />
                                                 <Input
                                                     value="{voyItemModel>Portn}"
                                                     editable="false"
@@ -725,7 +726,8 @@
                                                     value="{voyItemModel>Cargs}"
                                                     width="100px"
                                                     change=".onPortTabCargoSizeChange"
-                                                       type= "Number"
+                                                    type="Number"
+                                                    editable="false"
                                                 />
                                                 <!-- value="{path :'voyItemModel>Cargs',formatter: '.formatter.numberFormat'}" -->
                                                 <!-- liveChange=".liveCargoChange" -->
@@ -735,30 +737,42 @@
                                                     width="70px"
                                                     showValueHelp="true"
                                                     valueHelpRequest=".showValueHelpDialogCargoUnit"
-                                                 
+                                                    editable="false"
                                                 />
                                                 <Input
                                                     value="{voyItemModel>Pdist}"
                                                     width="80px"
                                                     editable="false"
                                                 />
-                                                <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
                                                 <Input
                                                     value="{voyItemModel>Medst}"
                                                     width="40px"
+                                                    editable="false"
                                                 />
+                                                <!-- value="{path :'voyItemModel>Pdist',formatter: '.formatter.numberFormat'}" -->
                                                 <Input
+                                                    value="{voyItemModel>Vspeed}"
+                                                    change=".onPortDaysChange"
+                                                    width="60px"
+                                                    editable="{= ${voyItemModel>Vlegn} !== 1 }"
+                                                />
+
+                                           
+                                                  <Input
                                                     value="{voyItemModel>Ppdays}"
                                                     change=".onPortDaysChange"
+                                                    type="Number"
                                                 />
-                                                    <!-- liveChange=".onPortDaysChange" -->
+                                        
                                                 <Input
                                                     value="{voyItemModel>Vwead}"
                                                     change=".onPortDaysChange"
+                                                    type="Number"
                                                 />
                                                 <Input
                                                     value="{voyItemModel>Vsdays}"
                                                     editable="false"
+                                                    width="60px"
                                                 />
                                                 <DatePicker
                                                     displayFormat="dd-MM-yyyy"
@@ -792,6 +806,7 @@
                                                     width="120px"
                                                     liveChange=".onVetddDatePickerLiveChange1"
                                                     change=".onVetddDatePickerChange"
+                                                    editable="{= ${voyItemModel>Vlegn} === 1 }"
                                                 />
                                                 <!-- dateValue="{voyItemModel>Vetdd}" -->
                                                 <!-- <Input
@@ -810,6 +825,8 @@
                                                     valueFormat="HH:mm:ss"
                                                     support2400="true"
                                                     displayFormat="HH:mm:ss"
+                                                    editable="{= ${voyItemModel>Vlegn} === 1 }"
+                                                    change=".onVetdtDatePickerChange"
                                                 />
                                                 <Input
                                                     value="{voyItemModel>Pstat}"
@@ -860,7 +877,6 @@
                                     value=" {path :'voyItemModel1>/', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="160px"
-                                
                                 />
 
                                 <Label text="Unit" />
@@ -888,12 +904,14 @@
 
                                 <Label text="Total Distance" />
                                 <Input
-                                    width="90px" value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
+                                    width="90px"
+                                    value=" {path :'voyItemModel1>/', formatter:'.totalDistanceCalc'}"
                                 />
 
                                 <Label text="Total Days" />
                                 <Input
-                                    value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}" editable="false"
+                                    value=" {path :'voyItemModel1>/', formatter:'.totalSeaDaysCalc'}"
+                                    editable="false"
                                 />
                             </FlexBox>
 
@@ -951,6 +969,12 @@
                                             <Label
                                                 id="_IDGnLabel22"
                                                 text="Distance"
+                                            />
+                                        </Column>
+                                        <Column id="_IDGenClumn133">
+                                            <Label
+                                                id="_IDGnLabel222"
+                                                text="Speed"
                                             />
                                         </Column>
                                         <Column id="_IDGenolumn14">
@@ -1083,7 +1107,6 @@
                                                     id="_IDGenInput15"
                                                     value="{costdetailsModel>Vlegn}"
                                                     liveChange="onVlegnInputLiveChange"
-                                            
                                                 />
                                                 <Input
                                                     id="cost"
@@ -1098,6 +1121,7 @@
                                                     editable="false"
                                                 />
                                                 <Select
+                                                    editable="false"
                                                     width="200px"
                                                     id="_Select5"
                                                     forceSelection="false"
@@ -1125,6 +1149,8 @@
                                                     id="DGene"
                                                     value="{costdetailsModel>Procost}"
                                                     change=".onCostLiveChange"
+                                                    type="Number"
+                                        
                                                 />
                                             </cells>
                                         </ColumnListItem>
@@ -1673,10 +1699,8 @@
                                                             text="Possible Value"
                                                         />
                                                     </Column>
-                                                     <Column width="10%">
-                                                        <Text
-                                                            text="Hint"
-                                                        />
+                                                    <Column width="10%">
+                                                        <Text text="Hint" />
                                                     </Column>
                                                 </columns>
                                             </Table>
@@ -1721,7 +1745,6 @@
                                                                 showValueHelp="false"
                                                                 valueHelpRequest=".showValueHelpDialogCurr"
                                                                 editable="false"
-                                                                
                                                             />
                                                         </cells>
                                                     </ColumnListItem>
@@ -1738,11 +1761,11 @@
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>
                             </l:VerticalLayout>
-              <HBox
-                    id="HBox2"
-                    width="100%"
-                >
-                    <!-- <FlexBox
+                            <HBox
+                                id="HBox2"
+                                width="100%"
+                            >
+                                <!-- <FlexBox
                         width="10%"
                         class="flexbtn"
                     >
@@ -1759,29 +1782,51 @@
                             type="Default"
                         />
                     </FlexBox> -->
-                    <!-- <FlexBox width="20%">
+                                <!-- <FlexBox width="20%">
                         <Button
                             id="saveprofileId"
                             type="Default"
                             text="Save Profile"
                         />
                     </FlexBox> -->
-                    <FlexBox width="20%">
-                        <Label
-                            id="_IDGenLabel49"
-                            text="Select Profile :"
-                             class="sapUiTinyMarginTop sapUiTinyMarginRight"
-                        />
-                        <Select
-                            id="_IDGenSelect4"
-                            width="120px"
+                                <FlexBox width="20%">
+                                    <Label
+                                        id="_IDGenLabel49"
+                                        text="Select Profile :"
+                                        class="sapUiTinyMarginTop sapUiTinyMarginRight"
+                                    />
+                                    <Select
+                                        id="_selectProfileId"
+                                        width="120px"
+                                        items="{
+                            path: '/xNAUTIxbidprofile_valuehelp'  }"
+                                        change=".onProfileChange"
+                                        forceSelection="false"
+                                    >
+                                        <items>
+                                            <core:Item
+                                                id="_IDGenItem7"
+                                                text="{BidprofileId}"
+                                            />
+                                        </items>
+                                    </Select>
+                                    <!-- <Select
+                            id="Select2"
+                            width="200px"
+                            forceSelection="false"
+                            items="{
+                            path: '/VoyTypeSet'
+                        }"
+                            selectedKey="{voyHeaderModel>/0/Voyty}"
                         >
-                            <items>
-                                <core:Item id="_IDGenItem7" />
-                            </items>
-                        </Select>
-                    </FlexBox>
-                    <!-- <FlexBox width="30%">
+                            <core:Item
+                                id="_Item2"
+                                key="{Voycd}"
+                                text="{Voydes}"
+                            />
+                        </Select> -->
+                                </FlexBox>
+                                <!-- <FlexBox width="30%">
                         <Button
                             id="_IDGenBuon13"
                             icon="sap-icon://sys-add"
@@ -1795,7 +1840,7 @@
                             type="Default"
                         />
                     </FlexBox> -->
-                </HBox> 
+                            </HBox>
                         </Panel>
                     </IconTabFilter>
                     <IconTabFilter
@@ -1808,22 +1853,48 @@
                             width="100%"
                             class=""
                         >
-                            <l:VerticalLayout id="_IDGenVerticalLayout1">
-                                <u:FileUploader
-                                    id="fileUploader"
-                                    uploadUrl="odata/v4/nautical/FileuploadSet"
-                                    sendXHR="true"
-                                    httpRequestMethod="Post"
-                                    change=".handleValueChangeUpload"
-                                    tooltip="Upload your file to the local server"
-                                    buttonText="Choose File"
-                                    icon="sap-icon://value-help"
-                                    fileType="pdf"
-                                    typeMissmatch="handleTypeMissmatch"
-                                />
+                            <l:VerticalLayout id="_IDGenVertiLayout1">
+                                <l:HorizontalLayout id="_IDGenVerticalLayout1">
+                                    <Input
+                                        id="fileinput"
+                                        width="250px"
+                                        placeholder="Description of file"
+                                        liveChange="Fileinputchange"
+                                        class="sapUiMarginTinyEnd"
+                                    />
+                                    <u:FileUploader
+                                        id="fileUploader"
+                                        uploadUrl="odata/v4/nautical/FileuploadSet"
+                                        sendXHR="true"
+                                        httpRequestMethod="Post"
+                                        change="handleValueChangeUpload"
+                                        tooltip="Upload your file to the local server"
+                                        buttonText="Choose File"
+                                        icon="sap-icon://value-help"
+                                        fileType="pdf"
+                                        typeMissmatch="handleTypeMissmatch"
+                                    />
+                                    <Button
+                                        text="Upload File"
+                                        press="handleUploadPress"
+                                    />
+                                    <Button
+                                        icon="sap-icon://delete"
+                                        type="Reject"
+                                        press="OnfileUploadDelete"
+                                        
+                                    />
+                                    <Button
+                                        icon="sap-icon://message-success"
+                                        visible="false"
+                                    />
+                                </l:HorizontalLayout>
+
                                 <Button
-		                	        text="Upload File"
-		                	        press="handleUploadPress" />
+                                    text="Add Row"
+                                    press="onAddRowFileUpload"
+                                    type="Emphasized"
+                                />
                             </l:VerticalLayout>
                         </Panel>
                     </IconTabFilter>

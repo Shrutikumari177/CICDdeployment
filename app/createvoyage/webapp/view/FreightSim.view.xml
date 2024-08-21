@@ -58,8 +58,9 @@
 													<Input
 														id="pertFCost"
 														width="8rem"
+														
+														type="Number"
 														/>
-														<!-- liveChange="pertFCostChange" -->
 													<Label
 														text="Total Cost:"
 														labelFor="pertTotalCost"
@@ -185,8 +186,9 @@
 													<Input
 														id="lumpsumFCost"
 														width="8rem"
+												
+															type="Number"
 														/>
-														<!-- liveChange="lumpsumFCostChange" -->
 													<Label
 														text="Total Cost:"
 														labelFor="lumpsumTotalCost"
@@ -312,6 +314,8 @@
 													<Input
 														id="tonNMFCost"
 														width="8rem"
+										
+															type="Number"
 														/>
 														<!-- liveChange="tonNMFCostChange" -->
 													<Label

@@ -4,10 +4,10 @@ POST http://localhost:4004/odata/v4/nauticalservice/VenodrLiveBidDetails
 Content-Type: application/json
 
 {
-  "Chrnmin": "4000000621",
+  "Chrnmin": "4000000641",
   "vendorNo": "2100000001",
-  "voyno": "1000000221",
-  "quotationPrice": "7800000",
+  "voyno": "1000000281",
+  "quotationPrice": "14000000",
   "comment": "for vendor 2100000001 testing."
 }
 
@@ -24,6 +24,9 @@ Content-Type: application/json
   "voyno" : "1000000221",
   "quotationPrice" : "7500000"
 }
+
+###
+GET http://localhost:4004/odata/v4/nauticalservice/contaward_tableSet?$filter=Chrnmin eq '4000000641'
 
 ###
 POST http://localhost:4004/odata/v4/nauticalservice/quotations
@@ -933,24 +936,69 @@ Content-Type: application/json
 GET http://localhost:4004/odata/v4/nauticalservice/getRoute?startLatitude=18.941&startLongitude=72.855&endLatitude=20.27769&endLongitude=86.69277
 
 
+###
+GET http://localhost:4004/odata/v4/nauticalservice/compareLiveFreight
 
 ### Invite For Quotation
-POST http://localhost:4004/odata/v4/nauticalservice/headerinvSet
+POST http://localhost:39523/odata/v4/nauticalservice/contheaderSet
 Content-Type: application/json
 
-{"Chrnmin" : "4000000552",
+{
+  "Chrnmin": "4000000552",
+  "contItemSet": [
+    {
+      "Voyno": "1000000108",
+      "Lifnr": "2100000001",
+      "Zcode": "FREIG",
+      "Chrnmin": "4000000552",
+      "CodeDesc": "FRIEGHT COST",
+      "Biddate": "2024-08-07T00:00:00Z",
+      "Bidtime": "06:30:00.0",
+      "Cvalue": "900000.000",
+      "Chrqsdate": "2024-08-07T00:00:00Z",
+      "Chrqstime": "10:00:00.0",
+      "Chrqedate": "2024-08-07T00:00:00Z",
+      "Chrqetime": "10:30:00.0",
+      "Uname": "ASHISH",
+      "Zmode": "AUTO"
+    },
+    {
+      "Voyno": "1000000108",
+      "Lifnr": "2100000000",
+      "Zcode": "FREIG",
+      "Chrnmin": "4000000552",
+      "CodeDesc": "FRIEGHT COST",
+      "Biddate": "2024-08-07T00:00:00Z",
+      "Bidtime": "07:00:00.0",
+      "Cvalue": "800000.000",
+      "Chrqsdate": "2024-08-07T00:00:00Z",
+      "Chrqstime": "10:00:00.0",
+      "Chrqedate": "2024-08-07T00:00:00Z",
+      "Chrqetime": "10:30:00.0",
+      "Uname": "ASHISH",
+      "Zmode": "AUTO"
+    }
+  ]
+}
+
+
+###
+ POST  http://localhost:4004/odata/v4/nauticalservice/headerinvSet
+ Content-Type: application/json
+
+ {"Chrnmin" : "4000000552",
  "HEADERTOITEM":[
  {
- "Voyno" : "1000000108",
+        "Voyno" : "1000000108",
         "Lifnr" : "2100000001",
         "Zcode" : "FREIG",
         "Chrnmin" : "4000000552",
         "CodeDesc" : "FRIEGHT COST",
         "Cvalue" : "600000.000",
-        "Chrqsdate" : "\/Date(1714953600000)\/",
-        "Chrqstime" : "PT17H37M44S",
-        "Chrqedate" : "\/Date(1714953600000)\/",
-        "Chrqetime" : "PT18H18M21S",
+        "Chrqsdate" : "2024-08-05T00:00:00Z",
+        "Chrqstime" : "00:00:00.0",
+        "Chrqedate" : "2024-08-05T00:00:00Z",
+        "Chrqetime" : "00:00:00.0",
         "Zmode" : "AUTO"
       },
       {
@@ -960,11 +1008,38 @@ Content-Type: application/json
         "Chrnmin" : "4000000552",
         "CodeDesc" : "FRIEGHT COST",
         "Cvalue" : "600000.000",
-        "Chrqsdate" : "\/Date(1714953600000)\/",
-        "Chrqstime" : "PT17H37M44S",
-        "Chrqedate" : "\/Date(1714953600000)\/",
-        "Chrqetime" : "PT18H18M21S",
+        "Chrqsdate" : "2024-08-05T00:00:00Z",
+        "Chrqstime" : "00:00:00.0",
+        "Chrqedate" : "2024-08-05T00:00:00Z",
+        "Chrqetime" : "00:00:00.0",
         "Zmode" : "AUTO"
       }
       ]
+ }
+ 
+###
+ POST  http://localhost:4004/odata/v4/nauticalservice/awardcontractSet
+ Content-Type: application/json
+
+ {
+        "Chrnmin" : "400000301",
+        "Voyno" : "10000031",
+        "Lifnr" : "2100000003",
+        "Zcode" : "FREIG",
+        "Biddate" : "2024-08-09T00:00:00Z",
+        "Bidtime" : "12:00:00",
+        "CodeDesc" : "FREIGHT COST",
+        "Value" : "",
+        "Cvalue" : "210000.000",
+        "Cunit" : "INR",
+        "Chrqsdate" : "2024-08-10T00:00:00Z",
+        "Chrqstime" : "12:20:00",
+        "Chrqedate" : "2024-08-10T00:00:00Z",
+        "Chrqetime" : "12:50:00",
+        "DoneBy" : true,
+        "Uname" : "2100000001",
+        "Stat" : "ON",
+        "Zmode" : "AUTO",
+        "Zcom" : "",
+        "Rank" : "L2"
  }

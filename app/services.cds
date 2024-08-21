@@ -14,3 +14,5 @@ using from './report/annotations';
 using from './biddingcontroller/annotations';
 
 using from './vendorbidding/annotations';
+
+using from './comparelivefreight/annotations';

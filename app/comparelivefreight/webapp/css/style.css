@@ -1,0 +1,40 @@
+.sapUiFormResGrid > div {
+    padding: 0rem 0.25rem;
+    box-sizing: border-box;
+  }
+  .borderedTable .borderedRow .sapMListTblCell {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.borderedTable .sapMListTblHeaderCell {
+    border: 1px solid #ddd;
+    padding: 8px;
+    background-color: #f9f9f9;
+}
+.flexOne{
+  margin-left: 5%;
+  width: 40%;
+  height: 100%;
+  /* border:2px solid red; */
+}
+.flexTwo{
+  margin-left: 5%;
+  width: 45%;
+  height: 100%;
+  /* border:2px solid green; */
+}
+.headerItem1{
+  width: 100%;
+  height: 100%;
+}
+.secondColumn{
+  width: 100%;
+  height: 100%;
+}
+.voyageText{
+  margin-left: -50px;
+}
+.voyageInput{
+  margin-left: 0px !important;
+}

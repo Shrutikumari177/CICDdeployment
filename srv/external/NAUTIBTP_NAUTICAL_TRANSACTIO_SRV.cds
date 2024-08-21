@@ -1,4 +1,4 @@
-/* checksum : e7412cc6e8b9c1da1d245269096b28ff */
+/* checksum : 5b7f952d5be2786cedec7b3e8fdf941d */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -63,8 +63,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.SubmitquoteSet {
   @sap.sortable : 'false'
   @sap.filterable : 'false'
   Bidtime : Time;
-  @cds.ambiguous : 'missing on condition?'
-  to_quote_item : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.SubmitquoteitemSet on to_quote_item.Voyno = Voyno and to_quote_item.Lifnr = Lifnr and to_quote_item.Chrnmin = Chrnmin;
+  to_quote_item : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.SubmitquoteitemSet {  };
 };
 
 @cds.external : true
@@ -425,88 +424,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHAT {
 @sap.updatable : 'false'
 @sap.deletable : 'false'
 @sap.content.version : '1'
-@sap.label : 'value help for award'
-entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxaward_value {
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Chartering Req. No.'
-  @sap.quickinfo : 'Charter No'
-  key Chrnmin : String(10) not null;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Voyage No'
-  @sap.quickinfo : 'Voyage Number'
-  Voyno : String(20);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Vendor'
-  @sap.quickinfo : 'Account Number of Vendor or Creditor'
-  Lifnr : String(10);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Code'
-  Zcode : String(12);
-  @sap.display.format : 'Date'
-  @sap.label : 'Bid Date'
-  Biddate : Date;
-  @sap.label : 'Bid Time'
-  Bidtime : Time;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Code Description'
-  CodeDesc : String(50);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Value'
-  Value : String(50);
-  @sap.label : 'Revaluation'
-  @sap.quickinfo : 'Revaluation amount on back-posting to a previous period'
-  Cvalue : Decimal(14, 3);
-  @sap.label : 'Currency'
-  @sap.quickinfo : 'Currency Key'
-  @sap.semantics : 'currency-code'
-  Cunit : String(5);
-  @sap.display.format : 'Date'
-  @sap.label : 'Bidding Start Date'
-  Chrqsdate : Date;
-  @sap.label : 'Bidding Start Time'
-  Chrqstime : Time;
-  @sap.display.format : 'Date'
-  @sap.label : 'Bidding End Date'
-  Chrqedate : Date;
-  @sap.label : 'Bidding End Time'
-  Chrqetime : Time;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Done by Vendor ?'
-  DoneBy : Boolean;
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Created by'
-  Uname : String(12);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Status'
-  Stat : String(4);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Type (Auto/manual)'
-  Zmode : String(4);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Comments'
-  Zcom : String(250);
-  @sap.display.format : 'UpperCase'
-  @sap.label : ''
-  @sap.quickinfo : 'Undefined range (can be used for patch levels)'
-  Rank : String(4);
-  @sap.display.format : 'UpperCase'
-  @sap.label : 'Created By'
-  AwrdCreatedBy : String(30);
-  @sap.display.format : 'Date'
-  @sap.label : 'Date'
-  @sap.quickinfo : 'Field of type DATS'
-  AwrdCreatedOn : Date;
-  @sap.label : ''
-  @sap.quickinfo : 'Field of type TIMS'
-  AwrdCreatedAt : Time;
-};
-
-@cds.external : true
-@cds.persistence.skip : true
-@sap.creatable : 'false'
-@sap.updatable : 'false'
-@sap.deletable : 'false'
-@sap.content.version : '1'
 @sap.label : 'Bidding History Report'
 entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORT {
   @sap.display.format : 'UpperCase'
@@ -605,7 +522,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxbidhist_valuehelp {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'
-  Chrnmin : String(10);
+  key Chrnmin : String(10) not null;
 };
 
 @cds.external : true
@@ -874,9 +791,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCharteringHeaderItem {
   @sap.label : 'Reference Chartering'
   @sap.quickinfo : 'Reference Chartering No.'
   RefChrnmin : String(10);
-  @cds.ambiguous : 'missing on condition?'
   tocharteringasso : Association to NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTERING {  };
-  @cds.ambiguous : 'missing on condition?'
   tovendor : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVEND {  };
 };
 
@@ -1026,9 +941,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCHARTPURCHASEITEM {
   @sap.label : 'Pur.Org.Discription'
   @sap.quickinfo : 'Discription of purchasing organization'
   Ekotx : String(20);
-  @cds.ambiguous : 'missing on condition?'
   topaymentterm : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpaymTerm {  };
-  @cds.ambiguous : 'missing on condition?'
   topurchasegroup : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxpurchGroup {  };
 };
 
@@ -1099,7 +1012,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTATUSREPORT_M {
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'
   key Chrnmin : String(10) not null;
-  @cds.ambiguous : 'missing on condition?'
   toitem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
 };
 
@@ -1115,7 +1027,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCONTAWARDSTREPORT_ASSOC {
   @sap.label : 'Chartering Req. No.'
   @sap.quickinfo : 'Charter No'
   key Chrnmin : String(10) not null;
-  @cds.ambiguous : 'missing on condition?'
   toitem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
 };
 
@@ -1400,6 +1311,18 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxnewbidhistoryreport {
   @sap.label : 'Voyage No'
   @sap.quickinfo : 'Voyage Number'
   key voyno : String(20) not null;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bid Date'
+  key biddate : Date not null;
+  @sap.label : 'Bid Time'
+  key bidtime : Time not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key vendor : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Code'
+  key code : String(12) not null;
   @sap.display.format : 'UpperCase'
   @sap.label : 'Voyage Type'
   Voyty : String(4);
@@ -1417,18 +1340,13 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxnewbidhistoryreport {
   @sap.label : 'Voyage name'
   @sap.quickinfo : 'Voyage Name'
   voyageName : String(20);
-  @sap.display.format : 'Date'
-  @sap.label : 'Bid Date'
-  biddate : Date;
-  @sap.label : 'Bid Time'
-  bidtime : Time;
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Vendor'
-  @sap.quickinfo : 'Account Number of Vendor or Creditor'
-  vendor : String(10);
+  @sap.label : 'Vessel Name'
+  vesselname : String(40);
   @sap.display.format : 'UpperCase'
-  @sap.label : 'Code'
-  code : String(12);
+  @sap.label : ''
+  @sap.quickinfo : 'Undefined range (can be used for patch levels)'
+  rank : String(4);
   @sap.display.format : 'UpperCase'
   @sap.label : 'Code Description'
   CodeDesc : String(50);
@@ -1458,6 +1376,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxnewbidhistoryreport {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Comments'
   Zcom : String(250);
+  Award : String(3);
 };
 
 @cds.external : true
@@ -1563,13 +1482,9 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQCHARTERING {
   @sap.display.format : 'Date'
   currentdate : Date;
   currenttime : Time;
-  @cds.ambiguous : 'missing on condition?'
   toassociation1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYGCT {  };
-  @cds.ambiguous : 'missing on condition?'
   toassociation2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVOYG {  };
-  @cds.ambiguous : 'missing on condition?'
   toassociation3 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxNAVYGIP {  };
-  @cds.ambiguous : 'missing on condition?'
   toassociation4 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {  };
 };
 
@@ -1641,9 +1556,7 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxRFQPORTAL {
   @sap.label : 'To'
   @sap.quickinfo : 'Valid-to date in current Release only 99991231 possible'
   DateTo : Date;
-  @cds.ambiguous : 'missing on condition?'
   toassociation1 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZCHATVEN {  };
-  @cds.ambiguous : 'missing on condition?'
   toassociation2 : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {  };
 };
 
@@ -1786,7 +1699,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONFETCH {
   Biddate : Date;
   @sap.label : 'Bid Time'
   Bidtime : Time;
-  @cds.ambiguous : 'missing on condition?'
   tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
@@ -1821,7 +1733,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxSUBMITQUATATIONPOST {
   Biddate : Date;
   @sap.label : 'Bid Time'
   Bidtime : Time;
-  @cds.ambiguous : 'missing on condition?'
   tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 
@@ -2169,11 +2080,8 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVOYAGEHEADERTOITEM {
   @sap.quickinfo : 'General Flag'
   Zdelete : Boolean;
   GV_CSTATUS : String(18);
-  @cds.ambiguous : 'missing on condition?'
   tobiditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDITEM {  };
-  @cds.ambiguous : 'missing on condition?'
   tocostcharge : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxCOSTCHARGES {  };
-  @cds.ambiguous : 'missing on condition?'
   toitem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVoygItem {  };
 };
 
@@ -2307,7 +2215,6 @@ entity NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH {
   Biddate : Date;
   @sap.label : 'Bid Time'
   Bidtime : Time;
-  @cds.ambiguous : 'missing on condition?'
   tovenditem : Association to many NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENDBID {  };
 };
 

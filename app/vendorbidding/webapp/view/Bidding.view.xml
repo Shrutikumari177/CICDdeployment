@@ -38,6 +38,7 @@
             <l:BlockLayout
                 id="_IDGenBlockLayout1"
                 background="Dashboard"
+                class="heigh"
             >
                 <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
                  <l:BlockLayoutCell
@@ -45,7 +46,7 @@
                         width="70%"
                     >
                      <Toolbar id="t3">
-					            <Title id="closed_title3" textAlign="Center"  class="h_text" level="H6" text="Chartering List : Details for Charter:{VendorData>/charteringNo} " />
+					            <Title id="closed_title3" textAlign="Center"  class="h_text" level="H6" text="Details for Charter:{VendorData>/charteringNo} " />
 				    </Toolbar>   
                         <l:HorizontalLayout
                             id="_IDGenHorizontalLayout1"
@@ -147,8 +148,8 @@
 						<microchart:RadialMicroChart
 							id="radialClock"
 							size="L"
-							width="190px"
-							height="190px"
+							width="180px"
+							height="150px"
 							alignContent="Center"
 							class="alignCircle scaleCircle hideCirclePercent"
 							hideOnNoData="true"
@@ -171,20 +172,20 @@
                             allowWrapping="false"
                         >
 
-                        	<f:Card id="GenCard1" width="250px"  height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+                        	<f:Card id="GenCard1" width="257px"  height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
 		                        	<card:Header id="GenHeader1"  title="Customer Quoted Value" subtitle="USD" />
 		                       </f:header>
 		                       <f:content>
 			                        <List id="GenList1" class="sapUiSmallMarginBottom" showSeparators="None">
 				                     <CustomListItem id="GenCustomListItem1" class="sapUiSmallMarginTop">
-						                    <ObjectStatus id="GenObjectStatus1" class="sapUiTinyMargin amount_text" text="{parts: [{path: 'inputModel>/displayValue'}], formatter: '.formatter.formatNumber'}" state="Success"/>
+						                    <ObjectStatus id="GenObjectStatus1" class="sapUiTinyMargin amount_text" state="Success"/>
 				                     </CustomListItem>
 			                        </List>
 		                        </f:content>
 	                          </f:Card>
 
-                              <f:Card id="GenCard2" width="250px" height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+                              <f:Card id="GenCard2" width="257px" height="150px" class="sapUiMediumMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
 		                        	<card:Header id="GenHeader2" title="First Bid" subtitle="USD" />
 		                       </f:header>
@@ -197,7 +198,7 @@
 		                        </f:content>
 	                          </f:Card>
 
-                              <f:Card id="GenCard3" width="250px" height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
+                              <f:Card id="GenCard3" width="257px" height="150px" class="sapUiMediumMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
 		                        	<card:Header id="GenHeader3" title="Last Bid" subtitle="USD" />
 		                       </f:header>
@@ -229,7 +230,7 @@
                            
                            <Label id="_IDGenLabel7" text="Freight Cost" class="sapUiSmallMarginTop"/>
                            <HBox id="_IDGenHBox1" class="test">
-                           <Input id="freightCostInput" value="{inputModel>/inputValue}" type="Number" width="142%" class="sapUiSmallMarginBottom"/>
+                           <Input id="freightCostInput" value="" liveChange="onFreightCostLiveChange" width="142%" class="sapUiSmallMarginBottom"/>
                            <Label id="_IDGenLabel9" text="" class="sapUiTinyMarginTop test1 sapUiTinyMarginBegin" />
                            </HBox>
 

@@ -59,6 +59,8 @@
                                                         id="headerVoynm"
                                                         width="100%"
                                                         value="{planmodel>/0/voynm}"
+                                                        liveChange=".onVoyageNameliveChange"
+                                                        
                                                     />
                                                     <Label
                                                         text="Voyage Type"
@@ -72,6 +74,7 @@
                                                         value="{planmodel>/0/voyty}"
                                                         showValueHelp="true"
                                                         valueHelpRequest="onVoyTyHelpRequest"
+                                                         valueHelpOnly="true"
                                                     />
                                                     <Label
                                                         text="Bidding Type"
@@ -85,6 +88,7 @@
                                                         value="{planmodel>/0/bidty}"
                                                         showValueHelp="true"
                                                         valueHelpRequest="onBidTyHelpRequest"
+                                                         valueHelpOnly="true"
                                                     />
                                                     <Label
                                                         text="Cargo Type"
@@ -98,6 +102,7 @@
                                                         value="{planmodel>/0/carty}"
                                                         showValueHelp="true"
                                                         valueHelpRequest="onCarTyHelpRequest"
+                                                        valueHelpOnly="true"
                                                     />
                                                     <Label
                                                         text="Currency"
@@ -111,6 +116,8 @@
                                                         value="{planmodel>/0/curty}"
                                                         showValueHelp="true"
                                                         valueHelpRequest="onCurTyHelpRequest"
+                                                         valueHelpOnly="true"
+
                                                     />
                                                 </content>
                                             </Panel>
@@ -139,14 +146,14 @@
                                     </layout:BlockLayoutCell>
                                 </layout:content>
                             </layout:BlockLayoutRow>
-                            <layout:BlockLayoutRow >
+                            <layout:BlockLayoutRow visible="false">
                                  <layout:BlockLayoutCell
                                     class="cellNoPadding1"
                                     width="1"
 
                                 >
                                                    <FlexBox  class="_flexCanalBox">
-                                                    <Label text="Select path to exclude :" class="sapUiTinyMargin"></Label>    
+                                                    <Label text="Select Path to Exclude :" class="sapUiTinyMargin"></Label>    
                                                   <CheckBox text="SUEZ" select=".onCheckBoxSelect" />
                                                     <CheckBox text="PANAMA" select=".onCheckBoxSelect"/>
                                                     <CheckBox text="KIEL" select=".onCheckBoxSelect"/>
@@ -297,6 +304,7 @@
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
                                                             type="Number"
+                                                            liveChange=".validateInputValue"
                                                         />
                                                     </ui:template>
                                                 </ui:Column>
@@ -308,6 +316,7 @@
                                                     <ui:template>
                                                         <Input
                                                             value="{
+                                                                type : 'sap.ui.model.type.Number',
 																path: 'oJsonModel>CargoSize',
 																formatter: '.formatter.numberFormat'
 															}"
@@ -315,6 +324,7 @@
                                                             required="true"
                                                             change="onPortTabCargoSizeChange"
                                                         />
+                                                            <!-- liveChange=".validateInputValue" -->
                                                     </ui:template>
                                                 </ui:Column>
                                                 <ui:Column width="5rem">
@@ -339,8 +349,9 @@
                                                     />
                                                     <ui:template>
                                                         <Input
-                                                            value="{oJsonModel>/portData/0/Speed}"
-                                                            editable="false"
+                                                            value="{oJsonModel>Speed}"
+                                                             editable="{= ${oJsonModel>LegId} !== '1' }"
+                                                            liveChange=".validateInputValue"
                                                         />
                                                     </ui:template>
                                                 </ui:Column>
@@ -363,7 +374,8 @@
                                                             value="{oJsonModel>PortDays}"
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
-                                                            type="Number"
+                                                        
+                                                            liveChange=".validateInputValue"
                                                         />
                                                     </ui:template>
                                                 </ui:Column>
@@ -429,7 +441,7 @@
                                                         
                                                             editable="{oJsonModel>/oEdit}"
                                                             required="true"
-                                                            valueFormat="hh:mm:ss.s"
+                                                            valueFormat="HH:mm:ss"
                                                             support2400="true"
                                                             displayFormat="HH:mm:ss"
                                                             value="{oJsonModel>DepartureTime}"

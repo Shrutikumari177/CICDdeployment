@@ -32,7 +32,7 @@
                     </TileContent>
         </GenericTile>
         <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
-                    header="VendorData Syncing" press="onVendorDataSyncingPress" visible="false" >
+                    header="VendorData Syncing" press="onVendorDataSyncingPress"  >
                     <TileContent id="_IDGenTileContent2">
                     <ImageContent id="_IDGenImageContent2" src="./images/VendorDataSync.png" ></ImageContent>
                     </TileContent>

@@ -25,6 +25,7 @@ sap.ui.define([
         return Controller.extend("com.ingenx.nauti.vendorbidding.controller.Main", {
             formatter: formatter,
             onInit: function () {
+
                 const bidTileModel = new JSONModel({
                     Open: 0,
                     Closed: 0,
@@ -51,6 +52,8 @@ sap.ui.define([
                         this._oBusyDialog.close();
                     }.bind(this));
             },
+
+        
             
             //this function is using for get the vendor data based on vendor no
             _fetchVendorData: function () {
@@ -103,7 +106,6 @@ sap.ui.define([
                     var oCharteringListData = oModel.bindList("/getfinalbidSet", undefined, undefined, undefined, {
                         $filter: `Lifnr eq '${this.staticData}'`
                     });
-                    debugger;
             
                     oCharteringListData.requestContexts(0).then(function (aContexts) {
                         aContexts.forEach(function (oContext) {
@@ -163,59 +165,44 @@ sap.ui.define([
                 bidTileModel.setProperty("/Open", counts.Open);
                 bidTileModel.setProperty("/Closed", counts.Closed);
                 bidTileModel.setProperty("/All", counts.All);
-            },            
+            },   
+                     
 
           
-            // this function is using for filter the chartering data based on Opne Status   
+            // this function is using for filter the chartering data based on Opne Status 
             pressOpen: function () {
-                let aFilter = [];
-                const oTable = this.byId("centerDataTable");
-                const oFilterOpen = new Filter("zstat", FilterOperator.EQ, statusLevel.OPEN);
-                const oFilterYetToStart = new Filter("zstat", FilterOperator.EQ, statusLevel.ONGOING);
-                const oFilterSubmit = new Filter("zstat", FilterOperator.EQ, statusLevel.SUBMIT);
-                aFilter = [oFilterOpen, oFilterYetToStart,oFilterSubmit];
-                const oFilter = new Filter({
-                    filters: aFilter,
-                    and: false,
-                });
-                try {
-                    oTable.getBinding("items").filter(oFilter);
-                } catch (error) {
-                    console.log(error.message);
-                    sap.m.MessageToast.show("Nothing to filter.");
-                }
-            },
+                const openFilters = [
+                    new Filter("zstat", FilterOperator.EQ, statusLevel.OPEN),
+                    new Filter("zstat", FilterOperator.EQ, statusLevel.ONGOING),
+                    new Filter("zstat", FilterOperator.EQ, statusLevel.SUBMIT),
+                ];
+                this._applyFilters(openFilters);
+            },  
   
-            // this function is using for filter the chartering data based on Close Status   
+            // this function is using for filter the chartering data based on Close Status  
             pressClose: function () {
-                let aFilter = [];
+                const closeFilters = [
+                    new Filter("zstat", FilterOperator.EQ, statusLevel.CLOSED),
+                    new Filter("zstat", FilterOperator.EQ, statusLevel.SUBMIT),
+                ];
+                this._applyFilters(closeFilters);
+            }, 
+  
+            // this function is using for display all chartering data in table 
+            pressAll: function () {
+                this._applyFilters([]);
+            },   
+            
+            // This function is actually working behind all filters method
+            _applyFilters: function (filters) {
                 const oTable = this.byId("centerDataTable");
-                const oFilterClosed = new Filter("zstat", FilterOperator.EQ, statusLevel.CLOSED);
-                const oFilterSubmitted = new Filter("zstat", FilterOperator.EQ, statusLevel.SUBMIT);
-                aFilter = [oFilterClosed, oFilterSubmitted];
-                const oFilter = new Filter({
-                    filters: aFilter,
-                    and: false,
-                });
                 try {
-                    oTable.getBinding("items").filter(oFilter);
+                    oTable.getBinding("items").filter(filters);
                 } catch (error) {
-                    console.log(error.message);
+                    console.error(error.message);
                     sap.m.MessageToast.show("Nothing to filter.");
                 }
             },
-  
-            // this function is using for display all chartering data in table  
-            pressAll: function () {
-                const oTable = this.byId("centerDataTable");
-                const oFilter = [];
-                try {
-                    oTable.getBinding("items").filter(oFilter);
-                } catch (error) {
-                    console.log(error.message);
-                    sap.m.MessageToast.show("Nothing to filter.");
-                }
-            },          
                   
         //this formatter is using for set the color of status text   
           statusFormatter: function (status) {
@@ -231,16 +218,7 @@ sap.ui.define([
                   default:
                       return sap.ui.core.ValueState.Information;
               }
-          },
-  
-          // toBiddingDetail: function (oEvent) {
-              //     const oSource = oEvent.getSource();
-              //     const oBindingContext = oSource.getBindingContext("charteringRequestModel");
-              //     const rowData = oBindingContext.getObject();
-              //     sessionStorage.setItem("biddingData", JSON.stringify(rowData));
-              //     this.getOwnerComponent().getRouter().navTo("RouteBidding");
-              // },
-              
+          },              
 
             // this function is using for navigating to the next page with some data
             toBiddingDetail: function (oEvent) {

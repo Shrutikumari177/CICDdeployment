@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="myCharterDialog"
+        noDataText="Loading..."
+        title="Select Voyage No"
+        search="onValueHelpSearch"
+        liveChange="onValueHelpSearch"
+        confirm="onValueHelpClosevoy"
+        cancel="onValueHelpClosevoy"
+        items="{path: '/xNAUTIxbidhist_valuehelp', sorter: {path: 'Chrnmin', descending: true}}"
+        initialFocus="SearchField">
+        <StandardListItem 
+            id="IDGenStandardListItem"
+            title="{voyno}"
+            description="{Chrnmin}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

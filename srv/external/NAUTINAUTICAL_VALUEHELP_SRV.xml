@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="NAUTI.NAUTICAL_VALUEHELP_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="xNAUTIxawardvoy_valuehelpType" sap:label="award valuehelp" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="voyno"/>
+                </Key>
+                <Property Name="voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxbidhist_valuehelpType" sap:label="value help for bid history" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="voyno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxbidprofile_valuehelpType" sap:label="value help for  bid prof" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BidprofileId"/>
+                </Key>
+                <Property Name="BidprofileId" Type="Edm.String" Nullable="false" MaxLength="25" sap:display-format="UpperCase" sap:label="ProfileId" sap:quickinfo="Profile id"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxcargo_valuehelpType" sap:label="cargo valuehelp tran" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="vessel_typ"/>
+                </Key>
+                <Property Name="vessel_typ" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Vessel Type"/>
+                <Property Name="description" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Cargo type descripti" sap:quickinfo="Cargo type description"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCHARTERINGVALUEHELPType" sap:label="chartering value help" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Chrnmex" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Charter Ext.No"/>
+                <Property Name="Chrcdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Creation Date" sap:quickinfo="Charter Request Creation Date"/>
+                <Property Name="Chrctime" Type="Edm.Time" Precision="0" sap:label="Creation Time" sap:quickinfo="Charter Request Creation Time"/>
+                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
+                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
+                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
+                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
+                <Property Name="Chrqdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Quot.Deadline Date" sap:quickinfo="Charter Quatation Deadline date"/>
+                <Property Name="Chrporg" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Purchase Org" sap:quickinfo="Charter Purchase Organization"/>
+                <Property Name="Chrporgn" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Pur.Org.Name" sap:quickinfo="Charter Purchase Organization name"/>
+                <Property Name="Chrpgrp" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Purchase Group" sap:quickinfo="Charter Purchase Group"/>
+                <Property Name="Chrpgrpn" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Pur.Grp.Name" sap:quickinfo="Charter Purchase Group Name"/>
+                <Property Name="Chrexcr" Type="Edm.Decimal" Precision="14" Scale="0" sap:label="Exch.Rate" sap:quickinfo="Exhange Rate"/>
+                <Property Name="Chrpayt" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Payment Terms"/>
+                <Property Name="Chrpaytxt" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Pay.term.dis" sap:quickinfo="Chartering payterms description"/>
+                <Property Name="Chrinco" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Inco Terms"/>
+                <Property Name="Chrincodis" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Chate.Incotrm.dis" sap:quickinfo="Chartering inco terms description"/>
+                <Property Name="Chrincol" Type="Edm.String" MaxLength="70" sap:display-format="UpperCase" sap:label="Inco Location" sap:quickinfo="Incoterms Location"/>
+                <Property Name="Cimater" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Mat." sap:quickinfo="Material"/>
+                <Property Name="Cimatdes" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material Short Text"/>
+                <Property Name="Ciqty" Type="Edm.Decimal" Precision="17" Scale="0" sap:unit="Ciuom" sap:label="Quantity"/>
+                <Property Name="Ciuom" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="Voyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Voynm" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
+                <Property Name="Chrven" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor Code"/>
+                <Property Name="Chrvenn" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Vendor Name"/>
+                <Property Name="Ciprec" Type="Edm.String" MaxLength="5" sap:label="Freight Currency" sap:semantics="currency-code"/>
+                <Property Name="Zdelete" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Indicator" sap:quickinfo="General Flag"/>
+                <Property Name="RefChrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Reference Chartering" sap:quickinfo="Reference Chartering No."/>
+            </EntityType>
+            <EntityType Name="xNAUTIxCHARTERVALUEHELPType" sap:label="chartering value help for charmin and creqno" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Creqno"/>
+                </Key>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxch_valuehelpType" sap:label="valuehelp" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Creqno"/>
+                    <PropertyRef Name="Chrnmin"/>
+                    <PropertyRef Name="Zlevel"/>
+                    <PropertyRef Name="Uname"/>
+                    <PropertyRef Name="Zdate"/>
+                    <PropertyRef Name="Ztime"/>
+                </Key>
+                <Property Name="Creqno" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Approval" sap:quickinfo="Chartering Approval Request Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Zlevel" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:label="Approver Level"/>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="Zdate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
+                <Property Name="Ztime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time"/>
+                <Property Name="Zcomm" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+                <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
+                <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxcostprof_valuehelpType" sap:label="valuehelp for cost profile" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Costprofid"/>
+                </Key>
+                <Property Name="Costprofid" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="CostProId" sap:quickinfo="cost profile dataelement"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxcurrency_valType" sap:label="currency valuehelp tran" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Navoycur"/>
+                </Key>
+                <Property Name="Navoycur" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="UpperCase" sap:label="Currency"/>
+                <Property Name="Navoygcurdes" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Currency Description"/>
+                <Property Name="NAVOCOUNT" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="" sap:quickinfo="COUNTRY"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxvendbid_valType" sap:label="value help for dist vendbid" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="Chrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxvoytyp_valuehelpType" sap:label="voyagetype valuehelp" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="VoyageType"/>
+                </Key>
+                <Property Name="VoyageType" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Voyage Code" sap:quickinfo="Voyage Type"/>
+                <Property Name="Voydes" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Voyage Code Descript" sap:quickinfo="Voyage Code Description"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxvoy_valuehelpType" sap:label="value help for voyage" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Voyno"/>
+                </Key>
+                <Property Name="Voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="voynm" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
+                <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
+            </EntityType>
+            <EntityContainer Name="NAUTI_NAUTICAL_VALUEHELP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="xNAUTIxawardvoy_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxawardvoy_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxbidhist_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxbidhist_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxbidprofile_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxbidprofile_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcargo_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcargo_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCHARTERINGVALUEHELP" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxCHARTERINGVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxCHARTERVALUEHELP" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxCHARTERVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxch_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxch_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcostprof_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcurrency_val" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcurrency_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxvendbid_val" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvendbid_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxvoytyp_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvoytyp_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxvoy_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvoy_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotations Target="NAUTI.NAUTICAL_VALUEHELP_SRV.NAUTI_NAUTICAL_VALUEHELP_SRV_Entities"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                                <String>groupby</String>
+                                <String>filter</String>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Rollup" EnumMember="None"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

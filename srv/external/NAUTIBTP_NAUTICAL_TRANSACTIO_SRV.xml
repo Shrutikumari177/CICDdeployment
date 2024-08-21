@@ -109,34 +109,6 @@
                 <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
                 <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
             </EntityType>
-            <EntityType Name="xNAUTIxaward_valueType" sap:label="value help for award" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Chrnmin"/>
-                </Key>
-                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
-                <Property Name="Voyno" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
-                <Property Name="Lifnr" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
-                <Property Name="Zcode" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
-                <Property Name="Biddate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
-                <Property Name="Bidtime" Type="Edm.Time" Precision="0" sap:label="Bid Time"/>
-                <Property Name="CodeDesc" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Code Description"/>
-                <Property Name="Value" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Value"/>
-                <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
-                <Property Name="Cunit" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
-                <Property Name="Chrqsdate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding Start Date"/>
-                <Property Name="Chrqstime" Type="Edm.Time" Precision="0" sap:label="Bidding Start Time"/>
-                <Property Name="Chrqedate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bidding End Date"/>
-                <Property Name="Chrqetime" Type="Edm.Time" Precision="0" sap:label="Bidding End Time"/>
-                <Property Name="DoneBy" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Done by Vendor ?"/>
-                <Property Name="Uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created by"/>
-                <Property Name="Stat" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Status"/>
-                <Property Name="Zmode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Type (Auto/manual)"/>
-                <Property Name="Zcom" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
-                <Property Name="Rank" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="" sap:quickinfo="Undefined range (can be used for patch levels)"/>
-                <Property Name="AwrdCreatedBy" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Created By"/>
-                <Property Name="AwrdCreatedOn" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Date" sap:quickinfo="Field of type DATS"/>
-                <Property Name="AwrdCreatedAt" Type="Edm.Time" Precision="0" sap:label="" sap:quickinfo="Field of type TIMS"/>
-            </EntityType>
             <EntityType Name="xNAUTIxBIDHISREPORTType" sap:label="Bidding History Report" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Chrnmin"/>
@@ -176,9 +148,10 @@
             <EntityType Name="xNAUTIxbidhist_valuehelpType" sap:label="value help for bid history" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="voyno"/>
+                    <PropertyRef Name="Chrnmin"/>
                 </Key>
                 <Property Name="voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
-                <Property Name="Chrnmin" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
+                <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
             </EntityType>
             <EntityType Name="xNAUTIxBIDITEMType" sap:label="Bid Item" sap:content-version="1">
                 <Key>
@@ -463,18 +436,24 @@
                 <Key>
                     <PropertyRef Name="Chrnmin"/>
                     <PropertyRef Name="voyno"/>
+                    <PropertyRef Name="biddate"/>
+                    <PropertyRef Name="bidtime"/>
+                    <PropertyRef Name="vendor"/>
+                    <PropertyRef Name="code"/>
                 </Key>
                 <Property Name="Chrnmin" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Chartering Req. No." sap:quickinfo="Charter No"/>
                 <Property Name="voyno" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Voyage No" sap:quickinfo="Voyage Number"/>
+                <Property Name="biddate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
+                <Property Name="bidtime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Bid Time"/>
+                <Property Name="vendor" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
+                <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
                 <Property Name="Voyty" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Voyage Type"/>
                 <Property Name="voyagrType" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Voyage Code Descript" sap:quickinfo="Voyage Code Description"/>
                 <Property Name="Carty" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Vessel Type"/>
                 <Property Name="cargoType" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Cargo type descripti" sap:quickinfo="Cargo type description"/>
                 <Property Name="voyageName" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
-                <Property Name="biddate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Bid Date"/>
-                <Property Name="bidtime" Type="Edm.Time" Precision="0" sap:label="Bid Time"/>
-                <Property Name="vendor" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Vendor" sap:quickinfo="Account Number of Vendor or Creditor"/>
-                <Property Name="code" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Code"/>
+                <Property Name="vesselname" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Vessel Name"/>
+                <Property Name="rank" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="" sap:quickinfo="Undefined range (can be used for patch levels)"/>
                 <Property Name="CodeDesc" Type="Edm.String" MaxLength="50" sap:display-format="UpperCase" sap:label="Code Description"/>
                 <Property Name="curkey" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
                 <Property Name="Cvalue" Type="Edm.Decimal" Precision="14" Scale="3" sap:label="Revaluation" sap:quickinfo="Revaluation amount on back-posting to a previous period"/>
@@ -484,6 +463,7 @@
                 <Property Name="Stat" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Status"/>
                 <Property Name="Zmode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Type (Auto/manual)"/>
                 <Property Name="Zcom" Type="Edm.String" MaxLength="250" sap:display-format="UpperCase" sap:label="Comments"/>
+                <Property Name="Award" Type="Edm.String" MaxLength="3"/>
             </EntityType>
             <EntityType Name="xNAUTIxpaymTermType" sap:label="Transactional payment term" sap:content-version="1">
                 <Key>
@@ -902,7 +882,6 @@
             </Association>
             <EntityContainer Name="NAUTI_BTP_NAUTICAL_TRANSACTIO_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="xNAUTIxAPPROVEDCHAT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxAPPROVEDCHATType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
-                <EntitySet Name="xNAUTIxaward_value" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxaward_valueType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxBIDHISREPORT" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDHISREPORTType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxbidhist_valuehelp" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxbidhist_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxBIDITEM" EntityType="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxBIDITEMType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
