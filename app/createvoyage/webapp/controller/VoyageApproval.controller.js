@@ -649,11 +649,11 @@ sap.ui.define(
       onSaveCommentApproval: function () {
         let sComment = this.byId("commentTextArea").getValue().trim();
         if (sComment === "") {
-          new sap.m.MessageToast.show("This field is mandatory");
+          new sap.m.MessageToast.show("Comment is Mandatory");
           return;
         }
 
-        sap.m.MessageToast.show("updating status .. ");
+        sap.m.MessageToast.show("Updating Status .. ");
         this.byId("approvalDialog").close();
 
 
@@ -664,7 +664,7 @@ sap.ui.define(
       onSaveCommentRejected: function () {
         let sComment = this.byId("commentTextArea2").getValue().trim();
         if (sComment === "") {
-          new sap.m.MessageToast.show("This field is mandatory");
+          new sap.m.MessageToast.show("Comment is Mandatory");
           return;
         }
 
@@ -719,26 +719,6 @@ sap.ui.define(
             // Refresh the model and rebind the table after 1.5 seconds
             sap.m.MessageToast.show("Voyage Approval Done");
 
-            let voyageStatusBindList = oModel.bindList("/newallstatusesSet");
-            if( stat == "REJ"){
-
-              voyageStatusBindList.create({
-                
-                "Voyage" : "1000000270",
-                "Status" : "Voyage Approval Rejected"
-                
-                
-              }, true)
-            } else if ( isLastApprover && stat == "APPR"){
-              voyageStatusBindList.create({
-                
-                "Voyage" : "1000000270",
-                "Status" : "Voyage Approval Done"
-                
-                
-              }, true);
-
-            }
             
             setTimeout(function () {
 
@@ -751,7 +731,7 @@ sap.ui.define(
 
           })
         } catch (error) {
-          console.log("Errro in updating status");
+          console.log("Errro in Updating Status");
         }
 
 

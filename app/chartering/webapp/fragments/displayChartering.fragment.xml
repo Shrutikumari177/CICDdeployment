@@ -10,7 +10,7 @@
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
 items="{
-        path: '/xNAUTIxCharteringHeaderItem',
+        path: '/xNAUTIxCHARTERINGVALUEHELP',
         sorter: {
             path: 'Chrnmin',
             descending: true

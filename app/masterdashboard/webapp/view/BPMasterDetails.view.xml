@@ -4,42 +4,84 @@
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
+    xmlns:f="sap.f"
+    xmlns:mdc="sap.ui.mdc"
+    xmlns:mdct="sap.ui.mdc.table"
+    xmlns:vm="sap.ui.fl.variants"
+    xmlns:m="sap.m"
+    
     xmlns="sap.m"
 >
-    <Page id="page">
-        <headerContent>
-            <Bar id="_IDGenBar2">
-                <contentLeft>
-                    <Button
-                        id="_IDGenIcon1"
-                        icon="sap-icon://nav-back"
-                        press="onBackPress"
-                    />
 
-                    <Button
-                        id="_IDGenIcon2"
-                        icon="sap-icon://home"
-                        press="onPressHome"
-                    />
+    <f:DynamicPage id="page">
+		
+        
+		<f:header>
+		
+			<f:DynamicPageHeader id = "dynamicPageHeader" pinnable="false">
 
-                    <Text
-                        id="_IDGenText1"
-                        class="text1"
-                        text="Business Partner"
-                    />
-                </contentLeft>
-                <contentRight>
-                    <SearchField
-                        id="searchField"
-                        width="300px"
-                        search="onSearch"
-                        placeholder="Search..."
-                        liveChange="onSearch"
-                        
-                    />
-                </contentRight>
-            </Bar>
-        </headerContent>
+			    <m:Bar id="_IDGenBar2">
+                    <m:contentLeft>
+                        <Button id="_IDGenIcon1"
+                            icon="sap-icon://nav-back"
+                            press="onBackPress"
+                       />
+                        <Button id="_IDGenIcon2"
+                            icon="sap-icon://home"
+                            press="onPressHome"
+                       />
+                        <m:Text id="_IDGenText1"
+                            class="text1"
+                            text="Business Partner Details"
+                        />
+                    </m:contentLeft>
+                    <m:contentRight>
+    
+                        <Button
+                            id="_IDGenIcon3"
+                            text="Delete"
+                            type="Emphasized"
+                            icon="sap-icon://delete"
+                            press="onDeletePress"
+                        />
+                    </m:contentRight>
+                </m:Bar>
+
+				<mdc:FilterBar id="filterbar" delegate="{
+							name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerFilterBarDelegate',
+							payload: {
+							    bindingPath: '/xNAUTIxnewvend_btp',
+                                searchKeys: ['Ort01', 'Land1', 'Lifnr']
+							}
+						}"
+						p13nMode = "Item,Value">
+					<mdc:basicSearchField>
+						<mdc:FilterField delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
+							dataType="sap.ui.model.type.String"
+							placeholder= "Search Here"
+							conditions="{$filters>/conditions/$search}"
+							propertyKey="$search"
+							maxConditions="1"/>
+					</mdc:basicSearchField>
+					<mdc:filterItems>
+						<mdc:FilterField
+							label="City"
+							propertyKey="Ort01"
+							dataType="sap.ui.model.type.String"
+							conditions="{$filters>/conditions/Ort01}"
+							valueHelp="name-vh"
+							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
+							/>
+					</mdc:filterItems>
+					<!-- <mdc:dependents>
+						<core:Fragment fragmentName="com.ingenx.nauti.masterdashboard.fragments.NameValueHelp" type="XML"/>
+					</mdc:dependents> -->
+				</mdc:FilterBar>
+
+			</f:DynamicPageHeader>
+		</f:header>
+     
+    <f:content>
 
         <Panel id="_IDGenPanel1" class="tablepanel" height="650px">
           
@@ -49,7 +91,7 @@
                 vertical="true"
                 class="scrollContainer"
             >
-                <Table
+                <!-- <Table
                     id="createTypeTable"
                     width="100%"
                     class="mastertables"
@@ -61,6 +103,7 @@
                     noDataText="Loading...."
                     growing="true"
                     growingThreshold="500"
+                    mode="MultiSelect"
                     
                   >
                     <columns>
@@ -149,11 +192,183 @@
 
                         </cells>
                     </ColumnListItem>
-                </Table>
+                </Table> -->
+
+            <mdc:Table
+                rowPress="onNavigateDetails"
+                header="Business Partner Set"
+                id="table"
+                width="100%"
+                filter="filterbar"
+                multiSelectMode="Default"
+                p13nMode="Column,Sort,Group"
+                class="mastertables"
+                selectionMode="Multi"
+	            type="ResponsiveTable"
+                threshold="100"
+                showRowCount="false"
+            
+                delegate="{
+                        name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerTableDelegate',
+                        payload: {
+                            bindingPath: '/xNAUTIxBusinessPartner1',
+                            searchKeys: ['Ort01', 'Land1', 'Lifnr']
+                        }
+                    }">
+                
+                
+                <mdct:Column
+                        propertyKey="VendorNo"
+                        header="Vendor No">
+                        <m:Text text="{Lifnr}" />
+                </mdct:Column>
+
+                <mdct:Column
+                    propertyKey="Name1"
+                    header="Name">
+                    <m:Text text="{Name1}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="Stras"
+                    header="Stras">
+                    <m:Text text="{Stras}" />
+                </mdct:Column>
+    
+                <mdct:Column
+                    propertyKey="PostalCode"
+                    header="Postal Code">
+                    <m:Text text="{Pstlz}" />
+                </mdct:Column>
+            
+                <mdct:Column
+                    propertyKey="CityName"
+                    header="City">
+                    <m:Text text="{Ort01}" />
+                </mdct:Column>
+
+                  <mdct:Column
+                    propertyKey="Country"
+                    header="Country">
+                    <m:Text text="{Land1}" />
+                </mdct:Column>
+
+                <mdct:Column
+                    propertyKey="PhoneNumber2"
+                    header="Telephone">
+                    <m:Text text="{Telf2}" />
+                </mdct:Column>
+
+                <mdct:Column
+                    propertyKey="CreationDate"
+                    header="Creation Date">
+                    <m:Text text="{Erdat}" />
+                </mdct:Column>
+            
+                <!-- <mdct:Column
+                    propertyKey="PhoneNumber1"
+                    header="PhoneNumber1">
+                    <m:Text text="{Telf1}" />
+                </mdct:Column>
+             -->
+                <!-- <mdct:Column
+                    propertyKey="FaxNumber"
+                    header="Fax No">
+                    <m:Text text="{Telfx}" />
+                </mdct:Column>
+             -->
+                
+            
+                
+                 <!-- <mdct:Column
+                    propertyKey="PartnerRole"
+                    header="Partner Role">
+                    <m:Text text="{PartnerRole}" />
+                </mdct:Column> -->
+
+                 <!-- <mdct:Column
+                    propertyKey="Company"
+                    header="Company">
+                    <m:Text text="{Anred}" />
+                </mdct:Column> -->
+
+                 
+
+                 <!-- <mdct:Column
+                    propertyKey="Name2"
+                    header="Name2">
+                    <m:Text text="{Name2}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="Name3"
+                    header="Name3">
+                    <m:Text text="{Name3}" />
+                </mdct:Column> -->
+
+                 <!-- <mdct:Column
+                    propertyKey="Sort1"
+                    header="Sort1">
+                    <m:Text text="{Sort1}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="StrSuppl1"
+                    header="StrSuppl1">
+                    <m:Text text="{StrSuppl1}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="StrSuppl2"
+                    header="StrSuppl2">
+                    <m:Text text="{StrSuppl2}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="HouseNum1"
+                    header="HouseNum1">
+                    <m:Text text="{HouseNum1}" />
+                </mdct:Column> -->
+
+                
+
+                 <!-- <mdct:Column
+                    propertyKey="Regio"
+                    header="Regio">
+                    <m:Text text="{Regio}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="TimeZone"
+                    header="TimeZone">
+                    <m:Text text="{TimeZone}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="Spras"
+                    header="Spras">
+                    <m:Text text="{Spras}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="SmtpAddr"
+                    header="SmtpAddr">
+                    <m:Text text="{SmtpAddr}" />
+                </mdct:Column>
+
+                 <mdct:Column
+                    propertyKey="DateTo"
+                    header="DateTo">
+                    <m:Text text="{DateTo}" />
+                </mdct:Column> -->
+
+
+			</mdc:Table>
             </ScrollContainer>
         </Panel>
 
-    </Page>
+    </f:content>
+    </f:DynamicPage >
 
    
 </mvc:View>

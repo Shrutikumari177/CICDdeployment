@@ -5,12 +5,10 @@ sap.ui.define([
 	"com/ingenx/nauti/masterdashboard/model/metadata/BusinessPartnerPropertyInfo",
 	"sap/ui/mdc/FilterField",
 	"sap/ui/core/Fragment",
-	"com/ingenx/nauti/masterdashboard/delegate/JSONBaseDelegate"
-], function (Element, FilterBarDelegate, BusinessPartnerPropertyInfo, FilterField, Fragment,
-	JSONBaseDelegate) {
+], function (Element, FilterBarDelegate, BusinessPartnerPropertyInfo, FilterField, Fragment) {
 	"use strict";
 
-	const JSONFilterBarDelegate = Object.assign({}, FilterBarDelegate, JSONBaseDelegate);
+	const JSONFilterBarDelegate = Object.assign({}, FilterBarDelegate);
 
 	JSONFilterBarDelegate.fetchProperties = async () => BusinessPartnerPropertyInfo;
 

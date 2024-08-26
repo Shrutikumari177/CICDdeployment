@@ -354,75 +354,6 @@ sap.ui.define(
     },
     
 
-      onSaveChartering1: function () {
-        let that = this;
-        let oChrmin = this.byId("charteringNo").getValue();
-        let oVoyno = this.byId("VoyageNo").getValue();
-        let oVendorString = this.byId('VendorNo').getProperty("_semanticFormValue");
-        let ochatExt = this.byId("chartExt").getValue();
-        let oDate = this.byId("creationDate").getValue();
-        let oTime = this.byId("creationTime").getValue();
-        let oPurchaseGr = this.byId("PurchaseGroup").getValue();
-        let oPurchaseOr = this.byId("PurchaseOrg").getValue();
-        let oPaymentTerm = this.byId("PaymentTerm").getValue();
-        let oVoynm = this.byId("voyname").getValue();
-
-        if (!oChrmin) {
-          sap.m.MessageBox.error("Please enter Chartering No");
-          return;
-        }
-
-        console.log("chartering:", oChrmin);
-        console.log("VoyageNo:", oVoyno);
-        console.log("VendorNo:", oVendorString);
-        console.log("chartExt:", ochatExt);
-
-        let oVendorArray = [];
-        if (oVendorString) {
-          let vendors = oVendorString.split(",");
-          vendors.forEach(function (vendor) {
-            oVendorArray.push({ "Lifnr": vendor.trim(), "Voyno": oVoyno });
-          });
-        }
-        console.log("array of vendors:", oVendorArray);
-
-        var oBindListSP = that.getView().getModel().bindList("/xNAUTIxCharteringHeaderItem");
-
-        try {
-          oBindListSP.create({
-            "Chrnmin": oChrmin,
-            "tovendor": oVendorArray,
-
-            "tocharteringasso": {
-              "Chrnmin": oChrmin,
-              "Chrnmex": ochatExt,
-              "Chrcdate": oDate,
-              "Chrctime": oTime,
-              "Chrqsdate": null,
-              "Chrqstime": null,
-              "Chrqedate": null,
-              "Chrqetime": null,
-              "Chrqdate": oDate,
-              "Chrporg": oPurchaseOr,
-              "Chrpgrp": oPurchaseGr,
-              "Chrpayt": oPaymentTerm,
-              "Voyno": oVoyno,
-              "Voynm": oVoynm,
-
-              "Zdelete": false,
-            }
-          });
-          console.log("created............");
-          sap.m.MessageBox.success("Data Saved Successfully");
-          this.loadData();
-
-          that.getOwnerComponent().getModel().refresh();
-          that.getView().getModel("vendorModel1").refresh();
-        } catch (error) {
-          console.error("Error while saving data:", error);
-          sap.m.MessageBox.error("Failed to save data.");
-        }
-      },
       onSaveChartering: async function () {
         let that = this;
         let oChrmin = this.byId("charteringNo").getValue();
@@ -440,6 +371,10 @@ sap.ui.define(
             sap.m.MessageBox.error("Please enter Chartering No");
             return;
         }
+        if (!ochatExt) {
+          sap.m.MessageBox.error("Please enter External Chartering Request No");
+          return;
+      }
     
         const chartNoValue = oChrmin;
         let oModel = this.getOwnerComponent().getModel();
@@ -489,6 +424,10 @@ sap.ui.define(
             });
         }
         console.log("array of vendors:", oVendorArray);
+        if (oVendorArray.length === 0) {
+          sap.m.MessageBox.error("Please select at least one vendor.");
+          return;
+      }
     
         var oBindListSP = that.getView().getModel().bindList("/xNAUTIxCharteringHeaderItem");
     

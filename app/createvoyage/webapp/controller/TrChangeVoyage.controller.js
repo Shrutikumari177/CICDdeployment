@@ -79,7 +79,7 @@ sap.ui.define(
                 this.getView().setModel(oBidCharterModel, "oBidCharterModel");
                 this.debouncedOnPortDaysChange = this.debounce(this._onPortDaysChange.bind(this), 600);
 
-                await this._initBidTemplate();
+                // await this._initBidTemplate();
 
             },
 
@@ -210,43 +210,6 @@ sap.ui.define(
                 }
             },
 
-            getBidDetails1: async function (VoyageNo) {
-                let that = this;
-                if (!that._busyDialog) {
-                    that._busyDialog = new sap.m.BusyDialog({
-                        title: "Please Wait",
-                        text: "Loading bid details..."
-                    });
-                }
-                that._busyDialog.open();
-                try {
-                    let bidItemModel = new sap.ui.model.json.JSONModel();
-                    let oModel = this.getOwnerComponent().getModel();
-                    let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
-                        $filter: `Voyno eq '${VoyageNo}'`
-                    });
-                    let oContexts = await oBindList.requestContexts(0, Infinity);
-                    let data = [];
-                    oContexts.forEach(oContext => {
-                        data.push(oContext.getObject());
-                    });
-                    console.log("Bid details data:", data);
-                    bidItemModel.setData(data);
-                    that.getView().setModel(bidItemModel, "bidItemModel");
-                    that.getView().getModel("bidItemModel").refresh();
-                    console.table(that.getView().getModel("bidItemModel").getData());
-                    let templateData = await that._getBidTemplate(oModel, "technical");
-                    bidPayload = [...data];
-                    that._setBidTemplate(templateData, that.byId("submitTechDetailTable"));
-                } catch (error) {
-                    console.error("Error loading bid details:", error);
-                } finally {
-                    if (that._busyDialog) {
-                        that._busyDialog.close();
-                        that._busyDialog = null;
-                    }
-                }
-            },
             getVoyageStatus: async function (myVOYNO) {
                 try {
                     let oModel = this.getOwnerComponent().getModel();
@@ -283,10 +246,10 @@ sap.ui.define(
                 console.log("myVoyno  received:", myVOYNO);
                 that.byId('_voyageInput1').setValue(myVOYNO);
                 let iconTab = this.byId("_idIconTabBar");
-                iconTab.setSelectedKey('info');
+                iconTab.setSelectedKey('info2');
 
 
-                await that.getBidDetails(myVOYNO);
+                // await that.getBidDetails(myVOYNO);
                 await that.getVoyageStatus(myVOYNO);
                 // Set the model to the view
 
@@ -297,7 +260,7 @@ sap.ui.define(
                     $expand: "toitem,tocostcharge,tobiditem"
                 });
 
-                oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+                oBindList.requestContexts(0, Infinity).then(async function (aContexts) {
                     if (aContexts.length === 1) {
                         const entityData = aContexts[0].getObject();   // NEED TO Discuss
                         tempDataArr.push(entityData);
@@ -376,6 +339,8 @@ sap.ui.define(
 
 
                         that.getView().setModel(oCommercialModel, "commercialModel");
+                        await that.getBidDetails(myVOYNO);
+                        
                     } else if (aContexts.length === 0) {
 
                         new sap.m.MessageBox.error(`No Data found against ${myVOYNO} Voyage no.`);
@@ -402,6 +367,11 @@ sap.ui.define(
                 console.log("my data", tempDataArr);
 
             },
+            // onAfterRendering :async  function (){
+            //     this.getBidDetails(myVOYNO);
+
+            // },
+
 
 
 
@@ -415,7 +385,7 @@ sap.ui.define(
                     //   let open = that.getOwnerComponent().getModel("status").getProperty("/open");
                     let oView = that.getView();
                     let templateData = await that._getBidTemplate(oModel, "technical");
-                    let templateData2 = await that._getBidTemplate(oModel, "commercial"); // temporary changes
+                    // let templateData2 = await that._getBidTemplate(oModel, "commercial"); // temporary changes
                     let oBidTemplateModel = new JSONModel(templateData);
                     oView.setModel(oBidTemplateModel, "bidtemplate");
 
@@ -1061,6 +1031,7 @@ sap.ui.define(
                     path: "tempModel>/",
                     template: oTable.getItems()[0].clone() // Assuming the first item in the table is the template
                 });
+                oTable.removeSelections();
 
                 // Set the group name for each radio button in the new row
                 var numRows = oModel.getProperty("/").length;
@@ -2879,6 +2850,7 @@ sap.ui.define(
             onRefresh: function () {
                 this.byId("_idIconTabBar").setVisible(false);
                 this.byId('_voyageInput1').setValue("");
+                this.byId('Input6').setValue("");
                 voyHeaderModel.setData([]);
                 voyItemModel.setData([]);
                 costdetailsModel.setData([]);
@@ -3018,12 +2990,7 @@ sap.ui.define(
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
-                            let statusBindList = oModel.bindList("/newallstatusesSet");
-                            voyageStatus = "Voyage Approval Pending";
-                            statusBindList.create({
-                                "Voyage": myVOYNO,
-                                "Status": voyageStatus
-                            }, true)
+                        
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
                         } else {
@@ -3066,9 +3033,9 @@ sap.ui.define(
                             eligibleforCancel = true;
 
                         } else if (Zaction.toUpperCase() === "APPR") {
-                            sap.m.MessageBox.warning("Already sent for approval, can't be cancel");
+                            sap.m.MessageBox.warning("Already sent for approval, can't be cancelled");
                         } else {
-                            sap.m.MessageBox.warning("Already sent for approval, can't be cancel");
+                            sap.m.MessageBox.warning("Already sent for approval, can't be cancelled");
                         }
                     } else {
 

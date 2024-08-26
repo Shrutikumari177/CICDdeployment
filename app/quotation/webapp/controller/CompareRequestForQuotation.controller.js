@@ -85,8 +85,7 @@ sap.ui.define([
 
 
         calculateAndBindRankings: function (Chrnmin) {
-            // debugger;
-
+           
             var oTable = this.byId("table");
             oTable.setNoData("Loading...");
 
@@ -288,14 +287,7 @@ sap.ui.define([
                 }
             }
         },
-        // onChartLiveChange1: function (oEvent) {
-
-        //     var sValue = oEvent.getParameter("value");
-
-        //     var oFilter = new Filter("Chrnmin", FilterOperator.Contains, sValue);
-
-        //     oEvent.getSource().getBinding("items").filter([oFilter]);
-        // },
+       
 
         onChartLiveChange1: function (oEvent) {
 
@@ -321,7 +313,7 @@ sap.ui.define([
             let oVoyageno = this.byId("Voyageno").getValue();
             var aData = [];
 
-            var oTableModel = this.getView().getModel(); // Assuming the table model is the main view model
+            var oTableModel = this.getView().getModel(); 
             var oListBinding = oTableModel.bindList("/xNAUTIxVOYAGEHEADERTOITEM");
 
             oListBinding.requestContexts().then(function (aContexts) {
@@ -335,8 +327,7 @@ sap.ui.define([
                 });
                 extractUnitData = extractData[0];
                 console.log("selected data is ", extractUnitData);
-                debugger;
-                // Set value for the "unit" input field in the first fragment
+
                 var oUnitInput = sap.ui.getCore().byId("unit");
                 if (oUnitInput) {
                     oUnitInput.setValue(extractUnitData);
@@ -595,7 +586,7 @@ sap.ui.define([
         mailData: function (finalBidStartDate, formattedStartTime, finalBidEndDate, formattedEndTime) {
             return new Promise((resolve, reject) => {
                 try {
-                    debugger;
+
                     console.log("bid start date", finalBidStartDate);
                     console.log("bid start time", formattedStartTime);
                     console.log("bid end date", finalBidEndDate);

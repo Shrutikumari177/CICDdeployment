@@ -7,13 +7,11 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"com/ingenx/nauti/masterdashboard/model/metadata/BusinessPartnerPropertyInfo",
-	"com/ingenx/nauti/masterdashboard/delegate/JSONBaseDelegate"
 ], function (
-	Element, TableDelegate, Column, Text, Filter, FilterOperator, BusinessPartnerPropertyInfo,
-	JSONBaseDelegate) {
+	Element, TableDelegate, Column, Text, Filter, FilterOperator, BusinessPartnerPropertyInfo) {
 	"use strict";
 
-	const JSONTableDelegate = Object.assign({}, TableDelegate, JSONBaseDelegate);
+	const JSONTableDelegate = Object.assign({}, TableDelegate, );
 
 	JSONTableDelegate.fetchProperties = async () =>
 		BusinessPartnerPropertyInfo.filter((oPI) => oPI.key !== "$search");
@@ -25,7 +23,7 @@ sap.ui.define([
 			header: oPropertyInfo.label,
 			template: new Text({
 				text: {
-					path: "mainService>" + sPropertyKey,
+					path: sPropertyKey,
 					type: oPropertyInfo.dataType
 				}
 			})

@@ -726,7 +726,7 @@ sap.ui.define(
             }
 
             if (!selectedPorts[i].PortDays) {
-              MessageBox.error("Please enter PortDays");
+              MessageBox.error("Please enter Port Days");
               return false;
             }
           }

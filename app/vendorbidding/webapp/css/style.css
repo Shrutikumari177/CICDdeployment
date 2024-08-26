@@ -39,3 +39,11 @@
 .statusText{
   font-weight: bold;
 }
+.unauthorisedText{
+  font-size: 45px; 
+}
+
+.unauthorisedicon .sapMImageContentImageIcon.sapUiIcon {
+  font-size: 7.75rem;
+  color: #556b82;
+  line-height: 2;  }

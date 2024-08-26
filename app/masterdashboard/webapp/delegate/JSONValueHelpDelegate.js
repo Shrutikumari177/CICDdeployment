@@ -3,15 +3,13 @@ sap.ui.define([
 	"sap/ui/mdc/ValueHelpDelegate",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"com/ingenx/nauti/masterdashboard/delegate/JSONBaseDelegate"
 ], function (
 	ValueHelpDelegate,
     Filter,
-    FilterOperator,
-    JSONBaseDelegate) {
+    FilterOperator) {
 	"use strict";
 
-	const JSONValueHelpDelegate = Object.assign({}, ValueHelpDelegate, JSONBaseDelegate);
+	const JSONValueHelpDelegate = Object.assign({}, ValueHelpDelegate);
 
 	JSONValueHelpDelegate.getFilters = function (oValueHelp, oContent) {
 		// create search filters

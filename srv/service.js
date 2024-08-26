@@ -12,32 +12,32 @@ module.exports = async (srv) => {
     const NAUTIUSERMAILID_SRV = await cds.connect.to("NAUTIUSERMAILID_SRV");
     srv.on('READ', 'xNAUTIxuserEmail', req => NAUTIUSERMAILID_SRV.run(req.query));
     const NAUTICONTRACTAWARD_SRV = await cds.connect.to("NAUTICONTRACTAWARD_SRV");
-    srv.on('READ', 'xNAUTIxcomparelivereport', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query));
     srv.on('READ', 'contaward_tableSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
-    srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('READ', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+
+    srv.on('CREATE', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    const NAUTINAUTICAL_VALUEHELP_SRV = await cds.connect.to("NAUTINAUTICAL_VALUEHELP_SRV"); 
+    srv.on('READ', 'xNAUTIxbidprofile_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxcostprof_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
 
 
 
     const NAUTIMASTER_BTP_SRV = await cds.connect.to("NAUTIMASTER_BTP_SRV");
+
     const NAUTIMARINE_TRAFFIC_API_SRV = await cds.connect.to("NAUTIMARINE_TRAFFIC_API_SRV");
     const NAUTIBTP_NAUTICAL_TRANSACTIO_SRV = await cds.connect.to("NAUTIBTP_NAUTICAL_TRANSACTIO_SRV");
     const NAUTIZVOYAPPROVAL_SRV = await cds.connect.to("NAUTIZVOYAPPROVAL_SRV");
     const NAUTIZVOY_VALUEHELP_CDS = await cds.connect.to("NAUTIZVOY_VALUEHELP_CDS");
     const NAUTIZCHATAPPROVAL_SRV = await cds.connect.to("NAUTIZCHATAPPROVAL_SRV");
     const NAUTICHASTATUS_SRV = await cds.connect.to("NAUTICHASTATUS_SRV");
-    const NAUTINAUTICAL_VALUEHELP_SRV = await cds.connect.to("NAUTINAUTICAL_VALUEHELP_SRV"); 
-    srv.on('READ', 'xNAUTIxbidhist_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
-    srv.on('READ', 'xNAUTIxbidprofile_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
 
-    
-    
     const NAUTIVENDOR_SRV = await cds.connect.to("NAUTIVENDOR_SRV");
     const NAUTICOMP_QUOT_SRV = await cds.connect.to("NAUTICOMP_QUOT_SRV");
-    srv.on('READ', 'xNAUTIxbidhist_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
-    
+
+    const NAUTIZNAUTIFILEUPL_VOY_SRV = await cds.connect.to("NAUTIZNAUTIFILEUPL_VOY_SRV");
+
     const NAUTIVOYSTATUS_SRV = await cds.connect.to("NAUTIVOYSTATUS_SRV");
-    srv.on('READ', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
-    srv.on('CREATE', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
     srv.on('READ', 'voyappstatusSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('READ', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxallstatuses', req => NAUTIVOYSTATUS_SRV.run(req.query));
@@ -45,17 +45,10 @@ module.exports = async (srv) => {
     srv.on('UPDATE', 'newallstatusesSet', req => NAUTIVOYSTATUS_SRV.run(req.query));
 
     const NAUTIZLIVEBID_VEND_SRV = await cds.connect.to("NAUTIZLIVEBID_VEND_SRV");
-    srv.on('READ', 'getfinalbidSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query));
-    srv.on('READ', 'venItemSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query));
-    srv.on('READ', 'vendorFinSet', req => NAUTIZLIVEBID_VEND_SRV.run(req.query));
-    srv.on('READ', 'xNAUTIxnewvendfbid', req => NAUTIZLIVEBID_VEND_SRV.run(req.query));
+
 
 
     const NAUTILIVEBID_CONT_SRV = await cds.connect.to("NAUTILIVEBID_CONT_SRV");
-    srv.on('READ', 'livecontrollerfetchSet', req => NAUTILIVEBID_CONT_SRV.run(req.query));
-    srv.on('READ', 'contItemSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
-    srv.on('CREATE', 'contheaderSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
-    srv.on('READ', 'contheaderSet', req => NAUTILIVEBID_CONT_SRV.run(req.query)); 
 
     const INGXTCONTROLLER_SRV = await cds.connect.to("INGXTCONTROLLER_SRV");
     srv.on('READ', 'BidsSet', req => INGXTCONTROLLER_SRV.run(req.query));
@@ -72,16 +65,11 @@ module.exports = async (srv) => {
     srv.on('READ', 'xNAUTIxitemBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxvenBid', req => NAUTICOMP_QUOT_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxvendbid_val', req => NAUTIINVITECOMPARE_SRV.run(req.query));
-    const NAUTIZNAUTIFILEUPL_VOY_SRV = await cds.connect.to("NAUTIZNAUTIFILEUPL_VOY_SRV");
-    srv.on('READ', 'FileuploadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
-    srv.on('READ', 'downloadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
-    srv.on('CREATE', 'FileuploadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
-    srv.on('CREATE', 'downloadSet', req => NAUTIZNAUTIFILEUPL_VOY_SRV.run(req.query));
+
 
     const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
     srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxnewvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
-
 
 
 
@@ -92,62 +80,6 @@ module.exports = async (srv) => {
         return response;
     });
 
-    srv.on('READ', 'ControllerLiveBidDetails', async function (req) {
-
-        console.log("Triggered....", req.data);
-        
-        let Chrnmin;
-        let currentQuotedRes = [];
-    
-        // Check if the filter is provided and extract the Chrnmin value
-        if (req._queryOptions && req._queryOptions.$filter) {
-            Chrnmin = req._queryOptions.$filter.split(' ')[2];
-            Chrnmin = Chrnmin.replace(/'/g, '');
-        }
-        
-        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
-        let ControllerLiveBidData = Chrnmin ? await SELECT.from('nauticalservice.ControllerLiveBidDetails').where({ Chrnmin }) : await SELECT.from('nauticalservice.ControllerLiveBidDetails');
-        ControllerLiveBidData = ControllerLiveBidData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        console.log("response", ControllerLiveBidData);
-        if(Chrnmin){
-            currentQuotedRes.push(ControllerLiveBidData[0])
-            return currentQuotedRes;
-        }
-
-        return ControllerLiveBidData;
-    });
-
-
-    srv.on('READ', 'VenodrLiveBidDetails', async function (req) {
-        console.log("Triggered....", req.data);
-        
-        let Chrnmin;
-    
-        // Check if the filter is provided and extract the Chrnmin value
-        if (req._queryOptions && req._queryOptions.$filter) {
-            Chrnmin = req._queryOptions.$filter.split(' ')[2];
-            Chrnmin = Chrnmin.replace(/'/g, '');
-        }
-        
-        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
-        const allData = Chrnmin ? await SELECT.from('nauticalservice.VenodrLiveBidDetails').where({ Chrnmin }) : await SELECT.from('nauticalservice.VenodrLiveBidDetails');
-    
-        // Filter the latest entry for each vendorNo
-        const latestEntries = allData.reduce((acc, current) => {
-            const existingEntry = acc.find(entry => entry.vendorNo === current.vendorNo);
-            if (!existingEntry || new Date(existingEntry.createdAt) < new Date(current.createdAt)) {
-                acc = acc.filter(entry => entry.vendorNo !== current.vendorNo);
-                acc.push(current);
-            }
-            return acc;
-        }, []);
-    
-        console.log("response", latestEntries);
-    
-        return latestEntries;
-    });
-    
-    
     srv.on('UPDATE', 'quotations', async (req) => {
         try {
             // Extract key parameters from the request URL
@@ -178,8 +110,8 @@ module.exports = async (srv) => {
             // Perform the update operation
             const affectedRows = await cds.transaction(req).run(
                 UPDATE('nauticalservice.quotations')
-                    .set(updateData)
-                    .where(whereCondition)
+                .set(updateData)
+                .where(whereCondition)
             );
 
             // Log and return the number of affected rows
@@ -194,20 +126,64 @@ module.exports = async (srv) => {
             });
         }
     });
-    // srv.on('CREATE', 'VenodrLiveBidDetails', async (req) => {
-    //     debugger;
-    //     const newData = {
-    //         ...req.data,
-    //         ID: 1
-    //     };
-    //     try {
-    //         const newBidDetails = await cds.create('VenodrLiveBidDetails').entries(newData);
-    //         req.reply(newBidDetails);
-    //     } catch (error) {
-    //         req.error(500, `Error creating VenodrLiveBidDetails: ${error.message}`);
-    //     }
-    // });
+    srv.on('READ', 'ControllerLiveBidDetails', async function (req) {
 
+        console.log("Triggered....", req.data);
+
+        let Chrnmin;
+        let currentQuotedRes = [];
+
+        // Check if the filter is provided and extract the Chrnmin value
+        if (req._queryOptions && req._queryOptions.$filter) {
+            Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+        }
+
+        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
+        let ControllerLiveBidData = Chrnmin ? await SELECT.from('nauticalservice.ControllerLiveBidDetails').where({
+            Chrnmin
+        }) : await SELECT.from('nauticalservice.ControllerLiveBidDetails');
+        ControllerLiveBidData = ControllerLiveBidData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        console.log("response", ControllerLiveBidData);
+        if (Chrnmin) {
+            currentQuotedRes.push(ControllerLiveBidData[0])
+            return currentQuotedRes;
+        }
+
+        return ControllerLiveBidData;
+    });
+
+
+    srv.on('READ', 'VenodrLiveBidDetails', async function (req) {
+        console.log("Triggered....", req.data);
+
+        let Chrnmin;
+
+        // Check if the filter is provided and extract the Chrnmin value
+        if (req._queryOptions && req._queryOptions.$filter) {
+            Chrnmin = req._queryOptions.$filter.split(' ')[2];
+            Chrnmin = Chrnmin.replace(/'/g, '');
+        }
+
+        // Fetch all data with the given Chrnmin or all data if no Chrnmin filter is provided
+        const allData = Chrnmin ? await SELECT.from('nauticalservice.VenodrLiveBidDetails').where({
+            Chrnmin
+        }) : await SELECT.from('nauticalservice.VenodrLiveBidDetails');
+
+        // Filter the latest entry for each vendorNo
+        const latestEntries = allData.reduce((acc, current) => {
+            const existingEntry = acc.find(entry => entry.vendorNo === current.vendorNo);
+            if (!existingEntry || new Date(existingEntry.createdAt) < new Date(current.createdAt)) {
+                acc = acc.filter(entry => entry.vendorNo !== current.vendorNo);
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+
+        console.log("response", latestEntries);
+
+        return latestEntries;
+    });
 
     srv.on('READ', 'CompareLiveFreight', async (req) => {
         try {
@@ -247,8 +223,9 @@ module.exports = async (srv) => {
             return [];
         }
     });
+   
 
-function calculateAndRankAward(voyageData, charminData) {
+  function calculateAndRankAward(voyageData, charminData) {
 
         const vendorScores = calculateScoresAward(voyageData, charminData);
 
@@ -449,8 +426,6 @@ function calculateAndRankAward(voyageData, charminData) {
         return Object.values(grouped);
 
     };
-
-
     srv.on('READ', 'calculateRankings', async (req) => {
         try {
             console.log("Triggered....", req.data);
@@ -619,20 +594,9 @@ function calculateAndRankAward(voyageData, charminData) {
         return Object.values(grouped);
     }
 
-    srv.on('CREATE', 'biddingStartManual', async (req) => {
-        try {
-            console.log("CREATE Event Triggered....", req.data);
 
-            const { Chrnmin, biddStartStatus } = req.data;
-            if (biddStartStatus) {
-                console.log(`Bidding has been started manually for Chrnmin: ${Chrnmin}`);
-            }
-            return req.data;
-        } catch (error) {
-            console.error("Error in CREATE event:", error);
-            req.error(500, "An error occurred while processing the request");
-        }
-    });
+
+  
 
 
     srv.on('CREATE', "sendEmail", async (req) => {
@@ -774,7 +738,12 @@ function calculateAndRankAward(voyageData, charminData) {
             }];
         }
     });
+   
 
+
+    registerHandlers(srv, NAUTILIVEBID_CONT_SRV, [
+        'contheaderSet', 'contItemSet', 'livecontrollerfetchSet'
+    ]);
     registerHandlers(srv, NAUTICHASTATUS_SRV, [
         'cha_statusSet'
     ])
@@ -783,8 +752,12 @@ function calculateAndRankAward(voyageData, charminData) {
     ])
 
     registerHandlers(srv, NAUTIZCHATAPPROVAL_SRV, ['xNAUTIxchaApp1', 'chartapprSet']);
+    registerHandlers(srv, NAUTIZLIVEBID_VEND_SRV, ['getfinalbidSet', 'venItemSet','vendorFinSet','xNAUTIxnewvendfbid']);
+
 
     registerHandlers(srv, NAUTIZVOY_VALUEHELP_CDS, ['xNAUTIxvoy_valuehelp']);
+    registerHandlers(srv, NAUTIZNAUTIFILEUPL_VOY_SRV, ['FileuploadSet']);
+
 
     registerHandlers(srv, NAUTIVENDOR_SRV, [
         'MasBidTemplateSet', 'DynamicTableSet', 'ITEM_BIDSet', 'PortsSet'
@@ -805,9 +778,10 @@ function calculateAndRankAward(voyageData, charminData) {
         'PortmasterUpdateSet', 'BidMasterSet', 'ClassMasterSet', 'CostMasterSet', 'CountryMasterSet', 'xNAUTIxcury_count', 'BusinessPartnerSet',
         'EventMasterSet', 'MaintainGroupSet', 'UOMSet', 'StandardCurrencySet', 'xNAUTIxportmascds', 'xNAUTIxSAPUSERS',
         'ReleaseStrategySet', 'VoyageRealeaseSet', 'RefrenceDocumentSet', 'xNAUTIxCountrySetFetch',
-        'PortmasterSet', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',
-        'xNAUTIxSAPUSERS', 'xNAUTIxcury_count', 'xNAUTIxuseridassociation', 'xNAUTIxUIIDUSRGROUP','xNAUTIxMASBID','costProfileSet'
+        'PortmasterSet', 'xNAUTIxMASBID', 'xNAUTIxBusinessPartner1', 'xNAUTIxvend_btp', 'RelStrategySet', 'CountrySet', 'xNAUTIxStandardCurrencyFetch', 'xNAUTIxUIIDUSRGROUP', 'xNAUTIxnewportcds',
+        'xNAUTIxSAPUSERS', 'xNAUTIxcury_count', 'xNAUTIxuseridassociation', 'xNAUTIxUIIDUSRGROUP', 'costProfileSet'
     ]);
+
 
     // Register handlers for NAUTIMARINE_TRAFFIC_API_SRV entities
     registerHandlers(srv, NAUTIMARINE_TRAFFIC_API_SRV, ['EsPathCollection', 'PortMasterSet', 'es_port_master', 'es_route_map']);
@@ -852,6 +826,96 @@ function registerHandlers(srv, service, entities) {
         srv.on('CREATE', entity, req => service.run(req.query));
         srv.on('UPDATE', entity, req => service.run(req.query));
         srv.on('DELETE', entity, req => service.run(req.query));
+    });
+
+    srv.on('CREATE', 'calculateDateAndTime', async (req, res) => {
+        try {
+            console.log("calculate functionn trigger");
+            let portData = req.data.ZCalcNav;
+            for (let i = 0; i < portData.length; i++) {
+                if (portData[i].LegId == '1') {
+                    let portDay = portData[i].PortDays;
+                    let departureDateValue = portData[i].DepartureDateValue;
+                    let departureTime = portData[i].DepartureTime;
+
+                    // Combine departure date and time into a single Date object
+                    let departureDateTime = new Date(`${departureDateValue}T${departureTime}`);
+
+                    let totalHours = parseFloat(portDay) * 24.00; // converting port dys into hours
+
+                    console.log("port 1 total hours: ", totalHours);
+                    // Add portDay to the departure date
+                    departureDateTime.setHours(departureDateTime.getHours() - parseInt(totalHours));
+                    departureDateTime.setMinutes(departureDateTime.getMinutes() - (totalHours % 1) * 60);
+
+                    // Format the arrival date and time
+                    let arrivalDate = departureDateTime.toISOString().split('T')[0]; // YYYY-MM-DD format
+                    let arrivalTime = departureDateTime.toTimeString().split(' ')[0];
+                    portData[i].ArrivalDate = arrivalDate;
+                    portData[i].ArrivalTime = arrivalTime;
+                    portData[i].SeaDays = "0";
+                    console.log("Port Dataa", portData[i]);
+                } else {
+                    let prevDepartureDate = portData[i - 1].DepartureDateValue;
+                    let prevDepartureTime = portData[i - 1].DepartureTime;
+                    let portDistance = portData[i].Distance;
+                    let vesselSpeed = portData[i].Speed;
+                    let portDays = portData[i].PortDays;
+                    let weather = parseFloat(portData[i].Weather);
+                    let totalHours = parseFloat(portDistance) / parseFloat(vesselSpeed);
+                    console.log("totalHours w/o weather", totalHours);
+
+                    if (weather) {
+                        totalHours = totalHours * (1 + weather / 100);
+                    }
+                    let days = parseFloat(totalHours / 24);
+                    console.log("Days ", days);
+                    console.log("weather  ", weather);
+
+                    let departureDateTime = new Date(`${prevDepartureDate}T${prevDepartureTime}`);
+                    console.log("totalHours", totalHours);
+                    console.log("departureDateTime", departureDateTime);
+                    console.log("departureDateTime Before", departureDateTime.getHours());
+
+                    // Add the total hours to the departure Date object
+                    departureDateTime.setHours(departureDateTime.getHours() + parseInt(totalHours));
+                    departureDateTime.setMinutes(departureDateTime.getMinutes() + (totalHours % 1) * 60);
+                    console.log("departureDateTime After", departureDateTime.getHours());
+
+                    // Format the arrival date and time
+                    let arrivalDate = departureDateTime.toISOString().split('T')[0]; // YYYY-MM-DD format
+                    let arrivalTime = departureDateTime.toTimeString().split(' ')[0]; // HH:MM:SS format
+                    portData[i].ArrivalDate = arrivalDate;
+                    portData[i].ArrivalTime = arrivalTime;
+                    let portDaysHours = portDays * 24;
+                    console.log("Port Days hours: ", portDaysHours);
+
+                    departureDateTime.setHours(departureDateTime.getHours() + parseInt(portDaysHours));
+                    departureDateTime.setMinutes(departureDateTime.getMinutes() + (portDaysHours % 1) * 60);
+
+                    let departureDate = departureDateTime.toISOString().split('T')[0];
+
+                    let departureTime = departureDateTime.toTimeString().split(' ')[0];
+                    portData[i].DepartureTime = departureTime
+                    portData[i].DepartureDateValue = departureDate;
+                    portData[i].SeaDays = parseFloat(days).toFixed(3);
+
+                }
+            }
+            console.log("payload after change ", portData);
+            return {
+                "ZCalcNav": portData
+            };
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw new Error('Error performing calculation');
+
+        }
+
+
+        // return await performCalculation(req.data);
+
     });
 
 

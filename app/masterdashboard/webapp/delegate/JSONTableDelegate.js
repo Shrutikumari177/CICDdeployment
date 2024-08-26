@@ -23,7 +23,7 @@ sap.ui.define([
 			header: oPropertyInfo.label,
 			template: new Text({
 				text: {
-					path: "mainService>" + sPropertyKey,
+					path: sPropertyKey,
 					type: oPropertyInfo.dataType
 				}
 			})
@@ -52,6 +52,7 @@ sap.ui.define([
 	};
 
 	JSONTableDelegate.getFilters = (oTable) => {
+		
 		const sSearch = Element.getElementById(oTable.getFilter()).getSearch();
 		const aKeys = oTable.getPayload().searchKeys;
 		let aFilters = TableDelegate.getFilters(oTable);

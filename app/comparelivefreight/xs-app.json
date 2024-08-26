@@ -5,7 +5,7 @@
     {
       "source": "^/odata/(.*)$",
       "target": "/odata/$1",
-      "destination": "Ingenx_OData_SAP",
+      "destination": "nautical-srv-api",
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },

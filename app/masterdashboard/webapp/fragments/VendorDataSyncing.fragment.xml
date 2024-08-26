@@ -13,67 +13,93 @@
                     <!-- First Column Group -->
                     <VBox class="sapUiSmallMarginEnd sapUiLargeMarginBottom">
                         <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Business Partner:" />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/BusinessPartner}" editable="false" />
+                            <Label class="labelStyle" text="Vendor No:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Lifnr}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Title:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/arned}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Name1:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Name1}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Name2:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Name2}" editable="false" />
+                        </FlexBox>
+
+                          <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Telephone: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf2}" editable="false" />
                         </FlexBox>
         
+                        <!-- <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Telf1: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf1}" editable="false" />
+                        </FlexBox>
+         -->
                         <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Country: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Country}" editable="false" />
+                            <Label class="labelStyle" text="Fax No: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telfx}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Language: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Spras}" editable="false" />
                         </FlexBox>
         
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Postal Code: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/PostalCode}" editable="false" />
-                        </FlexBox>
         
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="City Name:" />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/CityName}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Phone Number 1: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/PhoneNumber1}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label id="_IDGenLabel14" class="labelStyle" text="Erdat: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Erdat}" editable="false" />
-                        </FlexBox>
+                        
                     </VBox>
         
                     <!-- Second Column Group -->
                     <VBox>
+                        
                         <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Regio: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Regio}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Spras: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Spras}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Telf1: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf1}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Telf2: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telf2}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label class="labelStyle" text="Telfx: " />
-                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Telfx}" editable="false" />
-                        </FlexBox>
-        
-                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label id="_IDGenLabel13" class="labelStyle" text="SmtpAddr: " />
+                            <Label id="_IDGenLabel13" class="labelStyle" text="Address: " />
                             <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/SmtpAddr}" editable="false" />
                         </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Street:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Stras}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="City:" />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Ort01}" editable="false" />
+                        </FlexBox>
+
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Country: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Land1}" editable="false" />
+                        </FlexBox>
+        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Postal Code: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Pstlz}" editable="false" />
+                        </FlexBox>
+
+                        
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Region: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Regio}" editable="false" />
+                        </FlexBox>
+                        
+                        <!-- <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label class="labelStyle" text="Phone Number 1: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/PhoneNumber1}" editable="false" />
+                        </FlexBox>
+         -->
+                        <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
+                            <Label id="_IDGenLabel14" class="labelStyle" text="Creation Date: " />
+                            <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Erdat}" editable="false" />
+                        </FlexBox>
+
                     </VBox>
                 </FlexBox>
             </VBox>

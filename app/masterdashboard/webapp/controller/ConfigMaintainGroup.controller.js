@@ -848,8 +848,6 @@ sap.ui.define(
         let oView = this.getView();
         let oCreateTable = oView.byId("createTypeTable");
         let oUpdateTable = oView.byId("updateTypeTable");
-
-        // Get all items from the updateTypeTable
         let aItems = oUpdateTable.getItems();
 
         let i = 0;
@@ -874,25 +872,20 @@ sap.ui.define(
           return;
         }
 
-        // Iterate over the items to update the corresponding item in the createTypeTable
         aItems.forEach(function (oItem) {
-          let sValue = oItem.getCells()[0].getText(); // Assuming Value is in the first cell
-          let sDesc = oItem.getCells()[1].getValue(); // Assuming Field Description is in the second cell
+          let sValue = oItem.getCells()[0].getText();
+          let sDesc = oItem.getCells()[1].getValue(); 
 
-          var formattedDes = that.formatDes(sDesc);
-
-          // Find the corresponding item in the createTypeTable
           let oCreateItem = oCreateTable.getItems().find(function (oCreateItem) {
-            return oCreateItem.getCells()[0].getText() === sValue; // Assuming Value is in the first cell
+            return oCreateItem.getCells()[0].getText() === sValue;
           });
 
 
           if (oCreateItem) {
-            oCreateItem.getCells()[1].setText(formattedDes.replace(/\s+/g, " ").trim()); // Assuming Field Description is in the second cell
+            oCreateItem.getCells()[1].setText(sDesc.replace(/\s+/g, " ").trim()); 
           }
         });
 
-        // Show the createTypeTable
         oCreateTable.setVisible(true).removeSelections();
 
 

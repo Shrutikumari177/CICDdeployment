@@ -15,17 +15,16 @@ entity getRoute {
     message        : String;
 }
 
-entity biddingStartManual : managed{
-    key Chrnmin : String;
-    biddStartStatus : Boolean;
-}
-
 type BidDetail {
     CodeDesc: String;
     Value: String;
     Cvalue : Integer;
     fScore : Integer;
 };
+entity biddingStartManual : managed{
+    key Chrnmin : String;
+    biddStartStatus : Boolean;
+}
 
 type Vendors {
     vendorId : String;
@@ -42,12 +41,12 @@ entity calculateRankings {
     Chrnmin: String;
     Vendors : array of Vendors;
 }
-
 entity CompareLiveFreight {
     Voyno: String;
     Chrnmin: String;
     Vendors : array of Vendors;
 }
+ 
 
 entity ControllerLiveBidDetails : managed {
     key ID : UUID@Core.Computed;
@@ -110,4 +109,24 @@ entity VenodrLiveBidDetails : managed {
     voyno : String;
     quotationPrice : String;
     comment : String
+}
+type portDetails {
+
+    ArrivalDate:  String;
+    ArrivalTime : String;
+    CargoSize : String;
+    CargoUnit : String;
+    DepartureDateValue : String;
+    DepartureTime : String;
+    Distance : String;
+    LegId : String;
+    PortDays : String;
+    PortId: String;
+    PortName: String;
+    SeaDays : String;
+    Speed: String;
+    Weather: String;
+}
+entity calculateDateAndTime {
+    ZCalcNav : array of portDetails;
 }

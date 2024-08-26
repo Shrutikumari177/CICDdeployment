@@ -9,7 +9,7 @@
         confirm="onCharteringValueHelpClose"
         cancel="onCharteringValueHelpClose"
 items="{
-        path: '/xNAUTIxaward_value',
+        path: '/xNAUTIxawardReportFinal',
         sorter: {
             path: 'Chrnmin',
             descending: true

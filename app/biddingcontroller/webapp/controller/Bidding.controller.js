@@ -39,7 +39,7 @@ sap.ui.define([
                     "/navigatedControllerCurrBid",
                     "/navigatedMode"
                 ]);
-                // debugger;
+             
                 const vendorNo = navModel.getProperty("/navigatedVendorNo")
                 const VoyageNo = navModel.getProperty("/navigatedVoyageNo");
                 sVoyageNo = VoyageNo;
@@ -193,7 +193,7 @@ sap.ui.define([
 
             onControllerPostData: async function (vendorNum,voyageNo, charterNo, startDate, sTime, endDate, eTime){
                 try {
-                    debugger;
+                  
                     let allControllerData = []; 
                     let startTime = `${sTime}.0`;
                     let endTime = `${eTime}.0`;
@@ -245,7 +245,7 @@ sap.ui.define([
             },            
 
             sendControllerDataToS4: function(oPayload) {
-                debugger;
+              
                 const oDataModelV4 = this.getOwnerComponent().getModel();
                 let oBindList = oDataModelV4.bindList("/contheaderSet");
             
@@ -289,7 +289,7 @@ sap.ui.define([
 
 
             _onObjectMatched: async function (oEvent) {
-                debugger;
+
                 let selectedCharterNo = this.getOwnerComponent().getModel("navModel").getProperty("/navigatedCharterno");
                 let mode = this.getOwnerComponent().getModel("navModel").getProperty("/navigatedMode");
                 selectedCharterNo = "4000000621";
@@ -327,7 +327,7 @@ sap.ui.define([
             },
 
             fetchAndSortData: async function (Chrnmin) {
-                debugger
+             
                 let oModel = this.getOwnerComponent().getModel();
                 const aFilters = [
                     new sap.ui.model.Filter("Chrnmin", sap.ui.model.FilterOperator.EQ, Chrnmin)
@@ -342,7 +342,7 @@ sap.ui.define([
                         
                         let vendor = oContext.getObject();
                         let freightCost = 0;
-                        // let freightCost = vendor.bidDetails.find(detail => detail.CodeDesc === "FREIGHT")?.Value || "N/A";
+            
                         for(let i = 0; i < vendor.Vendors.length; i++){
                             let LiveBiddData = {
                                 vendorId : "",
@@ -388,7 +388,7 @@ sap.ui.define([
             },
 
             updateCardFromTable: function() {
-                debugger;
+              
                 var oTable = this.byId("centerDataTable");
                 var oItems = oTable.getItems();
                 if (oItems.length === 0) {
@@ -566,7 +566,7 @@ sap.ui.define([
             
 
             _startTimer: function(startDate, startTime, endDate, endTime) {
-                // debugger;
+              
                 if (this.intervalId) {
                     clearInterval(this.intervalId);
                     this.intervalId = null;

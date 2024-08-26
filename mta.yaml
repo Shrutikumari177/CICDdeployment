@@ -80,10 +80,6 @@ modules:
       name: comingenxnautireport
       target-path: resources/
     - artifacts:
-      - comingenxnautibiddingcontroller.zip
-      name: comingenxnautibiddingcontroller
-      target-path: resources/
-    - artifacts:
       - comingenxnautichartering.zip
       name: comingenxnautichartering
       target-path: resources/
@@ -102,6 +98,10 @@ modules:
     - artifacts:
       - comingenxnauticomparelivefreight.zip
       name: comingenxnauticomparelivefreight
+      target-path: resources/
+    - artifacts:
+      - comingenxnautibiddingcontroller.zip
+      name: comingenxnautibiddingcontroller
       target-path: resources/
 - name: comingenxnautimasterdashboard
   type: html5
@@ -126,16 +126,6 @@ modules:
 - name: comingenxnautireport
   type: html5
   path: app/report
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comingenxnautibiddingcontroller
-  type: html5
-  path: app/biddingcontroller
   build-parameters:
     build-result: dist
     builder: custom
@@ -186,6 +176,16 @@ modules:
 - name: comingenxnauticomparelivefreight
   type: html5
   path: app/comparelivefreight
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comingenxnautibiddingcontroller
+  type: html5
+  path: app/biddingcontroller
   build-parameters:
     build-result: dist
     builder: custom

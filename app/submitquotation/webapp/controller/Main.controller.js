@@ -14,6 +14,7 @@ sap.ui.define([
      */
     function (Controller, JSONModel, Filter, FilterOperator, BusyDialog) {
         "use strict";
+       let  userEmail
         const statusLevel = {
             CLOSED: "Closed",
             OPEN: "Open",
@@ -22,19 +23,25 @@ sap.ui.define([
         };
         return Controller.extend("com.ingenx.nauti.submitquotation.controller.Main", {
   
-          onInit: function () {
-  
-              const bidTileModel = new JSONModel({
-                  Open: 0,
-                  Closed: 0,
-                  All: 0,
-              });
-              this.getView().setModel(bidTileModel, "bidtilemodel");
-  
-              this._oBusyDialog = new BusyDialog({
-                text: "Loading"
-            });
-  
+          onInit: async function () {
+            await this.getLoggedInUserInfo();
+            this.staticData = await this.checkforValidUser();
+            if (this.staticData) {
+                this.getView().byId("authoLayout").setVisible(true);
+                this.getView().byId("authoLayout2").setVisible(true);
+                this.getView().byId("unauthorizedMessage").setVisible(false);
+        
+                const bidTileModel = new JSONModel({
+                    Open: 0,
+                    Closed: 0,
+                    All: 0,
+                });
+                this.getView().setModel(bidTileModel, "bidtilemodel");
+        
+                this._oBusyDialog = new BusyDialog({
+                    text: "Loading"
+                });
+        
                 let oVendorInfo = {
                     number: "",
                     name: "",
@@ -46,33 +53,31 @@ sap.ui.define([
                     },
                     chno: [],
                 };
-  
+        
                 this.getBidData = [];
-                this.staticData = "2100000001";
-  
+        
                 var oModel = this.getOwnerComponent().getModel();
-  
+        
                 let aFilter = new sap.ui.model.Filter("Lifnr", sap.ui.model.FilterOperator.EQ, this.staticData);
-                var oBidListData = oModel.bindList("/xNAUTIxsubmitquafetch", undefined, undefined,undefined,{
-                  $filter:`Lifnr eq '${this.staticData}'`
+                var oBidListData = oModel.bindList("/xNAUTIxsubmitquafetch", undefined, undefined, undefined, {
+                    $filter: `Lifnr eq '${this.staticData}'`
                 });
-  
-                this._oBusyDialog.open(); 
-  
+        
+                this._oBusyDialog.open();
+        
                 oBidListData.requestContexts(0).then(function (aContexts) {
                     aContexts.forEach(function (oContext) {
                         this.getBidData.push(oContext.getObject());
                     }.bind(this));
-  
+        
                     if (this.getBidData.length > 0) {
                         oVendorInfo.number = this.getBidData[0].Lifnr;
-                        oVendorInfo.name = this.getBidData[0].Name1; 
+                        oVendorInfo.name = this.getBidData[0].Name1;
                         oVendorInfo.address = `${this.getBidData[0].Stras} ${this.getBidData[0].Ort01} ${this.getBidData[0].Pstlz}`;
                         this.charteringData = this.getBidData;
-  
-                      
-                      const oVendorModel = new JSONModel();
-                      const charteringModel = new JSONModel();
+        
+                        const oVendorModel = new JSONModel();
+                        const charteringModel = new JSONModel();
                         oVendorModel.setData(oVendorInfo);
                         charteringModel.setData(this.charteringData);
                         this.getView().setModel(oVendorModel, "vendorinfo");
@@ -87,11 +92,49 @@ sap.ui.define([
                 }).finally(function () {
                     this._oBusyDialog.close();
                 }.bind(this));
+            } else {
+                this.getView().byId("authoLayout").setVisible(false);
+                this.getView().byId("authoLayout2").setVisible(false);
+                this.getView().byId("unauthorizedMessage").setVisible(true);
+            }
+           
+
+  
+           
             },
+            getLoggedInUserInfo : async function(){
+                try {
+                  let User = await sap.ushell.Container.getService("UserInfo");
+                  let userID = User.getId();
+                  userEmail = User.getEmail();
+                  let userFullName = User.getFullName();
+                  console.log("userEmail", userEmail);
+                  console.log("userFullName", userFullName);
+                  console.log("userID", userID);
+                } catch (error) {
+                  userEmail ="rishbh.tiwari@ingenxtec.com";
+                  console.log("hiii",userEmail);
+                }
+              },
+              checkforValidUser: async function() {
+                let loggedinUser = userEmail; 
+            
+                if (loggedinUser === "shruti.kumari@ingenxtec.com") {
+                    let vendorfound = "2100000001";
+                    console.log("Vendor found for Shruti Kumari", vendorfound);
+                    return vendorfound;
+                } else if (loggedinUser === "rishbh.tiwari@ingenxtec.com") {
+                    let vendorfound = "2100000002";
+                    console.log("Vendor found for Rishbh Tiwari", vendorfound);
+                    return vendorfound;
+                } else {
+                    console.log("No vendor found for the logged-in user");
+                    return null; 
+                }
+            },
+            
                 
-         // This function is using for getting the vendor data based on vendor no
           getCharterListData:async function () {
-              // debugger;
               let oModel = this.getOwnerComponent().getModel()
               let statusBind = oModel.bindList("/quotations",undefined,undefined,undefined,{
                   $filter:`Lifnr eq '${this.staticData}'`
@@ -138,6 +181,7 @@ sap.ui.define([
   
           // This function is using for extracting the chartering data and set the status based on Date and time
           _getCharterListData: async function () {
+            debugger
               let charteringData = this.getView().getModel("charteringRequestModel").getData();
               let current = new Date();
               
@@ -171,7 +215,7 @@ sap.ui.define([
                       counts.Closed++;
                   }
                   let existingQuotation = readVendorData.find(data => data.Chrnmin === element.Chrnmin);
-                  if (existingQuotation && element.zstat === statusLevel.OPEN && current < end && element.Lifnr === this.staticData) {
+                  if (!existingQuotation === undefined && element.zstat === statusLevel.OPEN && current < end && element.Lifnr === this.staticData) {
                       element.zstat = statusLevel.SUBMIT;
                   }
               });

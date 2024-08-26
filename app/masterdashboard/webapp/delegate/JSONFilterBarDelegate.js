@@ -12,15 +12,15 @@ sap.ui.define([
 
 	JSONFilterBarDelegate.fetchProperties = async () => JSONPropertyInfo;
 
-	// const _createValueHelp = (oFilterBar, sPropertyName) => {
-	// 	const aKey = "com.ingenx.nauti.masterdashboard.fragments.";
-	// 	return Fragment.load({
-	// 		name: aKey + oFilterBar.getPayload().valueHelp[sPropertyName]
-	// 	}).then((oValueHelp) => {
-	// 		oFilterBar.addDependent(oValueHelp);
-	// 		return oValueHelp;
-	// 	});
-	// };
+	const _createValueHelp = (oFilterBar, sPropertyName) => {
+		const aKey = "com.ingenx.nauti.masterdashboard.fragments.";
+		return Fragment.load({
+			name: aKey + oFilterBar.getPayload().valueHelp[sPropertyName]
+		}).then((oValueHelp) => {
+			oFilterBar.addDependent(oValueHelp);
+			return oValueHelp;
+		});
+	};
 
 	const _createFilterField = async (sId, oProperty, oFilterBar) => {
 		const sPropertyKey = oProperty.key;
@@ -33,12 +33,12 @@ sap.ui.define([
 			maxConditions: oProperty.maxConditions,
 			delegate: {name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {}}
 		});
-		// if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
-		// 	const aDependents = oFilterBar.getDependents();
-		// 	let oValueHelp = aDependents.find((oD) => oD.getId().includes(sPropertyKey));
-		// 	oValueHelp ??= await _createValueHelp(oFilterBar, sPropertyKey);
-		// 	oFilterField.setValueHelp(oValueHelp);
-		// }
+		if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
+			const aDependents = oFilterBar.getDependents();
+			let oValueHelp = aDependents.find((oD) => oD.getId().includes(sPropertyKey));
+			oValueHelp ??= await _createValueHelp(oFilterBar, sPropertyKey);
+			oFilterField.setValueHelp(oValueHelp);
+		}
 		return oFilterField;
 	};
 

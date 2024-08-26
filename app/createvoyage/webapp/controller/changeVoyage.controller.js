@@ -1039,6 +1039,9 @@ sap.ui.define(
                     template: oTable.getItems()[0].clone() // Assuming the first item in the table is the template
                 });
 
+                oTable.removeSelections();
+
+
                 // Set the group name for each radio button in the new row
                 var numRows = oModel.getProperty("/").length;
                 for (var i = 0; i < numRows; i++) {
@@ -1701,7 +1704,7 @@ sap.ui.define(
                             that.byId("_totalDays").setValue(totalDays.toFixed(1));
                             voyItemModel.refresh();
                         } else {
-                            sap.m.MessageBox.error("Unexpected error occured during Caluculation");
+                            sap.m.MessageBox.error("Unexpected error occurred during Calculation");
                             console.log(p1.context.oModel.mMessages[""][0].message);
                         }
                     });
@@ -2803,6 +2806,7 @@ sap.ui.define(
                     that.byId('_voyageInput1').setValue("");
                     that.byId('fileUploader').setValue("");
                     that.byId('fileinput').setValue("");
+                    this.byId('Input6').setValue("");
                     voyHeaderModel.setData([]);
                     voyItemModel.setData([]);
                     costdetailsModel.setData([]);
@@ -3055,12 +3059,7 @@ sap.ui.define(
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
-                            // let statusBindList = oModel.bindList("/newallstatusesSet");
-                            // voyageStatus = "Voyage Approval Pending";
-                            // statusBindList.create({
-                            //     "Voyage" : myVOYNO,
-                            //     "Status" : voyageStatus
-                            // }, true)
+                            
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
                         } else {
@@ -3103,9 +3102,9 @@ sap.ui.define(
                             eligibleforCancel = true;
 
                         } else if (Zaction.toUpperCase() === "APPR") {
-                            sap.m.MessageBox.warning("Already sent for Approval, can't be cancel");
+                            sap.m.MessageBox.warning("Already sent for Approval, can't be cancelled");
                         } else {
-                            sap.m.MessageBox.warning("Already sent for Approval, can't be cancel");
+                            sap.m.MessageBox.warning("Already sent for Approval, can't be cancelled");
                         }
                     } else {
 
@@ -3133,7 +3132,7 @@ sap.ui.define(
                                 if (oAction === MessageBox.Action.OK) {
                                     that.deleteVoyageSet(voynoNoValue);
                                 } else {
-                                    sap.m.MessageToast.show("Deletion cancelled");
+                                    sap.m.MessageToast.show("Deletion Cancelled");
                                 }
                             }
                         }
@@ -3154,7 +3153,7 @@ sap.ui.define(
 
                             oContext.delete();
 
-                            sap.m.MessageToast.show("Voyage with  '" + voynoNoValue + "' deleted successfully");
+                            sap.m.MessageToast.show("Voyage with  '" + voynoNoValue + "' Deleted Successfully");
                             that.onRefresh();
 
                         }

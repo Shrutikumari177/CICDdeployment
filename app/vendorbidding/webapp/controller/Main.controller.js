@@ -15,6 +15,7 @@ sap.ui.define([
      */
     function (Controller, JSONModel, Filter, FilterOperator, BusyDialog,formatter) {
         "use strict";
+        let  userEmail
         const statusLevel = {
             CLOSED: "Closed",
             OPEN: "Yet to Start",
@@ -24,33 +25,82 @@ sap.ui.define([
         };
         return Controller.extend("com.ingenx.nauti.vendorbidding.controller.Main", {
             formatter: formatter,
-            onInit: function () {
+            onInit:async  function () {
+                await this.getLoggedInUserInfo();
+                this.staticData = await this.checkforValidUser();
 
-                const bidTileModel = new JSONModel({
-                    Open: 0,
-                    Closed: 0,
-                    All: 0,
-                });
-                this.getView().setModel(bidTileModel, "bidtilemodel");
+                if (this.staticData) {
+                    this.getView().byId("authoLayout").setVisible(true);
+                    this.getView().byId("authoLayout2").setVisible(true);
+                    this.getView().byId("unauthorizedMessage").setVisible(false);
             
-                this._oBusyDialog = new BusyDialog({
-                    text: "Loading"
-                });
+                    const bidTileModel = new JSONModel({
+                        Open: 0,
+                        Closed: 0,
+                        All: 0,
+                    });
+                    this.getView().setModel(bidTileModel, "bidtilemodel");
+                
+                    this._oBusyDialog = new BusyDialog({
+                        text: "Loading"
+                    });
+                
+                    this.getBidData = [];
+                    this.charteringData = [];
+                 
+                
+                    this._oBusyDialog.open();
+                    Promise.all([this._fetchVendorData(), this._fetchCharteringData()])
+                        .then(function () {
+                            this._oBusyDialog.close();
+                            this._getCharterListData();
+                        }.bind(this))
+                        .catch(function (error) {
+                            console.error("Error fetching data", error);
+                            this._oBusyDialog.close();
+                        }.bind(this));
+                } else {
+                    this.getView().byId("authoLayout").setVisible(false);
+                    this.getView().byId("authoLayout2").setVisible(false);
+                    this.getView().byId("unauthorizedMessage").setVisible(true);
+                }
+               
+
+
+                
+            },
+
+
+
+            getLoggedInUserInfo : async function(){
+                try {
+                  let User = await sap.ushell.Container.getService("UserInfo");
+                  let userID = User.getId();
+                  userEmail = User.getEmail();
+                  let userFullName = User.getFullName();
+                  console.log("userEmail", userEmail);
+                  console.log("userFullName", userFullName);
+                  console.log("userID", userID);
+                } catch (error) {
+                  userEmail = "shruti.kumari@ingenxtec.com";
+                  console.log("hiii",userEmail);
+                }
+              },
+              checkforValidUser: async function() {
+                let loggedinUser = userEmail; 
             
-                this.getBidData = [];
-                this.charteringData = [];
-                this.staticData = "2100000001";
-            
-                this._oBusyDialog.open();
-                Promise.all([this._fetchVendorData(), this._fetchCharteringData()])
-                    .then(function () {
-                        this._oBusyDialog.close();
-                        this._getCharterListData();
-                    }.bind(this))
-                    .catch(function (error) {
-                        console.error("Error fetching data", error);
-                        this._oBusyDialog.close();
-                    }.bind(this));
+                if (loggedinUser === "shruti.kumari@ingenxtec.com") {
+                    let vendorfound = "2100000001";
+                    console.log("Vendor found for Shruti Kumari", vendorfound);
+                    return vendorfound;
+                } else if (loggedinUser === "rishbh.tiwari@ingenxtec.com") {
+                    let vendorfound = "2100000000";
+                    console.log("Vendor found for Rishbh Tiwari", vendorfound);
+                    return vendorfound;
+                } else {
+                    console.log("No vendor found for the logged-in user");
+                    return null; 
+                }
             },
 
         

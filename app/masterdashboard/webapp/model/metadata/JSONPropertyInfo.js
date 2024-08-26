@@ -3,198 +3,103 @@ sap.ui.define([
 	"use strict";
 
 	const aPropertyInfos = [{
-		key: "BusinessPartner",
-		label: "BusinessPartner",
-		path: "BusinessPartner",
+		key: "Lifnr",
+		label: "Vendor No",
+		path: "Lifnr",
 		dataType: "sap.ui.model.type.String",
-		// groupable: true,
 		visible: true
 	},{
-		key: "Country",
+		key: "Name1",
+		label: "Name",
+		path: "Name1",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+	},{
+		key: "Stras",
+		label: "Street",
+		path: "Stras",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+	},{
+		key: "Pstlz",
+		label: "Postal Code",
+		path: "Pstlz",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+	},{
+		key: "Ort01",
+		label: "City",
+		path: "Ort01",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+		// groupable: true
+	},{
+		key: "Land1",
 		label: "Country",
-		path: "Country",
+		path: "Land1",
 		dataType: "sap.ui.model.type.String",
 		visible: true
 	},{
-		key: "PostalCode",
-		label: "PostalCode",
-		path: "PostalCode",
+		key: "Erdat",
+		label: "Creation Date",
+		path: "Erdat",
 		dataType: "sap.ui.model.type.String",
 		visible: true
+		
 	},{
-		key: "CityName",
-		label: "CityName",
-		path: "CityName",
+		key: "Telf2",
+		label: "Telephone",
+		path: "Telf2",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
+		
 	},{
-		key: "PhoneNumber1",
+		key: "Telf1",
 		label: "PhoneNumber1",
-		path: "PhoneNumber1",
+		path: "Telf1",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
+		
 	},{
-		key: "FaxNumber",
+		key: "Telfx",
 		label: "FaxNumber",
-		path: "FaxNumber",
+		path: "Telfx",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
+		
 	},{
-		key: "CreationDate",
-		label: "CreationDate",
-		path: "CreationDate",
+		key: "SmtpAddr",
+		label: "Address",
+		path: "SmtpAddr",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
+		
 	},{
-		key: "PhoneNumber2",
-		label: "PhoneNumber2",
-		path: "PhoneNumber2",
+		key: "Regio",
+		label: "Region",
+		path: "Regio",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
-	}
-	// ,{
-	// 	key: "Supplier",
-	// 	label: "Supplier",
-	// 	path: "Supplier",
-	// 	dataType: "sap.ui.model.type.String"
-	// },{
-	// 	key: "PurchasingOrganization",
-	// 	label: "PurchasingOrganization",
-	// 	path: "PurchasingOrganization",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "BankCountry",
-	// 	label: "BankCountry",
-	// 	path: "BankCountry",
-	// 	dataType: "sap.ui.model.type.String"
-	// },{
-	// 	key: "coordinBankates",
-	// 	label: "coordinBankates",
-	// 	path: "coordinBankates",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "BankAccount",
-	// 	label: "BankAccount",
-	// 	path: "BankAccount",
-	// 	dataType: "sap.ui.model.type.Integer"
-	// },{
-	// 	key: "SupplierName",
-	// 	label: "SupplierName",
-	// 	path: "SupplierName",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "Bank",
-	// 	label: "Bank",
-	// 	path: "Bank",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "OrganizationBPName1",
-	// 	label: "OrganizationBPName1",
-	// 	path: "OrganizationBPName1",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "OrganizationBPName2",
-	// 	label: "OrganizationBPName2",
-	// 	path: "OrganizationBPName2",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "OrganizationBPName3",
-	// 	label: "OrganizationBPName3",
-	// 	path: "OrganizationBPName3",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "StreetName",
-	// 	label: "StreetName",
-	// 	path: "StreetName",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "CreatedByUser",
-	// 	label: "CreatedByUser",
-	// 	path: "CreatedByUser",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "IsNaturalPerson",
-	// 	label: "IsNaturalPerson",
-	// 	path: "IsNaturalPerson",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "TaxNumber1",
-	// 	label: "TaxNumber1",
-	// 	path: "TaxNumber1",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "TaxNumber2",
-	// 	label: "TaxNumber2",
-	// 	path: "TaxNumber2",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "TaxNumber3",
-	// 	label: "TaxNumber3",
-	// 	path: "TaxNumber3",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },
-	// {
-	// 	key: "TaxNumber4",
-	// 	label: "TaxNumber4",
-	// 	path: "TaxNumber4",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },
-	// {
-	// 	key: "TaxNumber5",
-	// 	label: "TaxNumber5",
-	// 	path: "TaxNumber5",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },
-	// {
-	// 	key: "VATRegistration",
-	// 	label: "VATRegistration",
-	// 	path: "VATRegistration",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "ResponsibleType",
-	// 	label: "ResponsibleType",
-	// 	path: "ResponsibleType",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },{
-	// 	key: "TaxNumberType",
-	// 	label: "TaxNumberType",
-	// 	path: "TaxNumberType",
-	// 	dataType: "sap.ui.model.type.String",
-	// 	groupable: true
-	// },
-
-
-	,{
+		
+	},{
+		key: "arned",
+		label: "Title",
+		path: "arned",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+	},{
+		key: "Spras",
+		label: "Language",
+		path: "Spras",
+		dataType: "sap.ui.model.type.String",
+		visible: true
+	},{
 		key: "$search",
 		label: "Search",
 		visible: true,
 		maxConditions: 1,
 		dataType: "sap.ui.model.type.String"
 	}
-
-
 
 ];
 

@@ -496,7 +496,6 @@
                                     value=" {path :'voyHeaderModel>/0/Frcost', formatter:'.FrieghtCostToShow'}"
                                     liveChange=".liveFrCostChange"
                                     width="160px"
-                            
                                 />
 
                                 <Label text="Unit" />
@@ -757,13 +756,12 @@
                                                     editable="{= ${voyItemModel>Vlegn} !== 1 }"
                                                 />
 
-                                           
-                                                  <Input
+                                                <Input
                                                     value="{voyItemModel>Ppdays}"
                                                     change=".onPortDaysChange"
                                                     type="Number"
                                                 />
-                                        
+
                                                 <Input
                                                     value="{voyItemModel>Vwead}"
                                                     change=".onPortDaysChange"
@@ -1150,7 +1148,6 @@
                                                     value="{costdetailsModel>Procost}"
                                                     change=".onCostLiveChange"
                                                     type="Number"
-                                        
                                                 />
                                             </cells>
                                         </ColumnListItem>
@@ -1669,6 +1666,88 @@
                             width="100%"
                             class=""
                         >
+
+
+                 <HBox
+                                id="HBox2"
+                                width="100%"
+                  >
+                    <!-- <FlexBox
+                        width="10%"
+                        class="flexbtn"
+                    >
+                        <Button
+                            id="add"
+                            icon="sap-icon://sys-add"
+                            press=".onAddRow2"
+                            type="Default"
+                        />
+                        <Button
+                            id="minus"
+                            icon="sap-icon://sys-minus"
+                            press=".onDeleteRow2"
+                            type="Default"
+                        />
+                    </FlexBox> -->
+                                <!-- <FlexBox width="20%">
+                        <Button
+                            id="saveprofileId"
+                            type="Default"
+                            text="Save Profile"
+                        />
+                    </FlexBox> -->
+                                <FlexBox width="20%">
+                                    <Label
+                                        id="_IDGenLabel49"
+                                        text="Select Profile :"
+                                        class="sapUiTinyMarginTop sapUiTinyMarginRight"
+                                    />
+                                    <Select
+                                        id="_selectProfileId"
+                                        width="120px"
+                                        items="{
+                            path: '/xNAUTIxbidprofile_valuehelp'  }"
+                                        change=".onProfileChange"
+                                    >
+                                        <items>
+                                            <core:Item
+                                                id="_IDGenItem7"
+                                                text="{BidprofileId}"
+                                            />
+                                        </items>
+                                    </Select>
+                                    <!-- <Select
+                            id="Select2"
+                            width="200px"
+                            forceSelection="false"
+                            items="{
+                            path: '/VoyTypeSet'
+                        }"
+                            selectedKey="{voyHeaderModel>/0/Voyty}"
+                        >
+                            <core:Item
+                                id="_Item2"
+                                key="{Voycd}"
+                                text="{Voydes}"
+                            />
+                        </Select> -->
+                                </FlexBox>
+                                <!-- <FlexBox width="30%">
+                        <Button
+                            id="_IDGenBuon13"
+                            icon="sap-icon://sys-add"
+                            press=".onAddRow2"
+                            type="Default"
+                        />
+                        <Button
+                            id="_IDGenBuon14"
+                            icon="sap-icon://sys-minus"
+                            press=".onDeleteRow2"
+                            type="Default"
+                        />
+                    </FlexBox> -->
+                 </HBox>
+                            
                             <l:VerticalLayout
                                 width="100%"
                                 class="sapUiContentPadding1"
@@ -1761,86 +1840,7 @@
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>
                             </l:VerticalLayout>
-                            <HBox
-                                id="HBox2"
-                                width="100%"
-                            >
-                                <!-- <FlexBox
-                        width="10%"
-                        class="flexbtn"
-                    >
-                        <Button
-                            id="add"
-                            icon="sap-icon://sys-add"
-                            press=".onAddRow2"
-                            type="Default"
-                        />
-                        <Button
-                            id="minus"
-                            icon="sap-icon://sys-minus"
-                            press=".onDeleteRow2"
-                            type="Default"
-                        />
-                    </FlexBox> -->
-                                <!-- <FlexBox width="20%">
-                        <Button
-                            id="saveprofileId"
-                            type="Default"
-                            text="Save Profile"
-                        />
-                    </FlexBox> -->
-                                <FlexBox width="20%">
-                                    <Label
-                                        id="_IDGenLabel49"
-                                        text="Select Profile :"
-                                        class="sapUiTinyMarginTop sapUiTinyMarginRight"
-                                    />
-                                    <Select
-                                        id="_selectProfileId"
-                                        width="120px"
-                                        items="{
-                            path: '/xNAUTIxbidprofile_valuehelp'  }"
-                                        change=".onProfileChange"
-                                        forceSelection="false"
-                                    >
-                                        <items>
-                                            <core:Item
-                                                id="_IDGenItem7"
-                                                text="{BidprofileId}"
-                                            />
-                                        </items>
-                                    </Select>
-                                    <!-- <Select
-                            id="Select2"
-                            width="200px"
-                            forceSelection="false"
-                            items="{
-                            path: '/VoyTypeSet'
-                        }"
-                            selectedKey="{voyHeaderModel>/0/Voyty}"
-                        >
-                            <core:Item
-                                id="_Item2"
-                                key="{Voycd}"
-                                text="{Voydes}"
-                            />
-                        </Select> -->
-                                </FlexBox>
-                                <!-- <FlexBox width="30%">
-                        <Button
-                            id="_IDGenBuon13"
-                            icon="sap-icon://sys-add"
-                            press=".onAddRow2"
-                            type="Default"
-                        />
-                        <Button
-                            id="_IDGenBuon14"
-                            icon="sap-icon://sys-minus"
-                            press=".onDeleteRow2"
-                            type="Default"
-                        />
-                    </FlexBox> -->
-                            </HBox>
+                    
                         </Panel>
                     </IconTabFilter>
                     <IconTabFilter
@@ -1882,7 +1882,6 @@
                                         icon="sap-icon://delete"
                                         type="Reject"
                                         press="OnfileUploadDelete"
-                                        
                                     />
                                     <Button
                                         icon="sap-icon://message-success"
