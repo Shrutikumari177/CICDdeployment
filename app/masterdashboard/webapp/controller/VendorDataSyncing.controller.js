@@ -61,7 +61,7 @@ sap.ui.define(
       onBackPress: function() {
           this.byId("table").clearSelection();
           const oRouter = this.getOwnerComponent().getRouter();
-          oRouter.navTo("RouteBusinessPartnerDashboard");
+          oRouter.navTo("RouteBusinessPartner");
         },
         onPressHome: function() {
           const oRouter = this.getOwnerComponent().getRouter();
