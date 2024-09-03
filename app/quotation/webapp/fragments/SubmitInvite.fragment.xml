@@ -1,64 +1,151 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout">
-    <Dialog id="_IDGenDialog1"  title="Bidding Time Details" class="sapUiSmallMargin" contentHeight="45%" contentWidth="60%">
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        id="_IDGenDialog1"
+        title="Bidding Time Details"
+        class="sapUiSmallMargin"
+        contentHeight="33%"
+        contentWidth="65%"
+    >
+        <Panel id="ui">
+            <FlexBox class="vflex">
+                <VBox
+                    alignItems="End"
+                    class="flex"
+                 >
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            text="Bidding Start Date :"
+                            class="labelStyle"
+                            required="true"
+                        />
+                        <DatePicker
+                            id="date1"
+                            width="150px"
+                            value="{addBiddingModel>/BiddingStartDate}"
+                            displayFormat="dd-MM-yyyy"
+                            change="onselectBSD"
+                        />
+                    </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            text="Bidding End Date :"
+                            class="labelStyle"
+                            required="true"
+                            
+                        />
+                        <DatePicker
+                            id="date2"
+                            width="150px"
+                            value="{addBiddingModel>/BiddingEndDate}"
+                            displayFormat="dd-MM-yyyy"
+                            change="onselectBED"
+                        />
+                    </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            required="true"
+                            text="Controller Quoted Value :"
+                        />
+                        <Input
+                            id="ControllerQValue"
+                              class="inputStyle"
+                            value="{addBiddingModel>/ControllerQuotedValue}"
+                            width="150px"
+                        />
+                    </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween" >
+                        <Label
+                            class="labelStyle"
+                            text="Mode of Bidding :"
+                            required="true"
+                        />
+                        <Select
+                            id="modeSelect"
+                            selectedKey="{addBiddingModel>/Mode}"
+                            width="150px"
+                        >
+                            <core:Item
+                                key="Mode1"
+                                text="Auto"
+                            />
+                            <core:Item
+                                key="Mode2"
+                                text="Manual"
+                            />
+                        </Select>
+                    </FlexBox>
+                </VBox>
 
-     
-    
-      <Panel id="ui">
-       <FlexBox  class="flex" >
-    <VBox  alignItems="End" class="flex">
-  <FlexBox   class="headerItem">
-     <Label  text="Bidding Start Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date1" width="150px" value="{addBiddingModel>/BiddingStartDate}"  displayFormat="dd-MM-yyyy" change="onselectBSD" />
+                <VBox
+                    alignItems="End"
+                    class="flex"
+                >
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Bidding Start Time :"
+                            required="true"
+                        />
+                        <TimePicker
+                            id="BidSTime"
+                            width="150px"
+                            value="{addBiddingModel>/BiddingStartTime}"
+                            change="onselectBSTime"
+                        />
+                    </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Bidding End Time :"
+                            required="true"
+                        />
+                        <TimePicker
+                            id="BidETime"
+                            width="150px"
+                            value="{addBiddingModel>/BiddingEndTime}"
+                            change="onselectBETime"
+                        />
+                    </FlexBox>
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label
+                            class="labelStyle"
+                            text="Unit : "
+                            required="true"
+                        />
+                        <Input
+                            value="{addBiddingModel>/Unit}"
+                              class="inputStyle"
+                            id="unit"
+                            editable="false"
+                            width="150px"
+                        />
+                    </FlexBox>
+                </VBox>
+            </FlexBox>
+        </Panel>
 
-    </FlexBox>
-     <FlexBox  class="headerItem">
-
-     <Label  text="Bidding End Date :" class="sapUiTinyMarginTop" required="true"/>
-     <DatePicker id="date2" width="150px" value="{addBiddingModel>/BiddingEndDate}" displayFormat="dd-MM-yyyy" change="onselectBED" />
-     
-    </FlexBox>
-<FlexBox  class="headerItem" >
-     <Label class="sapUiTinyMarginTop" required="true"
-     text="Controller Quoted Value :"/>
-     <Input id="ControllerQValue" value="{addBiddingModel>/ControllerQuotedValue}" width="150px"/>
-    </FlexBox>
-    <FlexBox  class="headerItem">
-     <Label  class="sapUiTinyMarginTop" text="Mode of Bidding :" required="true"/>
-     <Select id="modeSelect" selectedKey="{addBiddingModel>/Mode}" width="150px">
-                <core:Item key="Mode1" text="Auto"/>
-                <core:Item key="Mode2" text="Manual"/>
-            </Select>
-     </FlexBox>
-     </VBox>
-
-     <VBox  alignItems="End" class="flex">
-     <FlexBox  class="headerItem">
-      <Label  class="sapUiTinyMarginTop" text="Bidding Start Time :" required="true"/>
-     <TimePicker id="BidSTime" width="150px" value="{addBiddingModel>/BiddingStartTime}"  change="onselectBSTime"/>
-     </FlexBox>
-     <FlexBox class="headerItem">
-     <Label  class="sapUiTinyMarginTop" text="Bidding End Time :" required="true"/>
-    <TimePicker id="BidETime"  width="150px" value="{addBiddingModel>/BiddingEndTime}" change="onselectBETime"/>
-     </FlexBox>
-     <FlexBox  class="headerItem">
-      <Label  class="sapUiTinyMarginTop" text="Unit : " required="true"/>
-     <Input   value="{addBiddingModel>/Unit}" id="unit" editable="false" width="150px"/>
-     </FlexBox>
-     </VBox>
-     </FlexBox>
-     
-     </Panel>
-
-         <footer>
-        	<OverflowToolbar id="_IDGenOverflowToolbar1" >	
-                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>		
-				<Button id="_IDGenButton1" type="Accept" text="Send Email" press="onSaveEmail">
-				</Button>
-                <Button id="_IDGenButton2" type="Reject" text="Cancel" press="onCancel">
-				</Button>
-			</OverflowToolbar>
+        <footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar1">
+                <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                <Button
+                    id="_IDGenButton1"
+                    type="Accept"
+                    text="Send Email"
+                    press="onSaveEmail"
+                />
+                <Button
+                    id="_IDGenButton2"
+                    type="Reject"
+                    text="Cancel"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
         </footer>
     </Dialog>
-</core:FragmentDefinition>   
+</core:FragmentDefinition>

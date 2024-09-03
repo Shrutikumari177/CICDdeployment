@@ -93,9 +93,8 @@ sap.ui.define(
       },
 
 
-      handleDateChange: function (oEvent) {
+      handleDateChange1: function (oEvent) {
         let oDatePicker = oEvent.getSource();
-
 
         // let sPortDays = oEvent.getSource().getParent().getCells()[7].getValue();
 
@@ -124,7 +123,7 @@ sap.ui.define(
       },
 
 
-      //   var aDatePickers = oView.findAggregatedObjects(true, function(oControl) {
+     //   var aDatePickers = oView.findAggregatedObjects(true, function(oControl) {
       //       return oControl instanceof sap.m.DatePicker;
       //   });
 
@@ -136,7 +135,9 @@ sap.ui.define(
       //           }
       //       });
       //   });
-      // },
+      // }, 
+
+      // function to get Route from  external api  
 
       getRouteSeaPath: function (startLatitude, startLongitude, endLatitude, endLongitude) {
 
@@ -403,6 +404,12 @@ sap.ui.define(
           prepareData(oData, FromPortName, ToPortName);
           sap.ui.core.BusyIndicator.hide();
 
+
+          let oTable = that.byId("idPortTab");
+
+          let currentDate = new Date();
+          oTable.getRows()[0].getCells()[10].setMinDate(new Date(currentDate.getTime() + 15*24*3600*1000));
+         
         }
 
 
@@ -470,6 +477,9 @@ sap.ui.define(
           $input.prop("readonly", true);
         });
       },
+      isVetddDatePickerEditable : function ( data){
+        console.log(data);
+      },
 
       getRouteData: function (from, to, optimized) {
         let oModel = this.getView().getModel();
@@ -526,137 +536,134 @@ sap.ui.define(
         this._voyageValueHelpDialog.close();
       },
       // Predict button press function
-    
       navToCongestion: function (oEvent) {
         let oView = this.getView();
-        let oBusyDialog = new sap.m.BusyDialog({
-            text: "Predicting, please wait...",
-            title: "Processing"
-        });
+        let oBusyDialog = new sap.m.BusyDialog();
         oBusyDialog.open();
-    
-        // Sample Data
+
         let rawDataINBOM = [
-            { Date: "June 1 2024", MedianDelay: 2.0 },
-            { Date: "June 5 2024", MedianDelay: 1.5 },
-            { Date: "June 10 2024", MedianDelay: 1.5 },
-            { Date: "June 15 2024", MedianDelay: 1.5 },
-            { Date: "June 20 2024", MedianDelay: 1.0 },
-            { Date: "June 25 2024", MedianDelay: 1.5 },
-            { Date: "June 30 2024", MedianDelay: 2.5 },
-            { MedianDelay: 3.5, Port: "Hazira" },
-            { MedianDelay: 2.5, Port: "KAKINADA" },
-            { MedianDelay: 3.2, Port: "Mormugao" }
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 1.5 },
+          { Date: "June 10 2024", MedianDelay: 1.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 1.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+
+          { MedianDelay: 3.5, Port: "Hazira" },
+          { MedianDelay: 2.5, Port: "KAKINADA" },
+          { MedianDelay: 3.2, Port: "Mormugao" }
         ];
-    
         let rawDataKOCHI = [
-            { Date: "June 1 2024", MedianDelay: 2.0 },
-            { Date: "June 5 2024", MedianDelay: 1.5 },
-            { Date: "June 10 2024", MedianDelay: 1.5 },
-            { Date: "June 15 2024", MedianDelay: 1.5 },
-            { Date: "June 20 2024", MedianDelay: 1.0 },
-            { Date: "June 25 2024", MedianDelay: 1.5 },
-            { Date: "June 30 2024", MedianDelay: 2.5 },
-            { MedianDelay: 3.2, Port: "KOCHI" },
-            { MedianDelay: 3.2, Port: "Krishnapatnam" },
-            { MedianDelay: 3.2, Port: "Chennai" }
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 1.5 },
+          { Date: "June 10 2024", MedianDelay: 1.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 1.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+          { MedianDelay: 3.2, Port: "KOCHI" },
+
+          { MedianDelay: 3.2, Port: "Krishnapatnam" },
+          { MedianDelay: 3.2, Port: "Chennai" },
+
         ];
-    
+
         let rawDataINVTZ = [
-            { Date: "June 1 2024", MedianDelay: 1.0 },
-            { Date: "June 5 2024", MedianDelay: 1.2 },
-            { Date: "June 10 2024", MedianDelay: 2.5 },
-            { Date: "June 15 2024", MedianDelay: 3.0 },
-            { Date: "June 20 2024", MedianDelay: 1.5 },
-            { Date: "June 25 2024", MedianDelay: 2.5 },
-            { Date: "June 30 2024", MedianDelay: 1.5 },
-            { MedianDelay: 1.0, Port: "Kakinada" },
-            { MedianDelay: 3.2, Port: "Gangavaram" },
-            { MedianDelay: 3.2, Port: "Krishnapatnam" },
-            { MedianDelay: 3.2, Port: "Chennai" },
-            { MedianDelay: 1.2, Port: "Vishakhapatnam" }
+          { Date: "June 1 2024", MedianDelay: 1.0 },
+          { Date: "June 5 2024", MedianDelay: 1.2 },
+          { Date: "June 10 2024", MedianDelay: 2.5 },
+          { Date: "June 15 2024", MedianDelay: 3.0 },
+          { Date: "June 20 2024", MedianDelay: 1.5 },
+          { Date: "June 25 2024", MedianDelay: 2.5 },
+          { Date: "June 30 2024", MedianDelay: 1.5 },
+          { MedianDelay: 1.0, Port: "Kakinada" },
+          { MedianDelay: 3.2, Port: "Gangavaram" },
+          { MedianDelay: 3.2, Port: "Krishnapatnam" },
+          { MedianDelay: 3.2, Port: "Chennai" },
+          { MedianDelay: 1.2, Port: "Vishakhapatnam" },
+
         ];
-    
+
         let rawDataINPRT = [
-            { Date: "June 1 2024", MedianDelay: 2.0 },
-            { Date: "June 5 2024", MedianDelay: 3.5 },
-            { Date: "June 10 2024", MedianDelay: 2.5 },
-            { Date: "June 15 2024", MedianDelay: 1.5 },
-            { Date: "June 20 2024", MedianDelay: 2.0 },
-            { Date: "June 25 2024", MedianDelay: 1.5 },
-            { Date: "June 30 2024", MedianDelay: 2.5 },
-            { MedianDelay: 1.0, Port: "Chennai" },
-            { MedianDelay: 3.2, Port: "Kolkata" },
-            { MedianDelay: 3.2, Port: "Paradeep" }
+          { Date: "June 1 2024", MedianDelay: 2.0 },
+          { Date: "June 5 2024", MedianDelay: 3.5 },
+          { Date: "June 10 2024", MedianDelay: 2.5 },
+          { Date: "June 15 2024", MedianDelay: 1.5 },
+          { Date: "June 20 2024", MedianDelay: 2.0 },
+          { Date: "June 25 2024", MedianDelay: 1.5 },
+          { Date: "June 30 2024", MedianDelay: 2.5 },
+          { MedianDelay: 1.0, Port: "Chennai" },
+          { MedianDelay: 3.2, Port: "Kolkata" },
+          { MedianDelay: 3.2, Port: "Paradeep" }
+
         ];
-    
+
         let oModel = this.getOwnerComponent().getModel();
         let oEndPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${endPort}')`);
         let oStartPortBinding = oModel.bindContext(`/xNAUTIxnewportcds(Portc='${startPort}')`);
-    
-        Promise.all([
-            oEndPortBinding.requestObject(),
-            oStartPortBinding.requestObject()
-        ]).then(([oEndPortContext, oStartPortContext]) => {
-            let endPortName = oEndPortContext.Portn; 
-            let startPortName = oStartPortContext.Portn; 
-    
+
+        // Fetching end port name
+        oEndPortBinding.requestObject().then((oEndPortContext) => {
+          console.log("endport name", oEndPortContext);
+          let endPortName = oEndPortContext.Portn; // Assuming 'Portn' is the property holding the port name
+
+          oStartPortBinding.requestObject().then((oStartPortContext) => {
+            console.log("startport name", oStartPortContext);
+            let startPortName = oStartPortContext.Portn; // Assuming 'Portn' is the property holding the port name
+
             let rawData;
             switch (endPort) {
-                case "INBOM":
-                    rawData = rawDataINBOM;
-                    break;
-                case "INVTZ":
-                    rawData = rawDataINVTZ;
-                    break;
-                case "INPRT":
-                    rawData = rawDataINPRT;
-                    break;
-                case "KOCHI":
-                    rawData = rawDataKOCHI;
-                    break;
-                default:
-                    rawData = rawDataINBOM;
-                    break;
+              case "INBOM":
+                rawData = rawDataINBOM;
+                break;
+              case "INVTZ":
+                rawData = rawDataINVTZ;
+                break;
+              case "INPRT":
+                rawData = rawDataINPRT;
+                break;
+              case "KOCHI":
+                rawData = rawDataKOCHI;
+                break;
+              default:
+                rawData = rawDataINBOM;
+                break;
             }
-    
+
             let dateMedianDelayData = rawData.filter(item => item.Date).map(item => ({ Date: item.Date, MedianDelay: item.MedianDelay }));
             let portMedianDelayData = rawData.filter(item => item.Port).map(item => ({ Port: item.Port, MedianDelay: item.MedianDelay }));
-    
+
             let oData = {
-                ChartDataDate: dateMedianDelayData,
-                ChartDataPort: portMedianDelayData,
-                StartPort: startPortName,
-                EndPort: endPortName,
+              ChartDataDate: dateMedianDelayData,
+              ChartDataPort: portMedianDelayData,
+              StartPort: startPortName,
+              EndPort: endPortName,
             };
-    
+
             let oChartModel = new sap.ui.model.json.JSONModel(oData);
-    
+
             if (!this._voyageValueHelpDialog) {
-                Fragment.load({
-                    id: oView.getId(),
-                    name: "com.ingenx.nauti.createvoyage.fragments.CongestionShow",
-                    controller: this
-                }).then(function (oDialog) {
-                    oView.addDependent(oDialog);
-                    this._voyageValueHelpDialog = oDialog;
-                    this._voyageValueHelpDialog.setModel(oChartModel);
-                    this._voyageValueHelpDialog.open();
-                    this._setChartTitles();
-                    oBusyDialog.close(); 
-                }.bind(this));
-            } else {
+              Fragment.load({
+                id: oView.getId(),
+                name: "com.ingenx.nauti.createvoyage.fragments.CongestionShow",
+                controller: this
+              }).then(function (oDialog) {
+                oView.addDependent(oDialog);
+                this._voyageValueHelpDialog = oDialog;
                 this._voyageValueHelpDialog.setModel(oChartModel);
                 this._voyageValueHelpDialog.open();
                 this._setChartTitles();
-                oBusyDialog.close(); 
+              }.bind(this));
+            } else {
+              this._voyageValueHelpDialog.setModel(oChartModel);
+              this._voyageValueHelpDialog.open();
+              this._setChartTitles();
             }
-        }).catch((error) => {
-            console.error("Error fetching data", error);
-            oBusyDialog.close(); 
+          });
         });
-    },
-    
+        oBusyDialog.close();
+      },
 
       _setChartTitles: function () {
         let oVizFrame1 = this.byId("vizFrame");
@@ -1283,7 +1290,7 @@ sap.ui.define(
         var aCols = {
           cols: [
             {
-              label: "Cargo Type",
+              label: "Vessel Type",
               template: "sCargoType",
             },
             {

@@ -1,51 +1,51 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
+    xmlns:m="sap.m.Dialog"
     xmlns:l="sap.ui.layout">
-    <Dialog id="_IDGenDialog1"  title="Email Details" class="sapUiSmallMargin" contentHeight="40%" contentWidth="60%">
+    <Dialog id="_IDGenDialog1"  title="Email Details" class="sapUiSmallMargin" contentHeight="28%" contentWidth="65%">
 
      
     
       <Panel id="ui">
-      <Panel>
             <FlexBox class="flex">
-                <VBox class="flex" alignItems="End">
-                   <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Voyage Type :" />
-                        <Input value="{storedDataModel>/voyageType}" editable="false" />
+                <VBox class="flex" alignItems="Start">
+                   <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween" >
+                        <Label class="labelStyle" text="Voyage Type :" />
+                        <Input class="inputStyle" value="{storedDataModel>/voyageType}" editable="false" />
                     </FlexBox> 
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Vessel Type :" />
-                        <Input value="{storedDataModel>/vesselType}" editable="false" />
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween"  >
+                        <Label class="labelStyle" text="Vessel Type :" />
+                        <Input class="inputStyle" value="{storedDataModel>/vesselType}" editable="false" />
                     </FlexBox>
                     
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Cargo Unit : " />
-                        <Input value="{= ${storedDataModel>/cargoSize} + ' ' + ${storedDataModel>/cargoUnit} }" editable="false" />
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Cargo Unit : " />
+                        <Input class="inputStyle" value="{= ${storedDataModel>/cargoSize} + ' ' + ${storedDataModel>/cargoUnit} }" editable="false" />
                     </FlexBox>
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Vendor Code :" />
-                        <Input value="{storedDataModel>/vendorString}" editable="false" />
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Vendor Code :" />
+                        <Input class="inputStyle" value="{storedDataModel>/vendorString}" editable="false" />
                     </FlexBox>
                       </VBox>
                     
-                    <VBox class="flex" alignItems="End" >
+                    <VBox class="flex" alignItems="Start" >
                     
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Start Port: " />
-                        <Input value="{storedDataModel>/startPort}" editable="false" />
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Start Port: " />
+                        <Input class="inputStyle" value="{storedDataModel>/startPort}" editable="false" />
                     </FlexBox>
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="End Port :" />
-                        <Input value="{= ${storedDataModel>/midPort} + ' ' + ${storedDataModel>/endPort} }" editable="false" />
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="End Port :" />
+                        <Input class="inputStyle" value="{= ${storedDataModel>/midPort} + ' ' + ${storedDataModel>/endPort} }" editable="false" />
                     </FlexBox>
                     
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Bidding Start Date Time : " />
-                        <Input value="{storedDataModel>/obidStartD}" editable="false" />
+                    <FlexBox class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Bidding Start Date Time : " />
+                        <Input class="inputStyle" value="{storedDataModel>/obidStartD}" editable="false" />
                     </FlexBox>
-                    <FlexBox >
-                        <Label class="sapUiTinyMarginTop" text="Bidding End Date Time :" />
-                        <Input value="{storedDataModel>/obidEndD}" editable="false"  />
+                    <FlexBox  class="headerItem" direction="Row" justifyContent="SpaceBetween">
+                        <Label class="labelStyle" text="Bidding End Date Time :" />
+                        <Input class="inputStyle" value="{storedDataModel>/obidEndD}" editable="false"  />
                     </FlexBox>
                     
               
@@ -57,9 +57,6 @@
                 
             </FlexBox>
         </Panel>
-     
-       
-     </Panel>
 
          <footer>
         	<OverflowToolbar id="_IDGenOverflowToolbar1" >	

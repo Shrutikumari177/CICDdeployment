@@ -2,7 +2,7 @@
     xmlns:core="sap.ui.core"
     xmlns:m="sap.m.Dialog"
     xmlns:l="sap.ui.layout">
-    <Dialog id="_IDDialog"  title="Contract Award Detail" class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%" >
+    <Dialog id="_IDDialog"  title="Contract Award Detail" class="sapUiSmallMargin" contentHeight="35%" contentWidth="50%" >
 
          <Panel >
             <FlexBox  class="flex" >

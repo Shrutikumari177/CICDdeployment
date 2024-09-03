@@ -28,35 +28,53 @@
             </contentLeft>
             
             </Bar>
-            </headerContent>
-            <Panel height="120px" >
-            
-            
-                    <form:SimpleForm editable="true">
-                        
-                    <Label id="_IDGenLabel1" required="true" text="Chartering Request Number"/>
-                    <Input id="CharteringRqNo" width="170px" showValueHelp="true" valueHelpRequest="onCharteringNumber" />
+        </headerContent>
 
-                    </form:SimpleForm>
-            </Panel>  
-            <IconTabBar
-                id="IconTabBar"
-                tabDensityMode="Compact"
-            
-                class="icontabfilter"
-                visible="false"
-            
-            
+        <l:VerticalLayout id="_IDGenVerticalLayout1" width="100%">
+            <l:BlockLayout
+                id="_IDGenBlockLayout1"
+                background="Dashboard"
             >
-                <items>
-                    <IconTabFilter
-                        text="Award Report"
-                        key="info"
+                <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+                 <l:BlockLayoutCell
+                        id="_IDGenBlockLayoutCell1"
+                        width="90%"
+                    >
+                    <form:SimpleForm id="_IDGenSimpleForm1" editable="true"  width="120%">         
+                    <Label id="_IDGenLabel1" class="voyageText" design="Bold" required="true" text="Chartering Request Number" />
+                    <Input id="CharteringRqNo" class="voyageInput" width="200px" showValueHelp="true" valueHelpRequest="onCharteringNumber" valueHelpOnly ="true" />
+                    </form:SimpleForm>
+                    </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+            </l:BlockLayout>
+        </l:VerticalLayout>
+
+
+        <l:VerticalLayout
+            id="vendorDetailsLayout"
+            width="100%"
+            visible="false"
+            
+        >
+          <l:BlockLayout
+                id="_IDGenBlockLayout2"
+                background="Dashboard"
+                
+            >
+
+             <l:BlockLayoutRow id="_IDGenBlockLayoutRow2">
+                 <l:BlockLayoutCell
+                        id="_IDGenBlockLayoutCell2"
+                        width="90%"
                         
                     >
 
-                <Panel height="370px" class="myPanel" >
-                <Table id="myTableId"  width="auto" visible="true" items="{contractAwardModel>/}" >
+               <Toolbar id="t3" class="sapUiMediumMarginBottom">
+                    <Title id="closed_title3" textAlign="Center"  class="h_text" level="H6" text="Award Report" />
+			    </Toolbar> 
+
+            
+                <Table id="myTableId"  width="auto" visible="true" items="{contractAwardModel>/}"  >
                     <columns>
                         <Column width="130px">
                             <Text text="Chartering No"  />
@@ -111,10 +129,11 @@
                     </items>
                 </Table>
             
-            </Panel>
-            </IconTabFilter>
-                </items>
-            </IconTabBar>
+          
+               </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+            </l:BlockLayout>
+        </l:VerticalLayout>
 
         </Page>
     </mvc:View>

@@ -6,6 +6,10 @@ Content-Type: application/json
     "Chrnmin" : "4000000631",
     "biddStartStatus" : false
 }
+#####
+
+DELETE http://localhost:4004/odata/v4/nauticalservice/quotations(Chrnmin='4000000641',Voyno='1000000281',Lifnr='2100000001')
+
 
 ###
 POST http://localhost:4004/odata/v4/nauticalservice/ControllerLiveBidDetails

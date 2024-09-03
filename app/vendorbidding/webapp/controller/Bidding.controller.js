@@ -20,6 +20,7 @@ sap.ui.define([
         var intervalId;
         return Controller.extend("com.ingenx.nauti.vendorbidding.controller.Main", {
             formatter: formatter,
+
             onInit: function () {
                 this.infoModel = new JSONModel({
                     "voyageNo": "",
@@ -29,13 +30,11 @@ sap.ui.define([
                     "startDate": "",
                     "startTime": "",
                     "endDate": "",
-                    "endTime": ""
+                    "endTime": "",
+                    "currency":"",
                 });
                 this.getView().setModel(this.infoModel, "VendorData");
 
-                let oEventBus = sap.ui.getCore().getEventBus();
-                oEventBus.subscribe("bidding", "start", this.onBiddingStarted, this);
-                console.log( oEventBus.subscribe("bidding", "start", this.onBiddingStarted, this));
 
                 var oData = {
                     inputValue: "",
@@ -45,9 +44,9 @@ sap.ui.define([
                 this.getView().setModel(oModel, "inputModel");
 
                 const oRouter = this.getOwnerComponent().getRouter();
-                this._oPollingInterval = setInterval(this.checkBidStatus.bind(this), 5000);
+                // this._oPollingInterval = setInterval(this.checkBidStatus.bind(this), 5000);
                 oRouter.getRoute("RouteBidding").attachPatternMatched(this._onObjectMatched, this);
-                this._startAutoRefresh();
+                // this._startAutoRefresh();
             },
 
             checkBidStatus: function() {
@@ -65,28 +64,13 @@ sap.ui.define([
                     if(filteredStatusData){
                         sap.m.MessageBox.success("Bidding is started");
                         clearInterval(this._oPollingInterval);
-                                    }
-            
+                    }
                     console.log("Filtered Status Data:", filteredStatusData);
-            
                 }.bind(this)).catch(function(oError) {
                     console.error("Error fetching bid status:", oError);
                     sap.m.MessageBox.error("Failed to fetch bid status.");
                 });
             },            
-
-
-            onBiddingStarted: function (sChannelId, sEventId, oData) {
-                var oMessageStrip = new sap.m.MessageStrip({
-                    text: oData.message,
-                    showCloseButton: true,
-                    type: "Success",
-                    showIcon: true
-                });
-
-                var oPlaceholder = this.byId("messageStripPlaceholder");
-                oPlaceholder.addItem(oMessageStrip);
-            },
 
 
             //This function is using for geting the session storage data that is shared during 
@@ -104,16 +88,20 @@ sap.ui.define([
 
                 try {
                     const biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
+                    console.log("bidding data",biddingData);
                     this._updateVendorData(biddingData);
                     console.log("Updated vData", this.getView().getModel("VendorData").getData());
+                    // setTimeout(() => {
+                    //     this.triggerPostLineItemData()
+                    // }, 3000);
 
-                    await this.getHeaderDetailsData(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime);
+
+                    await this.getHeaderDetailsData(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime,biddingData.zstat);
                     headerDataLoaded = true;
 
                     this._updateUIBasedOnStatus(biddingData.zstat);
-
-                    await this._fetchAndSetBids();
-                    this.onPostLineItemData(biddingData.Lifnr, biddingData.Voyno, biddingData.Chrnmin, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime)
+                       this._intervalId = setInterval(this._fetchAndSetBids.bind(this), 2000);
+                    // this.onPostLineItemData(biddingData.Lifnr, biddingData.Voyno, biddingData.Chrnmin, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime)
                     voyageDataLoaded = true;
                 } catch (error) {
                     console.error("Error fetching data", error);
@@ -172,36 +160,41 @@ sap.ui.define([
 
             // This method is using for extract the first and last Quotation value of Controller 
             _fetchAndSetBids: async function () {
+               
                 try {
-                    let [vendorBids, controllerBids] = await Promise.all([
+                    const biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
+                    let [vendorBid, controllerBids,getfirstBidData] = await Promise.all([
                         this._fetchBidData("/VenodrLiveBidDetails"),
-                        this._fetchBidData("/ControllerLiveBidDetails")
+                        this._fetchBidData("/ControllerLiveBidDetails"),
+                        this._fetchBidData("/quotations")
                     ]);
-
+ 
+                    let firstBid = getfirstBidData.filter(item=>{
+                        return item.Lifnr === biddingData.Lifnr && item.Voyno === biddingData.Voyno
+                    })
+                    let firstBidValue = firstBid[0].to_quote_item.filter(i=>{return i.Zcode=== 'FREIG'})
+                    let vendorBids = vendorBid.filter(item=>item.vendorNo === biddingData.Lifnr)
+                    this._updateBidTextFields("FirstBidText",firstBidValue[0].Value);
                     if (vendorBids.length > 0) {
                         vendorBids.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                         let lastEntryData = vendorBids[0];
-                        let firstEntryData = vendorBids[vendorBids.length - 1];
-
-                        this._updateBidTextFields("GenObjectStatus3", firstEntryData.quotationPrice);
-                        this._updateBidTextFields("GenObjectStatus2", lastEntryData.quotationPrice);
+                        this._updateBidTextFields("GenObjectStatus3", lastEntryData.quotationPrice);
                     } else {
                         this._updateBidTextFields("GenObjectStatus3", "0.000");
-                        this._updateBidTextFields("GenObjectStatus2", "0.000");
                     }
-
+ 
                     if (controllerBids.length > 0) {
                         controllerBids.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                         let lastControllerBid = controllerBids[controllerBids.length - 1];
                         this._updateBidTextFields("GenObjectStatus1", lastControllerBid.quotationPrice);
                     } else {
                         this._updateBidTextFields("GenObjectStatus1", "0.000");
-                        // console.log("No entries found.");
                     }
                 } catch (oError) {
                     console.error("Error fetching bid data:", oError);
                 }
             },
+ 
 
             // This function is used to read the data with odata services and called from _fetchAndSetBids method
             _fetchBidData: async function (path) {
@@ -233,6 +226,40 @@ sap.ui.define([
             // This function is using to navigate the previous page 
             onBackButtonPress: function () {
                 this.getOwnerComponent().getRouter().navTo("RouteMain");
+                this.getView().byId("authoLayout").setVisible(true);
+                    this.getView().byId("authoLayout2").setVisible(true);
+                    this.getView().byId("unauthorizedMessage").setVisible(false);
+            },
+
+            nSubmit: async function () {
+                debugger
+                let vDataModel = this.getView().getModel("VendorData").getData()
+                let vendorNo = vDataModel.vendorNo
+                let voyageNo = vDataModel.voyageNo
+                let charteringNo = vDataModel.charteringNo
+                let quotedPrice = this.getView().byId("freightCostInput").getValue()
+                let comment = this.getView().byId("commentInput").getValue()
+                let oPayload = {
+                    Chrnmin: charteringNo,
+                    vendorNo: vendorNo,
+                    voyno: voyageNo,
+                    quotationPrice: quotedPrice,
+                    comment: comment
+                }
+                const oDataModelV4 = this.getOwnerComponent().getModel();
+                let oBindList = oDataModelV4.bindList("/VenodrLiveBidDetails", true);
+                try {
+                    let res = await oBindList.create(oPayload);
+                    if (res) {
+                       new sap.m.MessageBox.success("Successfully Submitted", {
+                            onClose: function () {
+                                // that.getOwnerComponent().getRouter().navTo("RouteMain");
+                            }
+                        })
+                    }
+                } catch (error) {
+                  console.log("error during creating",error);  
+                }
             },
 
             //This function is using to submit the Quotation value to hana 
@@ -279,7 +306,7 @@ sap.ui.define([
             },
 
             // This function is used to fetch the voyage data 
-            getHeaderDetailsData: async function (bidPath, startDate, startTime, endDate, endTime) {
+            getHeaderDetailsData: async function (bidPath, startDate, startTime, endDate, endTime,status) {
                 const dCharter = {
                     voyageType: "",
                     vesselType: "",
@@ -293,7 +320,7 @@ sap.ui.define([
                 try {
                     let sNewDate = this.formatter.dateFormat(startDate)
                     let sEndDate = this.formatter.dateFormat(endDate)
-                    this.onTimer(sNewDate, startTime, sEndDate, endTime)
+                    this.onTimer(sNewDate, startTime, sEndDate, endTime,status)
                     var oModel = this.getOwnerComponent().getModel();
                     var oBidListData = oModel.bindList(`/xNAUTIxVOYAGEHEADERTOITEM`, undefined, undefined, undefined, {
                         $filter: `Voyno eq '${bidPath}'`
@@ -312,6 +339,7 @@ sap.ui.define([
                         dCharter.voyageType = firstDetail.Voyty;
                         dCharter.vesselType = firstDetail.Carty;
                         dCharter.Currency = firstDetail.Curr;
+                        this.currType = firstDetail.Curr
                         dCharter.biddingType = firstDetail.Bidtype;
                         let currLabel = this.getView().byId("_IDGenLabel9");
 
@@ -349,8 +377,7 @@ sap.ui.define([
             },
 
             // This function is using for creating the timer for bidding
-            onTimer: function (startDate, startTime, endDate, endTime) {
-                // 
+            onTimer: function (startDate, startTime, endDate, endTime,status) {
                 if (this.intervalId) {
                     clearInterval(this.intervalId);
                     this.intervalId = null;
@@ -366,6 +393,21 @@ sap.ui.define([
 
                 oRadialMicroChart.setPercentage(0);
                 oTimeText.setText("");
+
+                if (status === "Closed") {
+                    oRadialMicroChart.setPercentage(100);
+                    oTimeText.setText("Time Left - 00:00:00");
+                    oRadialMicroChart.setValueColor("Critical"); 
+                    sap.m.MessageBox.show("Bidding has been closed.", {
+                        icon: sap.m.MessageBox.Icon.INFORMATION,
+                        title: "Bidding Closed",
+                        actions: [sap.m.MessageBox.Action.OK],
+                        onClose: function (oAction) {
+    
+                        }.bind(this)
+                    });
+                    return;
+                }
 
                 this.intervalId = setInterval(function () {
                     var currentDateTime = new Date();
@@ -405,14 +447,15 @@ sap.ui.define([
                                 title: "Bidding Complete",
                                 actions: [sap.m.MessageBox.Action.OK],
                                 onClose: function (oAction) {
-                                    // that.getOwnerComponent().getRouter().navTo("RouteMain");
                                     that.triggerPostLineItemData()
+                                    that.getOwnerComponent().getRouter().navTo("RouteMain");
                                 }
                             });
                         }
                     }
                 }.bind(this), updateInterval);
             },
+
 
             // This function is used to fetch the venodr model data and send data by paramter.
             triggerPostLineItemData: async function () {
@@ -426,60 +469,38 @@ sap.ui.define([
 
             // This function is used to fetch the vendor quotation data and send to s4   
             onPostLineItemData: async function (vNo, voyageNo, charterNo, startDate, sTime, endDate, eTime) {
-                
                 try {
                     let startTime = `${sTime}.0`;
-                    let endTime = `${eTime}.0`;
-                    let allVendorData = await this._fetchBidData("/VenodrLiveBidDetails");
+                    let endTime = `${eTime}.0`;            
 
-                    let extractData = allVendorData.filter(item => item.vendorNo === vNo && item.Chrnmin === charterNo && item.voyno === voyageNo);
-
-                    extractData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-                    let headerToItem = extractData.map((vendor, index) => {
-                        let createdAtDate = new Date(vendor.createdAt);
-                        let biddate = createdAtDate.toISOString().split('T')[0];
-                        let bidtime = createdAtDate.toTimeString().split(' ')[0];
-
-                        return {
-                            "Voyno": vendor.voyno,
-                            "Lifnr": vendor.vendorNo,
-                            "Zcode": "FREIG",
-                            "Chrnmin": vendor.Chrnmin,
-                            "Biddate": biddate,
-                            "Bidtime": bidtime,
-                            "CodeDesc": "FRIEGHT COST",
-                            "Cvalue": vendor.quotationPrice,
-                            "Chrqsdate": startDate,
-                            "Chrqstime": startTime,
-                            "Chrqedate": endDate,
-                            "Chrqetime": endTime,
-                            "DoneBy": true,
-                            "Stat": index === 0 ? "CLOS" : "ON",
-                            "Zmode": "AUTO"
-                        };
-                    });
+                    let headerToItem = [{
+                            "Voyno" : voyageNo,
+                            "Lifnr" : vNo,
+                            "Chrnmin": charterNo,
+                            "Cunit":   this.currType,
+                           "Chrqsdate": startDate,
+                           "Chrqstime": startTime,
+                           "Chrqedate": endDate,
+                           "Chrqetime": endTime
+                        }]       
 
                     let payload = {
                         "Chrnmin": charterNo,
                         "venToItem": headerToItem
                     };
-
                     console.log("Payload:", payload);
                     await this._sendVendorDataToS4(payload);
                 } catch (error) {
                     console.error("Error in onPostLineItemData:", error);
                 }
             },
-
-            // This function is used to send the data to S4 and called this function from onPostLineItemData
-            sendVendorDataToS4: function (oPayload) {
+          
+            _sendVendorDataToS4: function (oPayload) {
                 
                 const oDataModelV4 = this.getOwnerComponent().getModel();
                 let oBindList = oDataModelV4.bindList("/vendorFinSet");
-
-                oBindList.create(oPayload).created().then(oContext => {
-                    sap.m.MessageBox.success(`S4 data Submit Successfully`, {
+                oBindList.create(oPayload,true).created().then(oContext => {
+                    sap.m.MessageBox.success(`Data Submit Successfully`, {
                         title: "Data Created",
                         onClose: function () {
                         }
@@ -519,6 +540,9 @@ sap.ui.define([
                 if (this._oPollingInterval) {
                     clearInterval(this._oPollingInterval);
                 }
+                if(this._intervalId){
+                    clearInterval(_intervalId);
+                }
             },
 
             // This function is used for exit from the bidding
@@ -529,23 +553,7 @@ sap.ui.define([
                         actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
                         onClose: function (oAction) {
                             if (oAction === sap.m.MessageBox.Action.OK) {
-                                let biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
-
-                                if (biddingData) {
-                                    biddingData.zstat = "Closed";
-
-                                    let oModel = this.getView().getModel("charteringRequestModel");
-                                    let oData = oModel.getData();
-
-                                    for (let i = 0; i < oData.length; i++) {
-                                        if (oData[i].Chrnmin === biddingData.Chrnmin) {
-                                            oData[i] = biddingData;
-                                            break;
-                                        }
-                                    }
-                                    oModel.refresh();
-                                }
-                                this.getOwnerComponent().getRouter().navTo("RouteMain");
+                               this.getOwnerComponent().getRouter().navTo("RouteMain");
                             }
                         }.bind(this)
                     });
@@ -553,7 +561,7 @@ sap.ui.define([
 
             // This function is used to recall the _fetchAndSetBids function for fetching the latest data
             _startAutoRefresh: function () {
-                setInterval(this._fetchAndSetBids.bind(this), 3000);
+                setInterval(this._fetchAndSetBids.bind(this), 9000);
             }
 
         });

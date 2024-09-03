@@ -192,7 +192,7 @@
 		                       <f:content>
 			                        <List id="GenList2" class="sapUiSmallMarginBottom" showSeparators="None">
 				                     <CustomListItem id="GenCustomListItem2" class="sapUiSmallMarginTop">
-						                    <ObjectStatus id="GenObjectStatus2" class="sapUiTinyMargin amount_text" text="" state="Success"/>
+						                    <ObjectStatus id="FirstBidText" class="sapUiTinyMargin amount_text" text="" state="Success"/>
 				                     </CustomListItem>
 			                        </List>
 		                        </f:content>

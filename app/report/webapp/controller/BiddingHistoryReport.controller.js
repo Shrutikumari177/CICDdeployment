@@ -111,9 +111,9 @@ sap.ui.define(
                 
                 this.jsonModel1.setData(filteredData);
                 
-                // Set IconTabBar to be visible
-                this.byId("IconTabBar").setVisible(true); // Show the IconTabBar
-            },
+                const bidTable = this.getView().byId("vendorDetailsLayout");
+                    bidTable.setVisible(true);
+                },
 
 
               onChartSearch: function (oEvent) {

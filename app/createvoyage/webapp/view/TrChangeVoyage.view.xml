@@ -327,7 +327,7 @@
                                 text="Reference Details"
                                 class="vgheading"
                             />
-                            <Table
+                            <!-- <Table
                                 id="_IDGenTable3"
                                 width="50%"
                                 fixedLayout="false"
@@ -452,6 +452,71 @@
                                                 </items>
                                             </Select>
                                             <Input />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table> -->
+                             <Table
+                                id="documentTable"
+                                width="50%"
+                                fixedLayout="false"
+                                class="table"
+                                items="{referenceModel>/documents}"
+                            >
+                                <columns>
+                                    <Column width="50%">
+                                        <Label text="Document Indicator" />
+                                    </Column>
+                                    <Column width="50%">
+                                        <Label text="Reference Document No." />
+                                    </Column>
+                                    <Column width="auto">
+                                        <Button
+                                            icon="sap-icon://add"
+                                            press="onAddRowRef"
+                                        />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Select
+                                                selectedKey="{referenceModel>documentIndicator}"
+                                            >
+                                                <items>
+                                                    <core:Item
+                                                        key=""
+                                                        text=""
+                                                    />
+                                                    <core:Item
+                                                        key="G"
+                                                        text="G - SALES CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        key="K"
+                                                        text="K - PURCHASE CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        key="P"
+                                                        text="P - PURCHASE ORDER"
+                                                    />
+                                                    <core:Item
+                                                        key="S"
+                                                        text="S - SALES ORDER"
+                                                    />
+                                                    <core:Item
+                                                        key="Z"
+                                                        text="Z - NOMINATION KEY"
+                                                    />
+                                                </items>
+                                            </Select>
+                                            <Input
+                                                value="{referenceModel>referenceDocumentNo}"
+                                            />
+                                            <Button
+                                                icon="sap-icon://less"
+                                                press="onDeleteRowRef"
+                                            />
                                         </cells>
                                     </ColumnListItem>
                                 </items>

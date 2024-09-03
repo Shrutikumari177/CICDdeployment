@@ -35,7 +35,7 @@
                             text="Business Partner Details"
                         />
                     </m:contentLeft>
-                    <m:contentRight>
+                    <!-- <m:contentRight>
     
                         <Button
                             id="_IDGenIcon3"
@@ -44,38 +44,42 @@
                             icon="sap-icon://delete"
                             press="onDeletePress"
                         />
-                    </m:contentRight>
+                    </m:contentRight> -->
                 </m:Bar>
 
 				<mdc:FilterBar id="filterbar" delegate="{
-							name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerFilterBarDelegate',
-							payload: {
-							    bindingPath: '/xNAUTIxnewvend_btp',
-                                searchKeys: ['Ort01', 'Land1', 'Lifnr']
-							}
+							name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerFilterBarDelegate'
 						}"
-						p13nMode = "Item,Value">
-					<mdc:basicSearchField>
+						p13nMode = "Item,Value"
+                        liveMode="true"
+                        
+                        >
+					<mdc:basicSearchField >
 						<mdc:FilterField delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
 							dataType="sap.ui.model.type.String"
 							placeholder= "Search Here"
+                            liveChange="onLiveSearch"
 							conditions="{$filters>/conditions/$search}"
 							propertyKey="$search"
 							maxConditions="1"/>
 					</mdc:basicSearchField>
-					<mdc:filterItems>
+					<mdc:filterItems  >
+  
+
 						<mdc:FilterField
 							label="City"
 							propertyKey="Ort01"
 							dataType="sap.ui.model.type.String"
+                            liveChange="onLiveChange"
 							conditions="{$filters>/conditions/Ort01}"
 							valueHelp="name-vh"
-							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
+							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"    
+                            operators="Contains"                      
 							/>
+
+
 					</mdc:filterItems>
-					<!-- <mdc:dependents>
-						<core:Fragment fragmentName="com.ingenx.nauti.masterdashboard.fragments.NameValueHelp" type="XML"/>
-					</mdc:dependents> -->
+				
 				</mdc:FilterBar>
 
 			</f:DynamicPageHeader>
@@ -84,6 +88,12 @@
     <f:content>
 
         <Panel id="_IDGenPanel1" class="tablepanel" height="650px">
+
+            <m:Bar id="_IDGenBar1" class="_IDGenBar1">
+              <m:contentRight>            
+                <Button id="_IDGenButton1" text="Delete Selection" type="Emphasized" press="onDeletePress"/>
+              </m:contentRight>
+            </m:Bar>
           
             <ScrollContainer
                 id="scrollContainer"
@@ -201,12 +211,12 @@
                 width="100%"
                 filter="filterbar"
                 multiSelectMode="Default"
-                p13nMode="Column,Sort,Group"
+                p13nMode="Column"
                 class="mastertables"
                 selectionMode="Multi"
 	            type="ResponsiveTable"
                 threshold="100"
-                showRowCount="false"
+                showRowCount="true"
             
                 delegate="{
                         name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerTableDelegate',
@@ -218,7 +228,7 @@
                 
                 
                 <mdct:Column
-                        propertyKey="VendorNo"
+                        propertyKey="Lifnr"
                         header="Vendor No">
                         <m:Text text="{Lifnr}" />
                 </mdct:Column>
@@ -231,36 +241,36 @@
 
                  <mdct:Column
                     propertyKey="Stras"
-                    header="Stras">
+                    header="Street">
                     <m:Text text="{Stras}" />
                 </mdct:Column>
     
                 <mdct:Column
-                    propertyKey="PostalCode"
+                    propertyKey="Pstlz"
                     header="Postal Code">
                     <m:Text text="{Pstlz}" />
                 </mdct:Column>
             
                 <mdct:Column
-                    propertyKey="CityName"
+                    propertyKey="Ort01"
                     header="City">
                     <m:Text text="{Ort01}" />
                 </mdct:Column>
 
                   <mdct:Column
-                    propertyKey="Country"
+                    propertyKey="Land1"
                     header="Country">
                     <m:Text text="{Land1}" />
                 </mdct:Column>
 
                 <mdct:Column
-                    propertyKey="PhoneNumber2"
+                    propertyKey="Telf2"
                     header="Telephone">
                     <m:Text text="{Telf2}" />
                 </mdct:Column>
 
                 <mdct:Column
-                    propertyKey="CreationDate"
+                    propertyKey="Erdat"
                     header="Creation Date">
                     <m:Text text="{Erdat}" />
                 </mdct:Column>

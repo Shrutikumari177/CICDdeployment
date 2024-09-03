@@ -417,14 +417,7 @@ sap.ui.define([
             oDialog.close();
         },
 
-        onCancel: function () {
-            // Close the dialog
-            var oDialog = this._oDialog;
-            if (oDialog) {
-                oDialog.close();
-            }
-        },
-
+       
         onSaveEmail: function () {
             var convertTimeFormat = function (timeStr) {
                 if (!timeStr) {
@@ -720,11 +713,21 @@ sap.ui.define([
                                 Mode: "Mode1"
                             });
                             that._oDialog.close();
+                            var oTable = that.byId("table");
+                          if (oTable) {
+                          oTable.removeSelections(true);
+                            }
+
+
                         }
                     }
                 });
             } else {
                 this._oDialog.close();
+                var oTable = this.byId("table");
+                if (oTable) {
+                    oTable.removeSelections(true);
+                }
             }
         },
 

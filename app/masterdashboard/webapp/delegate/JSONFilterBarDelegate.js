@@ -31,21 +31,41 @@ sap.ui.define([
 			required: oProperty.required,
 			label: oProperty.label,
 			maxConditions: oProperty.maxConditions,
-			delegate: {name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {}}
+			delegate: { name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {} }
 		});
-		if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
+	
+		const oPayload = oFilterBar.getPayload();
+		if (oPayload && oPayload.valueHelp && oPayload.valueHelp[sPropertyKey]) {
 			const aDependents = oFilterBar.getDependents();
-			let oValueHelp = aDependents.find((oD) => oD.getId().includes(sPropertyKey));
-			oValueHelp ??= await _createValueHelp(oFilterBar, sPropertyKey);
+			let oValueHelp = null;
+	
+			for (let i = 0; i < aDependents.length; i++) {
+				if (aDependents[i].getId().includes(sPropertyKey)) {
+					oValueHelp = aDependents[i];
+					break;
+				}
+			}
+	
+			if (!oValueHelp) {
+				oValueHelp = await _createValueHelp(oFilterBar, sPropertyKey);
+			}
+	
 			oFilterField.setValueHelp(oValueHelp);
 		}
+	
 		return oFilterField;
 	};
-
+	
 	JSONFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey) => {
 		const oProperty = JSONPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oFilterBar.getId() + "--filter--" + sPropertyKey;
-		return Element.getElementById(sId) ?? (await _createFilterField(sId, oProperty, oFilterBar));
+		const oElement = Element.getElementById(sId);
+	
+		if (oElement) {
+			return oElement;
+		} else {
+			return await _createFilterField(sId, oProperty, oFilterBar);
+		}
 	};
 
 	return JSONFilterBarDelegate;

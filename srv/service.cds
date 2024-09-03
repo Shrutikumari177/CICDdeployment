@@ -26,6 +26,9 @@ using NAUTINAUTICAL_VALUEHELP_SRV from './external/NAUTINAUTICAL_VALUEHELP_SRV.c
 
 
 service nauticalservice {
+    entity xNAUTIxclosaward_table as projection on NAUTICONTRACTAWARD_SRV.xNAUTIxclosaward_table
+    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Rank, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
+;
 
     entity xNAUTIxbidprofile_valuehelp as projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxbidprofile_valuehelp
     {        key BidprofileId     }    

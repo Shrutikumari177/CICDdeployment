@@ -45,8 +45,14 @@ sap.ui.define([
 	JSONFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey) => {
 		const oProperty = BusinessPartnerPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oFilterBar.getId() + "--filter--" + sPropertyKey;
-		return Element.getElementById(sId) ?? (await _createFilterField(sId, oProperty, oFilterBar));
-	};
+		const oElement = Element.getElementById(sId);
+	
+		if (oElement) {
+			return oElement;
+		} else {
+			return await _createFilterField(sId, oProperty, oFilterBar);
+		}
+	};	
 
 	return JSONFilterBarDelegate;
 }, /* bExport= */false);

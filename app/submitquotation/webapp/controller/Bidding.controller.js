@@ -35,7 +35,8 @@ sap.ui.define([
                     "startDate": "",
                     "startTime": "",
                     "endDate": "",
-                    "endTime": ""
+                    "endTime": "",
+                    "vendorData":""
                 });
                 this.getView().setModel(this.infoModel, "vData");
                 console.log("Initial vData", this.getView().getModel("vData").getData());
@@ -93,6 +94,7 @@ sap.ui.define([
                     vInfo.setProperty("/startTime", biddingData.Chrqstime);
                     vInfo.setProperty("/endDate", biddingData.Chrqedate);
                     vInfo.setProperty("/endTime", biddingData.Chrqetime);
+                    vInfo.setProperty("/vendorData", biddingData.Name1);
                     console.log("Updated vData", vInfo.getData());
 
                     await this.getHeaderDetails(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime);
@@ -380,7 +382,6 @@ sap.ui.define([
                 });
             },
             
-            //This function is using for open Hint fragment 
             handlePopoverPress: function (oEvent, that) {
                 let oButton = oEvent.getSource();
                 let oView = that.oView;
@@ -691,7 +692,7 @@ sap.ui.define([
                 // Get additional data from the models and view
                 var infoModel = this.getView().getModel("vData");
                 let charterNo = infoModel.getProperty("/charteringNo");
-                let vendorName = infoModel.getProperty("/vendorName");
+                let vendorName = infoModel.getProperty("/vendorData");
                 let vendorNo = infoModel.getProperty("/vendorNo");
                 let voyageNo = infoModel.getProperty("/voyageNo");
                 let voyageCurr = infoModel.getProperty("/currency");
@@ -751,16 +752,18 @@ sap.ui.define([
                     "to_quote_item": to_quote_item
                 };
                 console.log("payload for submit Quotation:", payload);
-            
+            let that = this
                 // Submit the quotation using the OData model
                 const oModel = this.getOwnerComponent().getModel();
                 let oBindList = oModel.bindList("/quotations");
                 try {
                     let res = await oBindList.create(payload);
                     if (res) {
-                        console.log("Res", res);
-                        // Show success message
-                        sap.m.MessageToast.show("Successfully posted!");
+                       new sap.m.MessageBox.success("Successfully Submitted", {
+                            onClose: function () {
+                                that.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                            }
+                        })
                     }
                 } catch (error) {
                     console.error("Error", error);

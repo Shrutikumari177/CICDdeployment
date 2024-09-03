@@ -18,6 +18,8 @@ sap.ui.define(
     return BaseController.extend("com.ingenx.nauti.report.controller.ContractAwardStatusReport", {
       onInit() {
 
+        this._oBusyDialog = new sap.m.BusyDialog();
+
         let oModel2 = new sap.ui.model.json.JSONModel();
         this.getView().setModel(oModel2, "dataModel2");
         let oModel4 = this.getOwnerComponent().getModel();
@@ -30,6 +32,17 @@ sap.ui.define(
         }.bind(this))
         console.log("myvendorData", getModelData)
 
+      },
+
+       // This function is using for open the dialog box
+       _showBusyDialog: function (text) {
+        this._oBusyDialog.setText(text || "Processing...");
+        this._oBusyDialog.open();
+      },
+
+       // This function is using for closing the dialog box
+       _hideBusyDialog: function () {
+        this._oBusyDialog.close();
       },
       // onCharteringNumber: function () {
       //   if (!this._valueHelpDialog) {
@@ -78,9 +91,8 @@ sap.ui.define(
         console.log("contractAwardModel data", this.getView().getModel('contractAwardModel').getData());
     
         // Set IconTabBar to be visible
-        var oIconTabBar = this.byId("IconTabBar");
-        oIconTabBar.setVisible(true); 
-        oIconTabBar.setSelectedKey("info"); 
+        const awardTable = this.getView().byId("vendorDetailsLayout");
+        awardTable.setVisible(true);
       },
     
 

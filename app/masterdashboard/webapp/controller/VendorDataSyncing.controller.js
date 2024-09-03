@@ -12,18 +12,22 @@ sap.ui.define(
   function(BaseController,Fragment,History,MessageToast,MenuItem,JSONModel,CoreLibrary,ODataModel) {
     "use strict";
     let getModelData = [];
+    let getModelData2 = [];
 
     return BaseController.extend("com.ingenx.nauti.masterdashboard.controller.VendorDataSyncing", {
-      // _oSupplMenuFragment: null,
-      _oMenuFragment:null,
+      
       onInit() {
           
           // clear selected rows
-          this.byId("table").clearSelection();
+          let oTable = this.byId("table")
+          oTable.clearSelection();
 
-          // use filter
+          oTable.setNoData("Loading.....");
+
+          // getting entries from business partner set 
           let oModel = new sap.ui.model.json.JSONModel();
           this.getView().setModel(oModel, "businessService");
+
           let oModel3 = this.getOwnerComponent().getModel();
           let oBindList3 = oModel3.bindList("/BusinessPartnerSet");
           
@@ -35,43 +39,51 @@ sap.ui.define(
               this.getView().getModel("businessService").refresh();
       
           }.bind(this))
-         console.log("mydata", getModelData.length, getModelData)
 
-         let oModel1 = new sap.ui.model.json.JSONModel();
+          console.log("mydata", getModelData.length, getModelData)
+
+
+          // getting nativend data from 
+
+          let oModel1 = new sap.ui.model.json.JSONModel();
           this.getView().setModel(oModel1, "nautiNewVendModel");
           let oModel2 = this.getOwnerComponent().getModel();
           let oBindList2 = oModel2.bindList("/xNAUTIxnewvend_btp");
           
           oBindList2.requestContexts(0, Infinity).then(function (aContexts) {
               aContexts.forEach(function (oContext) {
-                getModelData.push(oContext.getObject());
+                getModelData2.push(oContext.getObject());
               });
-              oModel.setData(getModelData);
+              oModel1.setData(getModelData2);
               this.getView().getModel("nautiNewVendModel").refresh();
-              
-      
+                      
           }.bind(this))
 
       },
       
-      onExit: function () {
-        const oRouter = this.getOwnerComponent().getRouter();
-        oRouter.navTo("MastView");
-      },
+      // onExit: function () {
+      //   const oRouter = this.getOwnerComponent().getRouter();
+      //   oRouter.navTo("MastView");
+      // },
+
       onBackPress: function() {
           this.byId("table").clearSelection();
+
           const oRouter = this.getOwnerComponent().getRouter();
-          oRouter.navTo("RouteBusinessPartner");
-        },
-        onPressHome: function() {
+          oRouter.navTo("RouteBusinessPartnerDashboard");
+      },
+      
+      onPressHome: function() {
+          this.byId("table").clearSelection();
+
           const oRouter = this.getOwnerComponent().getRouter();
           oRouter.navTo("RouteHome");
-        },
+      },
 
-        onClearSelection: function() {
+      onClearSelection: function() {
            // clear selected rows
            this.byId("table").clearSelection();
-        },
+      },
       
       
       // create payload from selected entries
@@ -88,11 +100,17 @@ sap.ui.define(
           }
       
           var aPayloads = aSelectedItems.map(function (item) {
+
+              var sName1 = item.Name1;
+              if (sName1 && sName1.length > 35) {
+                  sName1 = sName1.substring(0, 35); // Truncate to 35 characters'
+              }
+
               return {
                   Lifnr: item.Lifnr,
-                  PartnerRole: "", // Blank field
+                  PartnerRole: "",
                   Anred: item.Anred,
-                  Name1: item.Name1 ,
+                  Name1: sName1 ,
                   Name2: item.Name2,
                   Name3: item.Name3,
                   Sort1: item.Sort1,
@@ -110,7 +128,7 @@ sap.ui.define(
                   Telf2: item.Telf2,
                   Telfx: item.Telfx,
                   SmtpAddr: item.SmtpAddr,
-                  Erdat: item.Erdat,
+                  Erdat: item.Erdat + "T00:00:00.000Z",
                   
               };
           });
@@ -125,48 +143,200 @@ sap.ui.define(
 
       // create unique entries from payload
       
+      // _checkAndCreateEntries: function (aPayloads) {
+      //     var oModel = this.getView().getModel("businessService");
+      //     var existingData = oModel.getData();
+      
+      //     // Confirm before creating entries
+      //     sap.m.MessageBox.confirm("Do you want to create new entries?", {
+      //         actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+      //         onClose: function (oAction) {
+      //             if (oAction === sap.m.MessageBox.Action.YES) {
+
+      //                 this.byId("table").clearSelection();
+      //                 var oModelV4 = this.getOwnerComponent().getModel();
+      //                 var oBindListV4 = oModelV4.bindList("/BusinessPartnerSet");
+      
+      //                 aPayloads.forEach(function (oPayload) {
+      //                     var bExists = existingData.some(function (oEntry) {
+      //                         return oEntry.Lifnr === oPayload.Lifnr; // Assuming Lifnr is the unique identifier
+      //                     });
+
+      //                     console.log("bExists", bExists)
+      
+      //                     if (!bExists) {
+      //                         console.log("Creating payload:", oPayload); // Log the complete payload
+      //                         oBindListV4.create(oPayload);
+      //                         oModelV4.refresh();
+      //                         console.log("doneeee");
+      //                         MessageToast.show("Entry(s) created successfully.");
+                              
+      //                     } else {
+      //                         MessageToast.show(`Vendor No ${oPayload.Lifnr} already exists.`);
+      //                         return;
+      //                     }
+                          
+                          
+      //                 });
+      //             } else {
+      //                 this.byId("table").clearSelection();
+      //                 MessageToast.show("Creation of new entries cancelled.");
+      //             }
+      //         }.bind(this) // Ensure proper context inside the callback
+      //     });
+      // },
+
+      // _checkAndCreateEntries: function (aPayloads) {
+      //   var oModel = this.getView().getModel("businessService");
+      //   var existingData = oModel.getData();
+        
+      //   // Arrays to track the results
+      //   var createdItems = [];
+      //   var existingItems = [];
+        
+      //   // Confirm before creating entries
+      //   sap.m.MessageBox.confirm("Do you want to create new entries?", {
+      //       actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+      //       onClose: function (oAction) {
+      //           if (oAction === sap.m.MessageBox.Action.YES) {
+    
+      //               this.byId("table").clearSelection();
+      //               var oModelV4 = this.getOwnerComponent().getModel();
+      //               var oBindListV4 = oModelV4.bindList("/BusinessPartnerSet");
+    
+      //               aPayloads.forEach(function (oPayload) {
+      //                   var bExists = existingData.some(function (oEntry) {
+      //                       return oEntry.Lifnr === oPayload.Lifnr; // Assuming Lifnr is the unique identifier
+      //                   });
+    
+      //                   console.log("bExists", bExists);
+                        
+      //                   if (!bExists) {
+      //                       console.log("Creating payload:", oPayload); // Log the complete payload
+      //                       oBindListV4.create(oPayload);
+      //                       oModelV4.refresh();
+      //                       createdItems.push(oPayload.Lifnr); // Track created item
+      //                   } else {
+      //                       existingItems.push(oPayload.Lifnr); // Track existing item
+      //                   }
+      //               });
+    
+      //               // Show messages after processing all payloads
+      //               if (createdItems.length > 0) {
+      //                   MessageToast.show(`Entries created successfully for: ${createdItems.join(", ")}`);
+      //               }
+      //               if (existingItems.length > 0) {
+      //                   MessageToast.show(`These vendors already exist: ${existingItems.join(", ")}`);
+      //               }
+    
+      //           } else {
+      //               this.byId("table").clearSelection();
+      //               MessageToast.show("Creation of new entries cancelled.");
+      //           }
+      //       }.bind(this) // Ensure proper context inside the callback
+      //   });
+      // },      
+
       _checkAndCreateEntries: function (aPayloads) {
           var oModel = this.getView().getModel("businessService");
-          var existingData = oModel.getData();
+          var oModelV4 = this.getOwnerComponent().getModel();
+          var existingData = oModel.getData(); // Get the latest data from the model
+      
+          // Arrays to track the results
+          var createdItems = [];
+          var existingItems = [];
       
           // Confirm before creating entries
           sap.m.MessageBox.confirm("Do you want to create new entries?", {
               actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
               onClose: function (oAction) {
                   if (oAction === sap.m.MessageBox.Action.YES) {
-                      var oModelV4 = this.getOwnerComponent().getModel();
+  
+                          // Create and open BusyDialog
+                      var oBusyDialog = new sap.m.BusyDialog({
+                        text: "Creating entries, please wait...",
+                        title: "Processing"
+                      });
+                      oBusyDialog.open();
+  
+  
+                      this.byId("table").clearSelection();
+      
                       var oBindListV4 = oModelV4.bindList("/BusinessPartnerSet");
       
-                      aPayloads.forEach(function (oPayload) {
-                          var bExists = existingData.some(function (oEntry) {
-                              return oEntry.Lifnr === oPayload.Lifnr; // Assuming Lifnr is the unique identifier
+                      // Fetch latest existing data to ensure up-to-date comparison
+                      oBindListV4.requestContexts(0, Infinity).then(function (aContexts) {
+                          existingData = aContexts.map(function (oContext) {
+                              return oContext.getObject();
                           });
       
-                          if (!bExists) {
-                              console.log("Creating payload:", oPayload); // Log the complete payload
-                              oBindListV4.create(oPayload);
-                              oModelV4.refresh();
-                              console.log("doneeee");
-                              MessageToast.show("Entry(s) created successfully.");
-                             
-                          } else {
-                              MessageToast.show(`Vendor No ${oPayload.Lifnr} already exists.`);
-                              return;
-                          }
+                          aPayloads.forEach(function (oPayload) {
+                              var bExists = existingData.some(function (oEntry) {
+                                  return oEntry.Lifnr === oPayload.Lifnr; // Assuming Lifnr is the unique identifier
+                              });
+      
+                              console.log("bExists", bExists);
+      
+                              if (!bExists) {
+                                  console.log("Creating payload:", oPayload); // Log the complete payload
+                                  oBindListV4.create(oPayload);
+                                  oModelV4.refresh();
+                                  createdItems.push(oPayload.Lifnr); // Track created item
+                              } else {
+                                  existingItems.push(oPayload.Lifnr); // Track existing item
+                              }
+                          })  
                           
-                          this.byId("table").clearSelection();
-                      });
+
+                          // var busyDialog = new sap.m.BusyDialog({
+                  
+                          //   });
+                          // busyDialog.open();
+      
+                          // Prepare messages based on the number of created and existing items
+                          var createdMessage = createdItems.length === 1 ? 
+                              `Entry: ${createdItems.join(", ")} created successfully` : 
+                              `Entries created successfully`;
+                          
+                          var existingMessage = existingItems.length === 1 ? 
+                              `Entry: ${existingItems.join(", ")} already exists` : 
+                              `Entries: ${existingItems.join(", ")} already exist`;
+      
+                          
+                          // Display messages separately with a slight delay to prevent overlap
+                          if (createdItems.length > 0) {
+                              sap.m.MessageToast.show(createdMessage, {
+                                  duration: 1000 // Display for 3 seconds
+                              });
+                          }
+
+                          if (existingItems.length > 5) {
+                              setTimeout(function () {
+                                  sap.m.MessageToast.show(`${existingItems.length} Entries already exist `, {
+                                      duration: 3000 // Display for 3 seconds
+                                  });
+                              }, 1500); // Show this message after a slight delay to avoid overlap
+                          }
+                          else if (existingItems.length > 0) {
+                              setTimeout(function () {
+                                  sap.m.MessageToast.show(existingMessage, {
+                                      duration: 3000 // Display for 3 seconds
+                                  });
+                              }, 1500); // Show this message after a slight delay to avoid overlap
+                          }
+
+                          oBusyDialog.close();
+      
+                      }.bind(this));
+                      
+  
                   } else {
-                      this.byId("table").clearSelection();
-                      MessageToast.show("Creation of new entries cancelled.");
+                      sap.m.MessageToast.show("Creation of new entries cancelled.");
                   }
               }.bind(this) // Ensure proper context inside the callback
           });
-      },
+      },      
 
-  
-      
-      // for navigation dialog box
       onNavigateDetails: function(oEvent) {
 
           var oBindingContext = oEvent.getParameter("bindingContext");                         
@@ -179,46 +349,44 @@ sap.ui.define(
           var oView = this.getView();
           if (!this._oDialog1) {
               this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.VendorDataSyncing", this);
-              oView.addDependent(this._oDialog1);
-     
-       
+              oView.addDependent(this._oDialog1); 
           }
           this._oDialog1.setModel(tempModel,"nautiNewVendModel1")
           this._oDialog1.open();
-        },
+      },
 
       oncancell: function () {
           this._oDialog1.close();
         },
 
-       onSearch: function (oEvent) {
-          var oTable = this.byId("table");
-          var oBinding = oTable.getBinding("items");
-          var sQuery = oEvent.getParameter("newValue");
+      // onSearch: function (oEvent) {
+      //     var oTable = this.byId("table");
+      //     var oBinding = oTable.getBinding("items");
+      //     var sQuery = oEvent.getParameter("newValue");
      
-          if(sQuery.trim()){
-            var oFilter1 = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.Contains, sQuery);
-            var oFilter2 = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.Contains, sQuery);
-            var oFilter3 = new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery);
-            var orFilter = new sap.ui.model.Filter({
-                filters: [oFilter1, oFilter2, oFilter3],
-                and: false
-            });
-            oBinding.filter([orFilter]);
-          }
-          else{
-            oBinding.filter([]);
-          }
+      //     if(sQuery.trim()){
+      //       var oFilter1 = new sap.ui.model.Filter("Country", sap.ui.model.FilterOperator.Contains, sQuery);
+      //       var oFilter2 = new sap.ui.model.Filter("Portc", sap.ui.model.FilterOperator.Contains, sQuery);
+      //       var oFilter3 = new sap.ui.model.Filter("Countryn", sap.ui.model.FilterOperator.Contains, sQuery);
+      //       var orFilter = new sap.ui.model.Filter({
+      //           filters: [oFilter1, oFilter2, oFilter3],
+      //           and: false
+      //       });
+      //       oBinding.filter([orFilter]);
+      //     }
+      //     else{
+      //       oBinding.filter([]);
+      //     }
    
-          var updatedBinding = oTable.getBinding("items");
+      //     var updatedBinding = oTable.getBinding("items");
    
-          if(!updatedBinding.aLastContextData.length){
-            oTable.setNoDataText("No Data found");
-            return;
-          }
+      //     if(!updatedBinding.aLastContextData.length){
+      //       oTable.setNoDataText("No Data found");
+      //       return;
+      //     }
          
-        },
+      // },
 
-});
+   });
   }
 );

@@ -3,6 +3,7 @@
 	xmlns:core="sap.ui.core">  
     <SelectDialog
         id="mySelectDialog12"
+        initialFocus="SearchField"
         noDataText="Loading..."
         title="Select Chartering No"
         search="onChartSearch"

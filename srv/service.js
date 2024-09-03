@@ -15,6 +15,9 @@ module.exports = async (srv) => {
     srv.on('READ', 'xNAUTIxawardReportFinal', req => NAUTICONTRACTAWARD_SRV.run(req.query));
     srv.on('READ', 'contaward_tableSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
     srv.on('READ', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxclosaward_table', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
+
+    
 
     srv.on('CREATE', 'awardcontractSet', req => NAUTICONTRACTAWARD_SRV.run(req.query)); 
     const NAUTINAUTICAL_VALUEHELP_SRV = await cds.connect.to("NAUTINAUTICAL_VALUEHELP_SRV"); 
@@ -70,8 +73,89 @@ module.exports = async (srv) => {
     const NAUTIVENDOR_BTP_SRV = await cds.connect.to("NAUTIVENDOR_BTP_SRV");
     srv.on('READ', 'xNAUTIxvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
     srv.on('READ', 'xNAUTIxnewvend_btp', req => NAUTIVENDOR_BTP_SRV.run(req.query));
-
-
+     
+    srv.on('CREATE', 'vendorFinSet', async function(req) {
+        try {
+            const { Chrnmin, venToItem } = req.data;
+    
+            console.log("Received chartering:", Chrnmin);
+            console.log("Received array:", venToItem);
+            console.log("Received payload:", req.data);
+    
+            const vendorLiveBidDetails = Chrnmin 
+                ? await SELECT.from('nauticalservice.VenodrLiveBidDetails').where({ Chrnmin }) 
+                : await SELECT.from('nauticalservice.VenodrLiveBidDetails');
+    
+            let vendorMap = {};
+            vendorLiveBidDetails.forEach(item => {
+                if (!vendorMap[item.vendorNo]) {
+                    vendorMap[item.vendorNo] = [];
+                }
+                vendorMap[item.vendorNo].push(item);
+            });
+    
+            let processedItems = [];
+            Object.keys(vendorMap).forEach(vendorNo => {
+                let vendorEntries = vendorMap[vendorNo];
+                vendorEntries.sort((a, b) => new Date(b.modifiedAt) - new Date(a.modifiedAt)); 
+    
+                vendorEntries.forEach((entry, index) => {
+                    let stat = index === 0 ? "CLOS" : "ON"; 
+    
+                    let biddate = entry.modifiedAt.split('T')[0]; 
+                    let bidtime = entry.modifiedAt.split('T')[1].split('Z')[0];
+    
+                    processedItems.push({
+                        ...entry,
+                        Stat: stat,
+                        Biddate: biddate,
+                        Bidtime: bidtime
+                    });
+                });
+            });
+    
+            let finalItems = processedItems.map(item => {
+                return {
+                    Voyno: item.voyno,
+                    Lifnr: item.vendorNo,
+                    Zcode: "FREIG",
+                    Chrnmin: Chrnmin,
+                    Biddate: item.Biddate, 
+                    Bidtime: item.Bidtime, 
+                    CodeDesc: "FRIEGHT COST",
+                    Value: "",
+                    Cvalue: item.quotationPrice,
+                    Cunit: venToItem[0].Cunit,
+                    Chrqsdate: venToItem[0].Chrqsdate,
+                    Chrqstime: venToItem[0].Chrqstime,
+                    Chrqedate: venToItem[0].Chrqedate,
+                    Chrqetime: venToItem[0].Chrqetime,
+                    DoneBy: true,
+                    Stat: item.Stat,
+                    Zmode: "AUTO",
+                    Zcom: item.comment,
+                };
+            });
+    
+            let finalData = {
+                Chrnmin: Chrnmin,
+                venToItem: finalItems
+            };
+    
+            req.data.venToItem = finalData.venToItem;
+    
+            // console.log("Final data to be posted:", req.data);
+            // console.log("Complete data of this payload:", finalData);
+    
+            let res = await NAUTIZLIVEBID_VEND_SRV.run(req.query);
+            console.log("Posting response:", res);
+    
+            return res; 
+        } catch (error) {
+            console.error("Error in CREATE handler:", error);
+            req.error(500, "Error while posting data");
+        }
+    });
 
     srv.on('READ', 'quotations', async function (req) {
         let response = await SELECT.from('nauticalservice.quotations');

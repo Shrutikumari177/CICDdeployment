@@ -5,7 +5,7 @@
 	<ValueHelpDialog
 	contentWidth="50%"
 		contentHeight="auto"
-		title="Cargo Types"
+		title="Vessel Types"
 		supportMultiselect="false"
 		ok=".onCarTyHelpOkPress"
 		cancel=".onCarTyHelpCancelPress"

@@ -22,13 +22,8 @@
 
 }
 
-.headerItem{
 
-    gap :10px;
 
-    margin-left: 30%;
-
-}
 
 .vgheading{
 
@@ -56,14 +51,7 @@
 
 }
 
-.headerItem{
 
-    gap :10px;
-
-    margin-left: 30%;
-
-
-}
 
 .vgheading{
 
@@ -89,13 +77,14 @@
 
 }
 
-.headerItem{
 
-    margin: 3%;
+/* .headerItem{
 
-     gap:10px;
+    gap :10px;
 
-}
+    margin-left: 30%;
+
+} */
 
 /* #_IDGenLabel7{
 
@@ -103,15 +92,13 @@
 
 } */
 
-.flex{
+/* .flex{
 
     margin-top: 1%; margin-left: 1%;
 
-        gap:8% ;
+     gap:8% ;
 
-        /* margin-left: 60px; */
-
-}
+} */
  
 
 
@@ -119,5 +106,31 @@
 
   margin-left: 5%;  
 
+}
+
+.flex{
+    margin-left: 29px;
+}
+.headerItem{
+    gap :10px;
+}
+.vflex{
+    gap :20px; 
+}
+.headerItem {
+    width: 100%;
+}
+ 
+.labelStyle {
+    width: 100%;
+    text-align: right;
+    margin-top: 10%;
+}
+
+
+ 
+.inputStyle {
+    width: 60%;
+    height: auto;
 }
 

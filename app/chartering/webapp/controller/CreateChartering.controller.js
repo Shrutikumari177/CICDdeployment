@@ -533,36 +533,36 @@ sap.ui.define(
     
        
         if (!oVoyno) {
-            sap.m.MessageToast.show("Please enter a Voyage Number");
+          sap.m.MessageBox.error("Please enter a Voyage Number");
             return;
         }
     
         if (!ochatExt) {
-            sap.m.MessageToast.show("Please enter an External chartering number");
+          sap.m.MessageBox.error("Please enter an External chartering number");
             return;
         }
     
         if (!(/^\d+$/.test(ochatExt))) {
-            sap.m.MessageToast.show("Please enter only numeric values in the External chartering number field");
+          sap.m.MessageBox.error("Please enter only numeric values in the External chartering number field");
             return;
         }
     
         if (oVendorArray.length === 0) {
-            sap.m.MessageToast.show("Please select at least one Vendor");
+          sap.m.MessageBox.error("Please select at least one Vendor");
             return;
         }
     
         if (!oPurchaseOr) {
-            sap.m.MessageToast.show("Please enter a Purchase Organization");
+          sap.m.MessageBox.error("Please enter a Purchase Organization");
             return;
         }
         if (!oPurchaseGr) {
-          sap.m.MessageToast.show("Please enter a Purchase Group");
+          sap.m.MessageBox.error("Please enter a Purchase Group");
           return;
       }
     
         if (!oPaymentTerm) {
-            sap.m.MessageToast.show("Please enter a Payment Term");
+          sap.m.MessageBox.error("Please enter a Payment Term");
             return;
         }
     

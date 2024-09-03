@@ -46,7 +46,7 @@ sap.ui.define([
           if (this._BusyDialog) {
             this._BusyDialog.setText("This is taking forever, please wait...");
           }
-        }, 5000);
+        }, 1000);
         let bModel = this.getOwnerComponent().getModel();
         let oBidListData = bModel.bindList("/livecontrollerfetchSet");
         oBidListData.requestContexts(0, Infinity).then(function (aContexts) {
@@ -119,6 +119,8 @@ sap.ui.define([
         const controllerCurrentBid = oContext.getProperty("Cvalue");
         const Mode = oContext.getProperty("Zmode");
         const vendorNo = oContext.getProperty("Lifnr");
+        const bidStatus = oContext.getProperty("Stat")
+
 
         const navModel = this.getOwnerComponent().getModel("navModel");
         navModel.setProperty("/navigatedVoyageNo", Voyno);
@@ -130,6 +132,7 @@ sap.ui.define([
         navModel.setProperty("/navigatedControllerCurrBid", controllerCurrentBid);
         navModel.setProperty("/navigatedMode", Mode);
         navModel.setProperty("/navigatedVendorNo",vendorNo)
+        navModel.setProperty("/navigatedstatus",bidStatus)
 
         // Navigate to the target route
         const oRouter = this.getOwnerComponent().getRouter();

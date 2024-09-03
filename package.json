@@ -15,7 +15,8 @@
     "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
     "@sap/xssec": "^3",
     "axios": "^1.7.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "@cap-js/hana": "^1"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -35,6 +36,7 @@
   },
   "cds": {
     "requires": {
+      "db": "hana",
       "NAUTIMASTER_BTP_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/NAUTIMASTER_BTP_SRV",
@@ -126,9 +128,7 @@
         }
       },
       "[production]": {
-        "multitenancy": true,
         "auth": "xsuaa",
-        "db": "hana",
         "connectivity": true
       },
       "NAUTIVENDOR_SRV": {
@@ -363,7 +363,6 @@
           }
         }
       },
-      "db": "hana",
       "NAUTIZLIVEBID_VEND_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/NAUTIZLIVEBID_VEND_SRV",
@@ -419,7 +418,14 @@
     }
   },
   "sapux": [
+    "app/biddingcontroller",
+    "app/chartering",
+    "app/comparelivefreight",
+    "app/createvoyage",
+    "app/masterboard",
+    "app/quotation",
     "app/report",
-    "app/biddingcontroller"
+    "app/submitquotation",
+    "app/vendorbidding"
   ]
 }

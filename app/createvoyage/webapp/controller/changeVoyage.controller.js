@@ -43,6 +43,7 @@ sap.ui.define(
         var bidData = [];
         var voyageStatus;
         var selectedProfile;
+        var referenceDocModel;
 
 
         return BaseController.extend("com.ingenx.nauti.createvoyage.controller.changeVoyage", {
@@ -51,6 +52,18 @@ sap.ui.define(
 
 
             onInit: async function () {
+                // Refrence table code 
+
+                // ref document  model
+                referenceDocModel = new sap.ui.model.json.JSONModel({
+                    documents: [
+                        {
+                            documentIndicator: "",
+                            referenceDocumentNo: ""
+                        }
+                    ]
+                });
+                this.getView().setModel(referenceDocModel, "referenceModel");
 
                 await this.getLoggedInUserInfo();
                 this._rowCount = 0;
@@ -132,7 +145,7 @@ sap.ui.define(
             onPortDaysChange: function (oEvent) {
                 let oInput = oEvent.getSource();
                 let sValue = oInput.getValue();
-                
+
                 // Remove leading zeros, but keep the number as "0" if the input was "0"
                 sValue = sValue.replace(/^0+(?!\.|$)/, '');
                 // Set the modified value back to the input field
@@ -310,17 +323,14 @@ sap.ui.define(
 
                 let oSelectedItem = oEvent.getParameter("selectedItem");
                 if (!oSelectedItem) {
+                    if( that._VoyageDialog){
+
+                        that._VoyageDialog.destroy();
+                        that._VoyageDialog = null;
+                    }
                     return;
                 }
-
-                // Initialize and open the Busy Dialog
-                // if (!that._busyDialog) {
-                //     that._busyDialog = new sap.m.BusyDialog({
-                //         title: "Please Wait",
-                //         text: "Loading Data..."
-                //     });
-                // }
-                // that._busyDialog.open();
+                that.clearRefDoc();
 
                 try {
 
@@ -403,21 +413,58 @@ sap.ui.define(
 
                     that.getView().setModel(oCommercialModel, "commercialModel");
 
-                    // Ensure the dialog is properly destroyed and set to null
-                    if (that._VoyageDialog) {
-                        that._VoyageDialog.destroy();
-                        that._VoyageDialog = null;
-                    }
+                 
                 } catch (error) {
                     console.error("Error during onVoyageValueHelpClose execution:", error);
                     sap.m.MessageBox.error(error.message);
                 } finally {
-                    // Close the Busy Dialog
-                    // if (that._busyDialog) {
-                    //     that._busyDialog.close();
-                    //     that._busyDialog = null;
-                    // }
+                     // Close the Busy Dialog
+                     if (that._busyDialog) {
+                        that._busyDialog.close();
+                        that._busyDialog = null;
+                    }
+                    // close the Voyage fragment
+                    if (that._VoyageDialog) {
+                        that._VoyageDialog.destroy();
+                        that._VoyageDialog = null;
+                    }
                 }
+            },
+            // code for refrence document table 
+            clearRefDoc: function () {
+                let oModel = referenceDocModel;
+
+                // Clear the documents array
+                if (oModel) {
+
+                    oModel.setProperty("/documents", [
+                        {
+                            documentIndicator: "",
+                            referenceDocumentNo: ""
+                        }
+                    ]);
+                }
+            },
+
+            onAddRowRef: function () {
+                var oModel = this.getView().getModel('referenceModel');
+                var aDocuments = oModel.getProperty("/documents");
+                aDocuments.push({
+                    documentIndicator: "",
+                    referenceDocumentNo: ""
+                });
+                oModel.setProperty("/documents", aDocuments);
+            },
+
+            onDeleteRowRef: function (oEvent) {
+                var oModel = this.getView().getModel('referenceModel');
+                var oTable = this.getView().byId("documentTable");
+                var sPath = oEvent.getSource().getBindingContext('referenceModel').getPath();
+                var aDocuments = oModel.getProperty("/documents");
+                var iIndex = parseInt(sPath.split("/")[2]);
+
+                aDocuments.splice(iIndex, 1);
+                oModel.setProperty("/documents", aDocuments);
             },
 
             onVoyageFilterSearch: function (oEvent) {
@@ -487,6 +534,11 @@ sap.ui.define(
                 console.log("profile selected : ", selectedProfile);
                 await this._initBidTemplate();
 
+                let oTable1 = oView.byId("submitTechDetailTable");
+                console.log("profile chnage");
+
+
+
 
             },
 
@@ -495,6 +547,10 @@ sap.ui.define(
                 return new Promise(async (resolve, reject) => {
                     try {
                         selectedProfile = this.byId('_selectProfileId')._getSelectedItemText();
+                        // if (!selectedProfile) {
+
+                        //     sap.m.MessageToast.show("Request to remote service : Profile not found ");
+                        // }
                         let aFilter = new sap.ui.model.Filter('profileId', sap.ui.model.FilterOperator.Contains, selectedProfile);
 
                         let oData = await helperFunctions.readEntity(oModel, "xNAUTIxMASBID", undefined, undefined, aFilter);
@@ -549,7 +605,7 @@ sap.ui.define(
                     oCells.push(new sap.m.CheckBox({
                         select: this.toggleCheckbox.bind(this),
                         selected: isEditable,
-                        // editable: !isEditable
+
                     }));
                     oCells.push(
                         new sap.m.Input({
@@ -574,6 +630,21 @@ sap.ui.define(
                     });
                     oTable.addItem(oItem);
                 });
+
+                //  deleting othe bid entries from bid Payload which are not in other profile 
+                // let oTable1 = oView.byId("submitTechDetailTable");
+                // console.log("profile  --");
+                // let oTableItems = oTable1.getItems();
+                // if( bidPayload.length){
+
+                //     for( let i=0 ; i< oTableItems.length ; i++){
+
+                //         let sCodeDesc = oTableItems[i].getCells()[0].getText();
+                //         bidPayload = bidPayload.filter( item =>item.CodeDesc !== sCodeDesc);
+                //         // console.log("bidpayload iteration -- ", i);
+                //     }
+                // }
+                // console.log("bidPayload after  complete iteration --", bidPayload);
             },
 
 
@@ -908,58 +979,84 @@ sap.ui.define(
                     return false;
                 }
             },
-            onDeleteBidDetail: function (oEvent) {
+            onDeleteBidDetail: function (oEvent, oInputSource) {
                 let oDialog = oEvent.getSource().getParent();
                 let oTable = oDialog.getContent()[0]; // table is the third item in the dialog's content
                 let oModel = oTable.getModel("tempModel");
                 let aSelectedItems = oTable.getItems();
 
+
                 let aSelectedIndices = [];
 
                 // If no rows are selected, return
                 if (oTable.getSelectedItems().length === 0) {
-                    new sap.m.MessageToast.show("Please select an item to delete");
+                    new sap.m.MessageToast.show("Please Select an Item to Delete.");
                     return;
                 }
+                let that = this;
+
+                new sap.m.MessageBox.confirm("Are you sure, you want to delete ?", {
+                    title: "Bid Deletion",
+                    onClose: function (oAction) {
+                        if (oAction === sap.m.MessageBox.Action.OK) {
+
+                            // Loop through table items and find selected indices
+                            for (let i = 0; i < aSelectedItems.length; i++) {
+                                if (aSelectedItems[i].getSelected()) {
+                                    aSelectedIndices.push(i);
+                                }
+                            }
+
+                            // Sort the indices in descending order to ensure correct deletion when multiple rows are selected
+                            aSelectedIndices.sort(function (a, b) {
+                                return b - a;
+                            });
+
+                            // Remove the selected rows from the model and from bidPayload
+                            for (let j = 0; j < aSelectedIndices.length; j++) {
+                                let index = aSelectedIndices[j];
+                                let aData = oModel.getProperty("/");
+
+                                // Get the Zcode and Value from the selected item
+                                let selectedItem = aData[index];
+                                let selectedZcode = selectedItem.Zcode;
+                                let selectedValue = selectedItem.Value;
+
+                                // Find the index of the corresponding entry in bidPayload
+                                let bidIndex = bidPayload.findIndex(bidItem => bidItem.Zcode === selectedZcode && bidItem.Value === selectedValue);
+
+                                // Remove the entry from bidPayload if it exists
+                                if (bidIndex !== -1) {
+                                    bidPayload.splice(bidIndex, 1);
+                                }
+
+                                // Remove the entry from the model
+                                aData.splice(index, 1);
+                                oModel.setProperty("/", aData);
+                            }
+                            //setting Parent input value
+                            let tempModelData = oModel.getData();
+                            let oInputValue = that.getInputData(tempModelData);
+                            oInputSource.setValue(oInputValue);
+
+                            if (!tempModelData.length) {
+                                oDialog.getContent()[1].setEnabled(true);
+                            }
 
 
-                // Loop through table items and find selected indices
-                for (let i = 0; i < aSelectedItems.length; i++) {
-                    if (aSelectedItems[i].getSelected()) {
-                        aSelectedIndices.push(i);
+                            // Clear the selection in the table
+                            oTable.removeSelections();
+
+
+                        } else {
+
+                            oTable.removeSelections();
+
+                        }
                     }
-                }
-
-                // Sort the indices in descending order to ensure correct deletion when multiple rows are selected
-                aSelectedIndices.sort(function (a, b) {
-                    return b - a;
                 });
 
-                // Remove the selected rows from the model and from bidPayload
-                for (let j = 0; j < aSelectedIndices.length; j++) {
-                    let index = aSelectedIndices[j];
-                    let aData = oModel.getProperty("/");
 
-                    // Get the Zcode and Value from the selected item
-                    let selectedItem = aData[index];
-                    let selectedZcode = selectedItem.Zcode;
-                    let selectedValue = selectedItem.Value;
-
-                    // Find the index of the corresponding entry in bidPayload
-                    let bidIndex = bidPayload.findIndex(bidItem => bidItem.Zcode === selectedZcode && bidItem.Value === selectedValue);
-
-                    // Remove the entry from bidPayload if it exists
-                    if (bidIndex !== -1) {
-                        bidPayload.splice(bidIndex, 1);
-                    }
-
-                    // Remove the entry from the model
-                    aData.splice(index, 1);
-                    oModel.setProperty("/", aData);
-                }
-
-                // Clear the selection in the table
-                oTable.removeSelections();
             },
 
             onAddNewBid: function (oEvent, Code, description, oDialogRef) {
@@ -974,7 +1071,7 @@ sap.ui.define(
 
                 }
                 // Add row button is nested inside the dialog
-                let oTable = oDialog.getContent()[0]; // Assuming the table is the second item in the dialog's content
+                let oTable = oDialog.getContent()[0];
                 let oModel = oTable.getModel("tempModel");
 
                 // Generate a unique group name for each row based on current timestamp
@@ -1038,9 +1135,7 @@ sap.ui.define(
                     path: "tempModel>/",
                     template: oTable.getItems()[0].clone() // Assuming the first item in the table is the template
                 });
-
                 oTable.removeSelections();
-
 
                 // Set the group name for each radio button in the new row
                 var numRows = oModel.getProperty("/").length;
@@ -1164,7 +1259,7 @@ sap.ui.define(
                                                 });
 
                                                 if (otherEntriesExist) {
-                                                    sap.m.MessageBox.error("Only one Entry can be Mandatory.");
+                                                    sap.m.MessageBox.warning("Single Entry is Allowed in Case of Mandatory, Please Remove Other Entries.");
                                                     // Reset the radio button selection
                                                     oEvent.getSource().setSelected(false);
 
@@ -1181,13 +1276,14 @@ sap.ui.define(
                                                     oEvent.getSource().getParent().getCells()[4].setValue(0).setEditable(false);
                                                     oEvent.getSource().getParent().getCells()[5].setValue("").setEditable(true);
 
-                                                    // Disable buttons in the dialog at content[1] and content[2]
+                                                    // Disable add button in Dialog
 
                                                     dialog.getContent()[1].setEnabled(false);
-                                                    dialog.getContent()[2].setEnabled(false);
+
                                                 } else {
+                                                    // Enable add button in Dialog
                                                     dialog.getContent()[1].setEnabled(true);
-                                                    dialog.getContent()[2].setEnabled(true);
+
 
                                                 }
                                             }
@@ -1258,14 +1354,18 @@ sap.ui.define(
                             text: "Delete",
                             type: "Reject",
                             press: function (oEvent) {
-                                that.onDeleteBidDetail(oEvent)
+
+                                that.onDeleteBidDetail(oEvent, oSource);
+
+                                // let oInputValue = that.getInputData(filterData);
+                                // oSource.setValue(oInputValue);
                             },
-                            enabled: {
-                                path: 'tempModel>/',
-                                formatter: function (aItems) {
-                                    return that.isEditableBasedOnMand(aItems);
-                                }
-                            }
+                            // enabled: {
+                            //     path: 'tempModel>/',
+                            //     formatter: function (aItems) {
+                            //         return that.isEditableBasedOnMand(aItems);
+                            //     }
+                            // }
                         }).addStyleClass("sapUiTinyMargin")
                     ],
                     beginButton: new sap.m.Button({
@@ -1289,15 +1389,6 @@ sap.ui.define(
                                 return false;
                             }
 
-                            function getDuplicateIndex(newEntry, existingEntries) {
-                                for (let i = 0; i < existingEntries.length; i++) {
-                                    if (existingEntries[i].Value === newEntry.Value) {
-                                        return i;
-                                    }
-                                }
-                                return -1;
-                            }
-
                             let entries = tempModel.getData();
                             if (entries.length) {
 
@@ -1307,23 +1398,60 @@ sap.ui.define(
                                     return; // Exit the press function
                                 }
                                 for (let entry of entries) {
-                                    if (!entry.Value || (!entry.Good && !entry.Mand && !entry.Must) || !entry.Zmax || !entry.Zmin) {
-                                        new sap.m.MessageBox.warning("Please fill All Empty Fields");
-                                        return; // Exit the press function
+                                    if (entry.Value === "") {
+                                        sap.m.MessageBox.error("Please fill Possible Value");
+                                        return;
+                                    }
+
+                                    if (entry.Good === "" && entry.Mand === "" && entry.Must === "") {
+                                        sap.m.MessageBox.error("Please fill at least one of the Good, Mand, or Must fields");
+                                        return;
+                                    }
+                                    if (entry.Zmin == "") {
+                                        sap.m.MessageBox.error("Please fill Min Score");
+                                        return;
+                                    }
+
+                                    if (entry.Zmax == "") {
+                                        sap.m.MessageBox.error("Please fill Max Score");
+                                        return;
                                     }
                                 }
-                                // Process each new entry
-                                for (let newEntry of entries) {
-                                    let duplicateIndex = getDuplicateIndex(newEntry, bidPayload);
-                                    if (duplicateIndex !== -1) {
-                                        // Overwrite the existing entry
-                                        bidPayload[duplicateIndex] = newEntry;
+
+
+                                let entriesMap = new Map();
+                                entries.forEach(entry => {
+                                    let key = `${entry.Zcode}_${entry.Value}`;
+                                    entriesMap.set(key, entry);
+                                });
+
+                                // Process bidPayload to remove conflicting entries and update with new ones
+                                for (let i = 0; i < bidPayload.length; i++) {
+                                    let existingEntry = bidPayload[i];
+                                    let matchingEntryKey = `${existingEntry.Zcode}_${existingEntry.Value}`;
+
+                                    // Check if the exact Zcode and Value pair exists in entries
+                                    if (entriesMap.has(matchingEntryKey)) {
+                                        // Overwrite the existing entry with the new one from entries
+                                        bidPayload[i] = entriesMap.get(matchingEntryKey);
+                                        // Remove the entry from the map as it has been processed
+                                        entriesMap.delete(matchingEntryKey);
                                     } else {
-                                        // Add the new entry if no duplicate is found
-                                        bidPayload.push(newEntry);
+                                        // Check if there's an entry in entries with the same Zcode but different Value
+                                        let conflictingKey = `${existingEntry.Zcode}_`;
+                                        if ([...entriesMap.keys()].some(key => key.startsWith(conflictingKey))) {
+                                            // Remove the entry with the same Zcode but different Value
+                                            bidPayload.splice(i, 1);
+                                            i--; // Adjust the index after removal
+                                        }
                                     }
                                 }
-                                // on Save locally saving bid changes
+
+                                // Add any remaining new entries from entries to bidPayload
+                                entriesMap.forEach((value) => {
+                                    bidPayload.push(value);
+                                });
+
 
                                 let oInputValue = that.getInputData(filterData);
                                 oSource.setValue(oInputValue);
@@ -1342,10 +1470,8 @@ sap.ui.define(
                         type: "Reject",
                         press: function () {
                             oDialog.close();
-                            // console.log("kjkj");
-                            let oInputValue = that.getInputData(filterData);
-                            oSource.setValue(oInputValue);
-                            console.table(bidPayload);
+                            // console.log("Cosed btn pressed");
+
                         },
                     }),
                 });
@@ -1394,7 +1520,7 @@ sap.ui.define(
                 let zMinValue = oEvent.getSource().getParent().getCells()[4].getValue();
                 if (zMinValue == "") {
                     oInput.setValue("");
-                    sap.m.MessageToast.show("Please fill Max Score ", { duration: 1000 });
+                    sap.m.MessageToast.show("Please fill Min Score First.", { duration: 1000 });
 
                     return;
                 }
@@ -1644,7 +1770,7 @@ sap.ui.define(
                         if (i == 0 && selectedPorts[i].Vetdt == "24:00:00") {
                             dummySelectedPorts.DepartureTime = "00:00:00";
                         }
-                        else{
+                        else {
                             dummySelectedPorts.DepartureTime = selectedPorts[i].Vetdt;
                         }
                         dummySelectedPorts.ArrivalDate = selectedPorts[i].Vetad;
@@ -1652,7 +1778,7 @@ sap.ui.define(
                         dummySelectedPorts.CargoSize = selectedPorts[i].Cargs;
                         dummySelectedPorts.CargoUnit = selectedPorts[i].Cargu;
                         dummySelectedPorts.DepartureDateValue = selectedPorts[i].Vetdd;
-                    
+
                         dummySelectedPorts.Distance = selectedPorts[i].Pdist;
                         dummySelectedPorts.LegId = selectedPorts[i].Vlegn.toString();
                         dummySelectedPorts.PortDays = selectedPorts[i].Ppdays;
@@ -2136,8 +2262,13 @@ sap.ui.define(
                 // Restrict multiple leading zeros (if there is more than one leading zero and no decimal point)
                 if (/^0{2,}/.test(sValue)) {
                     sValue = sValue.replace(/^0+/, '0'); // Replace leading zeros with a single zero
-                    oInput.setValue(sValue);
                 }
+
+                // Remove all commas from the value
+                sValue = sValue.replace(/,/g, '');
+
+                // Set the cleaned value back to the input
+                oInput.setValue(sValue);
 
                 // Regular expression to allow positive numbers with commas and up to 3 decimal places
                 var oRegex = /^\d{1,}(\.\d{0,3})?$/;
@@ -2402,76 +2533,68 @@ sap.ui.define(
                     sap.m.MessageToast.show("Please Select a Row to Remove");
                     return;
                 }
-                this.isDelete = true;
 
-                // new sap.m.MessageBox.confirm("Are you sure, you want to delete ?", {
-                //     title: "Cost deletion",
-                //     onClose: this.onDialogClose.bind(this)
-                // });
-                if (this.isDelete) {
 
-                    aSelectedItems.forEach(function (oSelectedItem) {
+                new sap.m.MessageBox.confirm("Are you sure, you want to delete ?", {
+                    title: "Cost Deletion",
+                    onClose: function (oAction) {
 
-                        let oContext = oSelectedItem.getBindingContext("costdetailsModel")
-                        let sPath = oContext.getPath();
-                        if (oContext.getObject() && oContext.getObject().Vlegn) {
+                        if (oAction === sap.m.MessageBox.Action.OK) {
 
-                            let oVlegn = parseInt(oContext.getObject().Vlegn);
-                            oVlegnArr.push(oVlegn);
-                        } else {
+                            aSelectedItems.forEach(function (oSelectedItem) {
+
+                                let oContext = oSelectedItem.getBindingContext("costdetailsModel")
+                                let sPath = oContext.getPath();
+                                if (oContext.getObject() && oContext.getObject().Vlegn) {
+
+                                    let oVlegn = parseInt(oContext.getObject().Vlegn);
+                                    oVlegnArr.push(oVlegn);
+                                } else {
+
+                                }
+
+                            });
+                            let numericContextArr = contextArr.map(context => parseInt(context.sPath.substring(1)));
+
+                            // Sort the numeric context paths
+                            numericContextArr.sort((a, b) => b - a);
+
+                            // Convert the sorted numeric context paths back to strings with '/' prefix
+                            let sortedContextArr = numericContextArr.map(num => `/${num}`);
+                            sortedContextArr.forEach(x => {
+
+                                let array = costdetailsModel.getData(); // Assuming getData() returns the array
+
+                                let objectToRemove = costdetailsModel.getProperty(x); // Assuming getProperty(sPath) returns the object
+                                let index = array.indexOf(objectToRemove);
+                                if (index !== -1) {
+
+                                    array.splice(index, 1); // Remove the object at the found index
+                                    // costdetailsModel.refresh(); 
+                                }
+                            })
+                            oVlegnArr.forEach(oVlegn => that.calculateSumAllCharges(oVlegn)
+                            )
+                            that.calctotalCost(voyItemModel.getData());
+                            costdetailsModel.refresh();
+                            voyItemModel.refresh();
+
+                            // console.log("costmodel after refresh ;", costdetailsModel.getData());
+
+                            oTable.removeSelections();
+                        }
+                        else {
+                            oTable.removeSelections();
+
 
                         }
 
-                    });
-                    let numericContextArr = contextArr.map(context => parseInt(context.sPath.substring(1)));
 
-                    // Sort the numeric context paths
-                    numericContextArr.sort((a, b) => b - a);
+                    }
+                });
 
-                    // Convert the sorted numeric context paths back to strings with '/' prefix
-                    let sortedContextArr = numericContextArr.map(num => `/${num}`);
-                    sortedContextArr.forEach(x => {
-
-                        let array = costdetailsModel.getData(); // Assuming getData() returns the array
-
-                        let objectToRemove = costdetailsModel.getProperty(x); // Assuming getProperty(sPath) returns the object
-                        let index = array.indexOf(objectToRemove);
-                        if (index !== -1) {
-
-                            array.splice(index, 1); // Remove the object at the found index
-                            // costdetailsModel.refresh(); 
-                        }
-                    })
-                    oVlegnArr.forEach(oVlegn => that.calculateSumAllCharges(oVlegn)
-                    )
-                    this.calctotalCost(voyItemModel.getData());
-                    costdetailsModel.refresh();
-                    voyItemModel.refresh();
-
-                    // console.log("costmodel after refresh ;", costdetailsModel.getData());
-
-                    oTable.removeSelections();
-                }
             },
-            onDialogClose: function (oAction) {
-                if (oAction === sap.m.MessageBox.Action.OK) {
-                    isDelete = true;
 
-                    // let oTableItemModel = costdetailsModel;
-                    // let oTableData = oTableItemModel.getData();
-
-                    // aSelectedItems.forEach(function (oSelectedItem) {
-                    //     let iIndex = oTable.indexOfItem(oSelectedItem);
-                    //     oTableData.splice(iIndex, 1);
-                    //     oTable.removeSelections();
-                    // });
-
-                    // oTableItemModel.setData(oTableData);
-
-                } else {
-                    oTable.removeSelections();
-                }
-            },
             calculateSumAllCharges: function (oVlegn) {
 
                 let data = costdetailsModel.getData();
@@ -2589,7 +2712,7 @@ sap.ui.define(
                 // sap.m.MessageToast.show("Data Saved");
             },
 
-            onSaveVoyage:async  function () {
+            onSaveVoyage: async function () {
 
                 let oModel = this.getOwnerComponent().getModel();
                 let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
@@ -2607,10 +2730,10 @@ sap.ui.define(
                             isVoyageEditable = true;
 
                         } else if (Zaction.toUpperCase() === "APPR") {
-                            sap.m.MessageBox.warning("Already Sent for Approval , can't modified.");
+                            sap.m.MessageBox.warning("Changes not Allowed after sent for Approval.");
                             isVoyageEditable = false;
                         } else {
-                            sap.m.MessageBox.warning("Already sent for Approval , can't be modified.");
+                            sap.m.MessageBox.warning("Changes not Allowed after sent for Approval.");
                             isVoyageEditable = false;
                         }
                     } else {
@@ -2619,18 +2742,18 @@ sap.ui.define(
                     }
                 }).catch(error => {
                     console.log("Error",);
-                    if (error.message.includes("No record found in Voyage Status") || error.error.message.includes("No record found in voyage status")) {
+                    if (error.message.includes("No Record found for Voyage Status") || error.error.message.includes("No record found in voyage status")) {
                         isVoyageEditable = true
                     }
                     console.error("Error while fething contetxs : ", error)
                 });
                 if (!isVoyageEditable) {
-                
+
                     return
-                    
+
                 }
 
-        
+
                 let headerDetail = voyHeaderModel.getData();
                 let itemDetails = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
@@ -2683,9 +2806,32 @@ sap.ui.define(
                     return;
                 }
 
+
+
+                let oTable1 = this.byId("submitTechDetailTable");
+                let oTableItems = oTable1.getItems();
+
+                // Extract all sCodeDesc values from oTableItems into an array
+                let sCodeDescList = oTableItems.map(item => item.getCells()[0].getText());
+
+                if (bidPayload) {
+                    // Iterate over bidPayload using a for loop to allow deletion
+                    for (let i = bidPayload.length - 1; i >= 0; i--) {
+                        let item = bidPayload[i];
+                        
+                        // Check if the item should be kept
+                        if (!sCodeDescList.includes(item.CodeDesc) && item.Cunit === "") {
+                            // Remove the item from the array if it doesn't match the condition
+                            bidPayload.splice(i, 1);
+                        }
+                    }
+                }
+
+                console.log("bidPayload after  complete iteration --", bidPayload);
                 // saving commercial Details to bidPayload;
 
                 this.onSaveCommercialDetail();
+
 
                 console.log(costData);
 
@@ -2746,8 +2892,8 @@ sap.ui.define(
                         console.log(oData);
 
                         // MessageBox.success(`Successfully saved `);
-                        MessageBox.success(`Successfully saved `, {
-                            title: "Voyage updated",
+                        MessageBox.success(`Successfully Saved `, {
+                            title: "Voyage updation",
                             onClose: function () {
 
                                 that.onRefresh();
@@ -2859,52 +3005,7 @@ sap.ui.define(
                 }
             },
 
-            onRefresh1: async function () {
-                let that = this;
 
-                // Initialize and open the Busy Dialog
-                if (!that._busyDialog1) {
-                    that._busyDialog1 = new sap.m.BusyDialog({
-                        title: "Please Wait",
-                        text: "Refreshing data..."
-                    });
-                }
-                that._busyDialog1.open();
-
-                try {
-                    let iconTab = this.byId("_idIconTabBar");
-                    iconTab.setVisible(false);
-                    iconTab.setSelectedKey('info');
-
-                    that.byId('_voyageInput1').setValue("");
-                    that.byId('Input6').setValue("");
-                    voyHeaderModel.setData([]);
-                    voyItemModel.setData([]);
-                    costdetailsModel.setData([]);
-                    // bidItemModel.setData([]);
-
-                    voyHeaderModel.refresh();
-                    console.log(voyHeaderModel.getData());
-                    voyItemModel.refresh();
-                    costdetailsModel.refresh();
-                    // bidItemModel.refresh();
-
-                    that.toggleEnable(false);
-                    that._busyDialog1.close();
-
-                    // Asynchronous operation
-                    await that.getDataforvoyage();
-
-                } catch (error) {
-                    console.error("Error during refresh:", error);
-                } finally {
-                    // Close the Busy Dialog
-                    if (that._busyDialog1) {
-                        that._busyDialog1.close();
-                        that._busyDialog1 = null;
-                    }
-                }
-            },
             getVoyageStatus: async function (myVOYNO) {
                 try {
                     let oModel = this.getOwnerComponent().getModel();
@@ -2961,7 +3062,7 @@ sap.ui.define(
                     return;
                 };
                 if (bidData.length !== bidPayload.length) {
-                    sap.m.MessageBox.error("Please Save  the Bid Details.");
+                    sap.m.MessageBox.error("Please Save Bid Details.");
                     return;
                 }
                 let sBidType = voyHeaderModel.getData()[0].Bidtype;
@@ -3059,7 +3160,7 @@ sap.ui.define(
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
-                            
+
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
                         } else {
@@ -3162,41 +3263,40 @@ sap.ui.define(
                 }.bind(this))
 
             },
-         
-           
+
 
             onAddRowFileUpload: function () {
                 var oInitialInput = this.byId("fileinput");
                 var oInitialFileUploader = this.byId("fileUploader");
-            
+
                 if (oInitialInput && oInitialFileUploader) {
                     if (!oInitialInput.getValue() || !oInitialFileUploader.getValue()) {
                         sap.m.MessageToast.show("Please Upload file and add Description First ");
                         return;
                     }
                 }
-            
+
                 if (this._aFileUploaders && this._aFileUploaders.length > 0) {
                     var lastUploader = this._aFileUploaders[this._aFileUploaders.length - 1];
-            
+
                     if (!lastUploader.descriptionInput.getValue() || !lastUploader.fileUploader.getValue()) {
                         sap.m.MessageToast.show("Please upload a File and provide a Description before adding a New File.");
                         return;
                     }
                 }
-            
+
                 var oVerticalLayout = this.byId("_IDGenVertiLayout1");
-            
+
                 if (oVerticalLayout) {
                     var oHorizontalLayout = new sap.ui.layout.HorizontalLayout();
-            
+
                     var oInput = new sap.m.Input({
                         width: "250px",
                         placeholder: "Description of file",
                         liveChange: this.Fileinputchange.bind(this)
                     });
                     oInput.addStyleClass("sapUiMarginTinyEnd");
-            
+
                     var oFileUploader = new sap.ui.unified.FileUploader({
                         uploadUrl: "odata/v4/nautical/FileuploadSet",
                         sendXHR: true,
@@ -3208,31 +3308,31 @@ sap.ui.define(
                         fileType: "pdf",
                         typeMissmatch: this.handleTypeMissmatch.bind(this)
                     });
-            
+
                     var oUploadButton = new sap.m.Button({
                         text: "Upload File",
                         press: this.handleUploadPress.bind(this)
                     });
-            
+
                     var oDeleteButton = new sap.m.Button({
                         icon: "sap-icon://delete",
                         type: sap.m.ButtonType.Reject,
                         press: this.OnfileUploadDelete.bind(this)
                     });
-            
+
                     var oSuccessIconButton = new sap.m.Button({
                         icon: "sap-icon://message-success",
                         visible: false
                     });
-            
+
                     oHorizontalLayout.addContent(oInput);
                     oHorizontalLayout.addContent(oFileUploader);
                     oHorizontalLayout.addContent(oUploadButton);
                     oHorizontalLayout.addContent(oDeleteButton); // Add delete button to the layout
                     oHorizontalLayout.addContent(oSuccessIconButton);
-            
+
                     oVerticalLayout.insertContent(oHorizontalLayout, oVerticalLayout.getContent().length - 1);
-            
+
                     if (!this._aFileUploaders) {
                         this._aFileUploaders = [];
                     }
@@ -3247,7 +3347,7 @@ sap.ui.define(
                     console.error("VerticalLayout with ID '_IDGenVertiLayout1' not found.");
                 }
             },
-            
+
             Fileinputchange: function (oEvent) {
                 var oInput = oEvent.getSource();
                 var sValue = oInput.getValue();
@@ -3317,18 +3417,17 @@ sap.ui.define(
                     this._busyDialog.close();
                 }
             },
-           
-          
-          
+
+
             OnfileUploadDelete: function (oEvent) {
                 var oButton = oEvent.getSource();
                 var oHorizontalLayout = oButton.getParent();
                 var oVerticalLayout = this.byId("_IDGenVertiLayout1");
-            
+
                 var isStaticRow = !this._aFileUploaders.find(function (item) {
                     return item.fileUploader.getParent() === oHorizontalLayout;
                 });
-            
+
                 if (isStaticRow) {
                     var oDescriptionInput = oHorizontalLayout.getContent().find(function (content) {
                         return content instanceof sap.m.Input;
@@ -3336,14 +3435,14 @@ sap.ui.define(
                     var oFileUploader = oHorizontalLayout.getContent().find(function (content) {
                         return content instanceof sap.ui.unified.FileUploader;
                     });
-            
+
                     if (oDescriptionInput && oFileUploader) {
                         var descriptionValue = oDescriptionInput.getValue().trim();
                         var fileUploaderValue = oFileUploader.getValue();
-            
+
                         if (descriptionValue === "" && fileUploaderValue === "") {
                             sap.m.MessageToast.show("Nothing to delete. The description and file uploader are empty.");
-                            return; 
+                            return;
                         } else {
                             sap.m.MessageBox.confirm("Are you sure you want to delete this item?", {
                                 actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.Cancel],
@@ -3367,7 +3466,7 @@ sap.ui.define(
                         onClose: function (oAction) {
                             if (oAction === sap.m.MessageBox.Action.OK) {
                                 oVerticalLayout.removeContent(oHorizontalLayout);
-            
+
                                 var index = this._aFileUploaders.findIndex(function (item) {
                                     return item.fileUploader.getParent() === oHorizontalLayout;
                                 });
@@ -3375,7 +3474,7 @@ sap.ui.define(
                                     this._aFileUploaders.splice(index, 1);
                                 }
                                 sap.m.MessageToast.show(" Deleted Successfully");
-            
+
                                 var oSuccessIconButton = oHorizontalLayout.getContent().find(function (content) {
                                     return content instanceof sap.m.Button && content.getIcon() === "sap-icon://message-success";
                                 });
@@ -3391,25 +3490,25 @@ sap.ui.define(
                 let oModel = this.getOwnerComponent().getModel();
                 let bindList = oModel.bindList("/FileuploadSet");
                 let that = this;
-            
+
                 bindList.attachCreateCompleted(async function (p) {
                     let params = p.getParameters();
                     let isSuccess = params.success;
                     that._busyDialog.close();
-            
+
                     let oHorizontalLayout = oUploadButton.getParent();
-            
+
                     let oSuccessIconButton = oHorizontalLayout.getContent().find(function (content) {
                         return content instanceof sap.m.Button && content.getIcon() === "sap-icon://message-success";
                     });
-            
+
                     let oDeleteIconButton = oHorizontalLayout.getContent().find(function (content) {
                         return content instanceof sap.m.Button && content.getIcon() === "sap-icon://delete";
                     });
-            
+
                     if (isSuccess) {
                         sap.m.MessageBox.success("File successfully uploaded");
-            
+
                         if (oUploadButton) {
                             oUploadButton.setEnabled(false);
                         }
@@ -3436,7 +3535,7 @@ sap.ui.define(
                         }
                     }
                 });
-            
+
                 let payload = {
                     "Filedescription": fileDescription,
                     "Filename": filename,
@@ -3444,11 +3543,11 @@ sap.ui.define(
                     "Voyageno": voyageNo,
                     "Filetype": filetype,
                 };
-            
+
                 bindList.create(payload, true);
             },
-            
-           
+
+
             handleValueChangeUpload: function (oEvent) {
                 sap.m.MessageToast.show("Press 'Upload File' to upload file '" + oEvent.getParameter("newValue") + "'");
             },
@@ -3462,55 +3561,6 @@ sap.ui.define(
                     aFileTypes.join(", "));
             },
 
-            handleNav: function (evt) {
-
-                let navCon = this.byId("navCon");
-
-                let target = evt.getSource().data("target");
-                if (target) {
-                    var animation = this.byId("animationSelect").getSelectedKey();
-                    navCon.to(this.byId(target), animation);
-                } else {
-                    navCon.back();
-                }
-            },
-            //  for navigation of nav container 2 
-            handleNavToPanelA: function () {
-                this.navigateToPanel("panelA");
-            },
-
-            handleNavToPanelB: function () {
-                this.navigateToPanel("panelB");
-            },
-
-            navigateToPanel: function (panelId) {
-                var navCon = this.byId("navCon2");
-                navCon.to(this.byId(panelId));
-            },
-
-
-            // for visiblity of nav container 1
-            toggleNavContainer: function () {
-                var navCon = this.byId("navCon");
-                var bar = this.byId("HBox10");
-                // Get the current visibility state of the NavContainer
-                var currentVisibility = navCon.getVisible();
-
-                // Toggle the visibility state
-                navCon.setVisible(!currentVisibility);
-                bar.setVisible(!currentVisibility);
-
-
-            },
-            // for visiblity of nav container 2
-            toggleBarAndNavContainer: function () {
-                let navCon2 = this.byId("navCon2");
-                let bar2 = this.byId("HBox20");
-                let currentVisibility = navCon2.getVisible();
-
-                navCon2.setVisible(!currentVisibility);
-                bar2.setVisible(!currentVisibility);
-            },
             lateInputField: function (inputField, selectedValue) {
                 inputField.setValue(selectedValue);
             },
@@ -3777,964 +3827,6 @@ sap.ui.define(
                 const oRouter = this.getOwnerComponent().getRouter();
                 oRouter.navTo("RouteHome");
             },
-
-            //search function
-            searchLegIdTab1: function () {
-                var sLegId = this.byId("searchFieldTab1").getValue();
-                var oTable = this.byId("tstab1");
-                var oBinding = oTable.getBinding("rows")
-                var oFilter = new Filter("LegId", FilterOperator.EQ, sLegId);
-                oBinding.filter([oFilter]);
-            },
-
-            //timesheet tab1 asc sorting fragment
-            sortOptionsTab1Asc: function () {
-                var oView = this.getView();
-                if (!this.byId('sortT1AscOptions')) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyTimesheetT1Asc",
-                        controller: this,
-                        id: oView.getId()
-                    }).then(function (oDialog) {
-                        oDialog.open();
-                    });
-
-                } else {
-                    this.byId('sortT1AscOptions').open();
-                }
-            },
-            exitDialog: function () {
-                var oDialog = this.byId('sortT1AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-
-            },
-
-            //timesheet tab2 asc sorting fragment
-            sortOptionsTab2Asc: function () {
-                var oView = this.getView();
-                if (!this.byId('sortT2AscOptions')) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyTimesheetT2Asc",
-                        controller: this,
-                        id: oView.getId()
-                    }).then(function (oDialog) {
-                        oDialog.open();
-                    });
-
-                } else {
-                    this.byId('sortT2AscOptions').open();
-                }
-            },
-            exitDialog: function () {
-                var oDialog = this.byId('sortT2AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-
-            },
-
-            //timesheet tab1 desc sorting fragment
-            sortOptionsTab1Desc: function () {
-                var oView = this.getView();
-                if (!this.byId('sortT1DescOptions')) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyTimesheetT1Desc",
-                        controller: this,
-                        id: oView.getId()
-                    }).then(function (oDialog) {
-                        oDialog.open();
-                    });
-
-                } else {
-                    this.byId('sortT1DescOptions').open();
-                }
-            },
-
-
-            exitDialog: function () {
-                var oDialog = this.byId('sortT1DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-
-            },
-
-            //timesheet tab2 desc sorting fragment
-            sortOptionsTab2Desc: function () {
-                var oView = this.getView();
-                if (!this.byId('sortT2DescOptions')) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyTimesheetT2Desc",
-                        controller: this,
-                        id: oView.getId()
-                    }).then(function (oDialog) {
-                        oDialog.open();
-                    });
-
-                } else {
-                    this.byId('sortT2DescOptions').open();
-                }
-            },
-
-
-            exitDialog: function () {
-                var oDialog = this.byId('sortT2DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-
-            },
-
-            //2 tables sorting below
-            sortascLegId_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "LegId"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to LegId");
-                }
-            },
-            sortascPortCode_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PortCode"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to PortCode");
-                }
-            },
-            sortascEventNo_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "EventNo"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to EventNo");
-                }
-            },
-            sortascStatus_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "Status"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Status");
-                }
-            },
-
-
-
-            sortascLegId_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "LegId"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to LegId");
-                }
-            },
-            sortascPortCode_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PortCode"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to PortCode");
-                }
-            },
-            sortascEventNo_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "EventNo"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to EventNo");
-                }
-            },
-            sortascStatus_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "Status"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Status");
-                }
-            },
-
-            // descending for tab1
-            sortdescLegId_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "LegId"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to LegId");
-                }
-            },
-            sortdescPortCode_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PortCode"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to PortCode");
-                }
-            },
-            sortdescEventNo_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "EventNo"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to EventNo");
-                }
-            },
-            sortdescStatus_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "Status"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to Status");
-                }
-            },
-
-            //descending for tab2
-            sortdescLegId_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "LegId"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    this.exitDialog()
-                    MessageToast.show("Sorted table in Descending order according to LegId");
-                }
-            },
-            sortdescPortCode_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PortCode"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    this.exitDialog()
-                    MessageToast.show("Sorted table in Descending order according to PortCode");
-                }
-            },
-            sortdescEventNo_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "EventNo"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    this.exitDialog()
-                    MessageToast.show("Sorted table in Descending order according to EventNo");
-                }
-            },
-            sortdescStatus_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "Status"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    this.exitDialog()
-                    MessageToast.show("Sorted table in Descending order according to Status");
-                }
-            },
-
-            //dates sorting for table1
-
-            //table1 startdate sorting ascending
-            sortascPlannedSD_Tab1: function () {
-                var oTable = this.byId("tstab1")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned Start Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedStartDate");
-                    oColumn.setFilterProperty("PlannedStartDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedStartDate", false),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned Start Date in table1")
-                }
-
-                else {
-                    console.error("Planned Start Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT1AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table1 enddate sorting ascending
-            sortascPlannedED_Tab1: function () {
-                var oTable = this.byId("tstab1")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned End Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedEndDate");
-                    oColumn.setFilterProperty("PlannedEndDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedEndDate", false),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned End Date in table1")
-                }
-
-                else {
-                    console.error("Planned End Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT1AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table1 start date sorting descending
-            sortdescPlannedSD_Tab1: function () {
-                var oTable = this.byId("tstab1")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned Start Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedStartDate");
-                    oColumn.setFilterProperty("PlannedStartDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedStartDate", true),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned Start Date in table1")
-                }
-
-                else {
-                    console.error("Planned Start Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT1DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table1 enddate sorting descending
-            sortdescPlannedED_Tab1: function () {
-                var oTable = this.byId("tstab1")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned End Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedEndDate");
-                    oColumn.setFilterProperty("PlannedEndDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedEndDate", true),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned End Date in table1")
-                }
-
-                else {
-                    console.error("Planned End Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT1DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //dates sorting for table2
-
-            //table2 startdate sorting ascending
-            sortascPlannedSD_Tab2: function () {
-                var oTable = this.byId("tstab2")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned Start Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedStartDate");
-                    oColumn.setFilterProperty("PlannedStartDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedStartDate", false),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned Start Date in table2")
-                }
-
-                else {
-                    console.error("Planned Start Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT2AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table2 enddate sorting ascending
-            sortascPlannedED_Tab2: function () {
-                var oTable = this.byId("tstab2")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned End Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedEndDate");
-                    oColumn.setFilterProperty("PlannedEndDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedEndDate", false),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned End Date in table2")
-                }
-
-                else {
-                    console.error("Planned End Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT2AscOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table2 start date descending
-            sortdescPlannedSD_Tab2: function () {
-                var oTable = this.byId("tstab2")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned Start Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedStartDate");
-                    oColumn.setFilterProperty("PlannedStartDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedStartDate", true),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned Start Date in table2")
-                }
-
-                else {
-                    console.error("Planned Start Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT2DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //table2 enddate sorting descending
-            sortdescPlannedED_Tab2: function () {
-                var oTable = this.byId("tstab2")
-                var oColumn = oTable.getColumns().find(function (column) {
-                    return column.getLabel().getText() === "Planned End Date";
-                });
-                if (oColumn) {
-                    oColumn.setSortProperty("PlannedEndDate");
-                    oColumn.setFilterProperty("PlannedEndDate");
-                    oColumn.setSortOrder(sap.ui.table.SortOrder.Ascending);
-                    oTable.bindAggregation("rows", {
-                        path: "tsFields>/fields",
-                        sorter: new sap.ui.model.Sorter("PlannedEndDate", true),
-                        template: oTable.getRows()[0].clone()
-                    });
-                    MessageToast.show("Sorted Successfully in ascending order according to Planned End Date in table2")
-                }
-
-                else {
-                    console.error("Planned End Date column not found.");
-                }
-
-                var oDialog = this.byId('sortT2DescOptions');
-                if (oDialog) {
-                    oDialog.close();
-                }
-            },
-
-            //time sorting for table1 ascending
-
-            //planned start time table1 ascending
-            sortascPlannedST_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedStartTime"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Planned Start Time");
-                }
-            },
-
-            //planned end time table1 ascending
-            sortascPlannedET_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedEndTime"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Planned End Time");
-                }
-            },
-
-            //planned start time table1 descending
-            sortdescPlannedST_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedStartTime"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to Planned Start Time");
-                }
-            },
-
-            //planned end time table1 descending
-            sortdescPlannedET_Tab1: function () {
-                var oTable = this.getView().byId("tstab1")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedEndTime"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT1DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to Planned Start Time");
-                }
-            },
-
-
-
-
-            //planned start time table2 ascending
-            sortascPlannedST_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedStartTime"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Planned Start Time");
-                }
-            },
-
-            //planned end time table2 ascending
-            sortascPlannedET_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedEndTime"
-                    var bDescending = false;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2AscOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in ascending order according to Planned End Time");
-                }
-            },
-
-            //planned start time table2 descending
-            sortdescPlannedST_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedStartTime"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to Planned Start Time");
-                }
-            },
-
-            //planned end time table2 descending
-            sortdescPlannedET_Tab2: function () {
-                var oTable = this.getView().byId("tstab2")
-                var oBinding = oTable.getBinding("rows");
-                console.log(oTable, oBinding)
-                if (oBinding && oBinding.sort) {
-                    var sSortField = "PlannedEndTime"
-                    var bDescending = true;
-                    var oSorter = new sap.ui.model.Sorter(sSortField, bDescending);
-                    oBinding.sort(oSorter);
-                    var oDialog = this.byId('sortT2DescOptions');
-                    if (oDialog) {
-                        oDialog.close();
-                    }
-                    MessageToast.show("Sorted table in Descending order according to Planned Start Time");
-                }
-            },
-
-            //search function for table1
-            showSearchFieldsTab1: function () {
-                this.byId("valueSearchTab1").setVisible(true)
-            },
-            searchLegIdTab1: function () {
-                var sLegId = this.byId("searchFieldTab1").getValue();
-                var oTable = this.byId("tstab1");
-                var oBinding = oTable.getBinding("rows")
-                var oFilter = new Filter("LegId", FilterOperator.EQ, sLegId);
-                oBinding.filter([oFilter]);
-            },
-            refreshTab1: function () {
-                var oTable = this.byId("tstab1");
-                var oBinding = oTable.getBinding("rows");
-                oBinding.filter([]);
-                this.byId("searchFieldTab1").setValue("")
-                this.showSearchFieldsTab1();
-            },
-            closeSearchTab1: function () {
-                this.refreshTab1()
-                this.byId("searchFieldTab1").setValue("")
-                this.byId("valueSearchTab1").setVisible(false)
-            },
-
-            //search function for table2
-            showSearchFieldsTab2: function () {
-                this.byId("valueSearchTab2").setVisible(true)
-            },
-            searchLegIdTab2: function () {
-                var sLegId = this.byId("searchFieldTab2").getValue();
-                var oTable = this.byId("tstab2");
-                var oBinding = oTable.getBinding("rows")
-                var oFilter = new Filter("LegId", FilterOperator.EQ, sLegId);
-                oBinding.filter([oFilter]);
-            },
-            refreshTab2: function () {
-                var oTable = this.byId("tstab2");
-                var oBinding = oTable.getBinding("rows");
-                oBinding.filter([]);
-                this.byId("searchFieldTab2").setValue("")
-                this.showSearchFieldsTab1();
-            },
-            closeSearchTab2: function () {
-                this.refreshTab1()
-                this.byId("searchFieldTab2").setValue("")
-                this.byId("valueSearchTab2").setVisible(false)
-            },
-
-            //export dropdown
-            tab1exp: function () {
-                var oView = this.getView(),
-                    oButton = oView.byId("bt1");
-
-                if (!this._oMenuFragment) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyageTStab1fileExport",
-                        id: oView.getId(),
-                        controller: this
-                    }).then(function (oMenu) {
-                        oMenu.openBy(oButton);
-                        this._oMenuFragment = oMenu;
-                    }.bind(this)).catch(function (oError) {
-                        new sap.ui.m.MessageBox.error("Error while loading the fragment: " + oError);
-                    });
-                } else {
-                    this._oMenuFragment.openBy(oButton);
-                }
-            },
-            tab2exp: function () {
-                var oView = this.getView(),
-                    oButton = oView.byId("bt2");
-
-                if (!this._oMenuFragment) {
-                    Fragment.load({
-                        name: "nauticalfe.fragments.TrChangeVoyageTStab2fileExport",
-                        id: oView.getId(),
-                        controller: this
-                    }).then(function (oMenu) {
-                        oMenu.openBy(oButton);
-                        this._oMenuFragment = oMenu;
-                    }.bind(this)).catch(function (oError) {
-                        new sap.ui.m.MessageBox.error("Error while loading the fragment: " + oError);
-                    });
-                } else {
-                    this._oMenuFragment.openBy(oButton);
-                }
-            },
-            tab1spreadsheet: function () {
-                console.log('entered tab1')
-                var oTable = this.getView().byId("tstab1"); // Replace with your actual table ID
-                var oModel = this.getView().getModel("tsFields"); // Replace with your actual model name
-
-                if (oTable && oModel) {
-                    var oExport = new Export({
-                        exportType: new sap.ui.core.util.ExportTypeCSV({
-                            separatorChar: ","
-                        }),
-                        models: oModel,
-                        rows: {
-                            path: "/fields"
-                        },
-                        columns: [
-                            { name: "LegId", template: { content: "{LegId}" } },
-                            { name: "PortCode", template: { content: "{PortCode}" } },
-                            { name: "EventNo", template: { content: "{EventNo}" } },
-                            { name: "EventType", template: { content: "{EventType}" } },
-                            { name: "NormalText", template: { content: "{NormalText}" } },
-                            { name: "Status", template: { content: "{Status}" } },
-                            { name: "PlannedStartDate", template: { content: "{PlannedStartDate}" } },
-                            { name: "PlannedStartTime", template: { content: "{PlannedStartTime}" } },
-                            { name: "PlannedEndDate", template: { content: "{PlannedEndDate}" } },
-                            { name: "PlannedEndTime", template: { content: "{PlannedEndTime}" } },
-                            { name: "EventStatus", template: { content: "{EventStatus}" } }
-
-                        ]
-                    });
-
-                    oExport.saveFile("Table1_exportedData.csv").catch(function (oError) {
-                        new sap.ui.m.MessageBox.error("Error while exporting data: " + oError);
-                    });
-                } else {
-                    new sap.ui.m.MessageBox.warning("No Data Available for Export.");
-                }
-            },
-            tab2spreadsheet: function () {
-                console.log('entered tab2')
-                var oTable = this.getView().byId("tstab2");
-                var oModel = this.getView().getModel("tsFields");
-
-                if (oTable && oModel) {
-                    var oExport = new Export({
-                        exportType: new sap.ui.core.util.ExportTypeCSV({
-                            separatorChar: ","
-                        }),
-                        models: oModel,
-                        rows: {
-                            path: "/fields"
-                        },
-                        columns: [
-                            { name: "LegId", template: { content: "{LegId}" } },
-                            { name: "PortCode", template: { content: "{PortCode}" } },
-                            { name: "EventNo", template: { content: "{EventNo}" } },
-                            { name: "EventType", template: { content: "{EventType}" } },
-                            { name: "NormalText", template: { content: "{NormalText}" } },
-                            { name: "Status", template: { content: "{Status}" } },
-                            { name: "PlannedStartDate", template: { content: "{PlannedStartDate}" } },
-                            { name: "PlannedStartTime", template: { content: "{PlannedStartTime}" } },
-                            { name: "PlannedEndDate", template: { content: "{PlannedEndDate}" } },
-                            { name: "PlannedEndTime", template: { content: "{PlannedEndTime}" } },
-                            { name: "EventStatus", template: { content: "{EventStatus}" } }
-
-                        ]
-                    });
-
-                    oExport.saveFile("Table2_exportedData.csv").catch(function (oError) {
-                        new sap.ui.m.MessageBox.error("Error while exporting data: " + oError);
-                    });
-                } else {
-                    new sap.ui.m.MessageBox.warning("No data available for export.");
-                }
-            },
-
-            //pdf export
-            tab1pdfexp: function () {
-                var oTable = this.getView().byId("tstab1"); // Replace with your actual table ID
-                var oModel = this.getView().getModel("tsFields"); // Replace with your actual model name
-
-                if (oTable && oModel) {
-                    var oPdfDocument = new sap.ui.core.util.ExportTypePDF({
-                        width: "auto",
-                        height: "auto",
-                        margin: {
-                            top: 10,
-                            bottom: 10,
-                            left: 10,
-                            right: 10
-                        }
-                    });
-
-                    var oPdfExporter = new sap.ui.core.util.Export({
-                        exportType: oPdfDocument,
-                        models: oModel,
-                        rows: {
-                            path: "/fields" // Replace with your actual model path
-                        },
-                        columns: [
-                            { name: "LegId", template: { content: "{tsFields>LegId}" } },
-                            { name: "PortCode", template: { content: "{tsFields>PortCode}" } },
-                            { name: "EventNo", template: { content: "{tsFields>EventNo}" } },
-                            { name: "EventType", template: { content: "{tsFields>EventType}" } },
-                            { name: "NormalText", template: { content: "{tsFields>NormalText}" } },
-                            { name: "Status", template: { content: "{tsFields>Status}" } },
-                            { name: "PlannedStartDate", template: { content: "{tsFields>PlannedStartDate}" } },
-                            { name: "PlannedStartTime", template: { content: "{tsFields>PlannedStartTime}" } },
-                            { name: "PlannedEndDate", template: { content: "{tsFields>PlannedEndDate}" } },
-                            { name: "PlannedEndTime", template: { content: "{tsFields>PlannedEndTime}" } },
-                            { name: "EventStatus", template: { content: "{tsFields>EventStatus}" } }
-                            // Add other columns as needed
-                        ]
-                    });
-
-                    oPdfExporter.saveFile("exportedData.pdf").catch(function (oError) {
-                        new sap.ui.m.MessageBox.error("Error while exporting data to PDF: " + oError);
-                    });
-                } else {
-                    new sap.ui.m.MessageBox.warning("No data available for export.");
-                }
-            },
-            updated: function (oEvent) {
-                console.log(oEvent.getParameter("path"))
-            },
-
-            /**
-             * @override
-             */
-            onAfterRendering1: function () {
-                costdetailsModel.attachPropertyChange(this.updated, this)
-            }
 
 
         });

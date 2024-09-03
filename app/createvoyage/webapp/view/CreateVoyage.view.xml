@@ -91,7 +91,7 @@
                                                          valueHelpOnly="true"
                                                     />
                                                     <Label
-                                                        text="Cargo Type"
+                                                        text="Vessel Type"
                                                         labelFor="headerCarty"
                                                         design="Bold"
                                                         class="sapUiSmallMarginTop"

@@ -37,7 +37,11 @@ xmlns="sap.m">
                                 searchKeys: ['Ort01', 'Land1', 'Lifnr']
 							}
 						}"
-						p13nMode = "Item,Value">
+						p13nMode = "Item,Value"
+                        liveMode="true"
+                        
+
+                        >
 					<mdc:basicSearchField>
 						<mdc:FilterField delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
 							dataType="sap.ui.model.type.String"
@@ -90,68 +94,6 @@ xmlns="sap.m">
             </m:contentRight>
         </m:Bar>
 
-		<!-- <mdc:actions>
-						<upload:ActionsPlaceholder id="uploadButton" placeholderFor="UploadButtonPlaceholder" />
-						<Button
-                        id="downloadSelectedButton"
-                        text="Download"
-                        enabled="false"
-                        press="onDownloadFiles"
-                    	/>
-						<MenuButton text="Add">
-                        <menu>
-                            <Menu>
-                                <MenuItem
-                                    text="URL"
-                                    press="openAddOrEditDialog"
-                                />
-                            </Menu>
-                        </menu>
-							<layoutData>
-								<OverflowToolbarLayoutData
-									priority="AlwaysOverflow"
-								/>
-							</layoutData>
-                    	</MenuButton>
-                    <Button
-                        id="removeDocumentButton"
-                        text="Remove"
-                        press="onRemoveButtonPress"
-                        enabled="false"
-                    >
-                        <layoutData>
-                            <OverflowToolbarLayoutData
-                                priority="AlwaysOverflow"
-                            />
-                        </layoutData>
-                    </Button>
-                    <Button
-                        id="renameButton"
-                        enabled="false"
-                        press="onRenameDocument"
-                        text="Rename"
-                    >
-                        <layoutData>
-                            <OverflowToolbarLayoutData
-                                priority="AlwaysOverflow"
-                            />
-                        </layoutData>
-                    </Button>
-                    <Button
-                        id="editUrlButton"
-                        text="Edit URL"
-                        enabled="false"
-                        press="onEditUrl"
-                    >
-                        <layoutData>
-                            <OverflowToolbarLayoutData
-                                priority="AlwaysOverflow"
-                            />
-                        </layoutData>
-                    </Button>
-		</mdc:actions> -->
-
-
 		<m:ScrollContainer
                 id="scrollContainer"
                 height="calc(100% - 50px)"
@@ -163,14 +105,15 @@ xmlns="sap.m">
                 header="Vendor Data Syncing"
                 id="table"
                 width="100%"
+                
                 filter="filterbar"
                 multiSelectMode="Default"
-                p13nMode="Column,Sort"
+                p13nMode="Column"
                 class="mastertables"
                 selectionMode="Multi"
 	            type="ResponsiveTable"
                 threshold="100"
-                showRowCount="false"
+                showRowCount="true"
 
                 delegate="{
                         name: 'com/ingenx/nauti/masterdashboard/delegate/JSONTableDelegate',

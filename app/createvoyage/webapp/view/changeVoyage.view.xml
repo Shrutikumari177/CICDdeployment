@@ -330,7 +330,7 @@
                                 text="Reference Details"
                                 class="vgheading"
                             />
-                            <Table
+                            <!-- <Table
                                 id="_IDGenTable3"
                                 width="50%"
                                 fixedLayout="false"
@@ -360,7 +360,7 @@
                                 <items>
                                     <ColumnListItem id="_IDGenColumnListItem1">
                                         <cells>
-                                            <Select id="_IDGenSelect5">
+                                            <Select id="_IDGenSelectforReference">
                                                 <items>
                                                     <core:Item
                                                         id="_IDGenItem8"
@@ -458,7 +458,73 @@
                                         </cells>
                                     </ColumnListItem>
                                 </items>
+                            </Table> -->
+                            <Table
+                                id="documentTable"
+                                width="50%"
+                                fixedLayout="false"
+                                class="table"
+                                items="{referenceModel>/documents}"
+                            >
+                                <columns>
+                                    <Column width="50%">
+                                        <Label text="Document Indicator" />
+                                    </Column>
+                                    <Column width="50%">
+                                        <Label text="Reference Document No." />
+                                    </Column>
+                                    <Column width="auto">
+                                        <Button
+                                            icon="sap-icon://add"
+                                            press="onAddRowRef"
+                                        />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Select
+                                                selectedKey="{referenceModel>documentIndicator}"
+                                            >
+                                                <items>
+                                                    <core:Item
+                                                        key=""
+                                                        text=""
+                                                    />
+                                                    <core:Item
+                                                        key="G"
+                                                        text="G - SALES CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        key="K"
+                                                        text="K - PURCHASE CONTRACT"
+                                                    />
+                                                    <core:Item
+                                                        key="P"
+                                                        text="P - PURCHASE ORDER"
+                                                    />
+                                                    <core:Item
+                                                        key="S"
+                                                        text="S - SALES ORDER"
+                                                    />
+                                                    <core:Item
+                                                        key="Z"
+                                                        text="Z - NOMINATION KEY"
+                                                    />
+                                                </items>
+                                            </Select>
+                                            <Input
+                                                value="{referenceModel>referenceDocumentNo}"
+                                            />
+                                            <Button
+                                                icon="sap-icon://less"
+                                                press="onDeleteRowRef"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
                             </Table>
+
                             <Button
                                 id="DocButton"
                                 icon="sap-icon://sys-minus"
@@ -511,6 +577,7 @@
                                     <core:Item
                                         key="{Uom}"
                                         text="{Uomdes}"
+                                        
                                     />
                                 </Select>
 
@@ -1666,13 +1733,11 @@
                             width="100%"
                             class=""
                         >
-
-
-                 <HBox
+                            <HBox
                                 id="HBox2"
                                 width="100%"
-                  >
-                    <!-- <FlexBox
+                            >
+                                <!-- <FlexBox
                         width="10%"
                         class="flexbtn"
                     >
@@ -1746,8 +1811,8 @@
                             type="Default"
                         />
                     </FlexBox> -->
-                 </HBox>
-                            
+                            </HBox>
+
                             <l:VerticalLayout
                                 width="100%"
                                 class="sapUiContentPadding1"
@@ -1840,7 +1905,6 @@
                                     </l:BlockLayoutRow>
                                 </l:BlockLayout>
                             </l:VerticalLayout>
-                    
                         </Panel>
                     </IconTabFilter>
                     <IconTabFilter

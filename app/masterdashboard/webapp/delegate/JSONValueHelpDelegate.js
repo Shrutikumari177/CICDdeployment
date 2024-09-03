@@ -14,16 +14,27 @@ sap.ui.define([
 	JSONValueHelpDelegate.getFilters = function (oValueHelp, oContent) {
 		// create search filters
 		const oPayload = oValueHelp.getPayload();
-		const aFilters = oPayload.searchKeys?.map((sPath) => new Filter({path: sPath, operator: FilterOperator.Contains, value1: oContent.getSearch()}));
-		const oSearchFilter = aFilters?.length && new Filter(aFilters, false);
+		let aFilters = [];
+	
+		if (oPayload && oPayload.searchKeys) {
+			aFilters = oPayload.searchKeys.map((sPath) => {
+				return new Filter({
+					path: sPath,
+					operator: FilterOperator.Contains,
+					value1: oContent.getSearch()
+				});
+			});
+		}
+	
+		const oSearchFilter = (aFilters.length > 0) ? new Filter(aFilters, false) : null;
 		return oSearchFilter ? [oSearchFilter] : [];
 	};
-
+	
 	// enable typeahead
 	JSONValueHelpDelegate.isSearchSupported = function (oValueHelp, oContent, oListBinding) {
-		return !!oValueHelp.getPayload()?.searchKeys;
-	};
-
+		const oPayload = oValueHelp.getPayload();
+		return oPayload && !!oPayload.searchKeys;
+	};	
 
 	return JSONValueHelpDelegate;
 }, /* bExport= */false);

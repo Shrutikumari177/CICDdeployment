@@ -1,4 +1,4 @@
-/* checksum : 2d0396c041c9be9db8cbd0663f6722cb */
+/* checksum : 19cb50cba4f1bf4300f78d62b1a24faf */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -206,14 +206,14 @@ entity NAUTICONTRACTAWARD_SRV.contaward_tableSet {
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  key Lifnr : String(10) not null;
+  Lifnr : String(10) not null;
   @sap.unicode : 'false'
   @sap.label : 'Code'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  key Zcode : String(12) not null;
+  Zcode : String(12) not null;
   @odata.Type : 'Edm.DateTime'
   @odata.Precision : 7
   @sap.unicode : 'false'
@@ -222,14 +222,14 @@ entity NAUTICONTRACTAWARD_SRV.contaward_tableSet {
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  key Biddate : Timestamp not null;
+  Biddate : Timestamp not null;
   @sap.unicode : 'false'
   @sap.label : 'Bid Time'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
-  key Bidtime : Time not null;
+  Bidtime : Time not null;
   @sap.unicode : 'false'
   @sap.label : 'Chartering Req. No.'
   @sap.creatable : 'false'
@@ -415,6 +415,78 @@ entity NAUTICONTRACTAWARD_SRV.xNAUTIxawardReportFinal {
   @sap.label : ''
   @sap.quickinfo : 'Field of type TIMS'
   AwrdCreatedAt : Time;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'closed award'
+entity NAUTICONTRACTAWARD_SRV.xNAUTIxclosaward_table {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Voyage No'
+  @sap.quickinfo : 'Voyage Number'
+  key Voyno : String(20) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Vendor'
+  @sap.quickinfo : 'Account Number of Vendor or Creditor'
+  key Lifnr : String(10) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Code'
+  key Zcode : String(12) not null;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bid Date'
+  key Biddate : Date not null;
+  @sap.label : 'Bid Time'
+  key Bidtime : Time not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : ''
+  @sap.quickinfo : 'Undefined range (can be used for patch levels)'
+  Rank : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Chartering Req. No.'
+  @sap.quickinfo : 'Charter No'
+  Chrnmin : String(10);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Code Description'
+  CodeDesc : String(50);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Value'
+  Value : String(50);
+  @sap.label : 'Revaluation'
+  @sap.quickinfo : 'Revaluation amount on back-posting to a previous period'
+  Cvalue : Decimal(14, 3);
+  @sap.label : 'Currency'
+  @sap.quickinfo : 'Currency Key'
+  @sap.semantics : 'currency-code'
+  Cunit : String(5);
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding Start Date'
+  Chrqsdate : Date;
+  @sap.label : 'Bidding Start Time'
+  Chrqstime : Time;
+  @sap.display.format : 'Date'
+  @sap.label : 'Bidding End Date'
+  Chrqedate : Date;
+  @sap.label : 'Bidding End Time'
+  Chrqetime : Time;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Done by Vendor ?'
+  DoneBy : Boolean;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Created by'
+  Uname : String(12);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Status'
+  Stat : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Type (Auto/manual)'
+  Zmode : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Comments'
+  Zcom : String(250);
 };
 
 @cds.external : true
