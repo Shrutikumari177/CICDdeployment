@@ -66,18 +66,15 @@
 					<mdc:filterItems  >
   
 
-						<mdc:FilterField
-							label="City"
-							propertyKey="Ort01"
-							dataType="sap.ui.model.type.String"
-                            liveChange="onLiveChange"
-							conditions="{$filters>/conditions/Ort01}"
-							valueHelp="name-vh"
-							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"    
-                            operators="Contains"                      
-							/>
-
-
+					<mdc:FilterField
+						label="City"
+						propertyKey="Ort01"
+						dataType="sap.ui.model.type.String"
+                        liveChange="onLiveChange"
+						conditions="{$filters>/conditions/Ort01}"
+						valueHelp="name-vh"
+						delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"    
+                        operators="Contains" />
 					</mdc:filterItems>
 				
 				</mdc:FilterBar>
@@ -92,11 +89,12 @@
             <m:Bar id="_IDGenBar1" class="_IDGenBar1">
               <m:contentRight>            
                 <Button id="_IDGenButton1" text="Delete Selection" type="Emphasized" press="onDeletePress"/>
+				<Button id="_IDGenButton2" text="Clear Selection" type="Emphasized" press="onClearSelection"/>
               </m:contentRight>
             </m:Bar>
           
             <ScrollContainer
-                id="scrollContainer"
+                id="scrollContainerr"
                 height="calc(100% - 50px)"
                 vertical="true"
                 class="scrollContainer"

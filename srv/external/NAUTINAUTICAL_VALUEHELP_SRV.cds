@@ -1,4 +1,4 @@
-/* checksum : 4752ca204bdf441ab4f597dd2a5034d9 */
+/* checksum : 3103bbb9ecf909b3da607e8a0bee0b09 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -233,6 +233,43 @@ entity NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxch_valuehelp {
   Zaction : String(4);
   @sap.label : 'E-Mail Address'
   Zemail : String(241);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'cost profile'
+entity NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprofile {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'CostProId'
+  @sap.quickinfo : 'cost profile dataelement'
+  key Costprofid : String(30) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Cost.Code'
+  @sap.quickinfo : 'Cost Code'
+  Costcode : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Cost.Code.Des'
+  @sap.quickinfo : 'Cost Code Description'
+  Cstcodes : String(35);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'association of cost profile'
+entity NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_ass {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'CostProId'
+  @sap.quickinfo : 'cost profile dataelement'
+  key Costprofid : String(30) not null;
+  to_name : Association to many NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprofile {  };
 };
 
 @cds.external : true

@@ -1,5 +1,5 @@
 <mvc:View xmlns:grid="sap.ui.layout.cssgrid" controllerName="com.ingenx.nauti.biddingcontroller.controller.Bidding" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:card="sap.f.cards" xmlns:f="sap.f" xmlns="sap.m" xmlns:microchart="sap.suite.ui.microchart">
-    <Page id="pages" title="{i18n>title2}" titleAlignment="Center">
+    <Page id="page" title="{i18n>title2}" titleAlignment="Center">
         <content>
             <MessageStrip id="startMsgStrip" visible="true" text="Press START to initiate bidding session." type="Information" class="sapUiResponsiveMargin"/>
             <grid:CSSGrid id="grid1" gridTemplateColumns="2fr 1fr 1fr" gridGap="1rem" class="sapUiSmallMarginBeginEnd">
@@ -15,11 +15,11 @@
                             <f:content>
                                 <List id="_IDGenList1" class="sapUiSmallMarginBottom" showSeparators="None">
                                     <CustomListItem id="_IDGenCustomListItem1" class="sapUiMediumMarginTop">
-                                        <HBox id="_IDGnHBox2" alignItems="Center" justifyContent="SpaceBetween">
+                                        <HBox id="_IDGenHBox2" alignItems="Center" justifyContent="SpaceBetween">
                                             <VBox id="_IDGenVBox3" class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
                                                 <Text text="Bid Start Time :" id="_IDGenTitle2"/>
                                             </VBox>
-                                            <ObjectStatus id="_IDGenObjectStatus89" class="sapUiTinyMargin sapUiSmallMarginEnd" text="" state="Success"/>
+                                            <ObjectStatus id="_IDGenObjectStatus1" class="sapUiTinyMargin sapUiSmallMarginEnd" text="" state="Success"/>
                                         </HBox>
                                         <HBox id="_IDGenHBox3" alignItems="Center" justifyContent="SpaceBetween">
                                             <VBox id="_IDGenVBox4" class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
@@ -96,41 +96,44 @@
                         <Label id="_IDGenLabel1" text="Current Bid:" labelFor="currentQuote"/>
                         <Input width="auto" id="currentQuote"  class="bold-input" enabled="false"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+                        <HBox id="submitBox">
                         <Label id="_IDGenLabel2" text="Quote Price:" labelFor="quoteInput"/>
                         <Input width="auto" value="" liveChange="onQuotePriceChange" id="quoteInput" type="Number"/>
+                       
                         <Button id="submitButton" text="Submit" type="Emphasized" press="onQuoteSubmit" enabled="false"/>
                         <Button id="startButton" text="START" type="Accept" press="onStartBidding"/>
                         <Button id="stopButton" text="STOP" type="Reject" press="onStop" visible="false"/>
+                        </HBox>
                     </Toolbar>
                 </headerToolbar>
                 <columns>
-                    <Column id="_IDGenComn1" width="20rem">
-                        <Label id="_IDGbel3" text="Vendors"/>
+                    <Column id="_IDGenColumn1" width="20rem">
+                        <Label id="_IDGenLabel3" text="Vendors"/>
                     </Column>
-                    <Column id="_IDGenColu2" demandPopin="true" hAlign="Center" minScreenWidth="phone">
-                        <Label id="_IDGenLel4" text="Technical Score"/>
+                    <Column id="_IDGenColumn2" demandPopin="true" hAlign="Center" minScreenWidth="phone">
+                        <Label id="_IDGenLabel4" text="Technical Score"/>
                     </Column>
-                    <Column id="_IDGeolumn3" demandPopin="true" hAlign="Center" minScreenWidth="phone">
-                        <Label id="_IDGabel5" text="Commercial Score"/>
+                    <Column id="_IDGenColumn3" demandPopin="true" hAlign="Center" minScreenWidth="phone">
+                        <Label id="_IDGenLabel5" text="Commercial Score"/>
                     </Column>
-                    <Column id="_IDGenlumn4" minScreenWidth="phone" hAlign="Right">
-                        <Label id="_IDGeabel6" text="Original Bid"/>
+                    <Column id="_IDGenColumn4" minScreenWidth="phone" hAlign="Right">
+                        <Label id="_IDGenLabel6" text="Original Bid"/>
                     </Column>
-                    <Column id="_IDGenCumn5" hAlign="Right">
+                    <Column id="_IDGenColumn5" hAlign="Right">
                         <Label id="_IDGenLabel7" text="Current Bid"/>
                     </Column>
                 </columns>
                 <items>
-                    <ColumnListItem id="dfff">
+                    <ColumnListItem id="_IDGenColumnListItem1">
                         <cells>
-                            <Text id="_IDnText1" text="{rankmodel>vendorId}" maxLines="1" tooltip="{rankmodel>vendorName} ({rankmodel>vendorId})"/>
-                            <Text id="_IDGText2" text="{rankmodel>Trank}"/>
-                            <Text id="_IDGext3" text="{rankmodel>Crank}"/>
+                            <Text id="_IDGenText1" text="{rankmodel>vendorId}" maxLines="1" tooltip="{rankmodel>vendorName} ({rankmodel>vendorId})"/>
+                            <Text id="_IDGenText2" text="{rankmodel>Trank}"/>
+                            <Text id="_IDGenText3" text="{rankmodel>Crank}"/>
                             <Text
-                            id="dfghjn" text="{rankmodel>originalBid}"/>
+                            id="_IDGenText4" text="{rankmodel>originalBid}"/>
                             <!-- Original Bid -->
                             <Text
-                            id="_IDGext5" text="{rankmodel>currentBid}"/>
+                            id="_IDGenText5" text="{rankmodel>currentBid}"/>
                         <!-- Current Bid -->
                         </cells>
                     </ColumnListItem>

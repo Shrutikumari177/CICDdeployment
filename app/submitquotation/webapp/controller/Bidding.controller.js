@@ -105,7 +105,7 @@ sap.ui.define([
                     await this.getHintDetailsData(biddingData.Voyno);
                     await this.getBidDetailsData(biddingData.zstat);
                     await this.getBidDetails(biddingData.Voyno)
-                    await this.readBidDetailData(biddingData.Chrnmin)
+                    await this.readBidDetailData(biddingData.Chrnmin,biddingData.Lifnr)
 
                     if (headerDataLoaded && voyageDataLoaded) {
                         this._oBusyDialog.close();
@@ -153,7 +153,7 @@ sap.ui.define([
             },  
 
             // This function is using for read the bid data that is stored in table after submit the bid
-            readBidDetailData: async function(charterNo) {
+            readBidDetailData: async function(charterNo,vendorNo) {
                 let that = this;
                 try {
                     let getDataForBidDetail = new JSONModel();
@@ -166,7 +166,7 @@ sap.ui.define([
                     oContext.forEach(oContext => {
                         bidData.push(oContext.getObject());
                     });
-                    readPayload = bidData.filter(item=>item.Chrnmin===charterNo);
+                    readPayload = bidData.filter(item=>item.Lifnr===vendorNo);
                     let costValue = this.getFreightValue(readPayload);
                     let costInput = this.getView().byId("totalCostDetails")
                     let cost = costValue ? `${costValue.Value}.000` :0.000

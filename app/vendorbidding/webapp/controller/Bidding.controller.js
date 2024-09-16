@@ -44,33 +44,9 @@ sap.ui.define([
                 this.getView().setModel(oModel, "inputModel");
 
                 const oRouter = this.getOwnerComponent().getRouter();
-                // this._oPollingInterval = setInterval(this.checkBidStatus.bind(this), 5000);
                 oRouter.getRoute("RouteBidding").attachPatternMatched(this._onObjectMatched, this);
                 // this._startAutoRefresh();
-            },
-
-            checkBidStatus: function() {
-                var sChrnmin = "4000000640";  
-                var oModel = this.getOwnerComponent().getModel();
-                
-                var oBidListData = oModel.bindList("/biddingStartManual", undefined, undefined, undefined,undefined);
-            
-                oBidListData.requestContexts(0).then(function (aContexts) {
-                    let statusData = aContexts.map(function(oContext) {
-                        return oContext.getObject();
-                    });
-            
-                    let filteredStatusData = statusData.filter(item => item.biddStartStatus === true && item.Chrnmin === sChrnmin );
-                    if(filteredStatusData){
-                        sap.m.MessageBox.success("Bidding is started");
-                        clearInterval(this._oPollingInterval);
-                    }
-                    console.log("Filtered Status Data:", filteredStatusData);
-                }.bind(this)).catch(function(oError) {
-                    console.error("Error fetching bid status:", oError);
-                    sap.m.MessageBox.error("Failed to fetch bid status.");
-                });
-            },            
+            },           
 
 
             //This function is using for geting the session storage data that is shared during 
@@ -91,16 +67,14 @@ sap.ui.define([
                     console.log("bidding data",biddingData);
                     this._updateVendorData(biddingData);
                     console.log("Updated vData", this.getView().getModel("VendorData").getData());
-                    // setTimeout(() => {
-                    //     this.triggerPostLineItemData()
-                    // }, 3000);
-
+                    // var that = this
+                
 
                     await this.getHeaderDetailsData(biddingData.Voyno, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime,biddingData.zstat);
                     headerDataLoaded = true;
-
+                    this._fetchAndSetBids()
                     this._updateUIBasedOnStatus(biddingData.zstat);
-                       this._intervalId = setInterval(this._fetchAndSetBids.bind(this), 2000);
+                    this._intervalId = setInterval(this._fetchAndSetBids.bind(this), 2000);
                     // this.onPostLineItemData(biddingData.Lifnr, biddingData.Voyno, biddingData.Chrnmin, biddingData.Chrqsdate, biddingData.Chrqstime, biddingData.Chrqedate, biddingData.Chrqetime)
                     voyageDataLoaded = true;
                 } catch (error) {
@@ -160,20 +134,21 @@ sap.ui.define([
 
             // This method is using for extract the first and last Quotation value of Controller 
             _fetchAndSetBids: async function () {
-               
+                
                 try {
+                //  debugger
                     const biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
                     let [vendorBid, controllerBids,getfirstBidData] = await Promise.all([
                         this._fetchBidData("/VenodrLiveBidDetails"),
                         this._fetchBidData("/ControllerLiveBidDetails"),
                         this._fetchBidData("/quotations")
                     ]);
- 
+
                     let firstBid = getfirstBidData.filter(item=>{
                         return item.Lifnr === biddingData.Lifnr && item.Voyno === biddingData.Voyno
                     })
                     let firstBidValue = firstBid[0].to_quote_item.filter(i=>{return i.Zcode=== 'FREIG'})
-                    let vendorBids = vendorBid.filter(item=>item.vendorNo === biddingData.Lifnr)
+                    let vendorBids = vendorBid.filter(item=>item.vendorNo === biddingData.Lifnr) 
                     this._updateBidTextFields("FirstBidText",firstBidValue[0].Value);
                     if (vendorBids.length > 0) {
                         vendorBids.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -182,7 +157,7 @@ sap.ui.define([
                     } else {
                         this._updateBidTextFields("GenObjectStatus3", "0.000");
                     }
- 
+
                     if (controllerBids.length > 0) {
                         controllerBids.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                         let lastControllerBid = controllerBids[controllerBids.length - 1];
@@ -194,7 +169,6 @@ sap.ui.define([
                     console.error("Error fetching bid data:", oError);
                 }
             },
- 
 
             // This function is used to read the data with odata services and called from _fetchAndSetBids method
             _fetchBidData: async function (path) {
@@ -218,7 +192,8 @@ sap.ui.define([
                 let oField = this.getView().byId(fieldId);
                 if (oField) {
                     let formattedValue = this.formatter.formatNumber(value);
-                    oField.setText(formattedValue ? formattedValue : "0.00")
+                    console.log(`Setting field ${fieldId} with value:`, formattedValue);
+                    oField.setText(formattedValue ? formattedValue : "0.000")
 
                 }
             },
@@ -226,9 +201,6 @@ sap.ui.define([
             // This function is using to navigate the previous page 
             onBackButtonPress: function () {
                 this.getOwnerComponent().getRouter().navTo("RouteMain");
-                this.getView().byId("authoLayout").setVisible(true);
-                    this.getView().byId("authoLayout2").setVisible(true);
-                    this.getView().byId("unauthorizedMessage").setVisible(false);
             },
 
             nSubmit: async function () {
@@ -289,7 +261,7 @@ sap.ui.define([
                     let oData = oContext.getObject();
                     if (p1.success) {
                         sap.m.MessageBox.success(`Submit Successfully`, {
-                            title: "Voyage Created",
+                            title: "Submitted",
                             onClose: function () {
                                 console.log("sent voyage no. :", oData.Voyno)
                             }
@@ -457,10 +429,12 @@ sap.ui.define([
             },
 
 
-            // This function is used to fetch the venodr model data and send data by paramter.
+            // This function is used to fetch the vendor model data and send data by paramter.
             triggerPostLineItemData: async function () {
                 try {
+                    debugger
                     let data = this.getView().getModel("VendorData").getData();
+                    console.log("triggeredpost lineitem data",data)
                     await this.onPostLineItemData(data.vendorNo, data.voyageNo, data.charteringNo, data.startDate, data.startTime, data.endDate, data.endTime);
                 } catch (error) {
                     console.error("Error in triggerPostLineItemData:", error);
@@ -477,7 +451,7 @@ sap.ui.define([
                             "Voyno" : voyageNo,
                             "Lifnr" : vNo,
                             "Chrnmin": charterNo,
-                            "Cunit":   this.currType,
+                            "Cunit":   this.currType || "",
                            "Chrqsdate": startDate,
                            "Chrqstime": startTime,
                            "Chrqedate": endDate,
@@ -540,20 +514,36 @@ sap.ui.define([
                 if (this._oPollingInterval) {
                     clearInterval(this._oPollingInterval);
                 }
-                if(this._intervalId){
-                    clearInterval(_intervalId);
+                if (this._intervalId) {
+                    clearInterval(this._intervalId);
                 }
             },
 
             // This function is used for exit from the bidding
             OnExitButton: function () {
-                sap.m.MessageBox.confirm("Are you sure you want to exit the bidding?",
+                sap.m.MessageBox.confirm("Do you want to exit the bidding?",
                     {
                         icon: sap.m.MessageBox.Icon.WARNING,
                         actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
                         onClose: function (oAction) {
                             if (oAction === sap.m.MessageBox.Action.OK) {
-                               this.getOwnerComponent().getRouter().navTo("RouteMain");
+                                // let biddingData = JSON.parse(sessionStorage.getItem("biddingData"));
+
+                                // if (biddingData) {
+                                //     biddingData.zstat = "Closed";
+
+                                //     let oModel = this.getView().getModel("charteringRequestModel");
+                                //     let oData = oModel.getData();
+
+                                //     for (let i = 0; i < oData.length; i++) {
+                                //         if (oData[i].Chrnmin === biddingData.Chrnmin) {
+                                //             oData[i] = biddingData;
+                                //             break;
+                                //         }
+                                //     }
+                                //     oModel.refresh();
+                                // }
+                                this.getOwnerComponent().getRouter().navTo("RouteMain");
                             }
                         }.bind(this)
                     });

@@ -3,23 +3,23 @@
     xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xmlns:sap="http://www.sap.com/Protocols/SAPData">
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
     </edmx:Reference>
@@ -115,6 +115,21 @@
                 <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
                 <Property Name="Zemail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
             </EntityType>
+            <EntityType Name="xNAUTIxcostprofileType" sap:label="cost profile" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Costprofid"/>
+                </Key>
+                <Property Name="Costprofid" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="CostProId" sap:quickinfo="cost profile dataelement"/>
+                <Property Name="Costcode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Cost.Code" sap:quickinfo="Cost Code"/>
+                <Property Name="Cstcodes" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Cost.Code.Des" sap:quickinfo="Cost Code Description"/>
+            </EntityType>
+            <EntityType Name="xNAUTIxcostprof_assType" sap:label="association of cost profile" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Costprofid"/>
+                </Key>
+                <Property Name="Costprofid" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="CostProId" sap:quickinfo="cost profile dataelement"/>
+                <NavigationProperty Name="to_name" Relationship="NAUTI.NAUTICAL_VALUEHELP_SRV.assoc_49406BC600705E411E64DCD403948689" FromRole="FromRole_assoc_49406BC600705E411E64DCD403948689" ToRole="ToRole_assoc_49406BC600705E411E64DCD403948689"/>
+            </EntityType>
             <EntityType Name="xNAUTIxcostprof_valuehelpType" sap:label="valuehelp for cost profile" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Costprofid"/>
@@ -151,6 +166,10 @@
                 <Property Name="voynm" Type="Edm.String" MaxLength="20" sap:label="Voyage name" sap:quickinfo="Voyage Name"/>
                 <Property Name="Zaction" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Action Taken"/>
             </EntityType>
+            <Association Name="assoc_49406BC600705E411E64DCD403948689" sap:content-version="1">
+                <End Type="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_assType" Multiplicity="1" Role="FromRole_assoc_49406BC600705E411E64DCD403948689"/>
+                <End Type="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprofileType" Multiplicity="*" Role="ToRole_assoc_49406BC600705E411E64DCD403948689"/>
+            </Association>
             <EntityContainer Name="NAUTI_NAUTICAL_VALUEHELP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="xNAUTIxawardvoy_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxawardvoy_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxbidhist_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxbidhist_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
@@ -159,11 +178,17 @@
                 <EntitySet Name="xNAUTIxCHARTERINGVALUEHELP" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxCHARTERINGVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxCHARTERVALUEHELP" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxCHARTERVALUEHELPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxch_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxch_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcostprofile" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprofileType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="xNAUTIxcostprof_ass" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_assType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxcostprof_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxcurrency_val" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxcurrency_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxvendbid_val" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvendbid_valType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxvoytyp_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvoytyp_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="xNAUTIxvoy_valuehelp" EntityType="NAUTI.NAUTICAL_VALUEHELP_SRV.xNAUTIxvoy_valuehelpType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <AssociationSet Name="assoc_49406BC600705E411E64DCD403948689" Association="NAUTI.NAUTICAL_VALUEHELP_SRV.assoc_49406BC600705E411E64DCD403948689" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="xNAUTIxcostprof_ass" Role="FromRole_assoc_49406BC600705E411E64DCD403948689"/>
+                    <End EntitySet="xNAUTIxcostprofile" Role="ToRole_assoc_49406BC600705E411E64DCD403948689"/>
+                </AssociationSet>
             </EntityContainer>
             <Annotations Target="NAUTI.NAUTICAL_VALUEHELP_SRV.NAUTI_NAUTICAL_VALUEHELP_SRV_Entities"
                 xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -180,9 +205,9 @@
                     </Record>
                 </Annotation>
             </Annotations>
-            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
+            <atom:link rel="self" href="http://odataservices:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
                 xmlns:atom="http://www.w3.org/2005/Atom"/>
-                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
+                <atom:link rel="latest-version" href="http://odataservices:8001/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV/$metadata"
                     xmlns:atom="http://www.w3.org/2005/Atom"/>
                 </Schema>
             </edmx:DataServices>

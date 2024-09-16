@@ -174,7 +174,7 @@
 
                         	<f:Card id="GenCard1" width="257px"  height="150px" class="sapUiSmallMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
-		                        	<card:Header id="GenHeader1"  title="Customer Quoted Value" subtitle="USD" />
+		                        	<card:Header id="GenHeader1"  title="Customer Quoted Value" subtitle="INR" />
 		                       </f:header>
 		                       <f:content>
 			                        <List id="GenList1" class="sapUiSmallMarginBottom" showSeparators="None">
@@ -187,7 +187,7 @@
 
                               <f:Card id="GenCard2" width="257px" height="150px" class="sapUiMediumMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
-		                        	<card:Header id="GenHeader2" title="First Bid" subtitle="USD" />
+		                        	<card:Header id="GenHeader2" title="First Bid" subtitle="INR" />
 		                       </f:header>
 		                       <f:content>
 			                        <List id="GenList2" class="sapUiSmallMarginBottom" showSeparators="None">
@@ -200,7 +200,7 @@
 
                               <f:Card id="GenCard3" width="257px" height="150px" class="sapUiMediumMarginBegin sapUiMediumMarginTop">
 		                       <f:header>
-		                        	<card:Header id="GenHeader3" title="Last Bid" subtitle="USD" />
+		                        	<card:Header id="GenHeader3" title="Last Bid" subtitle="INR" />
 		                       </f:header>
 		                       <f:content>
 			                        <List id="GenList3" class="sapUiSmallMarginBottom" showSeparators="None">

@@ -21,92 +21,367 @@ using NAUTILIVEBID_CONT_SRV from './external/NAUTILIVEBID_CONT_SRV.cds';
 using NAUTINAUTICAL_VALUEHELP_SRV from './external/NAUTINAUTICAL_VALUEHELP_SRV.cds';
 
 
-
-
-
-
 service nauticalservice {
-    entity xNAUTIxclosaward_table as projection on NAUTICONTRACTAWARD_SRV.xNAUTIxclosaward_table
-    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Rank, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
 
-    entity xNAUTIxbidprofile_valuehelp as projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxbidprofile_valuehelp
-    {        key BidprofileId     }    
-;
-    
-    entity xNAUTIxcostprof_valuehelp as projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_valuehelp
-    {        key Costprofid     }    
-;
+    entity CompareLiveFreight           as projection on nauticalschema.CompareLiveFreight;
 
- entity getfinalbidSet as projection on NAUTIZLIVEBID_VEND_SRV.getfinalbidSet
-    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
-    
-    entity venItemSet as projection on NAUTIZLIVEBID_VEND_SRV.venItemSet
-    {        Voyno, Lifnr, Zcode, Biddate, Bidtime, key Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
-    
-    entity vendorFinSet as projection on NAUTIZLIVEBID_VEND_SRV.vendorFinSet
-    {        key Chrnmin     }    
-;
-    
-    entity xNAUTIxnewvendfbid as projection on NAUTIZLIVEBID_VEND_SRV.xNAUTIxnewvendfbid
-    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
-     entity contItemSet as projection on NAUTILIVEBID_CONT_SRV.contItemSet
-    {        Voyno, Lifnr, Zcode, Biddate, Bidtime, key Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
-    
-    entity contheaderSet as projection on NAUTILIVEBID_CONT_SRV.contheaderSet
-    {        key Chrnmin     }    
-;
-    
-    entity livecontrollerfetchSet as projection on NAUTILIVEBID_CONT_SRV.livecontrollerfetchSet
-    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
+    entity xNAUTIxcostprof_ass          as
+        projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_ass {
+            key Costprofid,
+                to_name
+        };
 
-     entity BusinessPartnerSet as projection on NAUTIMASTER_BTP_SRV.BusinessPartnerSet
-    {        key Lifnr, PartnerRole, Anred, Name1, Name2, Name3, Sort1, StrSuppl1, StrSuppl2, HouseNum1, Stras, Pstlz, Ort01, Land1, Regio, TimeZone, Spras, Telf1, Telf2, Telfx, SmtpAddr, Erdat, DateTo     }    
-;
-     entity xNAUTIxnewvend_btp as projection on NAUTIVENDOR_BTP_SRV.xNAUTIxnewvend_btp
-    {        key Addrnumber, key Persnumber, key Consnumber, key Nation, key Lifnr, SmtpAddr, arned, Name1, Name2, Name3, Sort1, Land1, Ort01, Pstlz, Regio, Stras, Erdat, Spras, Telf1, Telf2, Telfx, PartnerName     }    
-;
-     entity contaward_tableSet as projection on NAUTICONTRACTAWARD_SRV.contaward_tableSet
-    {        key Voyno, key Lifnr, key Zcode, key Biddate, key Bidtime, Chrnmin, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;
- entity awardcontractSet as projection on NAUTICONTRACTAWARD_SRV.awardcontractSet
-    {        key Chrnmin, Voyno, Lifnr, Zcode, Biddate, Bidtime, CodeDesc, Value, Cvalue, Cunit, Chrqsdate, Chrqstime, Chrqedate, Chrqetime, DoneBy, Uname, Stat, Zmode, Zcom, Rank, AwrdCreatedBy, AwrdCreatedOn, AwrdCreatedAt     }    
-;
-     entity xNAUTIxbidhist_valuehelp as projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxbidhist_valuehelp
-    {        key voyno, key Chrnmin     }    
-;
+    entity xNAUTIxclosaward_table       as
+        projection on NAUTICONTRACTAWARD_SRV.xNAUTIxclosaward_table {
+            key Voyno,
+            key Lifnr,
+            key Zcode,
+            key Biddate,
+            key Bidtime,
+                Rank,
+                Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
 
-     entity FileuploadSet as projection on NAUTIZNAUTIFILEUPL_VOY_SRV.FileuploadSet
-    {        Filedescription, Fileid, key Voyageno, Creaby, Creadate, Creatime, key Filename, Filetype, Filecont, Del     }    
-;
-    entity VenodrLiveBidDetails as projection on nauticalschema.VenodrLiveBidDetails;
-     entity costProfileSet as projection on NAUTIMASTER_BTP_SRV.costProfileSet
-    {        key Costprofid, key Costcode, Cstcodes, Creadate, Creatime, Creaby, Changedby, Changedon, Changeat     }    
-;
-    entity BidMasterSet as projection on NAUTIMASTER_BTP_SRV.BidMasterSet
-    {        key BidprofileId, key Bname, key Code, Value, Cvalue, Cunit, Datatype, Tablename, MultiChoice, Creadate, Creatime, Creaby, Changedon, Changeat     }    
-;
-    
-    entity xNAUTIxMASBID as projection on NAUTIMASTER_BTP_SRV.xNAUTIxMASBID
-    {        key profileId, key Code, Value, Cvalue, Cunit, Datatype, Tablename, creaDate, creaTime, createdBy, changedOn, changeAt, Multi_Choice     }    
-;
-    
-    
-    entity newallstatusesSet as projection on NAUTIVOYSTATUS_SRV.newallstatusesSet
-    {        Status, key Voyage, Vdate, Vtime     }    
-;
-    
-    entity xNAUTIxallstatuses as projection on NAUTIVOYSTATUS_SRV.xNAUTIxallstatuses
-    {        key Voyage, Status, Vdate, Vtime     }    
-;
+    entity xNAUTIxbidprofile_valuehelp  as
+        projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxbidprofile_valuehelp {
+            key BidprofileId
+        };
+
+    entity xNAUTIxcostprof_valuehelp    as
+        projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxcostprof_valuehelp {
+            key Costprofid
+        };
+
+    entity getfinalbidSet               as
+        projection on NAUTIZLIVEBID_VEND_SRV.getfinalbidSet {
+            key Voyno,
+            key Lifnr,
+            key Zcode,
+            key Biddate,
+            key Bidtime,
+                Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity venItemSet                   as
+        projection on NAUTIZLIVEBID_VEND_SRV.venItemSet {
+                Voyno,
+                Lifnr,
+                Zcode,
+                Biddate,
+                Bidtime,
+            key Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity vendorFinSet                 as
+        projection on NAUTIZLIVEBID_VEND_SRV.vendorFinSet {
+            key Chrnmin,
+                venToItem
+        };
+
+    entity xNAUTIxnewvendfbid           as
+        projection on NAUTIZLIVEBID_VEND_SRV.xNAUTIxnewvendfbid {
+            key Voyno,
+            key Lifnr,
+            key Zcode,
+            key Biddate,
+            key Bidtime,
+                Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity contItemSet                  as
+        projection on NAUTILIVEBID_CONT_SRV.contItemSet {
+                Voyno,
+                Lifnr,
+                Zcode,
+                Biddate,
+                Bidtime,
+            key Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity contheaderSet                as
+        projection on NAUTILIVEBID_CONT_SRV.contheaderSet {
+            key Chrnmin,
+                contItemSet
+        };
+
+    entity livecontrollerfetchSet       as
+        projection on NAUTILIVEBID_CONT_SRV.livecontrollerfetchSet {
+            key Voyno,
+            key Lifnr,
+            key Zcode,
+            key Biddate,
+            key Bidtime,
+                Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity BusinessPartnerSet           as
+        projection on NAUTIMASTER_BTP_SRV.BusinessPartnerSet {
+            key Lifnr,
+                PartnerRole,
+                Anred,
+                Name1,
+                Name2,
+                Name3,
+                Sort1,
+                StrSuppl1,
+                StrSuppl2,
+                HouseNum1,
+                Stras,
+                Pstlz,
+                Ort01,
+                Land1,
+                Regio,
+                TimeZone,
+                Spras,
+                Telf1,
+                Telf2,
+                Telfx,
+                SmtpAddr,
+                Erdat,
+                DateTo
+        };
+
+    entity xNAUTIxnewvend_btp           as
+        projection on NAUTIVENDOR_BTP_SRV.xNAUTIxnewvend_btp {
+            key Addrnumber,
+            key Persnumber,
+            key Consnumber,
+            key Nation,
+            key Lifnr,
+                SmtpAddr,
+                arned,
+                Name1,
+                Name2,
+                Name3,
+                Sort1,
+                Land1,
+                Ort01,
+                Pstlz,
+                Regio,
+                Stras,
+                Erdat,
+                Spras,
+                Telf1,
+                Telf2,
+                Telfx,
+                PartnerName
+        };
+
+    entity contaward_tableSet           as
+        projection on NAUTICONTRACTAWARD_SRV.contaward_tableSet {
+            key Voyno,
+            key Lifnr,
+            key Zcode,
+            key Biddate,
+            key Bidtime,
+                Chrnmin,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+
+    entity awardcontractSet             as
+        projection on NAUTICONTRACTAWARD_SRV.awardcontractSet {
+            key Chrnmin,
+                Voyno,
+                Lifnr,
+                Zcode,
+                Biddate,
+                Bidtime,
+                CodeDesc,
+                Value,
+                Cvalue,
+                Cunit,
+                Chrqsdate,
+                Chrqstime,
+                Chrqedate,
+                Chrqetime,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom,
+                Rank,
+                AwrdCreatedBy,
+                AwrdCreatedOn,
+                AwrdCreatedAt
+        };
+
+    entity xNAUTIxbidhist_valuehelp     as
+        projection on NAUTINAUTICAL_VALUEHELP_SRV.xNAUTIxbidhist_valuehelp {
+            key voyno,
+            key Chrnmin
+        };
+
+    entity FileuploadSet                as
+        projection on NAUTIZNAUTIFILEUPL_VOY_SRV.FileuploadSet {
+                Filedescription,
+                Fileid,
+            key Voyageno,
+                Creaby,
+                Creadate,
+                Creatime,
+            key Filename,
+                Filetype,
+                Filecont,
+                Del
+        };
+
+    entity VenodrLiveBidDetails         as projection on nauticalschema.VenodrLiveBidDetails;
+
+    entity costProfileSet               as
+        projection on NAUTIMASTER_BTP_SRV.costProfileSet {
+            key Costprofid,
+            key Costcode,
+                Cstcodes,
+                Creadate,
+                Creatime,
+                Creaby,
+                Changedby,
+                Changedon,
+                Changeat
+        };
+
+    entity BidMasterSet                 as
+        projection on NAUTIMASTER_BTP_SRV.BidMasterSet {
+            key BidprofileId,
+            key Bname,
+            key Code,
+                Value,
+                Cvalue,
+                Cunit,
+                Datatype,
+                Tablename,
+                MultiChoice,
+                Creadate,
+                Creatime,
+                Creaby,
+                Changedon,
+                Changeat
+        };
+
+    entity xNAUTIxMASBID                as
+        projection on NAUTIMASTER_BTP_SRV.xNAUTIxMASBID {
+            key profileId,
+            key Code,
+                Value,
+                Cvalue,
+                Cunit,
+                Datatype,
+                Tablename,
+                creaDate,
+                creaTime,
+                createdBy,
+                changedOn,
+                changeAt,
+                Multi_Choice
+        };
 
 
-    
+    entity newallstatusesSet            as
+        projection on NAUTIVOYSTATUS_SRV.newallstatusesSet {
+                Status,
+            key Voyage,
+                Vdate,
+                Vtime
+        };
+
+    entity xNAUTIxallstatuses           as
+        projection on NAUTIVOYSTATUS_SRV.xNAUTIxallstatuses {
+            key Voyage,
+                Status,
+                Vdate,
+                Vtime
+        };
+
 
     entity xNAUTIxZSUBMITQUOUTFETCH     as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxZSUBMITQUOUTFETCH {
@@ -231,9 +506,7 @@ service nauticalservice {
                 Award
         };
 
-   
 
-   
     entity xNAUTIxawardReportFinal      as
         projection on NAUTICONTRACTAWARD_SRV.xNAUTIxawardReportFinal {
             key Chrnmin,
@@ -323,8 +596,8 @@ service nauticalservice {
             action getDistanceBetweenPort();
             action performCalulation();
         };
-        entity calculateDateAndTime as projection on nauticalschema.calculateDateAndTime;
 
+    entity calculateDateAndTime         as projection on nauticalschema.calculateDateAndTime;
     entity calculateRankings            as projection on nauticalschema.calculateRankings;
 
     entity MasBidTemplateSet            as
@@ -427,8 +700,6 @@ service nauticalservice {
                 route
         };
 
-
-   
 
     entity CountrySet                   as
         projection on NAUTIMASTER_BTP_SRV.CountrySet {
@@ -575,7 +846,7 @@ service nauticalservice {
                 Ind
         };
 
-   
+
     entity voyageStatus                 as projection on nauticalschema.voyageStatus;
 
     entity xNAUTIxBusinessPartner1      as
@@ -1009,7 +1280,7 @@ service nauticalservice {
                 Biddate,
                 Bidtime
         };
-        
+
 
     entity xNAUTIxVENFBID               as
         projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxVENFBID {
@@ -1324,8 +1595,29 @@ service nauticalservice {
                 Zcom,
                 Zmode
         };
-      
 
- entity xNAUTIxnewbidhistoryreport as projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxnewbidhistoryreport
-    {        key Chrnmin, key voyno, key biddate, key bidtime, key vendor, key code, Voyty, voyagrType, Carty, cargoType, voyageName, CodeDesc, curkey, Cvalue, Cunit, DoneBy, Uname, Stat, Zmode, Zcom     }    
-;}
+
+    entity xNAUTIxnewbidhistoryreport   as
+        projection on NAUTIBTP_NAUTICAL_TRANSACTIO_SRV.xNAUTIxnewbidhistoryreport {
+            key Chrnmin,
+            key voyno,
+            key biddate,
+            key bidtime,
+            key vendor,
+            key code,
+                Voyty,
+                voyagrType,
+                Carty,
+                cargoType,
+                voyageName,
+                CodeDesc,
+                curkey,
+                Cvalue,
+                Cunit,
+                DoneBy,
+                Uname,
+                Stat,
+                Zmode,
+                Zcom
+        };
+}

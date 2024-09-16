@@ -35,17 +35,18 @@ sap.ui.define(
         let myVOYNO;
         let oCommercialModel;
         let userEmail;
-        var bidData = [];
-        var voyageStatus;
-        var selectedProfile;
-        var referenceDocModel;
+        let bidData = [];
+        let voyageStatus;
+        let selectedProfile;
+        let referenceDocModel;
+        let costProfileDataModel = {};
 
-        return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage", {
+        return BaseController.extend("com.ingenx.nauti.createvoyage.controller.TrChangeVoyage1", {
             formatter: formatter,
             onInit: async function () {
 
-                 // ref document  model
-                 referenceDocModel = new sap.ui.model.json.JSONModel({
+                // ref document  model
+                referenceDocModel = new sap.ui.model.json.JSONModel({
                     documents: [
                         {
                             documentIndicator: "",
@@ -53,7 +54,7 @@ sap.ui.define(
                         }
                     ]
                 });
-                this.getView().setModel(referenceDocModel,"referenceModel");
+                this.getView().setModel(referenceDocModel, "referenceModel");
 
                 await this.getLoggedInUserInfo();
                 this._rowCount = 0;
@@ -81,8 +82,34 @@ sap.ui.define(
                 oBidCharterModel = new JSONModel();
                 this.getView().setModel(oBidCharterModel, "oBidCharterModel");
                 this.debouncedOnPortDaysChange = this.debounce(this._onPortDaysChange.bind(this), 600);
+                await this.getCostProfileData();
 
                 await this._initBidTemplate();
+
+            },
+
+            getCostProfileData: async function () {
+
+                try {
+                    costProfileDataModel = new sap.ui.model.json.JSONModel();
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBindList = oModel.bindList("/xNAUTIxcostprof_ass", undefined, undefined, undefined, {
+                        $expand: `to_name`
+                    });
+                    let oContexts = await oBindList.requestContexts(0, Infinity);
+                    let data = [];
+                    oContexts.forEach(oContext => {
+                        data.push(oContext.getObject());
+                    });
+                    console.log("Cost profile data", data);
+                    costProfileDataModel.setData(data);
+                    this.getView().setModel(costProfileDataModel, "costProfileDataModel");
+                    console.log(this.getView().getModel("costProfileDataModel").getData());
+
+                } catch (error) {
+                    console.log("error in  fetching cost profile -", error);
+
+                }
 
             },
 
@@ -96,8 +123,8 @@ sap.ui.define(
                     console.log("userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                    userEmail = undefined ;
-                    // userEmail = "sarath.venkateswara@ingenxtec.com";
+                    // userEmail = undefined ;
+                    userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
             debounce: function (func, wait) {
@@ -282,7 +309,31 @@ sap.ui.define(
                         voyHeaderModel.setData(tempDataArr);
                         voyItemModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
                         voyItemModel.setData([...tempDataArr[0].toitem]);
-                        costdetailsModel.setData([...tempDataArr[0].tocostcharge]);
+                        if (tempDataArr[0].tocostcharge.length) {
+
+                            costdetailsModel.setData([...tempDataArr[0].tocostcharge]);
+                        } else {
+                            let costData = [];
+                            let currency = voyHeaderModel.getData()[0].Curr;
+                            let unit = voyHeaderModel.getData()[0].toitem[0].Cargu;
+                            for (let i = 1; i <= tempDataArr[0].toitem.length; i++) {
+                                costData.push({
+                                    Voyno: myVOYNO,
+                                    Vlegn: i,
+                                    Procost: "0.000",
+                                    Prcunit: "",
+                                    Costu: unit,
+                                    Costcode: "",
+                                    Cstcodes: "",
+                                    Costcurr: currency,
+                                    CostCheck: false
+                                })
+                                costdetailsModel.setData(costData);
+
+
+                            }
+
+                        }
                         // sorting in asending based on Vlegn
                         costdetailsModel.getData().sort((a, b) => {
                             if (a.Vlegn < b.Vlegn) return -1;
@@ -439,6 +490,7 @@ sap.ui.define(
             },
 
             onProfileChange: async function (oEvent) {
+
                 let oSource = oEvent.getSource();
                 selectedProfile = oSource._getSelectedItemText();
                 console.log("profile selected : ", selectedProfile);
@@ -447,8 +499,180 @@ sap.ui.define(
                     await this._initBidTemplate();
                 }
 
+            },
+            onCostProfileChange: function (oEvent) {
+
+                let oSource = oEvent.getSource();
+                let sCostProfile = oSource._getSelectedItemText();
+                console.log("cost profile selected : ", sCostProfile);
+
+                let currency = voyHeaderModel.getData()[0].Curr;
+                let unit = voyHeaderModel.getData()[0].toitem[0].Cargu;
+                let oVlegn = oSource.getBindingContext('costdetailsModel').getObject().Vlegn;
+                let portsCount = voyItemModel.getData().length;
+
+                let oCostTable = this.byId('_costTablePlan');
+                let costData = costdetailsModel.getData();
+                let costFilterData = costData.filter(x => x.Vlegn == oVlegn);
+                let costMap = new Map();
+
+                costFilterData.forEach(item => {
+                    let key = `${item.Vlegn}_${item.Costcode}`; 
+                    costMap.set(key, item);
+                });
+                console.log("cost_map : ", costMap);
+
+                let profileData = costProfileDataModel.getData();
+                let selectedProfileData = profileData.filter(item => item.Costprofid == sCostProfile);
+                console.log("SelectedProfile dataa --", selectedProfileData);
+
+                let dataToInsert = [];
+
+                let costTemplate = {
+                    Voyno: myVOYNO,
+                    Vlegn: "",
+                    Procost: "0.000",
+                    Prcunit: "",
+                    Costu: unit,
+                    Costcode: "",
+                    Cstcodes: "",
+                    Costcurr: currency,
+                    CostCheck: false
+                };
+
+                selectedProfileData[0].to_name.forEach(j => {
+                    let key = `${oVlegn}_${j.Costcode}`;
+
+
+                    if (costMap.has(key)) {
+                        // Overwrite existing entry in the model
+                        let existingEntry = costMap.get(key);
+                        existingEntry.Costcode = j.Costcode;
+                        existingEntry.Cstcodes = j.Cstcodes;
+                        existingEntry.Costu = unit;
+                        existingEntry.Costcurr = currency;
+                        existingEntry.Prcunit = "";
+                        existingEntry.Procost = "0.000";
+                        dataToInsert.push(existingEntry)
+                    } else {
+                        // Add a new entry if it doesn't exist
+                        let newCostTemplate = Object.assign({}, costTemplate);
+                        newCostTemplate.Costcode = j.Costcode;
+                        newCostTemplate.Cstcodes = j.Cstcodes;
+                        newCostTemplate.Vlegn = oVlegn
+
+                        dataToInsert.push(newCostTemplate);
+                    }
+                })
+                // code for insert blank entries to select profile for other ports
+                for (let i = oVlegn + 1; i <= portsCount; i++) {
+                    let newCostTemplate = Object.assign({}, costTemplate);
+                    newCostTemplate.Vlegn = i;
+                    dataToInsert.push(newCostTemplate);
+
+                }
+
+
+
+                let costTablePresentData = oCostTable.getModel('costdetailsModel').getData();
+                costTablePresentData = costTablePresentData.filter(x => x.Vlegn !== oVlegn &&  x.Costcode !== "" );
+                dataToInsert = [...costTablePresentData, ...dataToInsert];
+                dataToInsert.sort((a, b) => {
+                    if (a.Vlegn < b.Vlegn) {
+                        return -1;
+                    }
+                    if (a.Vlegn > b.Vlegn) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
+
+
+                console.log("cost data to be inserted after select profile :- ", dataToInsert);
+
+
+                // costData.push(...dataToInsert);
+                costdetailsModel.setData(dataToInsert);
+                costdetailsModel.refresh();
+                console.log( oCostTable.getModel('costdetailsModel').getData());
+                //  select non--editable
+                // oCostTable.getItems().forEach(x => {
+                //     if (x.getCells()[0].getValue() == oVlegn) {
+
+                //         let otext = x.getCells()[1].getSelectedItem();
+                //         if (otext) {
+                //             otext = otext.getText();
+
+                //         }
+                //         if (!otext) {
+                //             x.getCells()[1].setEditable(false);
+                //         }
+                //     }
+                // })
 
             },
+            onCostProfileChange1: function (oEvent) {
+
+                let oSource = oEvent.getSource();
+                let sCostProfile = oSource._getSelectedItemText();
+                console.log("cost profile selected : ", sCostProfile);
+
+                let currency = voyHeaderModel.getData()[0].Curr;
+                let unit = voyHeaderModel.getData()[0].toitem[0].Cargu;
+                let portsCount = voyHeaderModel.getData()[0].toitem.length;
+
+                let oCostTable = this.byId('_costTablePlan');
+                let costData = costdetailsModel.getData();
+                let costMap = new Map();
+
+                costData.forEach(item => {
+                    let key = `${item.Vlegn}_${item.Costcode}`;
+                    costMap.set(key, item);
+                });
+                console.log("cost_map : ", costMap);
+
+                let profileData = costProfileDataModel.getData();
+                let selectedProfileData = profileData.filter(item => item.Costprofid == sCostProfile);
+                console.log("SelectedProfile dataa --", selectedProfileData);
+
+                let dataToInsert = [];
+
+                let costTemplate = {
+                    Voyno: myVOYNO,
+                    Vlegn: "",
+                    Procost: "0.000",
+                    Prcunit: "",
+                    Costu: unit,
+                    Costcode: "",
+                    Cstcodes: "",
+                    Costcurr: currency,
+                    CostCheck: false
+                };
+                for (let i = 1; i <= portsCount; i++) {
+
+                    selectedProfileData[0].to_name.forEach(j => {
+                        let toFind = `${i}_${j.Costcode}`;
+                        if (!costMap.has(toFind)) {
+
+                            let newCostTemplate = Object.assign({}, costTemplate); // Create a new object using Object.assign
+                            newCostTemplate.Costcode = j.Costcode;
+                            newCostTemplate.Cstcodes = j.Cstcodes;
+                            newCostTemplate.Vlegn = i;
+
+                            dataToInsert.push(newCostTemplate);
+                        }
+                    })
+                }
+                console.log("cost data to be inserted after select profile :- ", dataToInsert);
+
+
+                // costData.push(...dataToInsert);
+                costdetailsModel.setData(dataToInsert);
+                costdetailsModel.refresh();
+
+            },
+
 
             _getBidTemplate: function (oModel, detailType) {
                 let index = "Not Found";
@@ -529,7 +753,7 @@ sap.ui.define(
 
             },
 
-          
+
             _setBidTemplate: function (templateData, oTable) {
                 let oView = this.getView();
                 let that = this;
@@ -569,9 +793,8 @@ sap.ui.define(
                     });
                     oTable.addItem(oItem);
                 });
-               
-            },
 
+            },
             handlePopoverPress: function (oEvent, that) {
                 let oButton = oEvent.getSource();
                 let oView = that.oView;
@@ -878,7 +1101,7 @@ sap.ui.define(
                 let oTable = oDialog.getContent()[0]; // table is the third item in the dialog's content
                 let oModel = oTable.getModel("tempModel");
                 let aSelectedItems = oTable.getItems();
-                
+
 
                 let aSelectedIndices = [];
 
@@ -894,62 +1117,62 @@ sap.ui.define(
                     onClose: function (oAction) {
                         if (oAction === sap.m.MessageBox.Action.OK) {
 
-                        // Loop through table items and find selected indices
-                        for (let i = 0; i < aSelectedItems.length; i++) {
-                            if (aSelectedItems[i].getSelected()) {
-                                aSelectedIndices.push(i);
-                            }
-                        }
-
-                        // Sort the indices in descending order to ensure correct deletion when multiple rows are selected
-                        aSelectedIndices.sort(function (a, b) {
-                            return b - a;
-                        });
-
-                        // Remove the selected rows from the model and from bidPayload
-                        for (let j = 0; j < aSelectedIndices.length; j++) {
-                            let index = aSelectedIndices[j];
-                            let aData = oModel.getProperty("/");
-
-                            // Get the Zcode and Value from the selected item
-                            let selectedItem = aData[index];
-                            let selectedZcode = selectedItem.Zcode;
-                            let selectedValue = selectedItem.Value;
-
-                            // Find the index of the corresponding entry in bidPayload
-                            let bidIndex = bidPayload.findIndex(bidItem => bidItem.Zcode === selectedZcode && bidItem.Value === selectedValue);
-
-                            // Remove the entry from bidPayload if it exists
-                            if (bidIndex !== -1) {
-                                bidPayload.splice(bidIndex, 1);
+                            // Loop through table items and find selected indices
+                            for (let i = 0; i < aSelectedItems.length; i++) {
+                                if (aSelectedItems[i].getSelected()) {
+                                    aSelectedIndices.push(i);
+                                }
                             }
 
-                            // Remove the entry from the model
-                            aData.splice(index, 1);
-                            oModel.setProperty("/", aData);
-                        }
+                            // Sort the indices in descending order to ensure correct deletion when multiple rows are selected
+                            aSelectedIndices.sort(function (a, b) {
+                                return b - a;
+                            });
+
+                            // Remove the selected rows from the model and from bidPayload
+                            for (let j = 0; j < aSelectedIndices.length; j++) {
+                                let index = aSelectedIndices[j];
+                                let aData = oModel.getProperty("/");
+
+                                // Get the Zcode and Value from the selected item
+                                let selectedItem = aData[index];
+                                let selectedZcode = selectedItem.Zcode;
+                                let selectedValue = selectedItem.Value;
+
+                                // Find the index of the corresponding entry in bidPayload
+                                let bidIndex = bidPayload.findIndex(bidItem => bidItem.Zcode === selectedZcode && bidItem.Value === selectedValue);
+
+                                // Remove the entry from bidPayload if it exists
+                                if (bidIndex !== -1) {
+                                    bidPayload.splice(bidIndex, 1);
+                                }
+
+                                // Remove the entry from the model
+                                aData.splice(index, 1);
+                                oModel.setProperty("/", aData);
+                            }
                             //setting Parent input value
                             let tempModelData = oModel.getData();
                             let oInputValue = that.getInputData(tempModelData);
                             oInputSource.setValue(oInputValue);
 
                             // Enable the Add row if no Data
-                            if( !tempModelData.length){
+                            if (!tempModelData.length) {
                                 oDialog.getContent()[1].setEnabled(true);
                             }
 
 
 
-                        // Clear the selection in the table
-                        oTable.removeSelections();
+                            // Clear the selection in the table
+                            oTable.removeSelections();
 
 
-                    }else {
-                        
-                        oTable.removeSelections();
+                        } else {
 
+                            oTable.removeSelections();
+
+                        }
                     }
-                 }
                 });
 
 
@@ -1082,11 +1305,9 @@ sap.ui.define(
                 return sGood === "X" || sMand === "X";
             },
 
-            
             getInputData: function (hintData) {
                 var firstMandValue = null;
                 var firstGoodValue = null;
-                var firstMustValue = null;
 
                 for (var i = 0; i < hintData.length; i++) {
                     var item = hintData[i];
@@ -1102,19 +1323,12 @@ sap.ui.define(
                             firstGoodValue = item.Value;
                         }
                     }
-                    if (item.Must === "X") {
-                        if (firstMustValue === null) {
-                            firstMustValue = item.Value;
-                        }
-                    }
                 }
 
                 if (firstMandValue !== null) {
                     return firstMandValue;
                 } else if (firstGoodValue !== null) {
                     return firstGoodValue;
-                } else if (firstMustValue !== null) {
-                    return firstMustValue
                 } else {
                     return null;
                 }
@@ -1124,9 +1338,8 @@ sap.ui.define(
                 let oSource = oEvent.getSource();
                 let that = this;
                 let obj;
-                let currentDate = new Date();
                 if (datatype === "DATE") {
-                    obj = new sap.m.DatePicker({ valueFormat: "dd.MM.YYYY", value: "{tempModel>Value}" ,maxDate: currentDate });
+                    obj = new sap.m.DatePicker({ valueFormat: "dd.MM.YYYY", value: "{tempModel>Value}" });
 
                 } else if (tablename) {
 
@@ -1244,11 +1457,11 @@ sap.ui.define(
 
                                                     // Disable add row button in the dialog 
 
-                                                    dialog.getContent()[1].setEnabled(false); 
-                                            
+                                                    dialog.getContent()[1].setEnabled(false);
+
                                                 } else {
                                                     dialog.getContent()[1].setEnabled(true);
-                                    
+
 
                                                 }
                                             }
@@ -1321,8 +1534,8 @@ sap.ui.define(
                             type: "Reject",
                             press: function (oEvent) {
 
-                                that.onDeleteBidDetail(oEvent,oSource);
-                                
+                                that.onDeleteBidDetail(oEvent, oSource);
+
                             }
                         }).addStyleClass("sapUiTinyMargin")
                     ],
@@ -1355,12 +1568,12 @@ sap.ui.define(
                                     new sap.m.MessageBox.error("Duplicate Entry found");
                                     return; // Exit the press function
                                 }
-                                 for (let entry of entries) {
+                                for (let entry of entries) {
                                     if (entry.Value === "") {
                                         sap.m.MessageBox.error("Please fill Possible Value");
                                         return;
                                     }
-                
+
                                     if (entry.Good === "" && entry.Mand === "" && entry.Must === "") {
                                         sap.m.MessageBox.error("Please fill at least one of the Good, Mand, or Must fields");
                                         return;
@@ -1369,14 +1582,14 @@ sap.ui.define(
                                         sap.m.MessageBox.error("Please fill Min Score");
                                         return;
                                     }
-                
+
                                     if (entry.Zmax == "") {
                                         sap.m.MessageBox.error("Please fill Max Score");
                                         return;
                                     }
                                 }
 
-                              
+
                                 let entriesMap = new Map();
                                 entries.forEach(entry => {
                                     let key = `${entry.Zcode}_${entry.Value}`;
@@ -1429,7 +1642,7 @@ sap.ui.define(
                         press: function () {
                             oDialog.close();
                             // console.log("Closed btn pressed");
-                         
+
                         },
                     }),
                 });
@@ -1467,9 +1680,6 @@ sap.ui.define(
                     // Value is out of range, set value state to Error
                     oInput.setValueState(sap.ui.core.ValueState.Error);
                     oInput.setValueStateText("Value must be in range [0 - 4]");
-                    oInput.setValue(
-                        ""
-                        );
                 }
             },
             checkRangeforZmax: function (oEvent) {
@@ -1507,10 +1717,6 @@ sap.ui.define(
 
                     oInput.setValueState(sap.ui.core.ValueState.Error);
                     oInput.setValueStateText("Value must be in range [Min score - 5]", { duration: 1000 });
-                    oInput.setValue(
-                        ""
-                        );
-
                 }
             },
             assignGroupToRadioButton: function (oDialog) {
@@ -2088,10 +2294,10 @@ sap.ui.define(
                 if (/^0{2,}/.test(sValue)) {
                     sValue = sValue.replace(/^0+/, '0'); // Replace leading zeros with a single zero
                 }
-                
+
                 // Remove all commas from the value
                 sValue = sValue.replace(/,/g, '');
-                
+
                 // Set the cleaned value back to the input
                 oInput.setValue(sValue);
 
@@ -2267,8 +2473,8 @@ sap.ui.define(
                     return;
                 }
 
-                let oTableModel = costdetailsModel;
-                let oTableData = oTableModel.getData();
+                let oCostTableModel = costdetailsModel;
+                let oTableData = oCostTableModel.getData();
                 let currency = voyHeaderModel.getData()[0].Curr;
                 let unit = voyHeaderModel.getData()[0].toitem[0].Cargu;
 
@@ -2293,7 +2499,7 @@ sap.ui.define(
                 }
 
                 oTableData.push({ Voyno: myVOYNO, Vlegn: "", Procost: "0.000", Prcunit: "", Costu: unit, Costcode: "", Cstcodes: "", Costcurr: currency, CostCheck: false });
-                oTableModel.refresh();
+                oCostTableModel.refresh();
                 this.byId('_costTablePlan').removeSelections();
 
             },
@@ -2375,12 +2581,12 @@ sap.ui.define(
                     sap.m.MessageToast.show("Please Select a Row to Remove");
                     return;
                 }
-           
+
 
                 new sap.m.MessageBox.confirm("Are you sure, you want to delete ?", {
                     title: "Cost Deletion",
                     onClose: function (oAction) {
-                        
+
                         if (oAction === sap.m.MessageBox.Action.OK) {
 
                             aSelectedItems.forEach(function (oSelectedItem) {
@@ -2430,13 +2636,13 @@ sap.ui.define(
 
 
                         }
-                        
+
 
                     }
                 });
 
             },
-          
+
             calculateSumAllCharges: function (oVlegn) {
 
                 let data = costdetailsModel.getData();
@@ -2759,7 +2965,7 @@ sap.ui.define(
                     // Iterate over bidPayload using a for loop to allow deletion
                     for (let i = bidPayload.length - 1; i >= 0; i--) {
                         let item = bidPayload[i];
-                        
+
                         // Check if the item should be kept
                         if (!sCodeDescList.includes(item.CodeDesc) && item.Cunit === "") {
                             // Remove the item from the array if it doesn't match the condition
@@ -2835,7 +3041,7 @@ sap.ui.define(
                             title: "Voyage updation",
                             onClose: function () {
 
-                        
+
 
                             }
                         });
@@ -2986,21 +3192,21 @@ sap.ui.define(
                 }
             },
             onSendForApprovalCreate: async function () {
- 
- 
+
+
                 if (!myVOYNO) {
                     sap.m.MessageBox.error("Please enter Voyage No.");
                     return;
                 }
- 
+
                 await this.checkforValidUser();
                 if (!userEmail) {
                     return;
                 }
                 let oModel = this.getOwnerComponent().getModel();
- 
+
                 let oBindListSP = oModel.bindList("/voyapprovalSet");
- 
+
                 try {
                     let saveddata = oBindListSP.create({
                         "Vreqno": "",
@@ -3010,39 +3216,31 @@ sap.ui.define(
                     // console.log("saving data:", saveddata);
                     let oBusyDialog = new sap.m.BusyDialog();
                     oBusyDialog.open();
- 
+
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
- 
+
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
                         } else {
                             sap.m.MessageBox.error("Error: Approval not found after creation");
                         }
                     }).catch(function (error) {
-                        console.log("Error while requesting contexts:", error);
-                        if( error.cause.message.includes("VOYNO. NOT ASSOCIATED TO VESSELTYPE AND VOYAGE TYPE")){
- 
-                            sap.m.MessageBox.error("Release Strategy is not Maintained against Voyage Type and Vessel Type")
-                        }
-                        else {
- 
-                            sap.m.MessageBox.error("Error while Sending Approval");
-                        }
+                        console.error("Error while requesting contexts:", error);
                         oBusyDialog.close();
- 
+
                         throw error
- 
+
                     });
                 } catch (error) {
-                    console.log("Error while saving data:", error);
+                    console.error("Error while saving data:", error);
                     oBusyDialog.close();
+                    sap.m.MessageBox.error("Error while Sending Approval");
                 }
             },
- 
 
             onCancelVoayge: async function () {
 
@@ -3663,7 +3861,7 @@ sap.ui.define(
                 oRouter.navTo("RouteHome");
             },
 
-          
+
 
 
         });

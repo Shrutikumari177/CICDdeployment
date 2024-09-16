@@ -512,6 +512,7 @@
                                             </Select>
                                             <Input
                                                 value="{referenceModel>referenceDocumentNo}"
+                                                showValueHelp="true"
                                             />
                                             <Button
                                                 icon="sap-icon://less"

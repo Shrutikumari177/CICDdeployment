@@ -23,6 +23,8 @@ module.exports = async (srv) => {
     const NAUTINAUTICAL_VALUEHELP_SRV = await cds.connect.to("NAUTINAUTICAL_VALUEHELP_SRV"); 
     srv.on('READ', 'xNAUTIxbidprofile_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
     srv.on('READ', 'xNAUTIxcostprof_valuehelp', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
+    srv.on('READ', 'xNAUTIxcostprof_ass', req => NAUTINAUTICAL_VALUEHELP_SRV.run(req.query)); 
+
 
 
 

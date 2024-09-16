@@ -420,15 +420,16 @@
                                                             
                                                             displayFormat="dd-MM-yyyy"
                                                             valueFormat="yyyy-MM-dd"
-                                                            editable="{oJsonModel>/oEdit}"
                                                             required="true"
+                                                             editable="{= ${oJsonModel>LegId} === '1' }"
                                                             dateValue="{oJsonModel>DepartureDate}"
                                                             value="{oJsonModel>DepartureDateValue}"
                                                             change="handleDateChange"
-
-                                                            
+                                                            id="depatureDate"
+                                                            minDate=""
                                                             
                                                         />
+                                                            <!-- editable="{oJsonModel>/oEdit}" -->
                                                     </ui:template>
                                                 </ui:Column>
                                                 <ui:Column width="10rem">
@@ -439,12 +440,13 @@
                                                     <ui:template>
                                                         <TimePicker
                                                         
-                                                            editable="{oJsonModel>/oEdit}"
+                                                        
                                                             required="true"
                                                             valueFormat="HH:mm:ss"
                                                             support2400="true"
                                                             displayFormat="HH:mm:ss"
                                                             value="{oJsonModel>DepartureTime}"
+                                                             editable="{= ${oJsonModel>LegId} === '1' }"
                                                         />
                                                              <!-- dateValue="{oJsonModel>DepartureTime}" -->
                                                              <!--  for V2 model -->

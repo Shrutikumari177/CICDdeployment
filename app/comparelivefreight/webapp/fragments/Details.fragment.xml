@@ -24,7 +24,7 @@
                     </FlexBox>
                     <FlexBox class="headerItem1 sapUiSmallMarginBottom secondColumn" direction="Row" justifyContent="SpaceBetween">
                         <Label class="labelStyle sapUiTinyMarginTop sapUiSmallMarginBegin" text="Award Info :" />
-                        <Input class="inputStyle" value="No" editable="false" />
+                        <Input class="inputStyle" value="Yes" editable="false" />
                     </FlexBox>
 
                     <FlexBox class="headerItem1 sapUiSmallMarginBottom secondColumn" direction="Row" justifyContent="SpaceBetween">

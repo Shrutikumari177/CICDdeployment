@@ -64,7 +64,7 @@ sap.ui.define([
                 let vendorfound = "2100000001";
                 console.log("Vendor found for Shruti Kumari", vendorfound);
                 return vendorfound;
-            } else if (loggedinUser === "rishbh.tiwari@ingenxtec.com") {
+            } else if (loggedinUser === "rishabh.tiwari@ingenxtec.com") {
                 let vendorfound = "2100000002";
                 console.log("Vendor found for Rishbh Tiwari", vendorfound);
                 return vendorfound;

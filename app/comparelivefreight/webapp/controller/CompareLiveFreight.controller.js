@@ -243,11 +243,12 @@ sap.ui.define([
 
         // This method is used for checking the data i.e. available or not on server and this function calling from _postDataPayload
         _sendAwardDataToS4: function (oPayload) {
+            debugger
             const awardModel = this.getOwnerComponent().getModel();
             this._showBusyDialog("Checking for duplicates, please wait...");
 
             const oListBinding = awardModel.bindList("/awardcontractSet");
-
+            let allData = []
             oListBinding.requestContexts().then(aContexts => {
                 this._hideBusyDialog();
 
@@ -258,6 +259,13 @@ sap.ui.define([
                         oData.Voyno === oPayload.Voyno
                     );
                 });
+                // const fData = aContexts.forEach(oContext=>{
+                //     allData.push(oContext.getObject())
+                // })
+                // let findData = fData.find(item=>{
+                //     return (item.Chrnmin === oPayload.Chrnmin &&
+                //               item.Voyno === oPayload.Voyno)
+                // })
 
                 if (hasDuplicate) {
                     sap.m.MessageToast.show("Duplicate entry found.");
@@ -275,22 +283,15 @@ sap.ui.define([
         _postToServer: function (oPayload) {
             const awardModel = this.getOwnerComponent().getModel();
             this._showBusyDialog("Creating award...");
+            let oBindList = awardModel.bindList("/awardcontractSet")
 
-            awardModel.create("/awardcontractSet", oPayload, {
-                success: () => {
-                    this._hideBusyDialog();
-                    sap.m.MessageToast.show("Award created successfully.");
-                },
-                error: (oError) => {
-                    this._hideBusyDialog();
-                    const oErrorResponse = JSON.parse(oError.responseText);
-                    if (oErrorResponse.error.message.value.includes("Duplicate Entry")) {
-                        sap.m.MessageToast.show("Duplicate Entry Found");
-                    } else {
-                        sap.m.MessageToast.show("Error occurred while creating award.");
-                    }
-                }
-            });
+            oBindList.create(oPayload,true).created().then(oContext=>{
+                sap.m.MessageBox.success("Award created",{
+                    title:"Award"
+                })
+            }).catch(oError=>{
+                console.log("Error message:",oError);
+            })
         }
     });
 });

@@ -176,7 +176,13 @@
                         <core:Item id="_IDGenItem2" key="CURR" text="CURR" />
                         <core:Item id="_IDGenItem3" key="DATE" text="DATE" />
                     </Select>
-                    <Input id="Tablename" liveChange="onLiveChangeTablename"/>
+
+                    <Select id="Tablename" forceSelection="false" liveChange="onLiveChangeTablename">
+                        <core:Item id="_IDGenTableItem1" key="CLASS" text="/NAUTI/CLASS" />
+                        <core:Item id="_IDGenTableItem2" key="COUNTRY" text="/NAUTI/ZCOUNTRY" />
+                        <core:Item id="_IDGenTableItem3" key="PORT" text="/NAUTI/ZPORT" />
+                    </Select>
+                    <!-- <Input id="Tablename" liveChange="onLiveChangeTablename"/> -->
                     <CheckBox id="Multi_Choice"  select="onSelectChange"/>
                 </cells>
             </ColumnListItem>
@@ -233,8 +239,13 @@
                         <core:Item id="IDGenItem2" key="CURR" text="CURR" />
                         <core:Item id="IDGenItem3" key="DATE" text="DATE" />
 				    </Select>
+                    <Select id="Tablename1" forceSelection="false" liveChange="onLiveChangeTablename">
+                        <core:Item id="_IDGenTableUItem1" key="CLASS" text="/NAUTI/CLASS" />
+                        <core:Item id="_IDGenTableUItem2" key="COUNTRY" text="/NAUTI/ZCOUNTRY" />
+                        <core:Item id="_IDGenTableUItem3" key="PORT" text="/NAUTI/ZPORT" />
+                    </Select>
                     
-                    <Input id="Tablename1" liveChange="onLiveChangeTablename"/>
+                    <!-- <Input id="Tablename1" liveChange="onLiveChangeTablename"/> -->
                     <CheckBox id="MultiChoice1"  select="onSelectChange"/>
                 </cells>
             </ColumnListItem>

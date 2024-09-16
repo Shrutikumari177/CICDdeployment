@@ -12,15 +12,15 @@ sap.ui.define([
 
 	JSONFilterBarDelegate.fetchProperties = async () => JSONPropertyInfo;
 
-	const _createValueHelp = (oFilterBar, sPropertyName) => {
-		const aKey = "com.ingenx.nauti.masterdashboard.fragments.";
-		return Fragment.load({
-			name: aKey + oFilterBar.getPayload().valueHelp[sPropertyName]
-		}).then((oValueHelp) => {
-			oFilterBar.addDependent(oValueHelp);
-			return oValueHelp;
-		});
-	};
+	// const _createValueHelp = (oFilterBar, sPropertyName) => {
+	// 	const aKey = "com.ingenx.nauti.masterdashboard.fragments.";
+	// 	return Fragment.load({
+	// 		name: aKey + oFilterBar.getPayload().valueHelp[sPropertyName]
+	// 	}).then((oValueHelp) => {
+	// 		oFilterBar.addDependent(oValueHelp);
+	// 		return oValueHelp;
+	// 	});
+	// };
 
 	const _createFilterField = async (sId, oProperty, oFilterBar) => {
 		const sPropertyKey = oProperty.key;
@@ -29,43 +29,26 @@ sap.ui.define([
 			conditions: "{$filters>/conditions/" + sPropertyKey + '}',
 			propertyKey: sPropertyKey,
 			required: oProperty.required,
+			valueHelp: "name-vh",
 			label: oProperty.label,
 			maxConditions: oProperty.maxConditions,
-			delegate: { name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {} }
+			
+			 operators: "Contains",
+			delegate: {name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {}}
 		});
-	
-		const oPayload = oFilterBar.getPayload();
-		if (oPayload && oPayload.valueHelp && oPayload.valueHelp[sPropertyKey]) {
-			const aDependents = oFilterBar.getDependents();
-			let oValueHelp = null;
-	
-			for (let i = 0; i < aDependents.length; i++) {
-				if (aDependents[i].getId().includes(sPropertyKey)) {
-					oValueHelp = aDependents[i];
-					break;
-				}
-			}
-	
-			if (!oValueHelp) {
-				oValueHelp = await _createValueHelp(oFilterBar, sPropertyKey);
-			}
-	
-			oFilterField.setValueHelp(oValueHelp);
-		}
-	
+		// if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
+		// 	const aDependents = oFilterBar.getDependents();
+		// 	let oValueHelp = aDependents.find((oD) => oD.getId().includes(sPropertyKey));
+		// 	oValueHelp ??= await _createValueHelp(oFilterBar, sPropertyKey);
+		// 	oFilterField.setValueHelp(oValueHelp);
+		// }
 		return oFilterField;
 	};
-	
+
 	JSONFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey) => {
 		const oProperty = JSONPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oFilterBar.getId() + "--filter--" + sPropertyKey;
-		const oElement = Element.getElementById(sId);
-	
-		if (oElement) {
-			return oElement;
-		} else {
-			return await _createFilterField(sId, oProperty, oFilterBar);
-		}
+		return Element.getElementById(sId) ?? (await _createFilterField(sId, oProperty, oFilterBar));
 	};
 
 	return JSONFilterBarDelegate;

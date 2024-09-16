@@ -256,7 +256,7 @@ sap.ui.define(
           this.byId('createTypeTable').removeSelections();
 
         } else if (copyFlag) {
-          this.onCancelNewEntry();
+          this.onCancelCopy();
         } else if (newEntryFlag) {
           this.onCancelNewEntry();
         } else if (editFlag) {
@@ -275,6 +275,7 @@ sap.ui.define(
           oRouter.navTo("RouteHome");
 
         } else if (copyFlag) {
+         
           let oTable = this.byId("entryTypeTable"); // Assuming you have the table reference
           let aItems = oTable.getItems();
           let flag = false;
@@ -285,14 +286,14 @@ sap.ui.define(
             var sValue = oCells[2].getValue().trim();
             var sCvalue = oCells[3].getValue().trim();
             var sCunit = oCells[4].getValue().trim();
-            var sDatatype = oCells[5].getValue().trim();
-            var sTablename = oCells[6].getValue().trim();
+            var sDatatype = oCells[5].getSelectedKey();
+            var sTablename = oCells[6].getSelectedItem().getText();
             var sMulti_Choice = oCells[7].getSelected();
             // var sValue = this.removeExtraSpaces(oInput.getValue());
 
             console.log(onCopyInput[i] + ":" + sValue + ":");
             let fieldsArr = onCopyInput[i];
-            if (fieldsArr[0] !== sCode || fieldsArr[1] !== sBname || fieldsArr[2] !== sValue || fieldsArr[3] !== sCvalue || fieldsArr[4] !== sCunit || fieldsArr[5] !== sTablename || fieldsArr[6] !== sDatatype || fieldsArr[7] !== sMulti_Choice) {
+            if (fieldsArr[0] !== sCode || fieldsArr[1] !== sBname || fieldsArr[2] !== sValue || fieldsArr[3] !== sCvalue || fieldsArr[4] !== sCunit || fieldsArr[5] !== sDatatype  || fieldsArr[6] !== sTablename || fieldsArr[7] !== sMulti_Choice) {
               flag = true;
               break;
             }
@@ -507,7 +508,7 @@ sap.ui.define(
           firstItemCells[3].setValue("");
           firstItemCells[4].setValue("");
           firstItemCells[5].setSelectedKey("");
-          firstItemCells[6].setValue("");
+          firstItemCells[6].setSelectedKey("");
           firstItemCells[7].setSelected(false);
 
 
@@ -692,6 +693,35 @@ sap.ui.define(
                 ],
                 selectedKey: Datatype
             });
+
+          let selectedTablenameKey = "";
+
+          switch (Tablename) {
+              case "/NAUTI/CLASS":
+                  selectedTablenameKey = "CLASS";
+                  break;
+              case "/NAUTI/ZCOUNTRY":
+                  selectedTablenameKey = "COUNTRY";
+                  break;
+              case "/NAUTI/ZPORT":
+                  selectedTablenameKey = "PORT";
+                  break;
+              default:
+                  selectedTablenameKey = ""; // or handle it accordingly if not found
+          }
+
+            let oTablenameSelect = new sap.m.Select({
+              forceSelection: false,
+              width: "100%",
+              items: [
+                  new sap.ui.core.Item({ key: "CLASS", text: "/NAUTI/CLASS" }),
+                  new sap.ui.core.Item({ key: "COUNTRY", text: "/NAUTI/ZCOUNTRY" }),
+                  new sap.ui.core.Item({ key: "PORT", text: "/NAUTI/ZPORT" })
+              ],
+              selectedKey: selectedTablenameKey
+            });
+
+            console.log("Tablename:", Tablename);
     
             let newItem = new sap.m.ColumnListItem({
                 cells: [
@@ -701,7 +731,7 @@ sap.ui.define(
                     new sap.m.Input({ value: Cvalue, type: sap.m.InputType.Number, liveChange: that.onLiveChangeCvalue.bind(that) }),
                     new sap.m.Input({ value: Cunit, showValueHelp: true, valueHelpRequest: that.onCurrencyPress.bind(that), valueHelpOnly: true }),
                     oDatatypeSelect,
-                    new sap.m.Input({ value: Tablename, liveChange: that.onLiveChangeTablename.bind(that) }),
+                    oTablenameSelect,
                     new sap.m.CheckBox({ selected: MultiChoice, select: that.onSelectChange.bind(that) })
                 ]
             });
@@ -1039,7 +1069,7 @@ sap.ui.define(
             let value6 = row.getCells()[4].getValue().trim().toUpperCase();
             let value7 = row.getCells()[5].getSelectedKey();
             let value7Text = row.getCells()[5].getSelectedItem().getText().trim().toUpperCase();
-            let value8 = row.getCells()[6].getValue().trim().toUpperCase();
+            let value8 = row.getCells()[6].getSelectedItem().getText().trim().toUpperCase();
             let value9 = row.getCells()[7].getSelected();
     
             let payload = {
@@ -1127,7 +1157,7 @@ sap.ui.define(
           let sCvalue = oCells[3].getValue().trim();
           let sCunit = oCells[4].getValue().trim();
           let sDatatype = oCells[5].getSelectedKey().trim();
-          let sTablename = oCells[6].getValue().trim();
+          let sTablename = oCells[6].getSelectedKey().trim();
           let sMulti_Choice = oCells[7].getSelected();
 
           if (sBidprofileId !== "" || sCode !== "" || sValue !== "" || sCvalue !== "" || sCunit !== "" || sTablename !== "" || sDatatype !== "" || sMulti_Choice !== false) {
@@ -1169,7 +1199,7 @@ sap.ui.define(
           var sCvalue = oCells[3].getValue().trim();
           var sCunit = oCells[4].getValue().trim();
           var sDatatype = oCells[5].getSelectedKey().trim();
-          var sTablename = oCells[6].getValue().trim();
+          var sTablename = oCells[6].getSelectedItem().getText();
           var sMultiChoice = oCells[7].getSelected();
 
           let fieldsArr = onCopyInput[i];
@@ -1223,6 +1253,7 @@ sap.ui.define(
       },
 
       onCancelEdit: function () {
+
         var oTable = this.byId("updateTypeTable");
         var aItems = oTable.getItems();
         let flag = false;
@@ -1235,7 +1266,7 @@ sap.ui.define(
           var sCvalue = oCells[3].getValue().trim();
           var sCunit = oCells[4].getValue().trim();
           var sDatatype = oCells[5].getSelectedKey().trim();
-          var sTablename = oCells[6].getValue().trim();
+          var sTablename = oCells[6].getSelectedItem().getText();
           var sMultiChoice = oCells[7].getSelected();
 
           let fieldsArr = onEditInput[i];
@@ -1314,6 +1345,88 @@ sap.ui.define(
       },
 
 
+      // onDeletePress: function () {
+
+      //   let oTable = this.byId("createTypeTable");
+      //   let aItems = oTable.getSelectedItems();
+      //   if (!aItems.length) {
+
+      //     MessageToast.show("Please Select  Atleast one Row ");
+      //     return;
+      //   }
+
+      //   const that = this;
+      //   sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
+      //     MessageBox.confirm(
+      //       "Are you sure ,you want  to delete ?", {
+
+      //       title: "Confirm ",
+      //       onClose: function (oAction) {
+      //         if (oAction === MessageBox.Action.OK) {
+      //           oBusyDialog = new sap.m.BusyDialog({
+      //             text: "Deleting, please wait...",
+      //             title: "Processing"
+      //           });
+      //           oBusyDialog.open();
+      //           that.deleteSelectedItems(aItems);
+      //         } else {
+
+      //           oTable.removeSelections();
+      //           sap.m.MessageToast.show("Deletion canceled");
+
+      //         }
+      //       }
+      //     }
+      //     );
+      //   });
+
+      // },
+
+      // deleteSelectedItems: function (aItems) {
+      //   let slength = aItems.length;
+      //   let deleteMsg = slength === 1 ? "Record" : "Records";
+      //   let oModel = this.getOwnerComponent().getModel();
+
+      //   aItems.forEach((oItem) => {
+      //     const oContext = oItem.getBindingContext();
+      //     const oData = oContext.getObject();
+      //     let profileId = oData.profileId;
+      //     let code = oData.Code;
+      //     console.log("data to be deleted", profileId, code);
+      //     let that = this;
+      //     let oBindList = oModel.bindList("/BidMasterSet");
+
+      //     oBindList.requestContexts(0, Infinity).then((aContexts) => {
+      //       aContexts.forEach((oContext) => {
+      //         if (oContext.getObject().BidprofileId === profileId && oContext.getObject().Code === code) {
+      //           oContext.delete().then(function () {
+      //             oModel.refresh();
+
+      //             MessageToast.show(`${deleteMsg} deleted sucessfully`);
+      //             that.resetView();
+      //             oBusyDialog.close();
+
+
+
+
+
+      //           }).catch((err) => {
+      //             console.error("Error deleting record: ", err);
+
+      //           });
+      //         };
+      //       });
+      //     });
+
+      //     let oTable = this.byId("createTypeTable");
+      //     oTable.removeSelections();
+
+
+
+      //   })
+
+      // },
+
       onDeletePress: function () {
 
         let oTable = this.byId("createTypeTable");
@@ -1379,8 +1492,14 @@ sap.ui.define(
 
 
 
-                }).catch((err) => {
-                  console.error("Error deleting record: ", err);
+                }).catch((oError) => {
+                  if(oError.error.message.includes('Code exists in voyage, do not delete')){
+                    sap.m.MessageBox.error("Code already used in voyage, Cannot be deleted")
+                  }else{
+                    sap.m.MessageBox.error( oError.message);
+                  }
+                 
+                  oBusyDialog.close();
 
                 });
               };
@@ -1424,11 +1543,11 @@ sap.ui.define(
       },
       
       onUpdate: async function () {
+
         let that = this;
         let oView = this.getView();
         let oCreateTable = oView.byId("createTypeTable");
         let oUpdateTable = oView.byId("updateTypeTable");
-        console.log("datsgjj", onEditInput);
     
         let aItems = oUpdateTable.getItems();
         let flagNothingtoUpdate = true;
@@ -1439,7 +1558,7 @@ sap.ui.define(
             let sCvalue = oItem.getCells()[3].getValue().trim();
             let sCunit = oItem.getCells()[4].getValue().trim();
             let sDatatype = oItem.getCells()[5].getSelectedKey();
-            let sTablename = oItem.getCells()[6].getValue().trim();
+            let sTablename = oItem.getCells()[6].getSelectedItem().getText();
             let sMultiChoice = oItem.getCells()[7].getSelected();
     
             if (!sValue || !sDatatype) {
@@ -1449,7 +1568,6 @@ sap.ui.define(
     
             let fieldsArr = onEditInput[i];
             if (fieldsArr) {
-                console.log("hiidxfcgvv", fieldsArr);
     
                 if (
                     fieldsArr[2].trim() !== sValue ||
@@ -1483,7 +1601,7 @@ sap.ui.define(
                 let sCvalue = oItem.getCells()[3].getValue().trim();
                 let sCunit = oItem.getCells()[4].getValue().trim();
                 let sDatatype = oItem.getCells()[5].getSelectedKey();
-                let sTablename = oItem.getCells()[6].getValue().trim();
+                let sTablename = oItem.getCells()[6].getSelectedItem().getText();
                 let sMultiChoice = oItem.getCells()[7].getSelected();
     
                 values.push({
@@ -1497,22 +1615,23 @@ sap.ui.define(
                     MultiChoice: sMultiChoice
                 });
             });
+
+            console.log("values: ", values);
     
             let oModel = this.getOwnerComponent().getModel();
             let oBinding = oModel.bindList("/BidMasterSet");
     
             let aContexts = await oBinding.requestContexts();
     
-            // for (const value of values) {
-            //     let oContextToUpdate = aContexts.find(function (oContext) {
-            //         return oContext.getProperty("BidprofileId") === value.BidprofileId;
-            //     });
+       
             for (const value of values) {
               let oContextToUpdate = aContexts.find(function (oContext) {
                   return oContext.getProperty("BidprofileId") === value.BidprofileId &&
                          oContext.getProperty("Code") === value.Code &&
                          oContext.getProperty("Bname") === "";
               });
+
+
     
                 if (oContextToUpdate) {
                     oContextToUpdate.setProperty("Value", value.Value);
@@ -1527,6 +1646,8 @@ sap.ui.define(
                     throw new Error("Entity not found.");
                 }
             }
+
+            
     
             oModel.refresh();
             oView.getModel().refresh();
@@ -1628,6 +1749,51 @@ sap.ui.define(
             // Handle the datatype change if needed
           });
 
+          let selectedTablenameKey = "";
+
+          switch (properties.Tablename) {
+              case "/NAUTI/CLASS":
+                  selectedTablenameKey = "CLASS";
+                  break;
+              case "/NAUTI/ZCOUNTRY":
+                  selectedTablenameKey = "COUNTRY";
+                  break;
+              case "/NAUTI/ZPORT":
+                  selectedTablenameKey = "PORT";
+                  break;
+              default:
+                  selectedTablenameKey = "";
+          }
+
+          let oTablenameSelect = new sap.m.Select({
+            forceSelection: false,
+            width: "100%",
+            items: [
+              new sap.ui.core.Item({
+                key: "CLASS",
+                text: "/NAUTI/CLASS"
+              }),
+              new sap.ui.core.Item({
+                key: "COUNTRY",
+                text: "/NAUTI/ZCOUNTRY"
+              }),
+              new sap.ui.core.Item({
+                key: "PORT",
+                text: "/NAUTI/ZPORT"
+              })
+            ],
+            selectedKey:selectedTablenameKey
+
+
+          }).attachChange(function (oEvent) {
+            let sNewTablename = oEvent.getParameter("selectedItem").getKey();
+            // Handle the datatype change if needed
+          });
+
+          console.log("Tablename:",properties.Tablename )
+
+
+
           let oColumnListItem = new sap.m.ColumnListItem({
             cells: [
               new sap.m.Text({
@@ -1652,10 +1818,11 @@ sap.ui.define(
                 valueHelpOnly: true
               }),
               oDatatypeSelect,
-              new sap.m.Input({
-                value: properties.Tablename,
-                liveChange: that.onLiveChangeTablename.bind(that)
-              }),
+              oTablenameSelect,
+              // new sap.m.Input({
+              //   value: properties.Tablename,
+              //   liveChange: that.onLiveChangeTablename.bind(that)
+              // }),
               new sap.m.CheckBox({
                 selected: properties.MultiChoice,
                 select: that.onSelectChange.bind(that)

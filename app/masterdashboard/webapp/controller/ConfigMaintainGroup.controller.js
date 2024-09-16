@@ -597,16 +597,24 @@ sap.ui.define(
                 return;
             }
         }
-
+ 
         var oNewRow = new sap.m.ColumnListItem({
             cells: [
-                new sap.m.Input({ value: "", liveChange: this.onCodeLiveChange.bind(this) }),
+              new sap.m.Input({
+                value: "",
+                editable: true,
+                showValueHelp: true,
+                valueHelpRequest: this.onMaintaingroup.bind(this),
+                valueHelpOnly: true
+              }),
+ 
                 new sap.m.Input({ value: "", editable: true, liveChange: this.onLiveChange.bind(this) })
             ]
         });
-
+ 
         oTable.addItem(oNewRow);
-    },
+      },
+ 
       onDeleteRow1: function () {
         var oTable = this.byId("entryTypeTable");
         var aSelectedItems = oTable.getSelectedItems();

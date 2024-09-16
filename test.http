@@ -6,6 +6,24 @@ Content-Type: application/json
     "Chrnmin" : "4000000631",
     "biddStartStatus" : false
 }
+
+
+######
+PUT http://localhost:4004/odata/v4/nauticalservice/BidMasterSet(BidprofileId='TESTING',Bname='',Code='TEST')
+Content-Type: application/json
+
+{
+     "BidprofileId": "TESTING",
+      "Bname": "",
+      "Code": "TEST",
+      "Value": "Twefghjk",
+      "Cvalue": 0,
+      "Cunit": "",
+      "Datatype": "CHAR",
+      "Tablename": "/NAUTI/CLASS",
+      "MultiChoice": false
+}
+
 #####
 
 DELETE http://localhost:4004/odata/v4/nauticalservice/quotations(Chrnmin='4000000641',Voyno='1000000281',Lifnr='2100000001')

@@ -3,8 +3,8 @@
     xmlns:m="sap.m.Dialog"
     xmlns:l="sap.ui.layout">
     <Dialog id="_IDDialog"
-      title="Business Partner Details"
-       class="sapUiSmallMargin" contentHeight="250px" contentWidth="50%" >
+      title="Vendor Data Syncing Details"
+       class="sapUiSmallMargin" contentHeight="280px" contentWidth="50%" >
 
         <Panel>
             <VBox class="sapUiSmallMargin">
@@ -60,7 +60,7 @@
                     <VBox>
                         
                         <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label id="_IDGenLabel13" class="labelStyle" text="Address: " />
+                            <Label id="_IDGenLabel113" class="labelStyle" text="Address: " />
                             <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/SmtpAddr}" editable="false" />
                         </FlexBox>
 
@@ -96,7 +96,7 @@
                         </FlexBox>
          -->
                         <FlexBox class="headerItem" width="100%" direction="Row" justifyContent="SpaceBetween" alignItems="Center">
-                            <Label id="_IDGenLabel14" class="labelStyle" text="Creation Date: " />
+                            <Label id="_IDGenLabel144" class="labelStyle" text="Creation Date: " />
                             <Input class="inputStyle inputMargin" value="{nautiNewVendModel1>/0/Erdat}" editable="false" />
                         </FlexBox>
 

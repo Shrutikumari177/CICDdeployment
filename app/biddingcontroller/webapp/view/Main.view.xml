@@ -18,7 +18,7 @@
                        class="sapUiSmallMarginTop statusCard"
                      >
                          <f:header>
-                                <cards:Header id="_IDenHeader3"
+                                <cards:Header id="_IDGenHeader3"
                                     iconAlt="sap-icon://cargo-train"
                                     iconBackgroundColor="Accent6"
                                     iconDisplayShape="Circle"
@@ -54,7 +54,7 @@
                 </HBox>
                 <HBox id="secondBox">
             
-                <f:Card id="_IDGenard4"
+                <f:Card id="_IDGenCard4"
                        width="334px"
                        class="sapUiSmallMarginTop sapUiSmallMarginBegin statusCard"
                      >
@@ -109,9 +109,9 @@
 
 
         <layout:BlockLayout id="_IDGenBlockLayout1" background="Dashboard">
-            <layout:BlockLayoutRow id="_IDGenBlockLayoRow1" class="sapUiSmallMarginTop">
+            <layout:BlockLayoutRow id="_IDGenBlockLayoutRow1" class="sapUiSmallMarginTop">
                 <layout:content>
-                    <layout:BlockLayoutCell id="_IDGenBlkLayoutCell1">
+                    <layout:BlockLayoutCell id="_IDGenBlockLayoutCell1">
                         <Table
                             id="centerDataTable"
                             autoPopinMode="true"
@@ -125,18 +125,18 @@
                             items="{bidModel>/}"
                         > 
                             <headerToolbar>
-                                <Toolbar id="_IDGenToobar1">
-                                    <Title id="_IDGenTile1" text="Ongoing Bids"/>
-                                    <ToolbarSpacer id="_IDGenTolbarSpacer1"/>
+                                <Toolbar id="_IDGenToolbar1">
+                                    <Title id="_IDGenTitle1" text="Ongoing Bids"/>
+                                    <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
                 
                                 </Toolbar>
                             </headerToolbar>
                             <columns>
                                 <Column id="_IDGenColumn1">
-                                    <Label id="_IDGenLael1" text="Chartering Req. No."/>
+                                    <Label id="_IDGenLabel1" text="Chartering Req. No."/>
                                 </Column>
                                 <Column id="_IDGenColumn2">
-                                    <Label id="_IDGenabel2" text="Bid Start Date"/>
+                                    <Label id="_IDGenLabel2" text="Bid Start Date"/>
                                 </Column>
                                 <Column id="_IDGenColumn3">
                                     <Label id="_IDGenLabel3" text="Bid Start Time"/>

@@ -266,6 +266,7 @@ function (Controller, Fragment, MessageToast, MessageBox, Filter, FilterOperator
       
       this.byId("bidStartD").setValue("").setEnabled(true);
       this.getView().byId("Button1").setEnabled(true);
+      this.getView().byId("sumbit").setEnabled(false);
       
 
       var loc = this.getView().byId("CharteringRqNo");

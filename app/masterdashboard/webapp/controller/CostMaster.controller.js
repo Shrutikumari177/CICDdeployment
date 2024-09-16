@@ -875,7 +875,7 @@ sap.ui.define(
       },
 
       onUpdate: function () {
-        debugger;
+
         let that = this;
         let oView = this.getView();
         let oCreateTable = oView.byId("createTypeTable");
@@ -888,14 +888,14 @@ sap.ui.define(
         for (let i = 0; i < aItems.length; i++) {
             let oItem = aItems[i];
             let sDesc = oItem.getCells()[2].getValue();
-            if (onEditInput[i].trim() !== sDesc.trim()) {
-                flagNothingToUpdate = false;
-                break;
-            }
+            if (onEditInput[i].trim().toLowerCase() !== sDesc.trim().toLowerCase()) {
+              flagNothingToUpdate = false;
+            break;
+          }
         }
     
         if (flagNothingToUpdate === true) {
-            MessageToast.show("Nothing to update");
+            MessageToast.show("Nothing to Update");
             return;
         }
     

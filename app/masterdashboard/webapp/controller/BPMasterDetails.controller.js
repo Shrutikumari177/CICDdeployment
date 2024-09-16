@@ -12,22 +12,13 @@ sap.ui.define(
   ],
   function (BaseController, History, Filter, FilterOperator, MessageToast, MessageBox, ODataMetaModel, JSONModel,FilterBarDelegate) {
     "use strict";
-    let aSelectedIds = [];
-    let copyFlag = false;
-    let editFlag = false;
-    let newEntryFlag = false;
-    let onCopyInput = undefined;
+    
     let getModelData = [];
     let oBusyDialog;
 
     return BaseController.extend("com.ingenx.nauti.masterdashboard.controller.BPMasterDetails", {
       async onInit() {
         await this.loadportdata();
-
-        let oTable = this.byId("table")
-        oTable.clearSelection();
-
-        oTable.setNoData("Loading.....");
         
       },
       loadportdata: async function () {
@@ -47,7 +38,7 @@ sap.ui.define(
       },
 
       onNavigateDetails: function(oEvent) {
-          
+
         var oBindingContext = oEvent.getParameter("bindingContext");                         
              // Retrieve the data object for the pressed rowvar 
             let data = oBindingContext.getObject();
@@ -58,9 +49,7 @@ sap.ui.define(
             var oView = this.getView();
             if (!this._oDialog1) {
                 this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.BusinessPartnerDetails", this);
-                oView.addDependent(this._oDialog1);
-       
-         
+                oView.addDependent(this._oDialog1);       
             }
             this._oDialog1.setModel(tempModel,"nautiNewVendModel1")
             this._oDialog1.open();
@@ -70,72 +59,42 @@ sap.ui.define(
         this._oDialog1.close();
       },
 
+      onClearSelection: function() {
+        // clear selected rows
+       let oTable = this.byId("table")
+       oTable.clearSelection();
+      },
+
       onchange: function() {
         console.log("change is working")
       },
     
-      // onBackPress: function () {
-        
-      //   // clear selection 
-
-      //   this.byId("table").clearSelection();
-      //   this.byId("table")
-      //   // console.log("hey")
-      //   let oFilterBar = this.byId("filterbar")
-      //   let container = new sap.ui.mdc.filterbar.IFilterContainer(oFilterBar)
-      //   // oFilterBar.setFilterConditions({})
-      //   // FilterBarDelegate.clearFilters(oFilterBar)
-
-      //   const oRouter = this.getOwnerComponent().getRouter();
-      //   oRouter.navTo("RouteBusinessPartnerDashboard");
-       
-      // },
-      
 
       onBackPress: function () {
+        this.resetPage()
+        // Navigate back to the previous page
+        const oRouter = this.getOwnerComponent().getRouter();
+        oRouter.navTo("RouteBusinessPartner");
+      },    
+
+      onPressHome: function() {
+        this.byId("table")
+        this.resetPage()
+        const oRouter = this.getOwnerComponent().getRouter();
+        oRouter.navTo("RouteHome");
+      },
+
+      resetPage: function() {
         // Clear selection in the table
         this.byId("table").clearSelection();
 
          // Get the filter bar control
-    let oFilterBar = this.byId("filterbar");
-    
-       
-    if (oFilterBar) {
-      // Define new filter conditions
-      let newFilterConditions = {
-          Ort01: [{
-              operator: "Contains",
-              values: [""]
-          }]
-      };
-
-      // Set the new filter conditions
-      oFilterBar.setFilterConditions();
-      oFilterBar.getBasicSearchField().setConditions()
-    
-
-      // Optionally, trigger a search to refresh the data
-      oFilterBar.fireSearch();
-
-      // // Optionally, refresh the table data
-      // let oTable = this.byId("table");
-      // let oBinding = oTable.getBinding("items");
-      // if (oBinding) {
-      //     oBinding.refresh(); // Refresh data binding to show all entries
-      // }
-    }
-
-
-        // Navigate back to the previous page
-        const oRouter = this.getOwnerComponent().getRouter();
-        oRouter.navTo("RouteBusinessPartnerDashboard");
-    }
-,    
-
-      onPressHome: function() {
-        this.byId("table").clearSelection();
-        const oRouter = this.getOwnerComponent().getRouter();
-        oRouter.navTo("RouteHome");
+        let oFilterBar = this.byId("filterbar");
+        
+        // clear internal searche value 
+        if (oFilterBar) {
+          oFilterBar.setInternalConditions()
+        }
       },
 
       onLiveChange: function (oEvent) {
@@ -147,7 +106,7 @@ sap.ui.define(
         var wordsArray = inputString.split("."); // Split the string by the period
         var lastWord = wordsArray[wordsArray.length - 1]; // Get the last element from the array
         
-        oEvent
+        
         // Get the value
         var value = oEvent.getParameters()
         value = value.value
@@ -180,37 +139,39 @@ sap.ui.define(
         console.log("Value State:", oSource.getValueState());
         console.log("Value State Text:", oSource.getValueStateText());
         console.log("Value changing:", value);
-    }, 
+
+        
+      }, 
     
-  //   onLiveSearch: function (oEvent) {
-  //     // Get the FilterBar instance
-  //     const oFilterBar = this.byId("filterbar");
+    // onLiveSearch: function (oEvent) {
+    //   // Get the FilterBar instance
+    //   const oFilterBar = this.byId("filterbar");
 
-  //     const sValue = oEvent.getParameter("value");
-  //      console.log(oFilterBar.triggerSearch())
-  //     if (oFilterBar) {
-  //       oFilterBar.triggerSearch().then(function() {
-  //           console.log("Search triggered successfully");
-  //       }).catch(function(oError) {
-  //           console.error("Error triggering search:", oError);
-  //       });
-  //   } else {
-  //       console.error("FilterBar not found");
-  //   }
+    //   const sValue = oEvent.getParameter("value");
+    //    console.log(oFilterBar.triggerSearch())
+    //   if (oFilterBar) {
+    //     oFilterBar.triggerSearch().then(function() {
+    //         console.log("Search triggered successfully");
+    //     }).catch(function(oError) {
+    //         console.error("Error triggering search:", oError);
+    //     });
+    //   } else {
+    //     console.error("FilterBar not found");
+    // }
             
-  //     // Use a closure to create a new timeout for each call
-  //     clearTimeout(this._searchTimeout);
-  //     this._searchTimeout = setTimeout(() => {
+    //   // Use a closure to create a new timeout for each call
+    //   clearTimeout(this._searchTimeout);
+    //   this._searchTimeout = setTimeout(() => {
 
-  //       oFilterBar.fireSearch({
-  //           value: sValue // Pass the search value here
-  //       });
+    //     oFilterBar.fireSearch({
+    //         value: sValue // Pass the search value here
+    //     });
 
-  //       console.log("Search triggered with value:", sValue);
-  //     }, 1000); // 1-second delay
-  // },  
+    //     console.log("Search triggered with value:", sValue);
+    //   }, 1000); // 1-second delay
+    // },  
 
-      onDeletePress: function () {
+    onDeletePress: function () {
         var oTable = this.byId("table");
         var aSelectedContexts = oTable.getSelectedContexts(true);
     
@@ -244,43 +205,112 @@ sap.ui.define(
         });
       },
     
-      deleteSelectedItems: function (aItems) {
-        let slength = aItems.length;
-        let deleteMsg = slength === 1 ? "Record" : "Records";
-        let oModel = this.getOwnerComponent().getModel();
-    
-        aItems.forEach((oContext) => {
-          // const oContext = oItem.getBindingContext();
-          const oData = oContext.getObject();
-          let Lifnr = oData.Lifnr;
-          // let code = oData.Code;
-          console.log("data to be deleted", Lifnr);
-          let that = this;
-          let oBindList = oModel.bindList("/BusinessPartnerSet");
-    
-          oBindList.requestContexts(0, Infinity).then((aContexts) => {
-            aContexts.forEach((oContext) => {
-              if (oContext.getObject().Lifnr === Lifnr ) {
-                oContext.delete().then(function () {
-                  oModel.refresh();
-                  sap.m.MessageToast.show(`${deleteMsg} deleted sucessfully`);          
-                  oBusyDialog.close();
+      // deleteSelectedItems: function (aItems) {
+      //   let slength = aItems.length;
+      //   let deleteMsg = slength === 1 ? "Record" : "Records";
+      //   let oModel = this.getOwnerComponent().getModel();
+        
+        
+      //   aItems.forEach((oContext) => {
+         
+      //     const oData = oContext.getObject();
+      //     let Lifnr = oData.Lifnr;
+        
+      //     console.log("data to be deleted", Lifnr);
 
-                }).catch((err) => {
-                  MessageBox.error("Error deleting record: ", err.message);
-                  oBusyDialog.close();
-                  return
-                });
-              };
-            });
+      //     let oBindList = oModel.bindList("/BusinessPartnerSet");
+    
+      //     oBindList.requestContexts(0, Infinity).then((aContexts) => {
+      //       aContexts.forEach((oContext) => {
+      //         if (oContext.getObject().Lifnr === Lifnr ) {
+      //           oContext.delete().then(function () {
+      //             oModel.refresh();
+      //             sap.m.MessageToast.show(`${deleteMsg} deleted sucessfully`);          
+      //             oBusyDialog.close();
+
+      //           }).catch((err) => {
+      //             // console.log("erorr", typeof(err.message))
+      //             if (err.message.includes("vendor exists in voyage, do not delete")) {
+      //               MessageBox.error(`${deleteMsg} already exists in voyage, do not delete`);
+      //             }
+      //             else {
+      //               MessageBox.error(err.message);
+      //             }                  
+      //             oBusyDialog.close();
+      //             this.resetPage()
+      //           });
+      //         };
+      //       });
+      //     });
+    
+      //     this.byId("table").clearSelection();
+    
+      //   })    
+      // },
+
+
+      deleteSelectedItems: async function (aItems) {
+        let slength = aItems.length;
+        let deleteMsg = slength === 1 ? "A record" : "Some records";
+        let plural = slength === 1 ? "was" : "were"
+        let oModel = this.getOwnerComponent().getModel();
+        let errors = [];
+      
+        try {
+          // Collect all delete promises
+          let deletePromises = aItems.map(async (oContext) => {
+            try {
+              const oData = oContext.getObject();
+              let Lifnr = oData.Lifnr;
+      
+              console.log("data to be deleted", Lifnr);
+      
+              let oBindList = oModel.bindList("/BusinessPartnerSet");
+              let aContexts = await oBindList.requestContexts(0, Infinity);
+              let found = false;
+      
+              for (let context of aContexts) {
+                if (context.getObject().Lifnr === Lifnr) {
+                  found = true;
+                  await context.delete();
+                  break;
+                }
+              }
+      
+              if (!found) {
+                errors.push(`Record with Lifnr ${Lifnr} not found`);
+              }
+            } catch (err) {
+              errors.push(err.message);
+            }
           });
-    
+      
+          // Wait for all delete operations to complete
+          await Promise.all(deletePromises);
+      
+          if (errors.length === 0) {
+            oModel.refresh();
+            sap.m.MessageToast.show(`${deleteMsg} deleted successfully`);
+          } else {
+            throw new Error(errors.join("\n"));
+          }
+        } catch (err) {
+          if (err.message.includes("vendor exists in voyage, do not delete")) {
+            sap.m.MessageBox.error(`${deleteMsg} already exists in voyage, which ${plural} not deleted`);
+            oModel.refresh();
+          } else {
+            sap.m.MessageBox.error(err.message);
+            oModel.refresh();
+          }
+        } finally {
           this.byId("table").clearSelection();
-    
-        })
-    
-      },
+          if (typeof oBusyDialog !== 'undefined') {
+            oBusyDialog.close();
+          }
+        }
+      }
+      
+   
 
     });
-
-  });
+});
