@@ -22,6 +22,9 @@ using NAUTINAUTICAL_VALUEHELP_SRV from './external/NAUTINAUTICAL_VALUEHELP_SRV.c
 
 
 service nauticalservice {
+     entity ClassMasterSet as projection on NAUTIMASTER_BTP_SRV.ClassMasterSet
+    {        key ZfValue, ZfDesc     }    
+;
 
     entity CompareLiveFreight           as projection on nauticalschema.CompareLiveFreight;
 
@@ -709,12 +712,7 @@ service nauticalservice {
         };
 
 
-    entity ClassMasterSet               as
-        projection on NAUTIMASTER_BTP_SRV.ClassMasterSet {
-            key ZfValue,
-                ZfDesc
-        };
-
+   
     entity CostMasterSet                as
         projection on NAUTIMASTER_BTP_SRV.CostMasterSet {
             key Costcode,
