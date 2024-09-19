@@ -785,7 +785,7 @@ module.exports = async (srv) => {
 
             let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
                 const mailConfig = {
-                    from: "josiah.homenick1@ethereal.email",
+                    from: "nikki51@ethereal.email",
                     to: receiverEmail,
                     subject: `You are invited to submit a quotation for the following cargo size "${cargoSize}" for shipping of ship route "${routes[index]}"`,
                     text: `

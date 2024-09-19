@@ -89,7 +89,7 @@ sap.ui.define([
                   console.log("userFullName", userFullName);
                   console.log("userID", userID);
                 } catch (error) {
-                  userEmail ="shruti.kumari@ingenxtec.com";
+                  userEmail =undefined;
                   console.log("hiii",userEmail);
                 }
               },

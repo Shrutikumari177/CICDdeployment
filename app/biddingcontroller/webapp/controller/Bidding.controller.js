@@ -222,7 +222,7 @@ sap.ui.define([
                         "Chrnmin": vendor.Chrnmin,
                         "Biddate": biddate,
                         "Bidtime": bidtime,
-                        "CodeDesc": "FRIEGHT COST",
+                        "CodeDesc": "FREIGHT COST",
                         "Cvalue": vendor.quotationPrice,
                         "Chrqsdate": startDate,
                         "Chrqstime": startTime,

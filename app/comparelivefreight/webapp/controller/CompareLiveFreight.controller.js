@@ -271,6 +271,7 @@ sap.ui.define([
                     sap.m.MessageToast.show("Duplicate entry found.");
                 } else {
                     this._postToServer(oPayload);
+                    this._hideBusyDialog();
                 }
             }).catch(oError => {
                 this._hideBusyDialog();

@@ -1,4 +1,5 @@
 
+
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
@@ -96,8 +97,8 @@ sap.ui.define(
                     console.log("userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                    userEmail = undefined ;
-                    // userEmail = "sarath.venkateswara@ingenxtec.com";
+                    // userEmail = undefined ;
+                    userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
             debounce: function (func, wait) {
@@ -175,6 +176,8 @@ sap.ui.define(
                 try {
                     let bidItemModel = new sap.ui.model.json.JSONModel();
                     let oModel = that.getOwnerComponent().getModel();
+                    
+              
                     let oBindList = oModel.bindList("/xNAUTIxBIDITEM", undefined, undefined, undefined, {
                         $filter: `Voyno eq '${VoyageNo}'`
                     });
@@ -202,7 +205,7 @@ sap.ui.define(
 
                 } catch (error) {
                     console.error("Error loading Bid Details:", error);
-                    sap.m.MessageBox.error("Error in Loading Master Bid Template")
+                    sap.m.MessageBox.error("Error in fetching Bid Details.")
                     that._busyDialog1.close();
 
                 } finally {
@@ -1082,7 +1085,6 @@ sap.ui.define(
                 return sGood === "X" || sMand === "X";
             },
 
-            
             getInputData: function (hintData) {
                 var firstMandValue = null;
                 var firstGoodValue = null;
@@ -1126,7 +1128,7 @@ sap.ui.define(
                 let obj;
                 let currentDate = new Date();
                 if (datatype === "DATE") {
-                    obj = new sap.m.DatePicker({ valueFormat: "dd.MM.YYYY", value: "{tempModel>Value}" ,maxDate: currentDate });
+                    obj = new sap.m.DatePicker({ valueFormat: "dd.MM.YYYY", value: "{tempModel>Value}" , maxDate: currentDate});
 
                 } else if (tablename) {
 
@@ -1467,9 +1469,7 @@ sap.ui.define(
                     // Value is out of range, set value state to Error
                     oInput.setValueState(sap.ui.core.ValueState.Error);
                     oInput.setValueStateText("Value must be in range [0 - 4]");
-                    oInput.setValue(
-                        ""
-                        );
+                    oInput.setValue("");
                 }
             },
             checkRangeforZmax: function (oEvent) {
@@ -1507,10 +1507,7 @@ sap.ui.define(
 
                     oInput.setValueState(sap.ui.core.ValueState.Error);
                     oInput.setValueStateText("Value must be in range [Min score - 5]", { duration: 1000 });
-                    oInput.setValue(
-                        ""
-                        );
-
+                    oInput.setValue("");
                 }
             },
             assignGroupToRadioButton: function (oDialog) {
@@ -1914,7 +1911,7 @@ sap.ui.define(
                 }
 
             },
-            FrieghtCostToShow: function (fcost) {
+            FreightCostToShow: function (fcost) {
                 return formatter.numberFormat(fcost)
             },
 
@@ -2080,15 +2077,11 @@ sap.ui.define(
             // },
             liveFrCostChange: function () {
                 let oInput = this.byId("_friegthIdPlan");
-                let sValue = oInput.getValue() || "0";
+                let sValue = oInput.getValue();
                 // Remove leading and trailing spaces
                 sValue = sValue.trim();
 
-                // Restrict multiple leading zeros (if there is more than one leading zero and no decimal point)
-                if (/^0{2,}/.test(sValue)) {
-                    sValue = sValue.replace(/^0+/, '0'); // Replace leading zeros with a single zero
-                }
-                
+             
                 // Remove all commas from the value
                 sValue = sValue.replace(/,/g, '');
                 
@@ -2100,7 +2093,7 @@ sap.ui.define(
 
 
                 // Check if the value is negative
-                if (parseFloat(sValue) < 0) {
+                if (parseFloat(sValue) < 0 ) {
                     oInput.setValueState("Error");
                     oInput.setValueStateText("Negative values are not allowed.");
                     return;
@@ -2821,7 +2814,7 @@ sap.ui.define(
                     console.log("fsf", x);
                 });
 
-                oBindList.attachCreateCompleted(function (p) {
+                oBindList.attachCreateCompleted(async function (p) {
                     let p1 = p.getParameters();
 
                     let oContext = p1.context;
@@ -2835,10 +2828,15 @@ sap.ui.define(
                             title: "Voyage updation",
                             onClose: function () {
 
-                        
-
                             }
                         });
+                        let refreshedBidData = await helperFunctions.readEntity(oModel, "xNAUTIxBIDITEM", undefined, undefined,undefined, {
+                            $filter: `Voyno eq '${myVOYNO}'`
+                        });
+                        // console.log("oData read bid details:", refreshedBidData);
+                        if( refreshedBidData.length){
+                            bidData = JSON.parse(JSON.stringify(refreshedBidData));
+                        }
 
                     } else {
                         sap.m.MessageBox.error(p1.context.oModel.mMessages[""][0].message);
@@ -2986,21 +2984,21 @@ sap.ui.define(
                 }
             },
             onSendForApprovalCreate: async function () {
- 
- 
+
+
                 if (!myVOYNO) {
                     sap.m.MessageBox.error("Please enter Voyage No.");
                     return;
                 }
- 
+
                 await this.checkforValidUser();
                 if (!userEmail) {
                     return;
                 }
                 let oModel = this.getOwnerComponent().getModel();
- 
+
                 let oBindListSP = oModel.bindList("/voyapprovalSet");
- 
+
                 try {
                     let saveddata = oBindListSP.create({
                         "Vreqno": "",
@@ -3010,13 +3008,13 @@ sap.ui.define(
                     // console.log("saving data:", saveddata);
                     let oBusyDialog = new sap.m.BusyDialog();
                     oBusyDialog.open();
- 
+
                     oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
- 
+
                             sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
                             oBusyDialog.close();
                         } else {
@@ -3025,24 +3023,23 @@ sap.ui.define(
                     }).catch(function (error) {
                         console.log("Error while requesting contexts:", error);
                         if( error.cause.message.includes("VOYNO. NOT ASSOCIATED TO VESSELTYPE AND VOYAGE TYPE")){
- 
+
                             sap.m.MessageBox.error("Release Strategy is not Maintained against Voyage Type and Vessel Type")
                         }
                         else {
- 
+
                             sap.m.MessageBox.error("Error while Sending Approval");
                         }
                         oBusyDialog.close();
- 
+
                         throw error
- 
+
                     });
                 } catch (error) {
                     console.log("Error while saving data:", error);
                     oBusyDialog.close();
                 }
             },
- 
 
             onCancelVoayge: async function () {
 

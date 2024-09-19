@@ -42,7 +42,10 @@ Content-Type: application/json
 #####
 GET  http://localhost:4004/odata/v4/nauticalservice/biddingStartManual
 
-GET http://localhost:4004/odata/v4/nauticalservice/quotations?$filter=Chrnmin eq '4000000601'
+
+###
+
+GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxnewbidhistoryreport?$filter=Chrnmin eq '4000000680'
 
 
 ####
