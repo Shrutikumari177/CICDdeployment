@@ -85,9 +85,7 @@
                         <Column width="130px">
                             <Text text="Vendor" />
                         </Column>
-                        <Column width="130px">
-                            <Text text="Awarded" />
-                        </Column>
+                        
                         <Column width="130px">
                             <Text text="Code" />
                         </Column>
@@ -115,7 +113,7 @@
                                 <Text text="{contractAwardModel>Chrnmin}" />
                                 <Text text="{contractAwardModel>Voyno}" />
                                 <Text text="{contractAwardModel>Lifnr}" />
-                                <Text text="{contractAwardModel>Rank}" />
+                               
                                 <Text text="{contractAwardModel>Zcode}" />
                                 <Text text="{contractAwardModel>Biddate}" />
                                 <Text text="{contractAwardModel>Bidtime}" />

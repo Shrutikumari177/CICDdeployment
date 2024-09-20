@@ -803,7 +803,7 @@ sap.ui.define(
             dummySelectedPorts.CargoUnit = selectedPorts[i].CargoUnit;
             dummySelectedPorts.DepartureDateValue = selectedPorts[i].DepartureDateValue;
             dummySelectedPorts.DepartureTime = selectedPorts[i].DepartureTime;
-            dummySelectedPorts.Distance = selectedPorts[i].Distance;
+            dummySelectedPorts.Distance = selectedPorts[i].Distance.toString();
             dummySelectedPorts.LegId = selectedPorts[i].LegId;
             dummySelectedPorts.PortDays = selectedPorts[i].PortDays;
             dummySelectedPorts.PortId = selectedPorts[i].PortId;

@@ -45,7 +45,13 @@ GET  http://localhost:4004/odata/v4/nauticalservice/biddingStartManual
 
 ###
 
-GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxnewbidhistoryreport?$filter=Chrnmin eq '4000000680'
+GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxnewbidhistoryreport?$filter=Chrnmin eq '4000000641'
+
+
+
+###
+
+GET http://localhost:4004/odata/v4/nauticalservice/xNAUTIxnewbidhistoryreport/4000000680
 
 
 ####

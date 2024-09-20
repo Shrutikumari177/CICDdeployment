@@ -3640,10 +3640,8 @@ sap.ui.define(
                         ],
                     }),
                 });
-                // Bind the dialog to the view
                 this.getView().addDependent(oDialog);
 
-                // Open the dialog
                 oDialog.open();
             },
 

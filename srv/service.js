@@ -561,10 +561,12 @@ module.exports = async (srv) => {
         return groupedByVoynoAndChrnmin(rankedWithCommercial);
     }
 
+   
+
     function calculateScores(voyageData, charminData) {
         const vendorScores = new Map();
         const voyageDataMap = new Map(voyageData.map(v => [`${v.Zcode}-${v.Voyno}`, v]));
-
+    
         charminData.forEach(vendor => {
             const vendorScore = vendorScores.get(vendor.Lifnr) || {
                 vendorId: vendor.Lifnr,
@@ -576,35 +578,45 @@ module.exports = async (srv) => {
                 Cvalue: vendor.to_quote_item.map(item => item.Cvalue),
                 bidDetails: []
             };
-
+    
             vendor.to_quote_item.forEach(quoteItem => {
                 const expected = voyageDataMap.get(`${quoteItem.Zcode}-${vendor.Voyno}`);
                 if (expected) {
-                    let fScore;
+                    let fScore = 0;
                     if ((expected.Mand === "X" || expected.Must === "X") && expected.Value !== quoteItem.Value) {
                         vendorScore.eligible = "No";
                         fScore = 0;
                     } else {
-                        let score;
-                        const isExpectedDate = !isNaN(Date.parse(expected.Value));
+                        let score = 0;
+    
+                       
+                        const isExpectedDate = !isNaN(parseDate(expected.Value));
                         const isQuoteItemDate = !isNaN(Date.parse(quoteItem.Value));
-
+    
                         if (isExpectedDate && isQuoteItemDate) {
-                            const expectedDate = new Date(expected.Value);
+                            const expectedDate = parseDate(expected.Value);
                             const quoteItemDate = new Date(quoteItem.Value);
-
+    
+                         
                             if (quoteItemDate < expectedDate) {
                                 score = parseInt(expected.Zmin); // Assign Zmin if quoted date is earlier
                             } else if (quoteItemDate >= expectedDate) {
                                 score = parseInt(expected.Zmax); // Assign Zmax if quoted date is equal or later
                             }
+    
+                           
                         } else {
+                          
                             score = expected.Value === quoteItem.Value ? parseInt(expected.Zmax) : parseInt(expected.Zmin);
+                            
+                           
                         }
-
+    
                         vendorScore.score += score;
                         fScore = score;
                     }
+    
+                    // Push bid details
                     vendorScore.bidDetails.push({
                         CodeDesc: expected.CodeDesc,
                         Value: quoteItem.Value,
@@ -613,12 +625,22 @@ module.exports = async (srv) => {
                     });
                 }
             });
-
+    
             vendorScores.set(vendor.Lifnr, vendorScore);
         });
-
+    
         return Array.from(vendorScores.values());
     }
+    
+  
+    function parseDate(dateString) {
+        const [day, month, year] = dateString.split('.');
+        return new Date(`${year}-${month}-${day}`); 
+    }
+    
+    
+  
+    
 
     function rankByTechnicalScore(vendorScores) {
         const rankedVendors = vendorScores
@@ -1235,8 +1257,8 @@ function registerHandlers(srv, service, entities) {
             };
 
             return path;
-            // // Call the custom function to handle the request
-            // return await getDistanceBetweenPort(req._queryOptions);
+            // Call the custom function to handle the request
+            //  return await getDistanceBetweenPort(req._queryOptions);
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Error fetching data');

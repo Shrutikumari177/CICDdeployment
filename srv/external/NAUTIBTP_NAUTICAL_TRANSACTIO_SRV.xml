@@ -3,23 +3,23 @@
     xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xmlns:sap="http://www.sap.com/Protocols/SAPData">
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
     </edmx:Reference>
-    <edmx:Reference Uri="http://ingenxsrv:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+    <edmx:Reference Uri="http://odataservices:8001/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
         xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
         <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
     </edmx:Reference>
@@ -813,14 +813,14 @@
                 <End Type="NAUTI.BTP_NAUTICAL_TRANSACTIO_SRV.Submitquoteitem" Multiplicity="*" Role="ToRole_Submitquoteasso"/>
                 <ReferentialConstraint>
                     <Principal Role="FromRole_Submitquoteasso">
-                        <PropertyRef Name="Voyno"/>
-                        <PropertyRef Name="Lifnr"/>
                         <PropertyRef Name="Chrnmin"/>
+                        <PropertyRef Name="Lifnr"/>
+                        <PropertyRef Name="Voyno"/>
                     </Principal>
                     <Dependent Role="ToRole_Submitquoteasso">
-                        <PropertyRef Name="Voyno"/>
-                        <PropertyRef Name="Lifnr"/>
                         <PropertyRef Name="Chrnmin"/>
+                        <PropertyRef Name="Lifnr"/>
+                        <PropertyRef Name="Voyno"/>
                     </Dependent>
                 </ReferentialConstraint>
             </Association>
@@ -1011,9 +1011,9 @@
                     </Record>
                 </Annotation>
             </Annotations>
-            <atom:link rel="self" href="http://ingenxsrv:8001/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV/$metadata"
+            <atom:link rel="self" href="http://odataservices:8001/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV/$metadata"
                 xmlns:atom="http://www.w3.org/2005/Atom"/>
-                <atom:link rel="latest-version" href="http://ingenxsrv:8001/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV/$metadata"
+                <atom:link rel="latest-version" href="http://odataservices:8001/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV/$metadata"
                     xmlns:atom="http://www.w3.org/2005/Atom"/>
                 </Schema>
             </edmx:DataServices>
