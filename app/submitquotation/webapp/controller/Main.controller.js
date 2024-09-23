@@ -169,7 +169,7 @@ sap.ui.define([
                     element.zstat = statusLevel.YETTOSTART;
                     counts.YETTOSTART++;
                 } else if (current > end) {
-                    element.zstat = statusLevel.CLOSED;
+                    element.zstat = statusLevel.OPEN;
                     counts.Closed++;
                 }
 

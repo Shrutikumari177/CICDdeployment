@@ -589,6 +589,7 @@
                                                     />
                                                     <Input
                                                         id="fCost2"
+                                        
                                                         liveChange="onFCostChange"
                                                         value="{totalCalculateModel>/fCost2}"
                                                     />

@@ -126,6 +126,7 @@ sap.ui.define([
 
             // This function is using for extract the bid data for Hint table
             getBidDetails: async function (VoyageNo) {
+                
                 let that = this;
                 try {
                     let bidItemModel = new sap.ui.model.json.JSONModel();
@@ -154,8 +155,10 @@ sap.ui.define([
 
             // This function is using for read the bid data that is stored in table after submit the bid
             readBidDetailData: async function(charterNo,vendorNo) {
+                
                 let that = this;
                 try {
+                    // debugger
                     let getDataForBidDetail = new JSONModel();
                     let oModel = this.getOwnerComponent().getModel();
                     let oBindListData = oModel.bindList("/quotations",undefined,undefined,undefined,{ 
@@ -166,7 +169,7 @@ sap.ui.define([
                     oContext.forEach(oContext => {
                         bidData.push(oContext.getObject());
                     });
-                    readPayload = bidData.filter(item=>item.Lifnr===vendorNo);
+                    readPayload = bidData.filter(item=>item.Lifnr===vendorNo && item.Chrnmin===charterNo);
                     let costValue = this.getFreightValue(readPayload);
                     let costInput = this.getView().byId("totalCostDetails")
                     let cost = costValue ? `${costValue.Value}.000` :0.000
@@ -191,6 +194,7 @@ sap.ui.define([
 
             // This function is calling from readBidDetailData for extracting the freight data
            getFreightValue:function(cost){
+            // debugger
                if(cost && cost.length > 0 && cost[0].to_quote_item){
                 let costData = cost[0].to_quote_item
                 let foundItem = costData.find(item=>item.Zcode.includes("FREIG"))
@@ -539,6 +543,7 @@ sap.ui.define([
 
             // This function returns unique voyage of a vendor
             getCharterDetailsData: function () {
+                // debugger
                 const uniqueVlegnData = new Set();
                 var uniqueVoyageDetails = this.charterDetails.filter(function (item) {
                     if (uniqueVlegnData.has(item.Vlegn)) {
@@ -656,8 +661,24 @@ sap.ui.define([
             
             // This function is using for submit the Bid data
             onSubmitBid: async function() {
+                debugger
+
+                let frightCost = this.byId("fCost2").getValue()
                 // Retrieve data from the models and table
-                let bidItemModelData = this.getView().getModel("bidItemModel").getData();
+                let bidItemModel = this.getView().getModel("bidItemModel").getData();
+                let bidItemModelData = bidItemModel.reduce((acc, current) => {
+                    // Check if the zcode already exists in the accumulator
+                    if (!acc.some(item => item.Zcode === current.Zcode)) {
+                        acc.push(current); // Add the current item if zcode is unique
+                    }
+                    return acc;
+                }, []);
+
+                if(frightCost === ""){
+                    sap.m.MessageBox.error("Please enter all valid fields !!")
+                    return
+                }
+
                 var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();
                 var aData = [];
@@ -721,6 +742,7 @@ sap.ui.define([
                 let to_quote_item = [];
             
                 for (let i = 0; i < bidItemModelData.length; i++) {
+              
                     let CodeDesc = bidItemModelData[i].CodeDesc;
                     let Zcode = bidItemModelData[i].Zcode;
                     let inputValueObject = aData.find(item => item.Value === CodeDesc);

@@ -1258,7 +1258,7 @@ function registerHandlers(srv, service, entities) {
 
             return path;
             // Call the custom function to handle the request
-            //  return await getDistanceBetweenPort(req._queryOptions);
+            //   return await getDistanceBetweenPort(req._queryOptions);
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Error fetching data');
