@@ -13,7 +13,7 @@ sap.ui.define([
 		label: "Name",
 		path: "Name1",
 		dataType: "sap.ui.model.type.String",
-		visible: true
+		visible: true,
 	},{
 		key: "Stras",
 		label: "Street",
@@ -32,7 +32,6 @@ sap.ui.define([
 		path: "Ort01",
 		dataType: "sap.ui.model.type.String",
 		visible: true
-		// groupable: true
 	},{
 		key: "Land1",
 		label: "Country",

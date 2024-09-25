@@ -12,18 +12,18 @@ xmlns="sap.m">
 		<f:header>	
 			<f:DynamicPageHeader id = "dynamicPageHeader" pinnable="false">
 
-			    <m:Bar id="_IDGenBar2">
+			    <m:Bar id="_IDGenBarVd2">
                     <m:contentLeft>
-                        <Button id="_IDGenIcon1"
+                        <Button id="_IDGenIcon1Vd"
                             icon="sap-icon://nav-back"
                             press="onBackPress"
                         />
     
-                        <Button id="_IDGenIcon2"
+                        <Button id="_IDGenIcon2Vd"
                             icon="sap-icon://home"
                             press="onPressHome"
                         />
-                        <m:Text id="_IDGenText1"
+                        <m:Text id="_IDGenText1Vd"
                             class="text1"
                             text="Vendor Data Syncing Details"
                         />
@@ -31,11 +31,7 @@ xmlns="sap.m">
                 </m:Bar>
 
 				<mdc:FilterBar id="filterbar" delegate="{
-							name: 'com/ingenx/nauti/masterdashboard/delegate/JSONFilterBarDelegate',
-							payload: {
-                                bindingPath: '/xNAUTIxnewvend_btp',
-                                searchKeys: ['Ort01', 'Land1', 'Lifnr']
-							}
+							name: 'com/ingenx/nauti/masterdashboard/delegate/VendorDataFilterBarDelegate'	
 						}"
 						p13nMode = "Item,Value"
                         liveMode="true"
@@ -48,6 +44,7 @@ xmlns="sap.m">
 							placeholder= "Search Here"
 							conditions="{$filters>/conditions/$search}"
 							propertyKey="$search"
+                            liveChange="onLiveSearch"
 							maxConditions="1"/>
 					</mdc:basicSearchField>
 					<mdc:filterItems>
@@ -58,7 +55,6 @@ xmlns="sap.m">
 							conditions="{$filters>/conditions/Lifnr}"
 							valueHelp="name-vh"
 							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
-                            operators="Contains"
 							/>
 
 						<mdc:FilterField
@@ -68,7 +64,8 @@ xmlns="sap.m">
 							conditions="{$filters>/conditions/Ort01}"
 							valueHelp="name-vh"
 							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
-                            operators="Contains"
+                            multipleLines="false"
+                            maxConditions="-1"
 							/>
 						<mdc:FilterField
 							label="Country"
@@ -77,7 +74,6 @@ xmlns="sap.m">
 							conditions="{$filters>/conditions/Land1}"
 							valueHelp="name-vh"
 							delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
-                            operators="Contains"
 							/>
                         
 					</mdc:filterItems>
@@ -92,8 +88,8 @@ xmlns="sap.m">
 		<m:Bar id="_IDGenBar1" class="_IDGenBar1">
             <m:contentRight>    
           
-                <Button id="_IDGenButton1" text="Submit Selection" type="Emphasized" press="onSelectionSubmit"/>
-				<Button id="_IDGenButton2" text="Clear Selection" type="Emphasized" press="onClearSelection"/>
+                <Button id="_IDGenButton1Vd" text="Submit Selection" type="Emphasized" press="onSelectionSubmit"/>
+				<!-- <Button id="_IDGenButton2Vd" text="Clear Selection" type="Emphasized" press="onClearSelection"/> -->
             </m:contentRight>
         </m:Bar>
 
@@ -119,10 +115,10 @@ xmlns="sap.m">
                 showRowCount="true"
 
                 delegate="{
-                        name: 'com/ingenx/nauti/masterdashboard/delegate/JSONTableDelegate',
+                        name: 'com/ingenx/nauti/masterdashboard/delegate/VendorDataTableDelegate',
                         payload: {
                             bindingPath: '/xNAUTIxnewvend_btp',
-                            searchKeys: ['Ort01', 'Land1', 'Lifnr']
+                            searchKeys: ['Ort01', 'Land1', 'Lifnr','Name1','Pstlz']
                         }
                     }">
                 
@@ -134,14 +130,21 @@ xmlns="sap.m">
 
                 <mdct:Column
                     propertyKey="Name1"
-                    header="Name">
+                    header="Name" width="30%" >
                     <m:Text text="{Name1}" />
                 </mdct:Column>
 
-                 <mdct:Column
+                 <!-- <mdct:Column
                     propertyKey="Stras"
                     header="Street">
                     <m:Text text="{Stras}" />
+                </mdct:Column> -->
+
+                
+                <mdct:Column
+                    propertyKey="Ort01"
+                    header="City">
+                    <m:Text text="{Ort01}" />
                 </mdct:Column>
     
                 <mdct:Column
@@ -150,11 +153,6 @@ xmlns="sap.m">
                     <m:Text text="{Pstlz}" />
                 </mdct:Column>
             
-                <mdct:Column
-                    propertyKey="Ort01"
-                    header="City">
-                    <m:Text text="{Ort01}" />
-                </mdct:Column>
 
                   <mdct:Column
                     propertyKey="Land1"
@@ -162,17 +160,17 @@ xmlns="sap.m">
                     <m:Text text="{Land1}" />
                 </mdct:Column>
 
-                <mdct:Column
+                <!-- <mdct:Column
                     propertyKey="Telf2"
                     header="Telephone">
                     <m:Text text="{Telf2}" />
-                </mdct:Column>
+                </mdct:Column> -->
 
-                <mdct:Column
+                <!-- <mdct:Column
                     propertyKey="CreationDate"
                     header="Creation Date">
                     <m:Text text="{Erdat}" />
-                </mdct:Column>
+                </mdct:Column> -->
             
                 <!-- <mdct:Column
                     propertyKey="PhoneNumber1"
@@ -239,7 +237,6 @@ xmlns="sap.m">
                     <m:Text text="{HouseNum1}" />
                 </mdct:Column> -->
 
-                
 
                  <!-- <mdct:Column
                     propertyKey="Regio"

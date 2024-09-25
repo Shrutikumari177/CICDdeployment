@@ -2,14 +2,14 @@
 sap.ui.define([
 	"sap/ui/core/Element",
 	"sap/ui/mdc/FilterBarDelegate",
-	"com/ingenx/nauti/masterdashboard/model/metadata/BusinessPartnerPropertyInfo",
+	"com/ingenx/nauti/masterdashboard/model/metadata/BusinessPartnerFilterPropertyInfo",
 	"sap/ui/mdc/FilterField",
-], function (Element, FilterBarDelegate, BusinessPartnerPropertyInfo, FilterField) {
+], function (Element, FilterBarDelegate, BusinessPartnerFilterPropertyInfo, FilterField) {
 	"use strict";
 	
 	const JSONFilterBarDelegate = Object.assign({}, FilterBarDelegate);
 
-	JSONFilterBarDelegate.fetchProperties = async () => BusinessPartnerPropertyInfo;
+	JSONFilterBarDelegate.fetchProperties = async () => BusinessPartnerFilterPropertyInfo;
 
 
 	const _createFilterField = async (sId, oProperty, oController) => {
@@ -18,7 +18,6 @@ sap.ui.define([
 		console.log("controler", oController)
 		const oFilterField = new FilterField(sId, {
 			dataType: oProperty.dataType,
-			// liveChange:  oController.onLiveChange ? oController.onLiveChange.bind(oController) : null,
 			conditions: "{$filters>/conditions/" + sPropertyKey + '}',
 			propertyKey: sPropertyKey,
 			required: oProperty.required,
@@ -32,7 +31,7 @@ sap.ui.define([
 	};
 
 	JSONFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey, oController) => {
-		const oProperty = BusinessPartnerPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
+		const oProperty = BusinessPartnerFilterPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oFilterBar.getId() + "--filter--" + sPropertyKey;
 		return Element.getElementById(sId) ?? (await _createFilterField(sId, oProperty, oController));
 	};

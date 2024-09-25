@@ -97,80 +97,82 @@ sap.ui.define(
         }
       },
 
-      onLiveChange: function (oEvent) {
-        // Get the source control of the event
-        var oSource = oEvent.getSource();
+      // onLiveChange: function (oEvent) {
+      //   // Get the source control of the event
+      //   var oSource = oEvent.getSource();
     
-        // Get the datatype of the input source
-        var inputString = oSource.mProperties.dataType;
-        var wordsArray = inputString.split("."); // Split the string by the period
-        var lastWord = wordsArray[wordsArray.length - 1]; // Get the last element from the array
+      //   // Get the datatype of the input source
+      //   var inputString = oSource.mProperties.dataType;
+      //   var wordsArray = inputString.split("."); // Split the string by the period
+      //   var lastWord = wordsArray[wordsArray.length - 1]; // Get the last element from the array
         
         
-        // Get the value
-        var value = oEvent.getParameters()
-        value = value.value
-        var typeofvalue;
+      //   // Get the value
+      //   var value = oEvent.getParameters()
+      //   value = value.value
+      //   var typeofvalue;
     
-        // Check if value contains only numbers
-        if (/^\d+$/.test(value)) { 
-            typeofvalue = "Integer";
-        }
-        // Check if the value contains only letters
-        else if (/^[a-zA-Z]+$/.test(value) || value ==='') {
-            typeofvalue = "String";
-        }
-        // Check if the value contains both or other characters
-        else {
-            typeofvalue = "Integer";
-        }
+      //   // Check if value contains only numbers
+      //   if (/^\d+$/.test(value)) { 
+      //       typeofvalue = "Integer";
+      //   }
+      //   // Check if the value contains only letters
+      //   else if (/^[a-zA-Z]+$/.test(value) || value ==='') {
+      //       typeofvalue = "String";
+      //   }
+      //   // Check if the value contains both or other characters
+      //   else {
+      //       typeofvalue = "Integer";
+      //   }
     
-        // Apply value state based on the validation
-        if (typeofvalue != lastWord) {
-            // Set the value state to Error and provide a message
-            oSource.setValueState(sap.ui.core.ValueState.Error);
-            oSource.setValueStateText("Please enter alphabets only.");
-        } else {
-            // Clear any previous value state and message
-            oSource.setValueState(sap.ui.core.ValueState.None);
-            oSource.setValueStateText("");
-        }
+      //   // Apply value state based on the validation
+      //   if (typeofvalue != lastWord) {
+      //       // Set the value state to Error and provide a message
+      //       oSource.setValueState(sap.ui.core.ValueState.Error);
+      //       oSource.setValueStateText("Please enter alphabets only.");
+      //   } else {
+      //       // Clear any previous value state and message
+      //       oSource.setValueState(sap.ui.core.ValueState.None);
+      //       oSource.setValueStateText("");
+      //   }
     
-        console.log("Value State:", oSource.getValueState());
-        console.log("Value State Text:", oSource.getValueStateText());
-        console.log("Value changing:", value);
+      //   console.log("Value State:", oSource.getValueState());
+      //   console.log("Value State Text:", oSource.getValueStateText());
+      //   console.log("Value changing:", value);
 
         
-      }, 
+      // }, 
     
-    // onLiveSearch: function (oEvent) {
-    //   // Get the FilterBar instance
-    //   const oFilterBar = this.byId("filterbar");
+    onLiveSearch: function (oEvent) {
+      // Get the FilterBar instance
+      const oFilterBar = this.byId("filterbar");
+  
+      const sValue = oEvent.getParameter("value");
 
-    //   const sValue = oEvent.getParameter("value");
-    //    console.log(oFilterBar.triggerSearch())
-    //   if (oFilterBar) {
-    //     oFilterBar.triggerSearch().then(function() {
-    //         console.log("Search triggered successfully");
-    //     }).catch(function(oError) {
-    //         console.error("Error triggering search:", oError);
-    //     });
-    //   } else {
-    //     console.error("FilterBar not found");
-    // }
-            
-    //   // Use a closure to create a new timeout for each call
-    //   clearTimeout(this._searchTimeout);
-    //   this._searchTimeout = setTimeout(() => {
+      if (sValue) {
+        // console.log("key triggered")
+          const oEnterKeyEvent = new KeyboardEvent('keydown', {
+             key: 'Enter',
+             keyCode: 13,
+             which: 13,
+             bubbles: true,
+             cancelable: true
+          });
 
-    //     oFilterBar.fireSearch({
-    //         value: sValue // Pass the search value here
-    //     });
+          // Find the target input field (or element) where you want to dispatch the event
+        const oInputField = oFilterBar.getBasicSearchField().getFocusDomRef();
 
-    //     console.log("Search triggered with value:", sValue);
-    //   }, 1000); // 1-second delay
-    // },  
+        // Dispatch the Enter key event to simulate the key press
+        oInputField.dispatchEvent(oEnterKeyEvent);
+      }
 
+      if (sValue.length < 1) {
+        oFilterBar.getBasicSearchField().setConditions()
+      }
+      
+    },  
+
+   
     onDeletePress: function () {
         var oTable = this.byId("table");
         var aSelectedContexts = oTable.getSelectedContexts(true);
@@ -205,53 +207,11 @@ sap.ui.define(
         });
       },
     
-      // deleteSelectedItems: function (aItems) {
-      //   let slength = aItems.length;
-      //   let deleteMsg = slength === 1 ? "Record" : "Records";
-      //   let oModel = this.getOwnerComponent().getModel();
-        
-        
-      //   aItems.forEach((oContext) => {
-         
-      //     const oData = oContext.getObject();
-      //     let Lifnr = oData.Lifnr;
-        
-      //     console.log("data to be deleted", Lifnr);
-
-      //     let oBindList = oModel.bindList("/BusinessPartnerSet");
-    
-      //     oBindList.requestContexts(0, Infinity).then((aContexts) => {
-      //       aContexts.forEach((oContext) => {
-      //         if (oContext.getObject().Lifnr === Lifnr ) {
-      //           oContext.delete().then(function () {
-      //             oModel.refresh();
-      //             sap.m.MessageToast.show(`${deleteMsg} deleted sucessfully`);          
-      //             oBusyDialog.close();
-
-      //           }).catch((err) => {
-      //             // console.log("erorr", typeof(err.message))
-      //             if (err.message.includes("vendor exists in voyage, do not delete")) {
-      //               MessageBox.error(`${deleteMsg} already exists in voyage, do not delete`);
-      //             }
-      //             else {
-      //               MessageBox.error(err.message);
-      //             }                  
-      //             oBusyDialog.close();
-      //             this.resetPage()
-      //           });
-      //         };
-      //       });
-      //     });
-    
-      //     this.byId("table").clearSelection();
-    
-      //   })    
-      // },
-
-
-      deleteSelectedItems: async function (aItems) {
+    deleteSelectedItems: async function (aItems) {
         let slength = aItems.length;
-        let deleteMsg = slength === 1 ? "A record" : "Some records";
+        let deleteMsg = slength === 1 ? "Record" : "Some Records";
+        let deleteMsgErr = slength === 1 ? "A record" : "Some records";
+
         let plural = slength === 1 ? "was" : "were"
         let oModel = this.getOwnerComponent().getModel();
         let errors = [];
@@ -296,7 +256,7 @@ sap.ui.define(
           }
         } catch (err) {
           if (err.message.includes("vendor exists in voyage, do not delete")) {
-            sap.m.MessageBox.error(`${deleteMsg} already exists in voyage, which ${plural} not deleted`);
+            sap.m.MessageBox.error(`${deleteMsgErr} already exists in voyage, which ${plural} not deleted`);
             oModel.refresh();
           } else {
             sap.m.MessageBox.error(err.message);

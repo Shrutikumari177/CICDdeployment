@@ -7,14 +7,22 @@ const aPropertyInfos = [{
 	key: "Lifnr",
 	label: "Vendor No",
 	path: "Lifnr",
-	dataType: "sap.ui.model.type.String",
-	visible: true
+	dataType: "sap.ui.model.type.Integer",
+	visible: true,
 },{
 	key: "Name1",
 	label: "Name",
 	path: "Name1",
 	dataType: "sap.ui.model.type.String",
-	visible: true
+	visible: true,
+	visualSettings: {
+        widthCalculation: function (sValue) {
+            const baseWidth = 100; // Set a minimum base width
+            const charWidth = 8; // Approximate width per character (you can adjust this as needed)
+            
+            return `${Math.max(baseWidth, sValue.length * charWidth)}px`;
+        }
+    },
 },{
 	key: "Stras",
 	label: "Street",
@@ -25,7 +33,7 @@ const aPropertyInfos = [{
 	key: "Pstlz",
 	label: "Postal Code",
 	path: "Pstlz",
-	dataType: "sap.ui.model.type.String",
+	dataType: "sap.ui.model.type.Integer",
 	visible: true
 },{
 	key: "Ort01",
@@ -33,7 +41,6 @@ const aPropertyInfos = [{
 	path: "Ort01",
 	dataType: "sap.ui.model.type.String",
 	visible: true
-	// groupable: true
 },{
 	key: "Land1",
 	label: "Country",
@@ -51,14 +58,14 @@ const aPropertyInfos = [{
 	key: "Telf2",
 	label: "Telephone",
 	path: "Telf2",
-	dataType: "sap.ui.model.type.String",
+	dataType: "sap.ui.model.type.Integer",
 	visible: true
 	
 },{
 	key: "Telf1",
 	label: "PhoneNumber1",
 	path: "Telf1",
-	dataType: "sap.ui.model.type.String",
+	dataType: "sap.ui.model.type.Integer",
 	visible: true
 	
 },{

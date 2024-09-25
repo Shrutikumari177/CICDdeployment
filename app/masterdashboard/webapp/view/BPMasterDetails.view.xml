@@ -73,7 +73,8 @@
                         liveChange="onLiveChange"
 						conditions="{$filters>/conditions/Ort01}"
 						valueHelp="name-vh"
-						delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"    
+						delegate="{name: 'sap/ui/mdc/field/FieldBaseDelegate'}"
+                        maxConditions="-1"    
                         operators="Contains" />
 					</mdc:filterItems>
 				
@@ -89,7 +90,7 @@
             <m:Bar id="_IDGenBar1" class="_IDGenBar1">
               <m:contentRight>            
                 <Button id="_IDGenButton1" text="Delete Selection" type="Emphasized" press="onDeletePress"/>
-				<Button id="_IDGenButton2" text="Clear Selection" type="Emphasized" press="onClearSelection"/>
+				<!-- <Button id="_IDGenButton2" text="Clear Selection" type="Emphasized" press="onClearSelection"/> -->
               </m:contentRight>
             </m:Bar>
           
@@ -215,12 +216,13 @@
 	            type="ResponsiveTable"
                 threshold="100"
                 showRowCount="true"
+               
             
                 delegate="{
                         name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerTableDelegate',
                         payload: {
                             bindingPath: '/xNAUTIxBusinessPartner1',
-                            searchKeys: ['Ort01', 'Land1', 'Lifnr']
+                            searchKeys: ['Ort01', 'Land1', 'Lifnr','Name1']
                         }
                     }">
                 
@@ -233,26 +235,28 @@
 
                 <mdct:Column
                     propertyKey="Name1"
-                    header="Name">
-                    <m:Text text="{Name1}" />
+                    header="Name"
+                    width="30%"
+                    >
+                    <m:Text text="{Name1}"  />
                 </mdct:Column>
 
-                 <mdct:Column
+                 <!-- <mdct:Column
                     propertyKey="Stras"
                     header="Street">
                     <m:Text text="{Stras}" />
+                </mdct:Column> -->
+
+                <mdct:Column
+                    propertyKey="Ort01"
+                    header="City">
+                    <m:Text text="{Ort01}" />
                 </mdct:Column>
     
                 <mdct:Column
                     propertyKey="Pstlz"
                     header="Postal Code">
                     <m:Text text="{Pstlz}" />
-                </mdct:Column>
-            
-                <mdct:Column
-                    propertyKey="Ort01"
-                    header="City">
-                    <m:Text text="{Ort01}" />
                 </mdct:Column>
 
                   <mdct:Column
@@ -261,115 +265,17 @@
                     <m:Text text="{Land1}" />
                 </mdct:Column>
 
-                <mdct:Column
+                <!-- <mdct:Column
                     propertyKey="Telf2"
                     header="Telephone">
                     <m:Text text="{Telf2}" />
-                </mdct:Column>
+                </mdct:Column> -->
 
-                <mdct:Column
+                <!-- <mdct:Column
                     propertyKey="Erdat"
                     header="Creation Date">
                     <m:Text text="{Erdat}" />
-                </mdct:Column>
-            
-                <!-- <mdct:Column
-                    propertyKey="PhoneNumber1"
-                    header="PhoneNumber1">
-                    <m:Text text="{Telf1}" />
-                </mdct:Column>
-             -->
-                <!-- <mdct:Column
-                    propertyKey="FaxNumber"
-                    header="Fax No">
-                    <m:Text text="{Telfx}" />
-                </mdct:Column>
-             -->
-                
-            
-                
-                 <!-- <mdct:Column
-                    propertyKey="PartnerRole"
-                    header="Partner Role">
-                    <m:Text text="{PartnerRole}" />
                 </mdct:Column> -->
-
-                 <!-- <mdct:Column
-                    propertyKey="Company"
-                    header="Company">
-                    <m:Text text="{Anred}" />
-                </mdct:Column> -->
-
-                 
-
-                 <!-- <mdct:Column
-                    propertyKey="Name2"
-                    header="Name2">
-                    <m:Text text="{Name2}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="Name3"
-                    header="Name3">
-                    <m:Text text="{Name3}" />
-                </mdct:Column> -->
-
-                 <!-- <mdct:Column
-                    propertyKey="Sort1"
-                    header="Sort1">
-                    <m:Text text="{Sort1}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="StrSuppl1"
-                    header="StrSuppl1">
-                    <m:Text text="{StrSuppl1}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="StrSuppl2"
-                    header="StrSuppl2">
-                    <m:Text text="{StrSuppl2}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="HouseNum1"
-                    header="HouseNum1">
-                    <m:Text text="{HouseNum1}" />
-                </mdct:Column> -->
-
-                
-
-                 <!-- <mdct:Column
-                    propertyKey="Regio"
-                    header="Regio">
-                    <m:Text text="{Regio}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="TimeZone"
-                    header="TimeZone">
-                    <m:Text text="{TimeZone}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="Spras"
-                    header="Spras">
-                    <m:Text text="{Spras}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="SmtpAddr"
-                    header="SmtpAddr">
-                    <m:Text text="{SmtpAddr}" />
-                </mdct:Column>
-
-                 <mdct:Column
-                    propertyKey="DateTo"
-                    header="DateTo">
-                    <m:Text text="{DateTo}" />
-                </mdct:Column> -->
-
 
 			</mdc:Table>
             </ScrollContainer>
