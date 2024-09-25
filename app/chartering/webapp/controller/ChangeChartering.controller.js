@@ -50,7 +50,7 @@ sap.ui.define(
           console.log("userID", userID);
         } catch (error) {
            userEmail = undefined;
-          // userEmail = "sarath.venkateswara@ingenxtec.com";
+          //  userEmail = "sarath.venkateswara@ingenxtec.com";
 
         }
       },
@@ -485,99 +485,7 @@ sap.ui.define(
     },
     
 
-      onSendForApproval1:async function () {
-        const oChrmin = this.byId("charteringNo").getValue();
-
-        if (!oChrmin) {
-            sap.m.MessageBox.error("Please enter Chartering No.");
-            return;
-        }
-
-        let oModel = this.getOwnerComponent().getModel();
-        let oBinding = oModel.bindContext(`/cha_statusSet(Chrnmin='${oChrmin}')`);
-        let eligibleforApproval = false;
-        await oBinding.requestObject().then((oContext) => {
-            console.log(oContext);
-
-            if (oContext) {
-                let Zaction = oContext.Zaction;
-                console.log(oContext.Chrnmin);
-                console.log(Zaction);
-
-                if (Zaction === "REJ") {
-                  eligibleforApproval = true;
-                    
-
-                   
-                } else if (Zaction.toUpperCase() === "APPR") {
-                    sap.m.MessageBox.warning("Already sent for approval , status:Approved ");
-                } else {
-                    sap.m.MessageBox.warning("Already sent for approval , Status:  Pending");
-                }
-            } else {
-
-              eligibleforApproval = true;
-            }
-        }).catch(error => {
-          console.log("Error", );
-          if (error.message.includes("No record found in charter status") || error.error.message.includes("No record found in charter status")) {
-            eligibleforApproval = true
-          }
-        });
-        const that = this;
-        if(eligibleforApproval){
-          that.onSendForApprovalCreate();
-        }
-
-
-
-    },
-
    
-
-    
-      onSendForApprovalCreate1: async function () {
-        let oChrmin = this.byId("charteringNo").getValue();
-        if (!oChrmin) {
-          sap.m.MessageBox.error("Please enter Chartering No");
-          return;
-        }
-        await this.checkforValidUser();
-        if(!userEmail){
-          return;
-        }
-        let oBindListSP = this.getView().getModel().bindList("/chartapprSet");
-      
-        try {
-          let saveddata = oBindListSP.create({
-            "Creqno": "",
-            "Chrnmin": oChrmin,
-            "Zemail": userEmail
-          });
-          console.log("saving data:", saveddata);
-          let oBusyDialog = new sap.m.BusyDialog();
-          oBusyDialog.open();
-        
-          oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
-            let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Chrnmin === oChrmin);
-            if (ApprovalNo.length > 0) {
-              let appNo = ApprovalNo[0].getObject().Creqno;
-              console.log(appNo);
-              sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`);
-              oBusyDialog.close();
-            } else {
-              sap.m.MessageBox.error("Error: Approval not found after creation");
-            }
-          }).catch(function (error) {
-              throw error;
-          });
-        } catch (error) {
-          console.error("Error while saving data:", error);
-          oBusyDialog.close();
-          sap.m.MessageBox.error("Error while saving data");
-          
-        }
-      },
       onSendForApproval: async function () {
         const oChrmin = this.byId("charteringNo").getValue();
     
@@ -630,7 +538,7 @@ sap.ui.define(
         }
     },
     
-    onSendForApprovalCreate: async function (oBusyDialog) {
+    onSendForApprovalCreate1: async function (oBusyDialog) {
         let oChrmin = this.byId("charteringNo").getValue();
         if (!oChrmin) {
             sap.m.MessageBox.error("Please enter Chartering No");
@@ -678,7 +586,64 @@ sap.ui.define(
             sap.m.MessageBox.error("Error while saving data");
         }
     },
-    
+    onSendForApprovalCreate: async function (oBusyDialog) {
+      let oChrmin = this.byId("charteringNo").getValue();
+      if (!oChrmin) {
+          sap.m.MessageBox.error("Please enter Chartering No");
+          oBusyDialog.close(); 
+          return;
+      }
+  
+      await this.checkforValidUser();
+      if (!userEmail) {
+          oBusyDialog.close(); 
+          return;
+      }
+  
+      let oRouter = this.getOwnerComponent().getRouter();
+      let oBindListSP = this.getView().getModel().bindList("/chartapprSet");
+  
+      try {
+          let saveddata = oBindListSP.create({
+              "Creqno": "",
+              "Chrnmin": oChrmin,
+              "Zemail": userEmail
+          });
+  
+          console.log("Saving data:", saveddata);
+  
+          await oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
+              let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Chrnmin === oChrmin);
+              if (ApprovalNo.length > 0) {
+                  let appNo = ApprovalNo[0].getObject().Creqno;
+                  console.log(appNo);
+                  
+                 
+                  sap.m.MessageBox.success(`Chartering Approval no. ${appNo} created successfully`, {
+                      onClose: function () {
+                          oBusyDialog.close();
+  
+                          
+                          oRouter.navTo("RouteCharteringDashboard");
+                      }
+                  });
+              } else {
+                  sap.m.MessageBox.error("Error: Approval not found after creation");
+                  oBusyDialog.close(); 
+              }
+          }).catch(function (error) {
+              console.error("Error while requesting contexts:", error);
+              sap.m.MessageBox.error("Error while sending approval");
+              oBusyDialog.close(); 
+          });
+  
+      } catch (error) {
+          console.error("Error while saving data:", error);
+          oBusyDialog.close();
+          sap.m.MessageBox.error("Error while saving data");
+      }
+  },
+  
       
 
       

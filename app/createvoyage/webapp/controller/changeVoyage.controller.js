@@ -106,8 +106,8 @@ sap.ui.define(
                     console.log("userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                    userEmail = undefined ;
-                    // userEmail = "sarath.venkateswara@ingenxtec.com";
+                     userEmail = undefined ;
+                    //  userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
 
@@ -3146,42 +3146,49 @@ sap.ui.define(
                     oBusyDialog.close(); 
                 }
             },
-            
             onSendForApprovalCreate: async function (oBusyDialog) {
                 if (!myVOYNO) {
                     sap.m.MessageBox.error("Please enter Voyage No.");
-                    oBusyDialog.close(); // Close BusyDialog on error
+                    oBusyDialog.close();
                     return;
                 }
             
                 await this.checkforValidUser();
                 if (!userEmail) {
-                    oBusyDialog.close(); // Close BusyDialog if no user email
+                    oBusyDialog.close(); 
                     return;
                 }
             
+                let oRouter = this.getOwnerComponent().getRouter(); 
                 let oModel = this.getOwnerComponent().getModel();
                 let oBindListSP = oModel.bindList("/voyapprovalSet");
             
                 try {
-                    // Create approval
+                   
                     let saveddata = oBindListSP.create({
                         "Vreqno": "",
                         "Voyno": myVOYNO,
                         "Zemail": userEmail
                     });
             
-                  
                     await oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
                         let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
                         if (ApprovalNo.length > 0) {
                             let appNo = ApprovalNo[0].getObject().Vreqno;
                             console.log(appNo);
-                            sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
-                            oBusyDialog.close(); 
+            
+                           
+                            sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`, {
+                                onClose: function () {
+                                    oBusyDialog.close(); 
+            
+                                    
+                                    oRouter.navTo("RouteVoyageDashboard");
+                                }
+                            });
                         } else {
                             sap.m.MessageBox.error("Error: Approval not found after creation");
-                            oBusyDialog.close(); 
+                            oBusyDialog.close();
                         }
                     }).catch(function (error) {
                         console.log("Error while requesting contexts:", error);
@@ -3197,6 +3204,8 @@ sap.ui.define(
                     oBusyDialog.close(); 
                 }
             },
+            
+        
 
 
             onCancelVoayge: async function () {
