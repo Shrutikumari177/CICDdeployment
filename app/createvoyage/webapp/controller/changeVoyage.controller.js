@@ -2767,7 +2767,7 @@ sap.ui.define(
                 let itemDetails = voyItemModel.getData();
                 let costData = costdetailsModel.getData();
 
-                // console.log(voyHeaderModel.getData(), voyItemDetail, costData);
+                console.log("costdata", costData);
 
                 let frcostPlValue = this.byId("_friegthIdPlan").getValue();
                 let frUnitPl = this.byId("_idFrunitPlan").getSelectedKey();
@@ -2919,9 +2919,11 @@ sap.ui.define(
                 });
 
             },
+          
             checkEmptyFieldsCostCharges: function (dataArray) {
                 for (let i = 0; i < dataArray.length; i++) {
                     const obj = dataArray[i];
+            
                     if (
                         obj.Vlegn === "" ||
                         obj.Costcode === "" ||
@@ -2933,14 +2935,16 @@ sap.ui.define(
                         this.errorMessage = "All Cost Charges fields are Mandatory";
                         return true;
                     }
-                    // Check if Procost is equal to 0.000
+            
                     if (parseFloat(obj.Procost) === 0.000) {
-                        this.errorMessage = "Projected Cost are Mandatory";
+                        this.errorMessage = `Projected Cost is missing for Cost Code: ${obj.Costcode}`;
+
                         return true;
                     }
                 }
                 return false;
             },
+            
 
             onRefresh: async function () {
                 let that = this;

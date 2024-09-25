@@ -2847,10 +2847,10 @@ sap.ui.define(
                 });
 
             },
-
             checkEmptyFieldsCostCharges: function (dataArray) {
                 for (let i = 0; i < dataArray.length; i++) {
                     const obj = dataArray[i];
+            
                     if (
                         obj.Vlegn === "" ||
                         obj.Costcode === "" ||
@@ -2862,14 +2862,18 @@ sap.ui.define(
                         this.errorMessage = "All Cost Charges fields are Mandatory";
                         return true;
                     }
-
+            
                     if (parseFloat(obj.Procost) === 0.000) {
-                        this.errorMessage = "Projected Cost are Mandatory";
+                        this.errorMessage = `Projected Cost is missing for Cost Code: ${obj.Costcode}`;
+
                         return true;
                     }
                 }
                 return false;
             },
+            
+
+         
 
             onRefresh: function () {
                 this.byId("_idIconTabBar").setVisible(false);
