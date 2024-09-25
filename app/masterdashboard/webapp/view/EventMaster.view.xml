@@ -58,7 +58,7 @@
             selectionChange="selectedItems"
             width="100%"
             class="mastertables"
-             noDataText="Loading ..."
+             noDataText="No Data Found"
            
          >
             <columns>
