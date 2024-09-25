@@ -199,7 +199,7 @@ sap.ui.define(
                 if (!that._busyDialog1) {
                     that._busyDialog1 = new sap.m.BusyDialog({
                         title: "Please wait",
-                        text: "Loading Bid Betails..."
+                        text: "Loading Voyage Details..."
                     });
                 }
                 that._busyDialog1.open();
