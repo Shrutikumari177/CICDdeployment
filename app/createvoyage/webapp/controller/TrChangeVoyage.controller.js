@@ -97,8 +97,8 @@ sap.ui.define(
                     console.log("userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                    // userEmail = undefined ;
-                    userEmail = "sarath.venkateswara@ingenxtec.com";
+                     userEmail = undefined ;
+                    // userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
             debounce: function (func, wait) {
