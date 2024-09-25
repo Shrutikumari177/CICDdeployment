@@ -646,7 +646,7 @@ sap.ui.define(
        
       // Array to store duplicate entry codes
   
-      sap.m.MessageToast.show("Creating entries...");
+      // sap.m.MessageToast.show("Creating entries...");
 
       
       var items =  oTable.getItems();
@@ -730,7 +730,13 @@ sap.ui.define(
           that.resetView();
           oTable.removeSelections();
   
-          sap.m.MessageToast.show("All entries saved successfully.").removeSelections();
+          sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.").removeSelections();
+          }, 1600);
       }
       },
   
@@ -1032,7 +1038,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Class exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Value already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

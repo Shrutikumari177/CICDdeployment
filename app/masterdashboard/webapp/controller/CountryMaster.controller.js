@@ -405,7 +405,7 @@ sap.ui.define(
         let tempCodesArray = [];
         var duplicateEntries = []; 
 
-        sap.m.MessageToast.show("Creating entries...");
+        // sap.m.MessageToast.show("Creating entries...");
 
         oTable.getItems().forEach(function (row) {
           var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
@@ -481,7 +481,13 @@ sap.ui.define(
             }
           });
 
-          sap.m.MessageToast.show("All entries saved successfully.");
+          sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
         }
       },
       formatUomdes: function (ZfDesc) {
@@ -727,7 +733,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Country exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Country already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

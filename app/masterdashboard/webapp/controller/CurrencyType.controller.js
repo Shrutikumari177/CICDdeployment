@@ -401,7 +401,7 @@ sap.ui.define(
         var duplicateEntries = []; // Array to store duplicate entry codes
         var validEntries = []; // Array to store valid entries for posting
 
-        sap.m.MessageToast.show("Validating entries...");
+        //sap.m.MessageToast.show("Validating entries...");
 
         // Step 1: Validate all entries
         oTable.getItems().forEach(function (row) {
@@ -477,7 +477,13 @@ sap.ui.define(
           that.getView().getModel().refresh();
           that.resetView();
 
-          sap.m.MessageToast.show("All entries saved successfully.");
+          sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
         }
       },
       formatDes: function (Navoygcurdes) {
@@ -724,7 +730,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Code exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Currency already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

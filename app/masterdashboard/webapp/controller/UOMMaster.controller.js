@@ -653,7 +653,7 @@ sap.ui.define(
       var tempCodesArray  = [];
      
   
-      sap.m.MessageToast.show("Creating entries...");
+      // sap.m.MessageToast.show("Creating entries...");
 
       
       var items =  oTable.getItems();
@@ -740,7 +740,13 @@ sap.ui.define(
 
           that.resetView();
           oTable.removeSelections();  
-          sap.m.MessageToast.show("All entries saved successfully.");
+          sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
       }
       },
 
@@ -1046,7 +1052,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Code exists in voyage, do not delete')){
+              sap.m.MessageBox.error("UOM Code already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

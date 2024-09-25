@@ -1040,8 +1040,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            // Handle deletion error
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Code exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Cost Code already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
           });
         });
 

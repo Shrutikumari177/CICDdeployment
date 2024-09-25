@@ -651,7 +651,7 @@ sap.ui.define(
       let duplicateEntries = []; 
       let tempCodesArray = [];
 
-      sap.m.MessageToast.show("Creating entries...");
+      // sap.m.MessageToast.show("Creating entries...");
 
       let items =  oTable.getItems();
       for(let i=0 ; i< items.length ;i++ ) {
@@ -733,7 +733,13 @@ sap.ui.define(
 
         that.resetView();
         oTable.removeSelections();
-        sap.m.MessageToast.show("All entries saved successfully.");
+        sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
        
       }
     },
@@ -1045,7 +1051,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Code exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Vessel Code already used in voyage, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

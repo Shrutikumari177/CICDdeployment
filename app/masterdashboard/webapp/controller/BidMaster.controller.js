@@ -1494,7 +1494,7 @@ sap.ui.define(
 
                 }).catch((oError) => {
                   if(oError.error.message.includes('Code exists in voyage, do not delete')){
-                    sap.m.MessageBox.error("Code already used in voyage, Cannot be deleted")
+                    sap.m.MessageBox.error("Code already used in voyage, Can't be deleted")
                   }else{
                     sap.m.MessageBox.error( oError.message);
                   }

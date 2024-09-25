@@ -680,7 +680,7 @@ sap.ui.define(
         var errors = [];
         var duplicateEntries = []; // Array to store duplicate entry codes
 
-        sap.m.MessageToast.show("Creating entries...");
+        // sap.m.MessageToast.show("Creating entries...");
 
         oTable.getItems().forEach(function (row) {
           var value1 = row.getCells()[0].getValue().toUpperCase(); // Convert to lowercase
@@ -750,7 +750,13 @@ sap.ui.define(
             }
           });
 
-          sap.m.MessageToast.show("All entries saved successfully.");
+          sap.m.MessageToast.show("Creating entries...");
+          that.resetView();
+          oTable.removeSelections();
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
         }
       },
       formatUomdes: function (Zgroup) {
@@ -1075,7 +1081,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('User already exist in Approval, Do not delete')){
+              sap.m.MessageBox.error("User already exist in Approval, Can't be deleted")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });

@@ -705,6 +705,7 @@ sap.ui.define(
         return true;
       },
       onSave: function () {
+        debugger;
         let that = this;
         let oTable = that.byId("entryTypeTable");
         let oTable2 = that.byId("createTypeTable");
@@ -720,7 +721,7 @@ sap.ui.define(
         let duplicateEntries = [];
         let tempCodesArray = [];
 
-        sap.m.MessageToast.show("Creating entries...");
+        // sap.m.MessageToast.show("Creating entries...");
 
         let items = oTable.getItems();
         for (let i = 0; i < items.length; i++) {
@@ -746,13 +747,14 @@ sap.ui.define(
             entriesProcessed++;
             checkCompletion();
           });
-
+          
           oBindListSP.getContexts();
         }
 
         function checkCompletion() {
           if (entriesProcessed === totalEntries) {
             if (errors.length === 0 && duplicateEntries.length === 0) {
+              
               createEntries();
             } else {
               var errorMessage = "";
@@ -787,11 +789,14 @@ sap.ui.define(
               sap.m.MessageToast.show("Error while saving data");
             }
           });
-
+          sap.m.MessageToast.show("Creating entries...");
           that.resetView();
           oTable.removeSelections();
-
-          sap.m.MessageToast.show("All entries saved successfully.");
+          setTimeout(() => {
+           
+            sap.m.MessageToast.show("All entries saved successfully.");
+          }, 1600);
+          
           let createTable = this.getView.byId("createTypeTable");
           createTable.removeSelections();
         }
@@ -1104,7 +1109,11 @@ sap.ui.define(
             console.log("Succesfully Deleted");
             aSelectedIds = []
           }).catch(function (oError) {
-            MessageBox.error("Error deleting item: " + oError.message);
+            if(oError.error.message.includes('Code exists in voyage, do not delete')){
+              sap.m.MessageBox.error("Voyage Code already used in voyage, Can't be deleted.")
+            }else{
+              sap.m.MessageBox.error( oError.message);
+            }
             oBusyDialog.close();
 
           });
