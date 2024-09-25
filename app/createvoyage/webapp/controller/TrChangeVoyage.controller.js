@@ -2887,84 +2887,148 @@ sap.ui.define(
 
 
             },
+          
             sendApproval: async function () {
-
-
-                if (!myVOYNO) {
-                    sap.m.MessageBox.error("Please Select Voyage");
-                    return;
-                }
-                if (!bidPayload.length) {
-                    sap.m.MessageBox.error("Please fill Bid Details");
-                    return
-
-                }
-                let isTechnicalDetailsPresent = false;
-                let isCommercialDetailsPresent = false
-
-                // Loop through the bidPayload array to check for Cunit value other than 'CURR'
-                for (let item of bidPayload) {
-                    if (item.Cunit == "") {        // if CURR type( commercial) then Cunit must be present
-                        isTechnicalDetailsPresent = true;
-
+                let oBusyDialog = new sap.m.BusyDialog();
+                oBusyDialog.open(); 
+            
+                try {
+                    if (!myVOYNO) {
+                        sap.m.MessageBox.error("Please Select Voyage");
+                        oBusyDialog.close();
+                        return;
                     }
-                    else {
-                        isCommercialDetailsPresent = true
+            
+                    if (!bidPayload.length) {
+                        sap.m.MessageBox.error("Please fill Bid Details");
+                        oBusyDialog.close(); 
+                        return;
                     }
-                }
-                if (!isTechnicalDetailsPresent) {
-                    sap.m.MessageBox.error("Please fill Technical Bid Details");
-                    return;
-                };
-                if (bidData.length !== bidPayload.length) {
-                    sap.m.MessageBox.error("Please Save Bid Details.");
-                    return;
-                }
-                let sBidType = voyHeaderModel.getData()[0].Bidtype;
-
-                if (!isCommercialDetailsPresent) {
-                    sap.m.MessageBox.error("Please fill Commercial Bid Details");
-                    return;
-                }
-
-
-                let oModel = this.getOwnerComponent().getModel();
-                let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
-                let eligibleforApproval = false;
-
-                await oBinding.requestObject().then((oContext) => {
-                    console.log(oContext);
-
-                    if (oContext) {
-                        let Zaction = oContext.Zaction;
-                        console.log(oContext.Voyno);
-                        console.log(Zaction);
-
-                        if (Zaction === "REJ") {
-                            eligibleforApproval = true;
-
-                        } else if (Zaction.toUpperCase() === "APPR") {
-                            sap.m.MessageBox.warning("Already sent for Approval , status: Approved ");
+            
+                    let isTechnicalDetailsPresent = false;
+                    let isCommercialDetailsPresent = false;
+            
+                    // Check for Technical and Commercial details
+                    for (let item of bidPayload) {
+                        if (item.Cunit == "") {
+                            isTechnicalDetailsPresent = true;
                         } else {
-                            sap.m.MessageBox.warning("Already sent for Approval , Status: Pending");
+                            isCommercialDetailsPresent = true;
                         }
-                    } else {
-
-                        eligibleforApproval = true;
                     }
-                }).catch(error => {
-                    console.log("Error",);
-                    if (error.message.includes("No record found in Voyage Status") || error.error.message.includes("No record found in voyage status")) {
-                        eligibleforApproval = true
+            
+                    if (!isTechnicalDetailsPresent) {
+                        sap.m.MessageBox.error("Please fill Technical Bid Details");
+                        oBusyDialog.close();
+                        return;
                     }
-                    console.error("Error while fething contetxs : ", error)
-                });
-                const that = this;
-                if (eligibleforApproval) {
-                    that.onSendForApprovalCreate();
+            
+                    if (bidData.length !== bidPayload.length) {
+                        sap.m.MessageBox.error("Please Save Bid Details.");
+                        oBusyDialog.close(); 
+                        return;
+                    }
+            
+                    if (!isCommercialDetailsPresent) {
+                        sap.m.MessageBox.error("Please fill Commercial Bid Details");
+                        oBusyDialog.close(); 
+                        return;
+                    }
+            
+                    let oModel = this.getOwnerComponent().getModel();
+                    let oBinding = oModel.bindContext(`/voyappstatusSet(Voyno='${myVOYNO}')`);
+                    let eligibleforApproval = false;
+            
+                    await oBinding.requestObject().then((oContext) => {
+                        if (oContext) {
+                            let Zaction = oContext.Zaction;
+            
+                            if (Zaction === "REJ") {
+                                eligibleforApproval = true;
+                            } else if (Zaction.toUpperCase() === "APPR") {
+                                sap.m.MessageBox.warning("Already sent for Approval, status: Approved");
+                                oBusyDialog.close(); 
+                            } else {
+                                sap.m.MessageBox.warning("Already sent for Approval, Status: Pending");
+                                oBusyDialog.close(); 
+                            }
+                        } else {
+                            eligibleforApproval = true;
+                        }
+                    }).catch(error => {
+                        console.log("Error", error);
+                        if (error.message.includes("No record found in Voyage Status") || error.error.message.includes("No record found in voyage status")) {
+                            eligibleforApproval = true;
+                        }
+                        console.error("Error while fetching contexts: ", error);
+                        oBusyDialog.close(); 
+                    });
+            
+                    if (eligibleforApproval) {
+                        await this.onSendForApprovalCreate(oBusyDialog); 
+                    }
+                } catch (error) {
+                    console.log("Error during approval process:", error);
+                    oBusyDialog.close(); 
                 }
-
             },
+            
+            onSendForApprovalCreate: async function (oBusyDialog) {
+                if (!myVOYNO) {
+                    sap.m.MessageBox.error("Please enter Voyage No.");
+                    oBusyDialog.close(); // Close BusyDialog on error
+                    return;
+                }
+            
+                await this.checkforValidUser();
+                if (!userEmail) {
+                    oBusyDialog.close(); // Close BusyDialog if no user email
+                    return;
+                }
+            
+                let oModel = this.getOwnerComponent().getModel();
+                let oBindListSP = oModel.bindList("/voyapprovalSet");
+            
+                try {
+                    // Create approval
+                    let saveddata = oBindListSP.create({
+                        "Vreqno": "",
+                        "Voyno": myVOYNO,
+                        "Zemail": userEmail
+                    });
+            
+                    // Wait until all contexts are fetched
+                    await oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
+                        let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
+                        if (ApprovalNo.length > 0) {
+                            let appNo = ApprovalNo[0].getObject().Vreqno;
+                            console.log(appNo);
+                            sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
+                            oBusyDialog.close(); // Close BusyDialog on success
+                        } else {
+                            sap.m.MessageBox.error("Error: Approval not found after creation");
+                            oBusyDialog.close(); // Close BusyDialog on error
+                        }
+                    }).catch(function (error) {
+                        console.log("Error while requesting contexts:", error);
+                        if (error.cause && error.cause.message.includes("VOYNO. NOT ASSOCIATED TO VESSELTYPE AND VOYAGE TYPE")) {
+                            sap.m.MessageBox.error("Release Strategy is not Maintained against Voyage Type and Vessel Type");
+                        } else {
+                            sap.m.MessageBox.error("Error while Sending Approval");
+                        }
+                        oBusyDialog.close(); // Close BusyDialog on error
+                    });
+                } catch (error) {
+                    console.log("Error while saving data:", error);
+                    oBusyDialog.close(); // Close BusyDialog on error
+                }
+            },
+            
+            
+
+          
+            
+
             checkforValidUser: async function () {
                 try {
                     let oModel = this.getOwnerComponent().getModel();
@@ -2981,63 +3045,6 @@ sap.ui.define(
                     userEmail = undefined
                     sap.m.MessageBox.error("You are not authorized to send for approval");
                     console.log("User Not Found", error.message);
-                }
-            },
-            onSendForApprovalCreate: async function () {
-
-
-                if (!myVOYNO) {
-                    sap.m.MessageBox.error("Please enter Voyage No.");
-                    return;
-                }
-
-                await this.checkforValidUser();
-                if (!userEmail) {
-                    return;
-                }
-                let oModel = this.getOwnerComponent().getModel();
-
-                let oBindListSP = oModel.bindList("/voyapprovalSet");
-
-                try {
-                    let saveddata = oBindListSP.create({
-                        "Vreqno": "",
-                        "Voyno": myVOYNO,
-                        "Zemail": userEmail
-                    });
-                    // console.log("saving data:", saveddata);
-                    let oBusyDialog = new sap.m.BusyDialog();
-                    oBusyDialog.open();
-
-                    oBindListSP.requestContexts(0, Infinity).then(function (aContexts) {
-                        let ApprovalNo = aContexts.filter(oContext => oContext.getObject().Voyno === myVOYNO);
-                        if (ApprovalNo.length > 0) {
-                            let appNo = ApprovalNo[0].getObject().Vreqno;
-                            console.log(appNo);
-
-                            sap.m.MessageBox.success(`Voyage Approval no. ${appNo} Created Successfully`);
-                            oBusyDialog.close();
-                        } else {
-                            sap.m.MessageBox.error("Error: Approval not found after creation");
-                        }
-                    }).catch(function (error) {
-                        console.log("Error while requesting contexts:", error);
-                        if( error.cause.message.includes("VOYNO. NOT ASSOCIATED TO VESSELTYPE AND VOYAGE TYPE")){
-
-                            sap.m.MessageBox.error("Release Strategy is not Maintained against Voyage Type and Vessel Type")
-                        }
-                        else {
-
-                            sap.m.MessageBox.error("Error while Sending Approval");
-                        }
-                        oBusyDialog.close();
-
-                        throw error
-
-                    });
-                } catch (error) {
-                    console.log("Error while saving data:", error);
-                    oBusyDialog.close();
                 }
             },
 
