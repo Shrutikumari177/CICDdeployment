@@ -53,6 +53,8 @@ sap.ui.define(
                         
             }.bind(this))
 
+            console.log("getModelData2",getModelData2)
+
         },
         
  
@@ -64,7 +66,7 @@ sap.ui.define(
         onBackPress: function() {
             this.resetPage()
             const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteBusinessPartner");
+            oRouter.navTo("RouteBusinessPartnerDashboard");
         },
         
         onPressHome: function() {
@@ -121,10 +123,17 @@ sap.ui.define(
         onSelectionSubmit: function () {
             var oTable = this.byId("table");
             var aSelectedContexts = oTable.getSelectedContexts(true);
-            var aSelectedItems = aSelectedContexts.map(function (oContext) {
-                return oContext.getObject();
+            console.log("aSelectedContexts",aSelectedContexts)
+
+            var aSelectedKeys = aSelectedContexts.map(function (oContext) {
+                return oContext.getObject().Lifnr; 
             });
-        
+            
+            // Filter the data from getModelData2 based on the selected keys
+            var aSelectedItems = getModelData2.filter(function (item) {
+                return aSelectedKeys.includes(item.Lifnr);
+            });
+
             if (aSelectedItems.length === 0) {
                 MessageToast.show("No items selected.");
                 return;
@@ -136,6 +145,10 @@ sap.ui.define(
                 if (sName1 && sName1.length > 35) {
                     sName1 = sName1.substring(0, 35); // Truncate to 35 characters'
                 }
+
+                console.log("smtp", item.SmtpAddr)
+                console.log("item", item)
+
 
                 return {
                     Lifnr: item.Lifnr,
@@ -162,6 +175,7 @@ sap.ui.define(
                     Erdat: item.Erdat + "T00:00:00.000Z",
                     
                 };
+
             });
 
             
