@@ -289,14 +289,16 @@ sap.ui.define(
         },      
 
         onNavigateDetails: function(oEvent) {
+            var oBindingContext = oEvent.getParameter("bindingContext");    
 
-            var oBindingContext = oEvent.getParameter("bindingContext");                         
-             // Retrieve the data object for the pressed rowvar 
-            let data = oBindingContext.getObject();
+            let selectedData = oBindingContext.getObject();
+            var data = getModelData2.filter(function (item) {
+                return item.Lifnr === selectedData.Lifnr; 
+            });
             
-            // let data = oSource.getBindingContext("").getObject();
+            
             let tempModel = new sap.ui.model.json.JSONModel();
-            tempModel.setData([data]);
+            tempModel.setData(data);
             var oView = this.getView();
             if (!this._oDialog) {
                 this._oDialog = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.VendorDataSyncing", this);

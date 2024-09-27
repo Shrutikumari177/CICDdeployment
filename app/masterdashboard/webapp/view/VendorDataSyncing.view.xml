@@ -118,7 +118,7 @@ xmlns="sap.m">
                         name: 'com/ingenx/nauti/masterdashboard/delegate/VendorDataTableDelegate',
                         payload: {
                             bindingPath: '/xNAUTIxnewvend_btp',
-                            searchKeys: ['Ort01', 'Land1', 'Lifnr','Name1','Pstlz']
+                            searchKeys: ['Ort01', 'Land1', 'Lifnr']
                         }
                     }">
                 
@@ -130,7 +130,7 @@ xmlns="sap.m">
 
                 <mdct:Column
                     propertyKey="Name1"
-                    header="Name" width="30%" >
+                    header="Name">
                     <m:Text text="{Name1}" />
                 </mdct:Column>
 
@@ -160,17 +160,17 @@ xmlns="sap.m">
                     <m:Text text="{Land1}" />
                 </mdct:Column>
 
-                <!-- <mdct:Column
+                <mdct:Column
                     propertyKey="Telf2"
                     header="Telephone">
                     <m:Text text="{Telf2}" />
-                </mdct:Column> -->
+                </mdct:Column>
 
-                <!-- <mdct:Column
+                <mdct:Column
                     propertyKey="CreationDate"
                     header="Creation Date">
                     <m:Text text="{Erdat}" />
-                </mdct:Column> -->
+                </mdct:Column>
             
                 <!-- <mdct:Column
                     propertyKey="PhoneNumber1"

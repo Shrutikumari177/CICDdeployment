@@ -38,21 +38,22 @@ sap.ui.define(
       },
 
       onNavigateDetails: function(oEvent) {
+        var oBindingContext = oEvent.getParameter("bindingContext");    
 
-        var oBindingContext = oEvent.getParameter("bindingContext");                         
-             // Retrieve the data object for the pressed rowvar 
-            let data = oBindingContext.getObject();
-            
-            // let data = oSource.getBindingContext("").getObject();
-            let tempModel = new sap.ui.model.json.JSONModel();
-            tempModel.setData([data]);
-            var oView = this.getView();
-            if (!this._oDialog1) {
-                this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.BusinessPartnerDetails", this);
-                oView.addDependent(this._oDialog1);       
-            }
-            this._oDialog1.setModel(tempModel,"nautiNewVendModel1")
-            this._oDialog1.open();
+        let selectedData = oBindingContext.getObject();
+        var data = getModelData.filter(function (item) {
+            return item.Lifnr === selectedData.Lifnr; 
+        });
+        
+        let tempModel = new sap.ui.model.json.JSONModel();
+        tempModel.setData(data);
+        var oView = this.getView();
+        if (!this._oDialog1) {
+            this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.BusinessPartnerDetails", this);
+            oView.addDependent(this._oDialog1);       
+        }
+        this._oDialog1.setModel(tempModel,"nautiNewVendModel1")
+        this._oDialog1.open();
       },
 
       oncancell: function () {
@@ -74,7 +75,7 @@ sap.ui.define(
         this.resetPage()
         // Navigate back to the previous page
         const oRouter = this.getOwnerComponent().getRouter();
-        oRouter.navTo("RouteBusinessPartner");
+        oRouter.navTo("RouteBusinessPartnerDashboard");
       },    
 
       onPressHome: function() {
@@ -97,52 +98,7 @@ sap.ui.define(
         }
       },
 
-      // onLiveChange: function (oEvent) {
-      //   // Get the source control of the event
-      //   var oSource = oEvent.getSource();
-    
-      //   // Get the datatype of the input source
-      //   var inputString = oSource.mProperties.dataType;
-      //   var wordsArray = inputString.split("."); // Split the string by the period
-      //   var lastWord = wordsArray[wordsArray.length - 1]; // Get the last element from the array
-        
-        
-      //   // Get the value
-      //   var value = oEvent.getParameters()
-      //   value = value.value
-      //   var typeofvalue;
-    
-      //   // Check if value contains only numbers
-      //   if (/^\d+$/.test(value)) { 
-      //       typeofvalue = "Integer";
-      //   }
-      //   // Check if the value contains only letters
-      //   else if (/^[a-zA-Z]+$/.test(value) || value ==='') {
-      //       typeofvalue = "String";
-      //   }
-      //   // Check if the value contains both or other characters
-      //   else {
-      //       typeofvalue = "Integer";
-      //   }
-    
-      //   // Apply value state based on the validation
-      //   if (typeofvalue != lastWord) {
-      //       // Set the value state to Error and provide a message
-      //       oSource.setValueState(sap.ui.core.ValueState.Error);
-      //       oSource.setValueStateText("Please enter alphabets only.");
-      //   } else {
-      //       // Clear any previous value state and message
-      //       oSource.setValueState(sap.ui.core.ValueState.None);
-      //       oSource.setValueStateText("");
-      //   }
-    
-      //   console.log("Value State:", oSource.getValueState());
-      //   console.log("Value State Text:", oSource.getValueStateText());
-      //   console.log("Value changing:", value);
-
-        
-      // }, 
-    
+   
     onLiveSearch: function (oEvent) {
       // Get the FilterBar instance
       const oFilterBar = this.byId("filterbar");
@@ -269,8 +225,6 @@ sap.ui.define(
           }
         }
       }
-      
-   
 
     });
 });

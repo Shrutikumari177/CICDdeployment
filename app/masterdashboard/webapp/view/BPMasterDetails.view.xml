@@ -222,7 +222,7 @@
                         name: 'com/ingenx/nauti/masterdashboard/delegate/BusinessPartnerTableDelegate',
                         payload: {
                             bindingPath: '/xNAUTIxBusinessPartner1',
-                            searchKeys: ['Ort01', 'Land1', 'Lifnr','Name1']
+                            searchKeys: ['Ort01', 'Land1', 'Lifnr']
                         }
                     }">
                 
@@ -236,9 +236,9 @@
                 <mdct:Column
                     propertyKey="Name1"
                     header="Name"
-                    width="30%"
+                    width="auto"
                     >
-                    <m:Text text="{Name1}"  />
+                    <m:Text text="{Name1}" wrapping="false" />
                 </mdct:Column>
 
                  <!-- <mdct:Column
@@ -265,11 +265,11 @@
                     <m:Text text="{Land1}" />
                 </mdct:Column>
 
-                <!-- <mdct:Column
+                <mdct:Column
                     propertyKey="Telf2"
                     header="Telephone">
                     <m:Text text="{Telf2}" />
-                </mdct:Column> -->
+                </mdct:Column>
 
                 <!-- <mdct:Column
                     propertyKey="Erdat"

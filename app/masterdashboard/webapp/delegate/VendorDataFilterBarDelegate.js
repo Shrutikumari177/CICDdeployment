@@ -33,7 +33,7 @@ sap.ui.define([
 			label: oProperty.label,
 			maxConditions: oProperty.maxConditions,
 			
-			//  operators: "Contains",
+			// operators: "Contains",
 			delegate: {name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {}}
 		});
 		// if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
