@@ -103,11 +103,11 @@ sap.ui.define(
                     userEmail = User.getEmail();
                     let userFullName = User.getFullName();
                     console.log("userEmail", userEmail);
-                    console.log("userFullName", userFullName);
+                    console.log( "userFullName", userFullName);
                     console.log("userID", userID);
                 } catch (error) {
-                     userEmail = undefined ;
-                    //  userEmail = "sarath.venkateswara@ingenxtec.com";
+                    //  userEmail = undefined ;
+                      userEmail = "sarath.venkateswara@ingenxtec.com";
                 }
             },
 
