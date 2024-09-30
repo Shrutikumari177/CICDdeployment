@@ -97,7 +97,7 @@ Content-Type: application/json
 {
   "Vreqno":"",
   "Zemail":"sarath.venkateswara@ingenxtec.com",
-  "Voyno": "1000000147"
+  "Voyno": "1000000372"
 }
 
 ### POST REQUEST FOR VOYAGE TYPE WITH iTEM AND COST DETAILS
