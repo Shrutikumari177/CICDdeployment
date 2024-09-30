@@ -44,13 +44,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/MASTER_BTP_SRV"
           }
         }
@@ -62,13 +62,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/NAUTICALCV_SRV"
           }
         }
@@ -80,13 +80,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/MARINE_TRAFFIC_API_SRV"
           }
         }
@@ -98,13 +98,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/BTP_NAUTICAL_TRANSACTIO_SRV"
           }
         }
@@ -116,13 +116,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/VOYAPPROVAL_SRV"
           }
         }
@@ -138,13 +138,13 @@
         "model": "srv/external/NAUTIVENDOR_SRV",
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/VENDOR_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/VENDOR_SRV"
           }
         }
@@ -156,13 +156,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/VOY_VALUEHELP_CDS"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/VOY_VALUEHELP_CDS"
           }
         }
@@ -174,13 +174,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/CHATAPPROVAL_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/CHATAPPROVAL_SRV"
           }
         }
@@ -192,13 +192,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/CONTROLLER_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/CONTROLLER_SRV"
           }
         }
@@ -210,13 +210,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/VENDOR_BTP_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/VENDOR_BTP_SRV"
           }
         }
@@ -228,13 +228,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/COMP_QUOT_SRV"
           }
         }
@@ -246,13 +246,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/CHASTATUS_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/CHASTATUS_SRV"
           }
         }
@@ -264,13 +264,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/ingxt/CONTROLLER_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/ingxt/CONTROLLER_SRV"
           }
         }
@@ -282,13 +282,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/INVITECOMPARE_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/INVITECOMPARE_SRV"
           }
         }
@@ -300,13 +300,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/VOYSTATUS_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/VOYSTATUS_SRV"
           }
         }
@@ -316,13 +316,13 @@
         "model": "srv/external/NAUTIUSERMAILID_SRV",
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/USERMAILID_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/USERMAILID_SRV"
           }
         }
@@ -334,13 +334,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/CONTRACTAWARD_SRV"
           }
         }
@@ -352,13 +352,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
           }
         },
         "[devlopment]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/FILEUPL_VOY_SRV"
           }
         }
@@ -370,13 +370,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/LIVEBID_VEND_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/LIVEBID_VEND_SRV"
           }
         }
@@ -388,13 +388,13 @@
         "csrfInBatch": true,
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/LIVEBID_CONT_SRV"
           }
         }
@@ -404,17 +404,20 @@
         "model": "srv/external/NAUTINAUTICAL_VALUEHELP_SRV",
         "[production]": {
           "credentials": {
-            "destination": "Ingenx_OData_SAP",
+            "destination": "IngenxOdata",
             "path": "/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV"
           }
         },
         "[development]": {
           "credentials": {
-            "destination": "SandboxPO",
+            "destination": "SandboxPo",
             "path": "/sap/opu/odata/nauti/NAUTICAL_VALUEHELP_SRV"
           }
         }
       }
+    },
+    "sql": {
+      "native_hana_associations": false
     }
   },
   "sapux": [

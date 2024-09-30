@@ -732,7 +732,7 @@ module.exports = async (srv) => {
 
                 if (message === "Invitation for Live Quotation") {
                     mailConfig = {
-                        from: "josiah.homenick1@ethereal.email",
+                        from: "eduardo.rippin81@ethereal.email",
                         to: receiverEmail,
                         subject: `Invitation for Live Quotation`,
                         text: `
@@ -749,7 +749,7 @@ module.exports = async (srv) => {
                     };
                 } else {
                     mailConfig = {
-                        from: "nikki51@ethereal.email",
+                        from: "eduardo.rippin81@ethereal.email",
                         to: receiverEmail,
                         subject: `Submit a Quotation for ${cargoSize} tons of Cargo via Route "${routes[index]}"`,
                         text: `
@@ -787,68 +787,68 @@ module.exports = async (srv) => {
             }];
         }
     });
-    srv.on('CREATE', "sendEmail", async (req) => {
-        try {
-            console.log("Triggered....", req.data);
+    // srv.on('CREATE', "sendEmail", async (req) => {
+    //     try {
+    //         console.log("Triggered....", req.data);
 
 
-            const {
-                receiversEmails,
-                vendorsName,
-                routes,
-                bidStart,
-                bidEnd,
-                cargoSize,
-                bidstartTime,
-                bidEndTime
-            } = req.data;
+    //         const {
+    //             receiversEmails,
+    //             vendorsName,
+    //             routes,
+    //             bidStart,
+    //             bidEnd,
+    //             cargoSize,
+    //             bidstartTime,
+    //             bidEndTime
+    //         } = req.data;
 
 
 
-            let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
-                const mailConfig = {
-                    from: "nikki51@ethereal.email",
-                    to: receiverEmail,
-                    subject: `You are invited to submit a quotation for the following cargo size "${cargoSize}" for shipping of ship route "${routes[index]}"`,
-                    text: `
-                        Dear ${vendorsName[index]},
+    //         let emailPromises = receiversEmails.map(async (receiverEmail, index) => {
+    //             const mailConfig = {
+    //                 from: "nikki51@ethereal.email",
+    //                 to: receiverEmail,
+    //                 subject: `You are invited to submit a quotation for the following cargo size "${cargoSize}" for shipping of ship route "${routes[index]}"`,
+    //                 text: `
+    //                     Dear ${vendorsName[index]},
        
-                        You are invited to submit a quotation for the following cargo:
+    //                     You are invited to submit a quotation for the following cargo:
        
-                        Vendors: ${vendorsName[index]}
-                        Routes: ${routes[index]}
-                        Bid Start Date: ${new Date(bidStart).toLocaleDateString()}
-                        Bid start Time : ${bidstartTime}
-                        Bid End Date: ${new Date(bidEnd).toLocaleDateString()}
-                        Bid End Time :${bidEndTime}
-                        Cargo Size: ${cargoSize} tons
+    //                     Vendors: ${vendorsName[index]}
+    //                     Routes: ${routes[index]}
+    //                     Bid Start Date: ${new Date(bidStart).toLocaleDateString()}
+    //                     Bid start Time : ${bidstartTime}
+    //                     Bid End Date: ${new Date(bidEnd).toLocaleDateString()}
+    //                     Bid End Time :${bidEndTime}
+    //                     Cargo Size: ${cargoSize} tons
                        
  
-                        Best regards,
-                        Your Company
-                    `
-                };
+    //                     Best regards,
+    //                     Your Company
+    //                 `
+    //             };
 
-                let res = await sendMail({
-                    destinationName: "mailDestination"
-                }, mailConfig);
-                console.log(`Email sent to ${vendorsName[index]} (${receiverEmail}) - Response:`, res);
-                return {
-                    "message": `Email sent successfully to ${vendorsName[index]}`,
-                    "status": 201
-                };
-            });
+    //             let res = await sendMail({
+    //                 destinationName: "mailDestination"
+    //             }, mailConfig);
+    //             console.log(`Email sent to ${vendorsName[index]} (${receiverEmail}) - Response:`, res);
+    //             return {
+    //                 "message": `Email sent successfully to ${vendorsName[index]}`,
+    //                 "status": 201
+    //             };
+    //         });
 
-            let results = await Promise.all(emailPromises);
-            return results;
-        } catch (error) {
-            console.log(error);
-            return [{
-                "message": "Failed to send email",
-                "status": 500
-            }];
-        }
-    });
+    //         let results = await Promise.all(emailPromises);
+    //         return results;
+    //     } catch (error) {
+    //         console.log(error);
+    //         return [{
+    //             "message": "Failed to send email",
+    //             "status": 500
+    //         }];
+    //     }
+    // });
    
 
 

@@ -2,15 +2,15 @@
 sap.ui.define([
 	"sap/ui/core/Element",
 	"sap/ui/mdc/FilterBarDelegate",
-	"com/ingenx/nauti/masterdashboard/model/metadata/JSONPropertyInfo",
+	"com/ingenx/nauti/masterdashboard/model/metadata/VendorDataFilterPropertyInfo",
 	"sap/ui/mdc/FilterField",
 	"sap/ui/core/Fragment"
-], function (Element, FilterBarDelegate, JSONPropertyInfo, FilterField, Fragment) {
+], function (Element, FilterBarDelegate, VendorDataFilterPropertyInfo, FilterField, Fragment) {
 	"use strict";
 
-	const JSONFilterBarDelegate = Object.assign({}, FilterBarDelegate);
+	const VendorDataFilterBarDelegate = Object.assign({}, FilterBarDelegate);
 
-	JSONFilterBarDelegate.fetchProperties = async () => JSONPropertyInfo;
+	VendorDataFilterBarDelegate.fetchProperties = async () => VendorDataFilterPropertyInfo;
 
 	// const _createValueHelp = (oFilterBar, sPropertyName) => {
 	// 	const aKey = "com.ingenx.nauti.masterdashboard.fragments.";
@@ -33,7 +33,7 @@ sap.ui.define([
 			label: oProperty.label,
 			maxConditions: oProperty.maxConditions,
 			
-			 operators: "Contains",
+			// operators: "Contains",
 			delegate: {name: "sap/ui/mdc/field/FieldBaseDelegate", payload: {}}
 		});
 		// if (oFilterBar.getPayload().valueHelp[sPropertyKey]) {
@@ -45,11 +45,11 @@ sap.ui.define([
 		return oFilterField;
 	};
 
-	JSONFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey) => {
-		const oProperty = JSONPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
+	VendorDataFilterBarDelegate.addItem = async (oFilterBar, sPropertyKey) => {
+		const oProperty = VendorDataFilterPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oFilterBar.getId() + "--filter--" + sPropertyKey;
 		return Element.getElementById(sId) ?? (await _createFilterField(sId, oProperty, oFilterBar));
 	};
 
-	return JSONFilterBarDelegate;
+	return VendorDataFilterBarDelegate;
 }, /* bExport= */false);

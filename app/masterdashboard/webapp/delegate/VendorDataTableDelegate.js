@@ -6,15 +6,15 @@ sap.ui.define([
 	"sap/m/Text",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"com/ingenx/nauti/masterdashboard/model/metadata/JSONPropertyInfo"
+	"com/ingenx/nauti/masterdashboard/model/metadata/VendorDataPropertyInfo"
 ], function (
-	Element, TableDelegate, Column, Text, Filter, FilterOperator, JSONPropertyInfo) {
+	Element, TableDelegate, Column, Text, Filter, FilterOperator, VendorDataPropertyInfo) {
 	"use strict";
 
-	const JSONTableDelegate = Object.assign({}, TableDelegate);
+	const VendorDataTableDelegate = Object.assign({}, TableDelegate);
 
-	JSONTableDelegate.fetchProperties = async () =>
-		JSONPropertyInfo.filter((oPI) => oPI.key !== "$search");
+	VendorDataTableDelegate.fetchProperties = async () =>
+		VendorDataPropertyInfo.filter((oPI) => oPI.key !== "$search");
 
 	const _createColumn = (sId, oPropertyInfo) => {
 		const sPropertyKey = oPropertyInfo.key;
@@ -30,14 +30,14 @@ sap.ui.define([
 		});
 	};
 
-	JSONTableDelegate.addItem = async (oTable, sPropertyKey) => {
-		const oPropertyInfo = JSONPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
+	VendorDataTableDelegate.addItem = async (oTable, sPropertyKey) => {
+		const oPropertyInfo = VendorDataPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oTable.getId() + "---col-" + sPropertyKey;
 		return Element.getElementById(sId) ?? (await _createColumn(sId, oPropertyInfo));
 	};
 
-	JSONTableDelegate.updateBindingInfo = (oTable, oBindingInfo) => {
-		TableDelegate.updateBindingInfo.call(JSONTableDelegate, oTable, oBindingInfo);
+	VendorDataTableDelegate.updateBindingInfo = (oTable, oBindingInfo) => {
+		TableDelegate.updateBindingInfo.call(VendorDataTableDelegate, oTable, oBindingInfo);
 		oBindingInfo.path = oTable.getPayload().bindingPath;
 		oBindingInfo.templateShareable = true;
 	};
@@ -51,7 +51,7 @@ sap.ui.define([
 		return [new Filter(aFilters, false)];
 	};
 
-	JSONTableDelegate.getFilters = (oTable) => {
+	VendorDataTableDelegate.getFilters = (oTable) => {
 		
 		const sSearch = Element.getElementById(oTable.getFilter()).getSearch();
 		const aKeys = oTable.getPayload().searchKeys;
@@ -62,5 +62,5 @@ sap.ui.define([
 		return aFilters;
 	};
 
-	return JSONTableDelegate;
+	return VendorDataTableDelegate;
 }, /* bExport= */false);

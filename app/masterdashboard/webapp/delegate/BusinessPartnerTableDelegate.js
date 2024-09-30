@@ -33,9 +33,7 @@ sap.ui.define([
 	JSONTableDelegate.addItem = async (oTable, sPropertyKey) => {
 		const oPropertyInfo = BusinessPartnerPropertyInfo.find((oPI) => oPI.key === sPropertyKey);
 		const sId = oTable.getId() + "---col-" + sPropertyKey;
-		const existingElement = Element.getElementById(sId);
-		
-		return existingElement ? existingElement : await _createColumn(sId, oPropertyInfo);
+		return Element.getElementById(sId) ?? (await _createColumn(sId, oPropertyInfo));
 	};
 
 	JSONTableDelegate.updateBindingInfo = (oTable, oBindingInfo) => {

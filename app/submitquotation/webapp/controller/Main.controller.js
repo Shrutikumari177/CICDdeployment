@@ -53,7 +53,7 @@ sap.ui.define([
               console.log("userFullName", userFullName);
               console.log("userID", userID);
             } catch (error) {
-              userEmail =undefined;
+              userEmail ="shruti.kumari@ingenxtec.com";
               console.log("hiii",userEmail);
             }
           },
@@ -61,11 +61,11 @@ sap.ui.define([
             let loggedinUser = userEmail; 
         
             if (loggedinUser === "shruti.kumari@ingenxtec.com") {
-                let vendorfound = "2100000001";
+                let vendorfound = "100000";
                 console.log("Vendor found for Shruti Kumari", vendorfound);
                 return vendorfound;
             } else if (loggedinUser === "rishabh.tiwari@ingenxtec.com") {
-                let vendorfound = "2100000002";
+                let vendorfound = "100010";
                 console.log("Vendor found for Rishbh Tiwari", vendorfound);
                 return vendorfound;
             } else {

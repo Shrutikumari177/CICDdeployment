@@ -678,6 +678,14 @@ sap.ui.define([
                     sap.m.MessageBox.error("Please enter all valid fields !!")
                     return
                 }
+                if(Vname === ""){
+                    sap.m.MessageBox.error("Please enter Vessel Name !!")
+                    return
+                }
+                if(Vimono === ""){
+                    sap.m.MessageBox.error("Please enter  Vessel IMO no. !!")
+                    return
+                }
 
                 var oTable = this.byId("submitTechDetailTable");
                 var aItems = oTable.getItems();

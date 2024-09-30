@@ -17,10 +17,6 @@ sap.ui.define(
       return BaseController.extend("com.ingenx.nauti.masterdashboard.controller.VendorDataSyncing", {
         
         onInit() {
-            
-        //     // clear selected rows and filter
-        //    this.resetPage()
-        //     oTable.setNoData("Loading.....");
 
             // getting entries from business partner set 
             let oModel = new sap.ui.model.json.JSONModel();
@@ -57,12 +53,11 @@ sap.ui.define(
                         
             }.bind(this))
 
+            console.log("getModelData2",getModelData2)
+
         },
         
-        // onExit: function () {
-        //   const oRouter = this.getOwnerComponent().getRouter();
-        //   oRouter.navTo("MastView");
-        // },
+ 
         onClearSelection: function() {
              // clear selected rows
             let oTable = this.byId("table")
@@ -71,14 +66,14 @@ sap.ui.define(
         onBackPress: function() {
             this.resetPage()
             const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteBusinessPartner");
+            oRouter.navTo("RouteBusinessPartnerDashboard");
         },
         
         onPressHome: function() {
             this.resetPage()
 
             const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteMasterDashboard");
+            oRouter.navTo("RouteHome");
         },
 
         resetPage: function() {
@@ -94,15 +89,51 @@ sap.ui.define(
             }
         },
 
+        onLiveSearch: function (oEvent) {
+            // Get the FilterBar instance
+            const oFilterBar = this.byId("filterbar");
+        
+            const sValue = oEvent.getParameter("value");
+      
+            if (sValue) {
+              // console.log("key triggered")
+                const oEnterKeyEvent = new KeyboardEvent('keydown', {
+                   key: 'Enter',
+                   keyCode: 13,
+                   which: 13,
+                   bubbles: true,
+                   cancelable: true
+                });
+      
+                // Find the target input field (or element) where you want to dispatch the event
+              const oInputField = oFilterBar.getBasicSearchField().getFocusDomRef();
+      
+              // Dispatch the Enter key event to simulate the key press
+              oInputField.dispatchEvent(oEnterKeyEvent);
+            }
+      
+            if (sValue.length < 1) {
+              oFilterBar.getBasicSearchField().setConditions()
+            }
+            
+          }, 
+
         
         // create payload from selected entries
         onSelectionSubmit: function () {
             var oTable = this.byId("table");
             var aSelectedContexts = oTable.getSelectedContexts(true);
-            var aSelectedItems = aSelectedContexts.map(function (oContext) {
-                return oContext.getObject();
+            console.log("aSelectedContexts",aSelectedContexts)
+
+            var aSelectedKeys = aSelectedContexts.map(function (oContext) {
+                return oContext.getObject().Lifnr; 
             });
-        
+            
+            // Filter the data from getModelData2 based on the selected keys
+            var aSelectedItems = getModelData2.filter(function (item) {
+                return aSelectedKeys.includes(item.Lifnr);
+            });
+
             if (aSelectedItems.length === 0) {
                 MessageToast.show("No items selected.");
                 return;
@@ -114,6 +145,10 @@ sap.ui.define(
                 if (sName1 && sName1.length > 35) {
                     sName1 = sName1.substring(0, 35); // Truncate to 35 characters'
                 }
+
+                console.log("smtp", item.SmtpAddr)
+                console.log("item", item)
+
 
                 return {
                     Lifnr: item.Lifnr,
@@ -140,6 +175,7 @@ sap.ui.define(
                     Erdat: item.Erdat + "T00:00:00.000Z",
                     
                 };
+
             });
 
             
@@ -203,10 +239,6 @@ sap.ui.define(
                             })  
                             
 
-                            // var busyDialog = new sap.m.BusyDialog({
-                    
-                            //   });
-                            // busyDialog.open();
         
                             // Prepare messages based on the number of created and existing items
                             var createdMessage = createdItems.length === 1 ? 
@@ -250,31 +282,34 @@ sap.ui.define(
     
                     } else {
                         sap.m.MessageToast.show("Creation of new entries cancelled.");
+                        this.resetPage()
                     }
                 }.bind(this) // Ensure proper context inside the callback
             });
         },      
 
         onNavigateDetails: function(oEvent) {
+            var oBindingContext = oEvent.getParameter("bindingContext");    
 
-            var oBindingContext = oEvent.getParameter("bindingContext");                         
-             // Retrieve the data object for the pressed rowvar 
-            let data = oBindingContext.getObject();
+            let selectedData = oBindingContext.getObject();
+            var data = getModelData2.filter(function (item) {
+                return item.Lifnr === selectedData.Lifnr; 
+            });
             
-            // let data = oSource.getBindingContext("").getObject();
+            
             let tempModel = new sap.ui.model.json.JSONModel();
-            tempModel.setData([data]);
+            tempModel.setData(data);
             var oView = this.getView();
-            if (!this._oDialog1) {
-                this._oDialog1 = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.VendorDataSyncing", this);
-                oView.addDependent(this._oDialog1); 
+            if (!this._oDialog) {
+                this._oDialog = sap.ui.xmlfragment("com.ingenx.nauti.masterdashboard.fragments.VendorDataSyncing", this);
+                oView.addDependent(this._oDialog); 
             }
-            this._oDialog1.setModel(tempModel,"nautiNewVendModel1")
-            this._oDialog1.open();
+            this._oDialog.setModel(tempModel,"nautiNewVendModel1")
+            this._oDialog.open();
         },
 
         oncancell: function () {
-            this._oDialog1.close();
+            this._oDialog.close();
           },
 
  
