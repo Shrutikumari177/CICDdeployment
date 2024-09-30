@@ -36,7 +36,7 @@ sap.ui.define(
           console.log("userID", userID);
         } catch (error) {
           
-          userEmail = "piyush.kumar@ingenxtec.com";
+          userEmail = undefined;
         }
       },
       getSUerIdInfo :async function(){
